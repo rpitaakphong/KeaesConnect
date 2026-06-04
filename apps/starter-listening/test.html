@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Starter Progress Listening - Interactive Test</title>
+  <link rel="stylesheet" href="styles.css?v=early-submit">
+  <script defer src="app.js?v=early-submit"></script>
+</head>
+<body>
+  <a class="skip-link" href="#test">Skip to test</a>
+
+  <header class="exam-header" aria-label="Listening exam controls">
+    <div class="exam-title">
+      <p class="eyebrow">Cambridge Starter Progress</p>
+      <h1>Listening Interactive Test</h1>
+      <div class="status-pill" aria-live="polite">
+        <span data-progress-count>0</span>/20 answers
+      </div>
+      <button class="header-submit-button" type="button" data-submit>Submit test</button>
+    </div>
+    <section class="audio-bar" aria-label="Listening exam audio">
+      <div>
+        <p class="eyebrow">Listening exam audio</p>
+        <h2>Starter Progress Listening</h2>
+      </div>
+      <button class="start-exam-button" type="button" data-start-audio disabled>Start listening exam</button>
+      <audio preload="auto" data-audio-player data-audio-src="assets/starter-progress-listening.mp3">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="audio-tools">
+        <span class="time-readout" data-audio-time>00:00 / 21:30</span>
+        <p class="audio-note" data-audio-status>Once started, playback will continue until finish.</p>
+      </div>
+    </section>
+  </header>
+
+  <main id="test" class="shell">
+    <aside class="part-nav" aria-label="Listening parts">
+      <button class="part-tab is-active" type="button" data-part-button="part1">Part 1</button>
+      <button class="part-tab" type="button" data-part-button="part2">Part 2</button>
+      <button class="part-tab" type="button" data-part-button="part3">Part 3</button>
+      <button class="part-tab" type="button" data-part-button="part4">Part 4</button>
+      <button class="part-tab submit-tab" type="button" data-part-button="review">Review</button>
+    </aside>
+
+    <section class="test-panel">
+      <section class="part is-active" id="part1" data-part>
+        <div class="part-heading">
+          <div>
+            <p class="eyebrow">Part 1 - 5 questions</p>
+            <h2>Listen and draw lines.</h2>
+          </div>
+          <p class="hint">Choose an object, then choose where it belongs in the room.</p>
+        </div>
+
+        <div class="connect-layout">
+          <div class="connect-stage" data-connect-stage>
+            <img src="assets/part1-board.png" alt="Living room with objects around it for line matching.">
+            <svg class="line-layer" viewBox="0 0 2140 2500" aria-hidden="true" data-line-layer></svg>
+            <button class="hotspot object-point" type="button" style="--x:205; --y:245" data-object-point="phone" aria-label="Phone object"></button>
+            <button class="hotspot object-point is-example" type="button" style="--x:685; --y:245" aria-label="Radio example object" disabled></button>
+            <button class="hotspot object-point" type="button" style="--x:1115; --y:245" data-object-point="shell" aria-label="Shell object"></button>
+            <button class="hotspot object-point" type="button" style="--x:1590; --y:235" data-object-point="book" aria-label="Book object"></button>
+            <button class="hotspot object-point" type="button" style="--x:275; --y:2335" data-object-point="clock" aria-label="Clock object"></button>
+            <button class="hotspot object-point" type="button" style="--x:910; --y:2340" data-object-point="camera" aria-label="Camera object"></button>
+            <button class="hotspot object-point" type="button" style="--x:1605; --y:2315" data-object-point="lamp" aria-label="Lamp object"></button>
+
+            <button class="hotspot target-point" type="button" style="--x:410; --y:1240" data-target="woman" aria-label="Woman in chair"></button>
+            <button class="hotspot target-point" type="button" style="--x:230; --y:820" data-target="between-pictures" aria-label="Wall between the two pictures"></button>
+            <button class="hotspot target-point" type="button" style="--x:860; --y:1240" data-target="bookcase" aria-label="Bookcase"></button>
+            <button class="hotspot target-point" type="button" style="--x:1285; --y:1565" data-target="robot" aria-label="Robot on table"></button>
+            <button class="hotspot target-point" type="button" style="--x:1185; --y:1765" data-target="under-table" aria-label="Under the small table"></button>
+            <button class="hotspot target-point" type="button" style="--x:300; --y:1765" data-target="armchair" aria-label="Armchair"></button>
+            <button class="hotspot target-point" type="button" style="--x:690; --y:1825" data-target="rug" aria-label="Rug"></button>
+            <button class="hotspot target-point" type="button" style="--x:1455; --y:1405" data-target="cupboard" aria-label="Cupboard"></button>
+            <button class="hotspot target-point" type="button" style="--x:1835; --y:1185" data-target="door" aria-label="Door"></button>
+          </div>
+
+          <div class="connection-list">
+            <h3>Connections</h3>
+            <ul data-connection-list></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="part" id="part2" data-part>
+        <div class="part-heading">
+          <div>
+            <p class="eyebrow">Part 2 - 5 questions</p>
+            <h2>Listen and write a name or a number.</h2>
+          </div>
+          <p class="hint">Examples are already completed.</p>
+        </div>
+
+        <img class="wide-illustration" src="assets/part2-illustration.png" alt="Lucy and a boy talking.">
+
+        <div class="example-strip" aria-label="Examples">
+          <label>What is the girl's name? <input value="Lucy" disabled></label>
+          <label>How old is she? <input value="7" disabled></label>
+        </div>
+
+        <div class="written-list">
+          <label><span>1. What is Lucy's friend's name?</span><input data-text-answer="p2q1" autocomplete="off"></label>
+          <label><span>2. Which class are the two children in at school?</span><input data-text-answer="p2q2" autocomplete="off"></label>
+          <label><span>3. How many dogs are there at Lucy's house?</span><input data-text-answer="p2q3" inputmode="numeric" autocomplete="off"></label>
+          <label><span>4. What's the name of Lucy's favourite dog?</span><input data-text-answer="p2q4" autocomplete="off"></label>
+          <label><span>5. How many fish has Lucy's friend got?</span><input data-text-answer="p2q5" inputmode="numeric" autocomplete="off"></label>
+        </div>
+      </section>
+
+      <section class="part" id="part3" data-part>
+        <div class="part-heading">
+          <div>
+            <p class="eyebrow">Part 3 - 5 questions</p>
+            <h2>Listen and tick the box.</h2>
+          </div>
+          <p class="hint">Choose one picture for each question.</p>
+        </div>
+
+        <div class="choice-list" data-choice-list></div>
+      </section>
+
+      <section class="part" id="part4" data-part>
+        <div class="part-heading">
+          <div>
+            <p class="eyebrow">Part 4 - 5 questions</p>
+            <h2>Listen and colour.</h2>
+          </div>
+          <p class="hint">Choose a colour, then tap an object in the picture.</p>
+        </div>
+
+        <div class="colour-workspace">
+          <div class="palette" aria-label="Colour palette">
+            <button class="swatch is-active" type="button" style="--color:#ef4444" data-colour="#ef4444" aria-label="Red"></button>
+            <button class="swatch" type="button" style="--color:#f97316" data-colour="#f97316" aria-label="Orange"></button>
+            <button class="swatch" type="button" style="--color:#facc15" data-colour="#facc15" aria-label="Yellow"></button>
+            <button class="swatch" type="button" style="--color:#22c55e" data-colour="#22c55e" aria-label="Green"></button>
+            <button class="swatch" type="button" style="--color:#38bdf8" data-colour="#38bdf8" aria-label="Blue"></button>
+            <button class="swatch" type="button" style="--color:#a855f7" data-colour="#a855f7" aria-label="Purple"></button>
+            <button class="swatch" type="button" style="--color:#f472b6" data-colour="#f472b6" aria-label="Pink"></button>
+            <button class="swatch" type="button" style="--color:#8b5a2b" data-colour="#8b5a2b" aria-label="Brown"></button>
+          </div>
+
+          <div class="colour-stage" data-colour-stage>
+            <img src="assets/part4-scene.png" alt="Outdoor scene with birds, a tree, a house, a plane, flowers, and a man on a chair.">
+            <button class="colour-region example-region" type="button" style="--x:1370; --y:1550; --w:130; --h:110; --fill:#f59e0b" disabled aria-label="Orange duck example"></button>
+            <button class="colour-region" type="button" style="--x:650; --y:1080; --w:115; --h:95" data-region="tree-bird" aria-label="Bird in the tree"></button>
+            <button class="colour-region" type="button" style="--x:1340; --y:980; --w:90; --h:80" data-region="roof-bird" aria-label="Bird on the roof"></button>
+            <button class="colour-region" type="button" style="--x:1270; --y:650; --w:150; --h:110" data-region="flying-bird" aria-label="Flying bird"></button>
+            <button class="colour-region" type="button" style="--x:1500; --y:1420; --w:110; --h:95" data-region="standing-bird" aria-label="Bird near the house"></button>
+            <button class="colour-region" type="button" style="--x:285; --y:1740; --w:130; --h:110" data-region="man-bird" aria-label="Bird on the man's head"></button>
+            <button class="colour-region" type="button" style="--x:1020; --y:270; --w:210; --h:120" data-region="plane" aria-label="Plane"></button>
+            <button class="colour-region" type="button" style="--x:380; --y:1850; --w:130; --h:105" data-region="man-hat" aria-label="Man's hat"></button>
+            <button class="colour-region" type="button" style="--x:1450; --y:2310; --w:210; --h:145" data-region="flower-bird" aria-label="Bird between the flowers"></button>
+            <button class="colour-region" type="button" style="--x:1180; --y:2210; --w:85; --h:95" data-region="left-flower" aria-label="Left flower"></button>
+            <button class="colour-region" type="button" style="--x:1810; --y:2195; --w:85; --h:95" data-region="right-flower" aria-label="Right flower"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="part" id="review" data-part>
+        <div class="part-heading">
+          <div>
+            <p class="eyebrow">Final review</p>
+            <h2>Check your answers before submitting.</h2>
+          </div>
+          <p class="hint">Correctness is disabled until the audio transcript confirms the answer key.</p>
+        </div>
+
+        <div class="pending-note">
+          You may submit early, but final submission ends the test and your answers cannot be changed.
+        </div>
+        <div class="student-summary" data-student-summary hidden></div>
+        <div class="review-grid" data-review-grid></div>
+        <button class="primary-action" type="button" data-submit disabled>Submit test</button>
+        <div class="result-card" hidden data-result-card></div>
+      </section>
+    </section>
+  </main>
+
+  <dialog class="confirm-dialog" data-submit-dialog aria-labelledby="submitDialogTitle">
+    <form method="dialog">
+      <h2 id="submitDialogTitle">Submit test now?</h2>
+      <p>You are submitting before the listening audio has finished. Your answers will be marked and you cannot continue the test.</p>
+      <div class="dialog-actions">
+        <button class="secondary-action" type="submit" value="cancel">Cancel</button>
+        <button class="primary-action" type="submit" value="confirm">Submit test</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

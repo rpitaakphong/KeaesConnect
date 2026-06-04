@@ -3,6 +3,8 @@ const state = {
   audioStarted: false,
   audioEnded: false,
   audioStartPending: false,
+  studentReady: false,
+  studentProfile: null,
   selectedObject: null,
   connections: {
     radio: "bookcase",
@@ -14,6 +16,17 @@ const state = {
   },
   activeColour: "#ef4444",
   submitted: false,
+  savedResultId: null,
+};
+
+const RESULT_STORAGE_KEY = "keaes-test-results-v1";
+const PROFILE_STORAGE_KEY = `keaes-test-profile-v1:${new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening"}`;
+const WINDOW_NAME_PROFILE_KEY = "__keaesTestProfilesV1";
+const testMetadata = {
+  id: new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening",
+  title: "Starter Progress Listening",
+  subject: "English",
+  level: "Cambridge Starters",
 };
 
 const answerKey = {
@@ -143,25 +156,25 @@ const answerKey = {
 };
 
 const objects = {
-  phone: { label: "Phone", x: 180, y: 180 },
-  radio: { label: "Radio", x: 800, y: 170 },
-  shell: { label: "Shell", x: 1325, y: 170 },
-  book: { label: "Book", x: 1770, y: 150 },
-  clock: { label: "Clock", x: 310, y: 2245 },
-  camera: { label: "Camera", x: 1010, y: 2240 },
-  lamp: { label: "Lamp", x: 1810, y: 2210 },
+  phone: { label: "Phone", x: 205, y: 245 },
+  radio: { label: "Radio", x: 685, y: 245 },
+  shell: { label: "Shell", x: 1115, y: 245 },
+  book: { label: "Book", x: 1590, y: 235 },
+  clock: { label: "Clock", x: 275, y: 2335 },
+  camera: { label: "Camera", x: 910, y: 2340 },
+  lamp: { label: "Lamp", x: 1605, y: 2315 },
 };
 
 const targets = {
-  woman: { label: "woman in chair", x: 360, y: 1330 },
-  "between-pictures": { label: "between the two pictures", x: 255, y: 900 },
-  bookcase: { label: "bookcase", x: 1115, y: 1270 },
-  robot: { label: "table next to the robot", x: 1280, y: 1630 },
-  "under-table": { label: "under the small table", x: 1260, y: 1980 },
-  armchair: { label: "armchair", x: 430, y: 1830 },
-  rug: { label: "mat", x: 900, y: 1810 },
-  cupboard: { label: "cupboard", x: 1620, y: 1400 },
-  door: { label: "door", x: 1960, y: 1150 },
+  woman: { label: "woman in chair", x: 410, y: 1240 },
+  "between-pictures": { label: "between the two pictures", x: 230, y: 820 },
+  bookcase: { label: "bookcase", x: 860, y: 1240 },
+  robot: { label: "table next to the robot", x: 1285, y: 1565 },
+  "under-table": { label: "under the small table", x: 1185, y: 1765 },
+  armchair: { label: "armchair", x: 300, y: 1765 },
+  rug: { label: "mat", x: 690, y: 1825 },
+  cupboard: { label: "cupboard", x: 1455, y: 1405 },
+  door: { label: "door", x: 1835, y: 1185 },
 };
 
 const choiceQuestions = [
@@ -213,6 +226,7 @@ const assessedCounts = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (!loadStudentProfile()) return;
   buildPart3();
   bindNavigation();
   bindAudio();
@@ -222,6 +236,52 @@ document.addEventListener("DOMContentLoaded", () => {
   bindSubmit();
   renderAll();
 });
+
+function loadStudentProfile() {
+  const profile = readStudentProfile();
+  if (!profile) {
+    const landingUrl = new URL("index.html", window.location.href);
+    landingUrl.searchParams.set("testId", testMetadata.id);
+    window.location.replace(landingUrl.href);
+    return false;
+  }
+  state.studentProfile = profile;
+  state.studentReady = true;
+  return true;
+}
+
+function readStudentProfile() {
+  try {
+    const stored = window.sessionStorage?.getItem(PROFILE_STORAGE_KEY);
+    const profile = normalizeStudentProfile(JSON.parse(stored || "null"));
+    if (profile) return profile;
+  } catch {
+    // Fall through to tab-local storage for restricted browser contexts.
+  }
+  return readWindowNameProfile();
+}
+
+function readWindowNameProfile() {
+  try {
+    const parsed = JSON.parse(window.name || "{}");
+    return normalizeStudentProfile(parsed?.[WINDOW_NAME_PROFILE_KEY]?.[PROFILE_STORAGE_KEY]);
+  } catch {
+    return null;
+  }
+}
+
+function normalizeStudentProfile(value) {
+  if (!value || typeof value !== "object") return null;
+  const profile = {
+    fullName: cleanText(value.fullName),
+    nickname: cleanText(value.nickname),
+    dateOfBirth: cleanText(value.dateOfBirth),
+    subject: cleanText(value.subject),
+    level: cleanText(value.level),
+    testDate: cleanText(value.testDate),
+  };
+  return Object.values(profile).every(Boolean) ? profile : null;
+}
 
 function bindNavigation() {
   document.querySelectorAll("[data-part-button]").forEach((button) => {
@@ -267,7 +327,7 @@ function bindAudio() {
   };
 
   const startExamAudio = () => {
-    if (state.audioStarted || state.audioEnded || state.audioStartPending) return;
+    if (!state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending) return;
     state.audioStartPending = true;
     audio.currentTime = 0;
     const playAttempt = audio.play();
@@ -296,7 +356,7 @@ function bindAudio() {
   audio.addEventListener("durationchange", updateReadout);
   audio.addEventListener("ended", markComplete);
   audio.addEventListener("pause", () => {
-    if (!state.audioStarted || state.audioEnded) return;
+    if (!state.audioStarted || state.audioEnded || state.submitted) return;
     audio.play().catch(() => {
       setStatus("Playback was interrupted. Keep this page active so the exam can continue.", "warning");
     });
@@ -357,6 +417,7 @@ function buildPart3() {
 
   document.querySelectorAll("[data-choice-answer]").forEach((input) => {
     input.addEventListener("change", () => {
+      if (state.submitted) return;
       state.choices[input.dataset.choiceAnswer] = input.value;
       renderAll();
     });
@@ -364,15 +425,17 @@ function buildPart3() {
 }
 
 function bindPart1() {
-  document.querySelectorAll("[data-object], [data-object-point]").forEach((button) => {
+  document.querySelectorAll("[data-object-point]").forEach((button) => {
     button.addEventListener("click", () => {
-      state.selectedObject = button.dataset.object || button.dataset.objectPoint;
+      if (state.submitted) return;
+      state.selectedObject = button.dataset.objectPoint;
       renderPart1();
     });
   });
 
   document.querySelectorAll("[data-target]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       if (!state.selectedObject) return;
       if (state.selectedObject === "radio") return;
       state.connections[state.selectedObject] = button.dataset.target;
@@ -385,6 +448,7 @@ function bindPart1() {
 function bindPart2() {
   document.querySelectorAll("[data-text-answer]").forEach((input) => {
     input.addEventListener("input", () => {
+      if (state.submitted) return;
       state.textAnswers[input.dataset.textAnswer] = input.value;
       renderAll();
     });
@@ -394,6 +458,7 @@ function bindPart2() {
 function bindPart4() {
   document.querySelectorAll("[data-colour]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       state.activeColour = button.dataset.colour;
       renderPart4();
     });
@@ -401,6 +466,7 @@ function bindPart4() {
 
   document.querySelectorAll("[data-region]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       state.colours[button.dataset.region] = state.activeColour;
       renderAll();
     });
@@ -408,14 +474,60 @@ function bindPart4() {
 }
 
 function bindSubmit() {
-  document.querySelector("[data-submit]").addEventListener("click", () => {
-    state.submitted = true;
-    state.currentPart = "review";
-    renderAll();
+  document.querySelectorAll("[data-submit]").forEach((button) => {
+    button.addEventListener("click", confirmSubmit);
+  });
+
+  const dialog = document.querySelector("[data-submit-dialog]");
+  if (!dialog) return;
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue === "confirm") finalizeSubmission();
   });
 }
 
+function confirmSubmit() {
+  if (state.submitted) return;
+  const dialog = document.querySelector("[data-submit-dialog]");
+  if (dialog?.showModal) {
+    dialog.returnValue = "";
+    dialog.showModal();
+    return;
+  }
+  if (window.confirm("Submit test now? Your answers will be marked and you cannot continue the test.")) {
+    finalizeSubmission();
+  }
+}
+
+function finalizeSubmission() {
+  if (state.submitted) return;
+  state.submitted = true;
+  state.audioEnded = true;
+  state.audioStartPending = false;
+  state.selectedObject = null;
+  stopAudioForSubmission();
+  state.currentPart = "review";
+  saveMockResult();
+  renderAll();
+}
+
+function stopAudioForSubmission() {
+  const audio = document.querySelector("[data-audio-player]");
+  const startButton = document.querySelector("[data-start-audio]");
+  const status = document.querySelector("[data-audio-status]");
+  if (audio) audio.pause();
+  if (startButton) {
+    startButton.textContent = "Test submitted";
+    startButton.disabled = true;
+  }
+  if (status) {
+    status.textContent = "Test submitted. Playback has stopped.";
+    status.classList.remove("is-warning");
+    status.classList.add("is-complete");
+  }
+}
+
 function renderAll() {
+  renderStudentProfile();
   renderNavigation();
   renderPart1();
   renderPart2();
@@ -423,6 +535,21 @@ function renderAll() {
   renderPart4();
   renderReview();
   renderProgress();
+}
+
+function renderStudentProfile() {
+  const startButton = document.querySelector("[data-start-audio]");
+  const summary = document.querySelector("[data-student-summary]");
+  if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending || state.submitted;
+  if (summary) {
+    summary.hidden = !state.studentProfile;
+    if (state.studentProfile) {
+      summary.innerHTML = `
+        <h3>${escapeHtml(state.studentProfile.fullName)} (${escapeHtml(state.studentProfile.nickname)})</h3>
+        <p>${escapeHtml(state.studentProfile.subject)} · ${escapeHtml(state.studentProfile.level)} · Test date ${escapeHtml(state.studentProfile.testDate)}</p>
+      `;
+    }
+  }
 }
 
 function renderNavigation() {
@@ -435,10 +562,14 @@ function renderNavigation() {
 }
 
 function renderPart1() {
-  document.querySelectorAll("[data-object], [data-object-point]").forEach((button) => {
-    const objectId = button.dataset.object || button.dataset.objectPoint;
+  document.querySelectorAll("[data-object-point]").forEach((button) => {
+    const objectId = button.dataset.objectPoint;
     button.classList.toggle("is-selected", state.selectedObject === objectId);
     button.classList.toggle("is-linked", Boolean(state.connections[objectId]));
+    button.disabled = state.submitted;
+  });
+  document.querySelectorAll("[data-target]").forEach((button) => {
+    button.disabled = state.submitted;
   });
 
   const lineLayer = document.querySelector("[data-line-layer]");
@@ -478,12 +609,14 @@ function renderPart2() {
   document.querySelectorAll("[data-text-answer]").forEach((input) => {
     const stored = state.textAnswers[input.dataset.textAnswer] || "";
     if (input.value !== stored) input.value = stored;
+    input.disabled = state.submitted;
   });
 }
 
 function renderPart3() {
   document.querySelectorAll("[data-choice-answer]").forEach((input) => {
     input.checked = state.choices[input.dataset.choiceAnswer] === input.value;
+    input.disabled = state.submitted;
   });
   document.querySelectorAll("[data-choice-card]").forEach((card) => {
     const input = card.querySelector("input");
@@ -494,8 +627,10 @@ function renderPart3() {
 function renderPart4() {
   document.querySelectorAll("[data-colour]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.colour === state.activeColour);
+    button.disabled = state.submitted;
   });
   document.querySelectorAll("[data-region]").forEach((button) => {
+    button.disabled = state.submitted;
     const colour = state.colours[button.dataset.region];
     if (colour) {
       button.style.setProperty("--fill", colour);
@@ -510,7 +645,7 @@ function renderPart4() {
 function renderReview() {
   const reviewGrid = document.querySelector("[data-review-grid]");
   const partStatus = getPartStatus();
-  const submitButton = document.querySelector("[data-submit]");
+  const submitButtons = document.querySelectorAll("[data-submit]");
   reviewGrid.innerHTML = Object.entries(partStatus)
     .map(([part, status]) => {
       const label = part.replace("part", "Part ");
@@ -522,10 +657,10 @@ function renderReview() {
       `;
     })
     .join("");
-  if (submitButton) {
-    submitButton.disabled = !state.audioEnded || state.submitted;
-    submitButton.textContent = state.audioEnded ? "Submit test" : "Submit available after audio finishes";
-  }
+  submitButtons.forEach((button) => {
+    button.disabled = state.submitted;
+    button.textContent = state.submitted ? "Submitted" : "Submit test";
+  });
 
   const result = document.querySelector("[data-result-card]");
   result.hidden = !state.submitted;
@@ -611,6 +746,49 @@ function scoreSubmission() {
   };
 }
 
+function saveMockResult() {
+  if (!state.studentProfile || state.savedResultId) return;
+  const score = scoreSubmission();
+  const result = {
+    id: `result-${Date.now()}`,
+    testId: testMetadata.id,
+    testTitle: testMetadata.title,
+    student: state.studentProfile,
+    score: {
+      total: score.total,
+      possible: score.possible,
+      percent: Math.round((score.total / score.possible) * 100),
+    },
+    partScores: Object.entries(score.sections).map(([part, items]) => ({
+      part: part.replace("part", "Part "),
+      total: items.filter((item) => item.correct).length,
+      possible: items.length,
+    })),
+    answers: Object.values(score.sections).flat().map((item) => ({
+      part: item.part,
+      prompt: item.prompt,
+      response: item.response,
+      correctAnswer: item.correctAnswer,
+      correct: item.correct,
+      transcript: item.transcript,
+    })),
+    submittedAt: new Date().toISOString(),
+  };
+  const results = readResults();
+  results.unshift(result);
+  localStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(results.slice(0, 250)));
+  state.savedResultId = result.id;
+}
+
+function readResults() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(RESULT_STORAGE_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function buildResult({ part, prompt, response, correctAnswer, correct, transcript }) {
   return { part, prompt, response, correctAnswer, correct, transcript };
 }
@@ -682,4 +860,17 @@ function renderScoreSummary(score) {
       ${corrections}
     </section>
   `;
+}
+
+function cleanText(value) {
+  return String(value ?? "").trim().replace(/\s+/g, " ");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }

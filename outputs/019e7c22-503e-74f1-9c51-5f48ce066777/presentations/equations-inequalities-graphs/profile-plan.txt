@@ -1,8 +1,0 @@
-Task mode: create
-Primary deck-profile: appendix-heavy (educational content with teacher support sections)
-Secondary gates: Cambridge exam-prep classroom clarity; macOS clean/minimal visual style
-Required proof objects: editable worked examples, rules, practice answers, graph interpretations, teacher support guidance
-Source/asset requirements: source markdown at /Users/pitaakphong/Downloads/4-equations-inequalities-and-graphs (1).md; no external assets required
-Brand authenticity constraints: no Cambridge logo used; neutral exam-prep styling only
-Profile-specific QA gates: readable equations, no crowded teacher notes, practice/answer separation, clear graph slides
-Known missing inputs: no school branding or template deck supplied
