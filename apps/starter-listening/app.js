@@ -20,6 +20,8 @@ const state = {
 };
 
 const RESULT_STORAGE_KEY = "keaes-test-results-v1";
+const PROFILE_STORAGE_KEY = `keaes-test-profile-v1:${new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening"}`;
+const WINDOW_NAME_PROFILE_KEY = "__keaesTestProfilesV1";
 const testMetadata = {
   id: new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening",
   title: "Starter Progress Listening",
@@ -154,25 +156,25 @@ const answerKey = {
 };
 
 const objects = {
-  phone: { label: "Phone", x: 180, y: 180 },
-  radio: { label: "Radio", x: 800, y: 170 },
-  shell: { label: "Shell", x: 1325, y: 170 },
-  book: { label: "Book", x: 1770, y: 150 },
-  clock: { label: "Clock", x: 310, y: 2245 },
-  camera: { label: "Camera", x: 1010, y: 2240 },
-  lamp: { label: "Lamp", x: 1810, y: 2210 },
+  phone: { label: "Phone", x: 205, y: 245 },
+  radio: { label: "Radio", x: 685, y: 245 },
+  shell: { label: "Shell", x: 1115, y: 245 },
+  book: { label: "Book", x: 1590, y: 235 },
+  clock: { label: "Clock", x: 275, y: 2335 },
+  camera: { label: "Camera", x: 910, y: 2340 },
+  lamp: { label: "Lamp", x: 1605, y: 2315 },
 };
 
 const targets = {
-  woman: { label: "woman in chair", x: 360, y: 1330 },
-  "between-pictures": { label: "between the two pictures", x: 255, y: 900 },
-  bookcase: { label: "bookcase", x: 1115, y: 1270 },
-  robot: { label: "table next to the robot", x: 1280, y: 1630 },
-  "under-table": { label: "under the small table", x: 1260, y: 1980 },
-  armchair: { label: "armchair", x: 430, y: 1830 },
-  rug: { label: "mat", x: 900, y: 1810 },
-  cupboard: { label: "cupboard", x: 1620, y: 1400 },
-  door: { label: "door", x: 1960, y: 1150 },
+  woman: { label: "woman in chair", x: 410, y: 1240 },
+  "between-pictures": { label: "between the two pictures", x: 230, y: 820 },
+  bookcase: { label: "bookcase", x: 860, y: 1240 },
+  robot: { label: "table next to the robot", x: 1285, y: 1565 },
+  "under-table": { label: "under the small table", x: 1185, y: 1765 },
+  armchair: { label: "armchair", x: 300, y: 1765 },
+  rug: { label: "mat", x: 690, y: 1825 },
+  cupboard: { label: "cupboard", x: 1455, y: 1405 },
+  door: { label: "door", x: 1835, y: 1185 },
 };
 
 const choiceQuestions = [
@@ -224,8 +226,8 @@ const assessedCounts = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (!loadStudentProfile()) return;
   buildPart3();
-  initStudentGate();
   bindNavigation();
   bindAudio();
   bindPart1();
@@ -235,26 +237,50 @@ document.addEventListener("DOMContentLoaded", () => {
   renderAll();
 });
 
-function initStudentGate() {
-  const form = document.querySelector("[data-student-form]");
-  const testDate = form?.elements.testDate;
-  if (testDate && !testDate.value) testDate.value = new Date().toISOString().slice(0, 10);
-  form?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(form);
-    const profile = {
-      fullName: cleanText(data.get("fullName")),
-      nickname: cleanText(data.get("nickname")),
-      dateOfBirth: cleanText(data.get("dateOfBirth")),
-      subject: cleanText(data.get("subject")),
-      level: cleanText(data.get("level")),
-      testDate: cleanText(data.get("testDate")),
-    };
-    if (Object.values(profile).some((value) => !value)) return;
-    state.studentProfile = profile;
-    state.studentReady = true;
-    renderAll();
-  });
+function loadStudentProfile() {
+  const profile = readStudentProfile();
+  if (!profile) {
+    const landingUrl = new URL("index.html", window.location.href);
+    landingUrl.searchParams.set("testId", testMetadata.id);
+    window.location.replace(landingUrl.href);
+    return false;
+  }
+  state.studentProfile = profile;
+  state.studentReady = true;
+  return true;
+}
+
+function readStudentProfile() {
+  try {
+    const stored = window.sessionStorage?.getItem(PROFILE_STORAGE_KEY);
+    const profile = normalizeStudentProfile(JSON.parse(stored || "null"));
+    if (profile) return profile;
+  } catch {
+    // Fall through to tab-local storage for restricted browser contexts.
+  }
+  return readWindowNameProfile();
+}
+
+function readWindowNameProfile() {
+  try {
+    const parsed = JSON.parse(window.name || "{}");
+    return normalizeStudentProfile(parsed?.[WINDOW_NAME_PROFILE_KEY]?.[PROFILE_STORAGE_KEY]);
+  } catch {
+    return null;
+  }
+}
+
+function normalizeStudentProfile(value) {
+  if (!value || typeof value !== "object") return null;
+  const profile = {
+    fullName: cleanText(value.fullName),
+    nickname: cleanText(value.nickname),
+    dateOfBirth: cleanText(value.dateOfBirth),
+    subject: cleanText(value.subject),
+    level: cleanText(value.level),
+    testDate: cleanText(value.testDate),
+  };
+  return Object.values(profile).every(Boolean) ? profile : null;
 }
 
 function bindNavigation() {
@@ -398,9 +424,9 @@ function buildPart3() {
 }
 
 function bindPart1() {
-  document.querySelectorAll("[data-object], [data-object-point]").forEach((button) => {
+  document.querySelectorAll("[data-object-point]").forEach((button) => {
     button.addEventListener("click", () => {
-      state.selectedObject = button.dataset.object || button.dataset.objectPoint;
+      state.selectedObject = button.dataset.objectPoint;
       renderPart1();
     });
   });
@@ -451,7 +477,7 @@ function bindSubmit() {
 }
 
 function renderAll() {
-  renderStudentGate();
+  renderStudentProfile();
   renderNavigation();
   renderPart1();
   renderPart2();
@@ -461,16 +487,10 @@ function renderAll() {
   renderProgress();
 }
 
-function renderStudentGate() {
-  const gate = document.querySelector("[data-student-gate]");
+function renderStudentProfile() {
   const startButton = document.querySelector("[data-start-audio]");
-  const status = document.querySelector("[data-audio-status]");
   const summary = document.querySelector("[data-student-summary]");
-  gate?.classList.toggle("is-complete", state.studentReady);
   if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending;
-  if (status && !state.studentReady) {
-    status.textContent = "Enter student details first. Once started, playback will not stop and continue until finish.";
-  }
   if (summary) {
     summary.hidden = !state.studentProfile;
     if (state.studentProfile) {
@@ -492,8 +512,8 @@ function renderNavigation() {
 }
 
 function renderPart1() {
-  document.querySelectorAll("[data-object], [data-object-point]").forEach((button) => {
-    const objectId = button.dataset.object || button.dataset.objectPoint;
+  document.querySelectorAll("[data-object-point]").forEach((button) => {
+    const objectId = button.dataset.objectPoint;
     button.classList.toggle("is-selected", state.selectedObject === objectId);
     button.classList.toggle("is-linked", Boolean(state.connections[objectId]));
   });

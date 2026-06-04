@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const SESSION_KEY = "keaesx-employee-session";
+  const SESSION_KEY = "keaes-workspace-employee-session";
 
   document.addEventListener("DOMContentLoaded", () => {
     refreshChrome();
@@ -27,7 +27,7 @@
   function logout() {
     sessionStorage.removeItem(SESSION_KEY);
     refreshChrome();
-    window.location.href = "index.html";
+    window.location.href = "login.html";
   }
 
   function getEmployee() {
@@ -80,5 +80,5 @@
     return clean(value).replace(/\b\w/g, (char) => char.toUpperCase()) || "Employee";
   }
 
-  window.KeaesXPortal = { login, logout, getEmployee, requireSession };
+  window.KeaesWorkspacePortal = { login, logout, getEmployee, requireSession };
 })();

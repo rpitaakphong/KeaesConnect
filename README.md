@@ -1,11 +1,10 @@
-# KeaesX Employee Portal
+# Keaes Workspace Employee Portal
 
-Static employee portal for Keaes internal tools. Designed for SiteGround deployment at `www.keaesx.com`.
+Static workspace for Keaes learning resources, quizzes, exams, and student performance review.
 
 ## Structure
 
 ```text
-index.html
 login.html
 dashboard.html
 
@@ -16,17 +15,14 @@ assets/
   js/
     portal.js
 
-tools/
-  hours-cross-check/
-    index.html
-    styles.css
-    app.js
-    README.md
+apps/
+  admin-tests/
+  starter-listening/
 ```
 
 ## Run Locally
 
-Open `index.html` in a browser.
+Open `login.html` in a browser.
 
 For a local server:
 
@@ -35,7 +31,7 @@ cd "/Users/pitaakphong/Documents/New project"
 python3 -m http.server 4173
 ```
 
-Then open `http://127.0.0.1:4173/`.
+Then open `http://127.0.0.1:4173/login.html`.
 
 ## Prototype Login
 
@@ -43,16 +39,11 @@ The login is a static prototype gate. It accepts any non-empty email and passwor
 
 This is not real authentication. Add server-side or hosted identity authentication before using private employee accounts.
 
-## Current Tool
+## Current Tools
 
-The first available tool is:
+- `apps/admin-tests/`: admin test dashboard and mock assignment flow.
+- `apps/starter-listening/`: student details landing page and Starter Progress Listening exam.
 
-```text
-tools/hours-cross-check/
-```
+## Deploy
 
-It processes Teach and Go and class-list files locally in the browser. Files are not uploaded to a server.
-
-## Deploy to SiteGround
-
-Upload the deploy zip contents into `public_html` so `index.html` sits directly inside `public_html`.
+Upload the site contents and use `login.html` as the staff workspace entry point.

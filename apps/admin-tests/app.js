@@ -2,7 +2,7 @@
   "use strict";
 
   const RESULT_STORAGE_KEY = "keaes-test-results-v1";
-  const SESSION_KEY = "keaesx-employee-session";
+  const SESSION_KEY = "keaes-workspace-employee-session";
   const tests = [
     {
       id: "starter-progress-listening",
@@ -52,7 +52,7 @@
     document.querySelectorAll("[data-logout-button]").forEach((button) => {
       button.addEventListener("click", () => {
         sessionStorage.removeItem(SESSION_KEY);
-        window.location.href = "../../index.html";
+        window.location.href = "../../login.html";
       });
     });
   }
