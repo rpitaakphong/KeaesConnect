@@ -1,0 +1,2 @@
+certifi>=2024.2.2
+websockets==12.0

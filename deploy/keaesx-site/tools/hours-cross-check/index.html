@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keaes Hours Cross-Check</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <main id="main" class="app-shell">
+    <div class="tool-topbar">
+      <a class="ghost-button" href="../../dashboard.html"><i data-lucide="arrow-left"></i> Back to Dashboard</a>
+      <span class="badge soft">KeaesX Tool</span>
+    </div>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Keaes Academics Tutorial Centre</p>
+        <h1>Class-Hours Reconciliation</h1>
+        <p class="hero-copy">Cross-check monthly Teach and Go records against the raw class-list CSV export, verify teacher names, and export an audit-ready report.</p>
+      </div>
+      <div class="privacy-card">
+        <i data-lucide="shield-check" aria-hidden="true"></i>
+        <div>
+          <strong>Private by design</strong>
+          <span>Your class data stays in this browser. No files are uploaded to a server.</span>
+        </div>
+      </div>
+    </header>
+
+    <section id="uploadStep" class="panel step-panel is-active" aria-labelledby="uploadTitle">
+      <div class="section-heading">
+        <div>
+          <span class="step-chip">Step 1</span>
+          <h2 id="uploadTitle">Upload monthly files</h2>
+          <p>Use the processed Teach and Go file and the class-management class-list CSV export for the same reporting month.</p>
+        </div>
+        <button id="demoResetBtn" class="ghost-button" type="button"><i data-lucide="rotate-ccw"></i> Clear state</button>
+      </div>
+
+      <div class="upload-grid">
+        <article class="upload-card" data-dropzone="tng">
+          <input id="tngFile" type="file" accept=".csv,.xlsx,.xls,text/csv" hidden>
+          <div class="upload-icon"><i data-lucide="file-spreadsheet"></i></div>
+          <h3>Upload Teach and Go</h3>
+          <p>.csv or .xlsx file. For Excel workbooks, only the `By Date` sheet is used.</p>
+          <div id="tngFileMeta" class="file-meta empty">No file selected</div>
+          <div class="upload-actions">
+            <button type="button" class="secondary-button" data-pick="tng">Choose file</button>
+            <button type="button" class="ghost-button" data-remove="tng" disabled>Remove</button>
+          </div>
+        </article>
+
+        <article class="upload-card" data-dropzone="csv">
+          <input id="csvFile" type="file" accept=".csv,text/csv" hidden>
+          <div class="upload-icon cyan"><i data-lucide="table"></i></div>
+          <h3>Upload class-list CSV export</h3>
+          <p>.csv export with Branch, Date, Start Time, End Time, Hours, Subject, Tutor, Platform, and Type.</p>
+          <div id="csvFileMeta" class="file-meta empty">No file selected</div>
+          <div class="upload-actions">
+            <button type="button" class="secondary-button" data-pick="csv">Choose file</button>
+            <button type="button" class="ghost-button" data-remove="csv" disabled>Remove</button>
+          </div>
+        </article>
+      </div>
+
+      <details class="explainer">
+        <summary>How are hours calculated?</summary>
+        <p>Teacher hours count each class session once. Student names are ignored in this version. The main reconciliation key is date, start time, verified teacher name, and duration; course is shown as supporting context.</p>
+      </details>
+
+      <div id="uploadError" class="notice error hidden" role="alert"></div>
+      <div id="parseProgress" class="progress-panel hidden" aria-live="polite">
+        <span class="spinner"></span>
+        <span>Parsing CSV files locally and checking teacher names...</span>
+      </div>
+      <div class="footer-actions">
+        <p class="support-note">Supported files: `.csv`. Reporting dates are detected from file contents, not file names.</p>
+        <button id="runBtn" class="primary-button" type="button" disabled><i data-lucide="play"></i> Check Teacher Names</button>
+      </div>
+    </section>
+
+    <section id="reviewStep" class="panel step-panel" aria-labelledby="reviewTitle">
+      <div class="section-heading">
+        <div>
+          <span class="step-chip">Step 2</span>
+          <h2 id="reviewTitle">Teacher name check</h2>
+          <p>Verify whether Teach and Go teacher names match class-list tutor names before calculating differences.</p>
+        </div>
+      </div>
+      <div id="reviewGrid" class="metric-grid review-grid"></div>
+      <div id="reviewWarnings" class="warning-stack"></div>
+      <div class="footer-actions">
+        <button id="backToUploadBtn" type="button" class="ghost-button"><i data-lucide="arrow-left"></i> Replace files</button>
+        <button id="proceedBtn" type="button" class="primary-button"><i data-lucide="check-circle-2"></i> Save Names & Run Summary</button>
+      </div>
+    </section>
+
+    <section id="resultsStep" class="step-panel" aria-labelledby="resultsTitle">
+      <div class="dashboard-header">
+        <div>
+          <p class="eyebrow">Results dashboard</p>
+          <h2 id="resultsTitle">Hours Cross-Check</h2>
+          <div class="badge-row">
+            <span id="branchBadge" class="badge">Branch</span>
+            <span id="statusBadge" class="badge status">Waiting</span>
+            <span id="modeBadge" class="badge soft">Students ignored</span>
+          </div>
+        </div>
+        <div class="dashboard-actions">
+          <button id="exportReportBtn" type="button" class="secondary-button"><i data-lucide="download"></i> Export Report</button>
+          <button id="resetBtn" type="button" class="ghost-button"><i data-lucide="refresh-cw"></i> Reset</button>
+        </div>
+      </div>
+
+      <div id="summaryCards" class="summary-grid"></div>
+
+      <nav class="tabs" aria-label="Results tabs">
+        <button class="tab is-active" data-tab="synthesis" type="button">Synthesis</button>
+        <button class="tab" data-tab="overview" type="button">Overview</button>
+        <button class="tab" data-tab="teachers" type="button">Teachers</button>
+        <button class="tab" data-tab="courses" type="button">Courses</button>
+        <button class="tab" data-tab="sessions" type="button">Session Mismatches</button>
+        <button class="tab" data-tab="quality" type="button">Data Quality</button>
+        <button class="tab" data-tab="settings" type="button">Teacher Names</button>
+      </nav>
+
+      <section id="tab-synthesis" class="tab-panel is-active"></section>
+      <section id="tab-overview" class="tab-panel"></section>
+      <section id="tab-teachers" class="tab-panel"></section>
+      <section id="tab-courses" class="tab-panel"></section>
+      <section id="tab-sessions" class="tab-panel"></section>
+      <section id="tab-quality" class="tab-panel"></section>
+      <section id="tab-settings" class="tab-panel"></section>
+    </section>
+  </main>
+</body>
+</html>

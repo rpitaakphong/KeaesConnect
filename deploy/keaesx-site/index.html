@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeaesX Employee Portal</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/portal.css">
+  <script defer src="assets/js/portal.js"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-nav">
+    <a class="brand-mark" href="index.html" aria-label="KeaesX home"><span>K</span><strong>KeaesX</strong></a>
+    <nav aria-label="Primary navigation">
+      <a class="nav-link is-active" href="index.html">Home</a>
+      <a class="nav-link" href="dashboard.html">Tools</a>
+    </nav>
+    <div class="nav-actions">
+      <span data-employee-badge class="badge soft hidden">Employee</span>
+      <a data-login-link class="ghost-button" href="login.html">Log in</a>
+      <button data-logout-button class="ghost-button hidden" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main id="main" class="app-shell">
+    <section class="landing-hero" aria-labelledby="landingTitle">
+      <div>
+        <p class="eyebrow">Keaes Academics Tutorial Centre</p>
+        <h1 id="landingTitle">Employee tools for faster monthly operations.</h1>
+        <p class="hero-copy">KeaesX gives the team one private workspace for class-hour reconciliation, reporting tools, and future admin workflows.</p>
+        <div class="landing-actions">
+          <a class="primary-button" href="login.html"><i data-lucide="log-in"></i> Employee Login</a>
+          <a class="ghost-button" href="dashboard.html"><i data-lucide="layout-dashboard"></i> View Tools</a>
+        </div>
+      </div>
+      <aside class="landing-panel">
+        <span class="step-chip">Current tool</span>
+        <h2>Class-Hours Reconciliation</h2>
+        <p>Verify teacher mappings, compare Teach and Go against class-list exports, and generate an audit-friendly summary.</p>
+        <a class="secondary-button" href="tools/hours-cross-check/index.html"><i data-lucide="arrow-right"></i> Open Tool</a>
+      </aside>
+    </section>
+
+    <section class="portal-feature-grid" aria-label="Portal highlights">
+      <article class="portal-feature">
+        <i data-lucide="shield-check"></i>
+        <h3>Local file processing</h3>
+        <p>Operational files are processed in the employee browser. No student or class file is uploaded to an app server.</p>
+      </article>
+      <article class="portal-feature">
+        <i data-lucide="blocks"></i>
+        <h3>Expandable tool hub</h3>
+        <p>The dashboard is ready for future tools such as payroll checks, student reports, and schedule audits.</p>
+      </article>
+      <article class="portal-feature">
+        <i data-lucide="file-check-2"></i>
+        <h3>Export-ready reports</h3>
+        <p>Each workflow can produce CSV or JSON outputs for review, documentation, and follow-up.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

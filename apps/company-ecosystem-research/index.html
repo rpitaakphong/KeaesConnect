@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecosystem Lens</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Ecosystem map</p>
+          <h1>Ecosystem Lens</h1>
+        </div>
+        <div class="actions">
+          <button id="exportJson" class="secondary">Export JSON</button>
+          <label class="secondary file-button">
+            Import JSON
+            <input id="importJson" type="file" accept="application/json" />
+          </label>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="panel controls">
+          <section>
+            <label for="companySearch">Company</label>
+            <div class="search-row">
+              <input id="companySearch" value="NVIDIA" autocomplete="off" />
+              <button id="resetView">Focus</button>
+            </div>
+          </section>
+
+          <section>
+            <p class="label">View</p>
+            <div id="viewModeControls" class="segmented">
+              <button class="active" data-view="full">Full ecosystem</button>
+              <button data-view="simplified">Simplified</button>
+            </div>
+          </section>
+
+          <section>
+            <p class="label">Relationship</p>
+            <div id="relationshipFilters" class="chip-list"></div>
+          </section>
+
+          <section>
+            <p class="label">Coverage</p>
+            <div id="signalStack" class="signal-stack"></div>
+          </section>
+        </aside>
+
+        <section class="graph-stage" aria-label="Company ecosystem graph">
+          <div class="graph-toolbar">
+            <div>
+              <p id="graphKicker" class="eyebrow">NVIDIA ecosystem</p>
+              <h2 id="graphTitle">AI accelerator supply chain</h2>
+            </div>
+            <div id="legend" class="legend"></div>
+          </div>
+          <svg id="ecosystemGraph" role="img" aria-label="Interactive company relationship diagram"></svg>
+        </section>
+
+        <aside class="panel inspector">
+          <div id="nodeInspector"></div>
+        </aside>
+      </main>
+    </div>
+
+    <template id="sourceTemplate">
+      <a class="source-link" target="_blank" rel="noreferrer"></a>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

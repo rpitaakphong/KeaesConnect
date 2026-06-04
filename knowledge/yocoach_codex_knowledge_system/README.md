@@ -1,0 +1,5 @@
+# Yo!Coach Codex Knowledge System
+
+Copy this folder into `/knowledge/yocoach_codex_knowledge_system/` and ask Codex to read it before coding.
+
+Read order: 00_MASTER_CONTEXT, 01_ARCHITECTURE, 02_DATABASE_SCHEMA, 03_API_CONTRACTS, 04_FRONTEND_ROUTES, 05_ADMIN_PERMISSIONS, 06_BOOKING_ENGINE, 07_WALLET_PAYMENTS_PAYOUTS, 08_INTEGRATIONS, 09_WORKFLOWS, 10_IMPLEMENTATION_ROADMAP, 11_CODEX_PROMPTS.

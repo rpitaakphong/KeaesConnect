@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Topic 4 Quiz | Equations, Inequalities and Graphs</title>
+  <style>
+    :root {
+      --cyan: #08b8e8;
+      --purple: #8a39f6;
+      --pink: #ff2a91;
+      --ink: #2d2d34;
+      --muted: #7a7a8b;
+      --soft: #f7f7fb;
+      --line: #ececf4;
+      --good: #10b981;
+      --bad: #ef4444;
+      --shadow: 0 28px 70px rgba(45, 45, 52, .28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-rounded, "SF Pro Rounded", "Aptos", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.24), transparent 20%),
+        linear-gradient(90deg, var(--cyan) 0 50%, var(--purple) 50% 100%);
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 34px 18px;
+    }
+
+    .quiz-frame {
+      width: min(1080px, 100%);
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 42px;
+      align-items: center;
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 660px;
+      border-radius: 36px;
+      padding: 46px 36px;
+      background: linear-gradient(160deg, #8b3ff7 0%, #933df5 45%, #ff2b92 100%);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -80px -110px auto auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.16);
+      filter: blur(2px);
+    }
+
+    .brand {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: white;
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: .01em;
+      line-height: 1.15;
+    }
+
+    .stack {
+      position: relative;
+      width: 270px;
+      height: 382px;
+      margin-top: 20px;
+    }
+
+    .paper {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: white;
+      box-shadow: 0 20px 34px rgba(31, 31, 45, .18);
+    }
+
+    .paper.back {
+      transform: rotate(-4deg) translate(-16px, 14px);
+      opacity: .72;
+    }
+
+    .paper.front {
+      padding: 42px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transform: rotate(1.5deg);
+      transition: transform .45s ease, box-shadow .45s ease;
+    }
+
+    .paper.front.pop {
+      animation: cardPop .48s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .star {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      color: #d8d8df;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .quote {
+      color: #c8a3ff;
+      font-size: 52px;
+      font-weight: 900;
+      line-height: .7;
+      margin-bottom: 8px;
+    }
+
+    .question-number {
+      color: var(--pink);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 18px;
+    }
+
+    .mini-question {
+      font-size: 25px;
+      line-height: 1.18;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .dots {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      justify-content: center;
+      padding-top: 10px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.44);
+      transition: width .25s ease, background .25s ease;
+    }
+
+    .dot.active {
+      width: 28px;
+      background: #fff;
+    }
+
+    .quiz-panel {
+      position: relative;
+      min-height: 660px;
+      border-radius: 36px;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .quiz-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 92% 10%, rgba(8,184,232,.18), transparent 24%),
+        radial-gradient(circle at 8% 88%, rgba(255,42,145,.12), transparent 24%);
+      pointer-events: none;
+    }
+
+    .topbar,
+    .question-area,
+    .controls {
+      position: relative;
+      z-index: 2;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(138,57,246,.22);
+      background: #f5efff;
+      color: #7134d9;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .score {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 5vw, 50px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .prompt {
+      margin: 0 0 24px;
+      color: #4d4d5e;
+      font-size: clamp(20px, 2.8vw, 30px);
+      line-height: 1.25;
+      font-weight: 850;
+    }
+
+    .math {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: #f7f7fb;
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    .options {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .option {
+      width: 100%;
+      min-height: 66px;
+      border: 2px solid transparent;
+      border-radius: 22px;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 12px 24px rgba(45,45,52,.08);
+      padding: 14px 18px;
+      text-align: left;
+      font: inherit;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1.25;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .option:hover:not(:disabled) {
+      transform: translateY(-3px);
+      border-color: rgba(138,57,246,.4);
+      box-shadow: 0 18px 32px rgba(45,45,52,.13);
+    }
+
+    .option:disabled {
+      cursor: default;
+    }
+
+    .option.correct {
+      border-color: rgba(16,185,129,.9);
+      background: #ecfdf5;
+      animation: correctPulse .55s ease;
+    }
+
+    .option.incorrect {
+      border-color: rgba(239,68,68,.9);
+      background: #fff1f2;
+      animation: shake .42s ease;
+    }
+
+    .feedback {
+      min-height: 72px;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      opacity: 0;
+      transform: translateY(12px) scale(.98);
+      transition: opacity .25s ease, transform .25s ease;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .feedback.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .feedback.good {
+      color: #065f46;
+      background: #d1fae5;
+    }
+
+    .feedback.bad {
+      color: #991b1b;
+      background: #ffe4e6;
+    }
+
+    .controls {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 20px;
+    }
+
+    .nav {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 20px;
+      min-width: 112px;
+      color: white;
+      background: #2d2d34;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .18s ease, opacity .18s ease;
+    }
+
+    .nav.secondary {
+      background: #ffffff;
+      color: #2d2d34;
+      border: 1px solid var(--line);
+    }
+
+    .nav:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .nav:disabled {
+      opacity: .42;
+      cursor: default;
+    }
+
+    .result {
+      display: none;
+      position: relative;
+      z-index: 2;
+      margin: auto 0;
+      text-align: center;
+      animation: cardPop .55s ease;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-badge {
+      width: 118px;
+      height: 118px;
+      margin: 0 auto 22px;
+      border-radius: 32px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(145deg, var(--pink), var(--purple));
+      box-shadow: 0 20px 40px rgba(138,57,246,.28);
+      font-size: 46px;
+      font-weight: 950;
+    }
+
+    .result h2 {
+      margin: 0 0 10px;
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .result p {
+      margin: 0 auto 28px;
+      max-width: 470px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 750;
+    }
+
+    .confetti {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .piece {
+      position: absolute;
+      width: 10px;
+      height: 18px;
+      border-radius: 4px;
+      opacity: 0;
+      animation: confetti .85s ease forwards;
+    }
+
+    @keyframes cardPop {
+      0% { transform: translateY(18px) scale(.96) rotate(1.5deg); opacity: .3; }
+      100% { transform: translateY(0) scale(1) rotate(1.5deg); opacity: 1; }
+    }
+
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.035); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-7px); }
+      50% { transform: translateX(7px); }
+      75% { transform: translateX(-4px); }
+    }
+
+    @keyframes confetti {
+      0% { opacity: 0; transform: translateY(-10px) rotate(0deg); }
+      15% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(190px) rotate(420deg); }
+    }
+
+    @media (max-width: 880px) {
+      body {
+        background: linear-gradient(180deg, var(--cyan) 0 48%, var(--purple) 48% 100%);
+      }
+
+      .quiz-frame {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+
+      .hero-card {
+        min-height: 260px;
+        border-radius: 30px;
+        padding: 26px 22px;
+      }
+
+      .stack {
+        width: min(260px, 72vw);
+        height: 190px;
+      }
+
+      .paper.front {
+        padding: 26px 24px;
+      }
+
+      .quote {
+        font-size: 34px;
+      }
+
+      .mini-question {
+        font-size: 20px;
+      }
+
+      .quiz-panel {
+        min-height: 620px;
+        border-radius: 30px;
+        padding: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="quiz-frame" aria-label="Topic 4 quiz">
+      <aside class="hero-card">
+        <div class="brand">Topic 4<br>Quiz Cards</div>
+        <div class="stack" aria-hidden="true">
+          <div class="paper back"></div>
+          <div class="paper front" id="previewCard">
+            <div class="star">☆</div>
+            <div class="quote">“</div>
+            <div class="question-number" id="previewNumber">Question 1</div>
+            <div class="mini-question" id="previewText">Solve |x - 4| = 7</div>
+          </div>
+        </div>
+        <div class="dots" id="dots" aria-label="Quiz progress"></div>
+      </aside>
+
+      <section class="quiz-panel">
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+        <div id="quizView">
+          <div class="topbar">
+            <div class="label" id="sectionLabel">Section A · Quick checks</div>
+            <div class="score" id="scoreLabel">Score 0 / 0</div>
+          </div>
+
+          <div class="question-area">
+            <h1 id="questionTitle">Question 1</h1>
+            <p class="prompt" id="prompt"></p>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div class="result" id="resultView">
+          <div class="result-badge" id="resultScore">0</div>
+          <h2>Quiz complete</h2>
+          <p id="resultText"></p>
+          <button class="nav" id="restartBtn" type="button">Restart</button>
+        </div>
+
+        <div class="controls">
+          <button class="nav secondary" id="backBtn" type="button">Back</button>
+          <button class="nav" id="nextBtn" type="button">Next</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const quiz = [
+      {
+        section: "Section A · Quick checks",
+        prompt: "Solve: <span class=\"math\">|x - 4| = 7</span>",
+        preview: "Solve |x - 4| = 7",
+        options: ["x = -3, 11", "x = 3, 11", "x = -11, 3", "x = 4, 7"],
+        answer: 0,
+        explanation: "Split into x - 4 = 7 or x - 4 = -7."
+      },
+      {
+        section: "Section A · Quick checks",
+        prompt: "Solve: <span class=\"math\">|2x + 1| = 5</span>",
+        preview: "Solve |2x + 1| = 5",
+        options: ["x = -2, 3", "x = -3, 2", "x = -5, 5", "x = 2 only"],
+        answer: 1,
+        explanation: "The two cases are 2x + 1 = 5 and 2x + 1 = -5."
+      },
+      {
+        section: "Section A · Quick checks",
+        prompt: "Solve: <span class=\"math\">|x + 3| = 2x - 1</span>. Give all real solutions.",
+        preview: "Solve |x + 3| = 2x - 1",
+        options: ["x = 4", "x = -2/3", "x = -2/3, 4", "No real solution"],
+        answer: 0,
+        explanation: "x = -2/3 is rejected because 2x - 1 must be non-negative."
+      },
+      {
+        section: "Section A · Quick checks",
+        prompt: "Solve: <span class=\"math\">|3x - 6| = |x + 2|</span>",
+        preview: "Solve |3x - 6| = |x + 2|",
+        options: ["x = 1, 4", "x = -1, 4", "x = 1 only", "x = -4, -1"],
+        answer: 0,
+        explanation: "Use same sign and opposite sign cases."
+      },
+      {
+        section: "Section B · Inequalities",
+        prompt: "Solve: <span class=\"math\">2|x - 1| > 6</span>",
+        preview: "Solve 2|x - 1| > 6",
+        options: ["-2 < x < 4", "x < -2 or x > 4", "x ≤ -2 or x ≥ 4", "x > 4 only"],
+        answer: 1,
+        explanation: "Divide by 2 first, then use the outside intervals."
+      },
+      {
+        section: "Section B · Inequalities",
+        prompt: "Solve: <span class=\"math\">|x + 5| ≤ 3</span>",
+        preview: "Solve |x + 5| ≤ 3",
+        options: ["-8 ≤ x ≤ -2", "-3 ≤ x ≤ 3", "x ≤ -8 or x ≥ -2", "2 ≤ x ≤ 8"],
+        answer: 0,
+        explanation: "Write -3 ≤ x + 5 ≤ 3, then subtract 5."
+      },
+      {
+        section: "Section B · Inequalities",
+        prompt: "Solve: <span class=\"math\">|2x - 3| ≤ x + 1</span>",
+        preview: "Solve |2x - 3| ≤ x + 1",
+        options: ["-1 ≤ x ≤ 4", "2/3 ≤ x ≤ 4", "x ≤ 2/3 or x ≥ 4", "x ≥ -1"],
+        answer: 1,
+        explanation: "Also require x + 1 ≥ 0, then solve the compound inequality."
+      },
+      {
+        section: "Section B · Inequalities",
+        prompt: "Solve: <span class=\"math\">|x² - 5x + 4| > 2</span>. Give intervals.",
+        preview: "Solve |x² - 5x + 4| > 2",
+        options: [
+          "x < (5 - √17)/2 or 2 < x < 3 or x > (5 + √17)/2",
+          "(5 - √17)/2 < x < (5 + √17)/2",
+          "x < 2 or x > 3",
+          "2 ≤ x ≤ 3 only"
+        ],
+        answer: 0,
+        explanation: "Split into x² - 5x + 4 > 2 or x² - 5x + 4 < -2."
+      },
+      {
+        section: "Section C · Substitution",
+        prompt: "Solve by substitution: <span class=\"math\">x⁴ - 5x² + 4 = 0</span>",
+        preview: "Solve x⁴ - 5x² + 4 = 0",
+        options: ["x = -2, -1, 1, 2", "x = -4, -1, 1, 4", "x = 1, 4", "x = ±√5"],
+        answer: 0,
+        explanation: "Let u = x², then solve u² - 5u + 4 = 0."
+      },
+      {
+        section: "Section C · Substitution",
+        prompt: "Solve: <span class=\"math\">(x² + 1)² - 7(x² + 1) + 12 = 0</span>",
+        preview: "Solve using u = x² + 1",
+        options: ["x = ±√2, ±√3", "x = ±2, ±3", "x = √2, √3 only", "x = ±1, ±2"],
+        answer: 0,
+        explanation: "Let u = x² + 1, so u = 3 or u = 4."
+      },
+      {
+        section: "Section D · Cubic graphs",
+        prompt: "For <span class=\"math\">f(x) = (x + 2)(x - 1)(x - 3)</span>, which sketch features are correct?",
+        preview: "Identify cubic sketch features",
+        options: [
+          "x-intercepts (-2,0), (1,0), (3,0); y-intercept (0,6); falls left and rises right",
+          "x-intercepts (2,0), (-1,0), (-3,0); y-intercept (0,-6)",
+          "x-intercepts (-2,0), (1,0), (3,0); y-intercept (0,-6); rises left and falls right",
+          "x-intercepts only at x = 6"
+        ],
+        answer: 0,
+        explanation: "The factors give roots -2, 1, 3, and f(0) = 6."
+      },
+      {
+        section: "Section D · Cubic inequalities",
+        prompt: "Using <span class=\"math\">f(x) = (x + 2)(x - 1)(x - 3)</span>, solve <span class=\"math\">f(x) ≤ 0</span>.",
+        preview: "Solve f(x) ≤ 0",
+        options: ["(-∞, -2] ∪ [1, 3]", "[-2, 1] ∪ [3, ∞)", "(-2, 1) ∪ (3, ∞)", "[-2, 3]"],
+        answer: 0,
+        explanation: "The sign is negative before -2 and between 1 and 3; include roots."
+      }
+    ];
+
+    const state = {
+      index: 0,
+      chosen: Array(quiz.length).fill(null),
+      checked: Array(quiz.length).fill(false)
+    };
+
+    const els = {
+      previewCard: document.getElementById("previewCard"),
+      previewNumber: document.getElementById("previewNumber"),
+      previewText: document.getElementById("previewText"),
+      dots: document.getElementById("dots"),
+      sectionLabel: document.getElementById("sectionLabel"),
+      scoreLabel: document.getElementById("scoreLabel"),
+      questionTitle: document.getElementById("questionTitle"),
+      prompt: document.getElementById("prompt"),
+      options: document.getElementById("options"),
+      feedback: document.getElementById("feedback"),
+      backBtn: document.getElementById("backBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      quizView: document.getElementById("quizView"),
+      resultView: document.getElementById("resultView"),
+      resultScore: document.getElementById("resultScore"),
+      resultText: document.getElementById("resultText"),
+      restartBtn: document.getElementById("restartBtn"),
+      confetti: document.getElementById("confetti")
+    };
+
+    function score() {
+      return state.chosen.reduce((total, chosen, i) => total + (chosen === quiz[i].answer ? 1 : 0), 0);
+    }
+
+    function renderDots() {
+      els.dots.innerHTML = "";
+      quiz.forEach((_, i) => {
+        const dot = document.createElement("span");
+        dot.className = "dot" + (i === state.index ? " active" : "");
+        els.dots.appendChild(dot);
+      });
+    }
+
+    function render() {
+      const item = quiz[state.index];
+      els.quizView.style.display = "block";
+      els.resultView.classList.remove("show");
+      els.sectionLabel.textContent = item.section;
+      els.scoreLabel.textContent = `Score ${score()} / ${quiz.length}`;
+      els.questionTitle.textContent = `Question ${state.index + 1}`;
+      els.prompt.innerHTML = item.prompt;
+      els.previewNumber.textContent = `Question ${state.index + 1}`;
+      els.previewText.textContent = item.preview;
+      els.previewCard.classList.remove("pop");
+      void els.previewCard.offsetWidth;
+      els.previewCard.classList.add("pop");
+
+      els.options.innerHTML = "";
+      item.options.forEach((option, optionIndex) => {
+        const button = document.createElement("button");
+        button.className = "option";
+        button.type = "button";
+        button.innerHTML = option;
+        button.disabled = state.checked[state.index];
+        button.addEventListener("click", () => choose(optionIndex));
+
+        if (state.checked[state.index]) {
+          if (optionIndex === item.answer) button.classList.add("correct");
+          if (optionIndex === state.chosen[state.index] && optionIndex !== item.answer) button.classList.add("incorrect");
+        }
+
+        els.options.appendChild(button);
+      });
+
+      renderFeedback();
+      renderDots();
+      els.backBtn.disabled = state.index === 0;
+      els.nextBtn.textContent = state.index === quiz.length - 1 ? "Finish" : "Next";
+    }
+
+    function renderFeedback() {
+      const item = quiz[state.index];
+      const checked = state.checked[state.index];
+      const chosen = state.chosen[state.index];
+      els.feedback.className = "feedback";
+      els.feedback.textContent = "";
+
+      if (!checked) return;
+
+      const correct = chosen === item.answer;
+      els.feedback.classList.add("show", correct ? "good" : "bad");
+      els.feedback.textContent = correct
+        ? `Correct. ${item.explanation}`
+        : `Incorrect. The correct answer is: ${item.options[item.answer]}. ${item.explanation}`;
+    }
+
+    function choose(optionIndex) {
+      if (state.checked[state.index]) return;
+
+      state.chosen[state.index] = optionIndex;
+      state.checked[state.index] = true;
+      if (optionIndex === quiz[state.index].answer) burst();
+      render();
+    }
+
+    function burst() {
+      els.confetti.innerHTML = "";
+      const colors = ["#ff2a91", "#8a39f6", "#08b8e8", "#10b981", "#ffffff"];
+      for (let i = 0; i < 22; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "piece";
+        piece.style.left = `${22 + Math.random() * 56}%`;
+        piece.style.top = `${12 + Math.random() * 18}%`;
+        piece.style.background = colors[i % colors.length];
+        piece.style.animationDelay = `${Math.random() * .16}s`;
+        els.confetti.appendChild(piece);
+      }
+    }
+
+    function showResult() {
+      const earned = score();
+      els.quizView.style.display = "none";
+      els.resultView.classList.add("show");
+      els.resultScore.textContent = `${earned}/${quiz.length}`;
+      els.resultText.textContent = earned === quiz.length
+        ? "Excellent. You handled every modulus, substitution, and cubic interval correctly."
+        : "Review any red answers, then retry. Focus on case splitting, interval notation, and checking rejected solutions.";
+      els.nextBtn.disabled = true;
+      els.backBtn.disabled = false;
+      burst();
+    }
+
+    els.backBtn.addEventListener("click", () => {
+      if (els.resultView.classList.contains("show")) {
+        els.resultView.classList.remove("show");
+        els.quizView.style.display = "block";
+        els.nextBtn.disabled = false;
+        render();
+        return;
+      }
+      state.index = Math.max(0, state.index - 1);
+      render();
+    });
+
+    els.nextBtn.addEventListener("click", () => {
+      if (state.index === quiz.length - 1) {
+        showResult();
+        return;
+      }
+      state.index += 1;
+      render();
+    });
+
+    els.restartBtn.addEventListener("click", () => {
+      state.index = 0;
+      state.chosen.fill(null);
+      state.checked.fill(false);
+      els.nextBtn.disabled = false;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
