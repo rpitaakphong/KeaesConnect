@@ -3,6 +3,8 @@ const state = {
   audioStarted: false,
   audioEnded: false,
   audioStartPending: false,
+  studentReady: false,
+  studentProfile: null,
   selectedObject: null,
   connections: {
     radio: "bookcase",
@@ -14,6 +16,15 @@ const state = {
   },
   activeColour: "#ef4444",
   submitted: false,
+  savedResultId: null,
+};
+
+const RESULT_STORAGE_KEY = "keaes-test-results-v1";
+const testMetadata = {
+  id: new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening",
+  title: "Starter Progress Listening",
+  subject: "English",
+  level: "Cambridge Starters",
 };
 
 const answerKey = {
@@ -214,6 +225,7 @@ const assessedCounts = {
 
 document.addEventListener("DOMContentLoaded", () => {
   buildPart3();
+  initStudentGate();
   bindNavigation();
   bindAudio();
   bindPart1();
@@ -222,6 +234,28 @@ document.addEventListener("DOMContentLoaded", () => {
   bindSubmit();
   renderAll();
 });
+
+function initStudentGate() {
+  const form = document.querySelector("[data-student-form]");
+  const testDate = form?.elements.testDate;
+  if (testDate && !testDate.value) testDate.value = new Date().toISOString().slice(0, 10);
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const profile = {
+      fullName: cleanText(data.get("fullName")),
+      nickname: cleanText(data.get("nickname")),
+      dateOfBirth: cleanText(data.get("dateOfBirth")),
+      subject: cleanText(data.get("subject")),
+      level: cleanText(data.get("level")),
+      testDate: cleanText(data.get("testDate")),
+    };
+    if (Object.values(profile).some((value) => !value)) return;
+    state.studentProfile = profile;
+    state.studentReady = true;
+    renderAll();
+  });
+}
 
 function bindNavigation() {
   document.querySelectorAll("[data-part-button]").forEach((button) => {
@@ -267,7 +301,7 @@ function bindAudio() {
   };
 
   const startExamAudio = () => {
-    if (state.audioStarted || state.audioEnded || state.audioStartPending) return;
+    if (!state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending) return;
     state.audioStartPending = true;
     audio.currentTime = 0;
     const playAttempt = audio.play();
@@ -411,11 +445,13 @@ function bindSubmit() {
   document.querySelector("[data-submit]").addEventListener("click", () => {
     state.submitted = true;
     state.currentPart = "review";
+    saveMockResult();
     renderAll();
   });
 }
 
 function renderAll() {
+  renderStudentGate();
   renderNavigation();
   renderPart1();
   renderPart2();
@@ -423,6 +459,27 @@ function renderAll() {
   renderPart4();
   renderReview();
   renderProgress();
+}
+
+function renderStudentGate() {
+  const gate = document.querySelector("[data-student-gate]");
+  const startButton = document.querySelector("[data-start-audio]");
+  const status = document.querySelector("[data-audio-status]");
+  const summary = document.querySelector("[data-student-summary]");
+  gate?.classList.toggle("is-complete", state.studentReady);
+  if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending;
+  if (status && !state.studentReady) {
+    status.textContent = "Enter student details first. Once started, playback will not stop and continue until finish.";
+  }
+  if (summary) {
+    summary.hidden = !state.studentProfile;
+    if (state.studentProfile) {
+      summary.innerHTML = `
+        <h3>${escapeHtml(state.studentProfile.fullName)} (${escapeHtml(state.studentProfile.nickname)})</h3>
+        <p>${escapeHtml(state.studentProfile.subject)} · ${escapeHtml(state.studentProfile.level)} · Test date ${escapeHtml(state.studentProfile.testDate)}</p>
+      `;
+    }
+  }
 }
 
 function renderNavigation() {
@@ -611,6 +668,49 @@ function scoreSubmission() {
   };
 }
 
+function saveMockResult() {
+  if (!state.studentProfile || state.savedResultId) return;
+  const score = scoreSubmission();
+  const result = {
+    id: `result-${Date.now()}`,
+    testId: testMetadata.id,
+    testTitle: testMetadata.title,
+    student: state.studentProfile,
+    score: {
+      total: score.total,
+      possible: score.possible,
+      percent: Math.round((score.total / score.possible) * 100),
+    },
+    partScores: Object.entries(score.sections).map(([part, items]) => ({
+      part: part.replace("part", "Part "),
+      total: items.filter((item) => item.correct).length,
+      possible: items.length,
+    })),
+    answers: Object.values(score.sections).flat().map((item) => ({
+      part: item.part,
+      prompt: item.prompt,
+      response: item.response,
+      correctAnswer: item.correctAnswer,
+      correct: item.correct,
+      transcript: item.transcript,
+    })),
+    submittedAt: new Date().toISOString(),
+  };
+  const results = readResults();
+  results.unshift(result);
+  localStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(results.slice(0, 250)));
+  state.savedResultId = result.id;
+}
+
+function readResults() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(RESULT_STORAGE_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function buildResult({ part, prompt, response, correctAnswer, correct, transcript }) {
   return { part, prompt, response, correctAnswer, correct, transcript };
 }
@@ -682,4 +782,17 @@ function renderScoreSummary(score) {
       ${corrections}
     </section>
   `;
+}
+
+function cleanText(value) {
+  return String(value ?? "").trim().replace(/\s+/g, " ");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }

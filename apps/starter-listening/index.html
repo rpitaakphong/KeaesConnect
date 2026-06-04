@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Starter Progress Listening - Interactive Test</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="styles.css?v=portal-theme">
+  <script defer src="app.js?v=portal-theme"></script>
 </head>
 <body>
   <a class="skip-link" href="#test">Skip to test</a>
@@ -20,20 +20,39 @@
     </div>
   </header>
 
+  <section class="student-gate" data-student-gate aria-labelledby="studentGateTitle">
+    <div class="student-gate-card">
+      <div>
+        <p class="eyebrow">Student details</p>
+        <h2 id="studentGateTitle">Enter your information before starting.</h2>
+        <p class="hint">This information will be saved with your test result for admin review.</p>
+      </div>
+      <form class="student-form" data-student-form>
+        <label>Full name <input name="fullName" autocomplete="name" required></label>
+        <label>Nickname <input name="nickname" autocomplete="nickname" required></label>
+        <label>Date of birth <input name="dateOfBirth" type="date" required></label>
+        <label>Subject <input name="subject" value="English" required></label>
+        <label>Level <input name="level" value="Cambridge Starters" required></label>
+        <label>Test date <input name="testDate" type="date" required></label>
+        <button class="primary-action" type="submit" data-student-submit>Continue to test</button>
+      </form>
+    </div>
+  </section>
+
   <section class="audio-bar" aria-label="Listening exam audio">
     <div class="audio-main">
       <div>
         <p class="eyebrow">Listening exam audio</p>
         <h2>Starter Progress Listening</h2>
       </div>
-      <button class="start-exam-button" type="button" data-start-audio>Start listening exam</button>
+      <button class="start-exam-button" type="button" data-start-audio disabled>Start listening exam</button>
       <audio preload="auto" data-audio-player data-audio-src="assets/starter-progress-listening.mp3">
         Your browser does not support the audio element.
       </audio>
     </div>
     <div class="audio-tools">
       <span class="time-readout" data-audio-time>00:00 / 21:30</span>
-      <p class="audio-note" data-audio-status>Once started, playback will not stop and continue until finish.</p>
+      <p class="audio-note" data-audio-status>Enter student details first. Once started, playback will not stop and continue until finish.</p>
     </div>
   </section>
 
@@ -183,6 +202,7 @@
         <div class="pending-note">
           Submit is available after the listening audio has finished. The answer key is hidden until final submission.
         </div>
+        <div class="student-summary" data-student-summary hidden></div>
         <div class="review-grid" data-review-grid></div>
         <button class="primary-action" type="button" data-submit disabled>Submit test</button>
         <div class="result-card" hidden data-result-card></div>

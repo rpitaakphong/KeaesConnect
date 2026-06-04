@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test Admin | KeaesX</title>
+  <link rel="stylesheet" href="styles.css?v=portal-theme">
+  <script defer src="../../assets/js/portal.js"></script>
+  <script defer src="app.js?v=portal-theme"></script>
+</head>
+<body data-page="admin-tests">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="admin-topbar">
+    <a class="brand-mark" href="../../dashboard.html" aria-label="Back to KeaesX dashboard"><span>K</span><strong>KeaesX Tests</strong></a>
+    <div class="top-actions">
+      <span data-employee-badge class="badge soft hidden">Employee</span>
+      <a class="ghost-button" href="../../dashboard.html">Portal</a>
+      <button data-logout-button class="ghost-button hidden" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main id="main" class="admin-shell">
+    <section class="hero-panel">
+      <div>
+        <p class="eyebrow">WP4 admin dashboard</p>
+        <h1>Send tests and review student performance.</h1>
+        <p>Mock localStorage data is used in WP4. WP5 will replace this with a shared database.</p>
+      </div>
+      <div class="mock-badge">Local mock mode</div>
+    </section>
+
+    <section class="metric-grid" data-metrics></section>
+
+    <section class="admin-grid">
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Test catalog</p>
+            <h2>Available tests</h2>
+          </div>
+        </div>
+        <div class="test-list" data-test-list></div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Send test</p>
+            <h2>Generate link</h2>
+          </div>
+        </div>
+        <form class="link-form" data-link-form>
+          <label>Selected test
+            <select name="testId" data-test-select></select>
+          </label>
+          <label>Share URL
+            <input name="shareUrl" data-share-url readonly>
+          </label>
+          <div class="button-row">
+            <button class="primary-button" type="button" data-copy-link>Copy link</button>
+            <a class="secondary-button" data-open-link target="_blank" rel="noopener">Open test</a>
+          </div>
+          <label>Message template
+            <textarea data-message-template readonly rows="5"></textarea>
+          </label>
+        </form>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Student performance</p>
+          <h2>Submitted results</h2>
+        </div>
+        <button class="ghost-button" type="button" data-seed-results>Load sample data</button>
+      </div>
+      <div class="results-layout">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Test</th>
+                <th>Subject</th>
+                <th>Level</th>
+                <th>Score</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody data-results-table></tbody>
+          </table>
+        </div>
+        <aside class="detail-panel" data-result-detail>
+          <h3>No result selected</h3>
+          <p>Select a student result to see score details and corrections.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
