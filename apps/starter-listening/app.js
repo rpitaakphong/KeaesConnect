@@ -356,7 +356,7 @@ function bindAudio() {
   audio.addEventListener("durationchange", updateReadout);
   audio.addEventListener("ended", markComplete);
   audio.addEventListener("pause", () => {
-    if (!state.audioStarted || state.audioEnded) return;
+    if (!state.audioStarted || state.audioEnded || state.submitted) return;
     audio.play().catch(() => {
       setStatus("Playback was interrupted. Keep this page active so the exam can continue.", "warning");
     });
@@ -417,6 +417,7 @@ function buildPart3() {
 
   document.querySelectorAll("[data-choice-answer]").forEach((input) => {
     input.addEventListener("change", () => {
+      if (state.submitted) return;
       state.choices[input.dataset.choiceAnswer] = input.value;
       renderAll();
     });
@@ -426,6 +427,7 @@ function buildPart3() {
 function bindPart1() {
   document.querySelectorAll("[data-object-point]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       state.selectedObject = button.dataset.objectPoint;
       renderPart1();
     });
@@ -433,6 +435,7 @@ function bindPart1() {
 
   document.querySelectorAll("[data-target]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       if (!state.selectedObject) return;
       if (state.selectedObject === "radio") return;
       state.connections[state.selectedObject] = button.dataset.target;
@@ -445,6 +448,7 @@ function bindPart1() {
 function bindPart2() {
   document.querySelectorAll("[data-text-answer]").forEach((input) => {
     input.addEventListener("input", () => {
+      if (state.submitted) return;
       state.textAnswers[input.dataset.textAnswer] = input.value;
       renderAll();
     });
@@ -454,6 +458,7 @@ function bindPart2() {
 function bindPart4() {
   document.querySelectorAll("[data-colour]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       state.activeColour = button.dataset.colour;
       renderPart4();
     });
@@ -461,6 +466,7 @@ function bindPart4() {
 
   document.querySelectorAll("[data-region]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (state.submitted) return;
       state.colours[button.dataset.region] = state.activeColour;
       renderAll();
     });
@@ -468,12 +474,56 @@ function bindPart4() {
 }
 
 function bindSubmit() {
-  document.querySelector("[data-submit]").addEventListener("click", () => {
-    state.submitted = true;
-    state.currentPart = "review";
-    saveMockResult();
-    renderAll();
+  document.querySelectorAll("[data-submit]").forEach((button) => {
+    button.addEventListener("click", confirmSubmit);
   });
+
+  const dialog = document.querySelector("[data-submit-dialog]");
+  if (!dialog) return;
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue === "confirm") finalizeSubmission();
+  });
+}
+
+function confirmSubmit() {
+  if (state.submitted) return;
+  const dialog = document.querySelector("[data-submit-dialog]");
+  if (dialog?.showModal) {
+    dialog.returnValue = "";
+    dialog.showModal();
+    return;
+  }
+  if (window.confirm("Submit test now? Your answers will be marked and you cannot continue the test.")) {
+    finalizeSubmission();
+  }
+}
+
+function finalizeSubmission() {
+  if (state.submitted) return;
+  state.submitted = true;
+  state.audioEnded = true;
+  state.audioStartPending = false;
+  state.selectedObject = null;
+  stopAudioForSubmission();
+  state.currentPart = "review";
+  saveMockResult();
+  renderAll();
+}
+
+function stopAudioForSubmission() {
+  const audio = document.querySelector("[data-audio-player]");
+  const startButton = document.querySelector("[data-start-audio]");
+  const status = document.querySelector("[data-audio-status]");
+  if (audio) audio.pause();
+  if (startButton) {
+    startButton.textContent = "Test submitted";
+    startButton.disabled = true;
+  }
+  if (status) {
+    status.textContent = "Test submitted. Playback has stopped.";
+    status.classList.remove("is-warning");
+    status.classList.add("is-complete");
+  }
 }
 
 function renderAll() {
@@ -490,7 +540,7 @@ function renderAll() {
 function renderStudentProfile() {
   const startButton = document.querySelector("[data-start-audio]");
   const summary = document.querySelector("[data-student-summary]");
-  if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending;
+  if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending || state.submitted;
   if (summary) {
     summary.hidden = !state.studentProfile;
     if (state.studentProfile) {
@@ -516,6 +566,10 @@ function renderPart1() {
     const objectId = button.dataset.objectPoint;
     button.classList.toggle("is-selected", state.selectedObject === objectId);
     button.classList.toggle("is-linked", Boolean(state.connections[objectId]));
+    button.disabled = state.submitted;
+  });
+  document.querySelectorAll("[data-target]").forEach((button) => {
+    button.disabled = state.submitted;
   });
 
   const lineLayer = document.querySelector("[data-line-layer]");
@@ -555,12 +609,14 @@ function renderPart2() {
   document.querySelectorAll("[data-text-answer]").forEach((input) => {
     const stored = state.textAnswers[input.dataset.textAnswer] || "";
     if (input.value !== stored) input.value = stored;
+    input.disabled = state.submitted;
   });
 }
 
 function renderPart3() {
   document.querySelectorAll("[data-choice-answer]").forEach((input) => {
     input.checked = state.choices[input.dataset.choiceAnswer] === input.value;
+    input.disabled = state.submitted;
   });
   document.querySelectorAll("[data-choice-card]").forEach((card) => {
     const input = card.querySelector("input");
@@ -571,8 +627,10 @@ function renderPart3() {
 function renderPart4() {
   document.querySelectorAll("[data-colour]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.colour === state.activeColour);
+    button.disabled = state.submitted;
   });
   document.querySelectorAll("[data-region]").forEach((button) => {
+    button.disabled = state.submitted;
     const colour = state.colours[button.dataset.region];
     if (colour) {
       button.style.setProperty("--fill", colour);
@@ -587,7 +645,7 @@ function renderPart4() {
 function renderReview() {
   const reviewGrid = document.querySelector("[data-review-grid]");
   const partStatus = getPartStatus();
-  const submitButton = document.querySelector("[data-submit]");
+  const submitButtons = document.querySelectorAll("[data-submit]");
   reviewGrid.innerHTML = Object.entries(partStatus)
     .map(([part, status]) => {
       const label = part.replace("part", "Part ");
@@ -599,10 +657,10 @@ function renderReview() {
       `;
     })
     .join("");
-  if (submitButton) {
-    submitButton.disabled = !state.audioEnded || state.submitted;
-    submitButton.textContent = state.audioEnded ? "Submit test" : "Submit available after audio finishes";
-  }
+  submitButtons.forEach((button) => {
+    button.disabled = state.submitted;
+    button.textContent = state.submitted ? "Submitted" : "Submit test";
+  });
 
   const result = document.querySelector("[data-result-card]");
   result.hidden = !state.submitted;

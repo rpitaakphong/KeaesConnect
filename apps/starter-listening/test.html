@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Starter Progress Listening - Interactive Test</title>
-  <link rel="stylesheet" href="styles.css?v=under-table-target-2">
-  <script defer src="app.js?v=under-table-target-2"></script>
+  <link rel="stylesheet" href="styles.css?v=early-submit">
+  <script defer src="app.js?v=early-submit"></script>
 </head>
 <body>
   <a class="skip-link" href="#test">Skip to test</a>
@@ -17,6 +17,7 @@
       <div class="status-pill" aria-live="polite">
         <span data-progress-count>0</span>/20 answers
       </div>
+      <button class="header-submit-button" type="button" data-submit>Submit test</button>
     </div>
     <section class="audio-bar" aria-label="Listening exam audio">
       <div>
@@ -168,7 +169,7 @@
         </div>
 
         <div class="pending-note">
-          Submit is available after the listening audio has finished. The answer key is hidden until final submission.
+          You may submit early, but final submission ends the test and your answers cannot be changed.
         </div>
         <div class="student-summary" data-student-summary hidden></div>
         <div class="review-grid" data-review-grid></div>
@@ -177,5 +178,16 @@
       </section>
     </section>
   </main>
+
+  <dialog class="confirm-dialog" data-submit-dialog aria-labelledby="submitDialogTitle">
+    <form method="dialog">
+      <h2 id="submitDialogTitle">Submit test now?</h2>
+      <p>You are submitting before the listening audio has finished. Your answers will be marked and you cannot continue the test.</p>
+      <div class="dialog-actions">
+        <button class="secondary-action" type="submit" value="cancel">Cancel</button>
+        <button class="primary-action" type="submit" value="confirm">Submit test</button>
+      </div>
+    </form>
+  </dialog>
 </body>
 </html>
