@@ -123,7 +123,7 @@ button { cursor: pointer; }
   text-transform: uppercase;
 }
 
-.mock-badge, .badge {
+.backend-badge, .badge {
   background: var(--green-soft);
   border: 0;
   border-radius: 999px;

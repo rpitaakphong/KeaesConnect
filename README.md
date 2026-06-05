@@ -18,6 +18,9 @@ assets/
 apps/
   admin-tests/
   starter-listening/
+
+supabase/
+  schema.sql
 ```
 
 ## Run Locally
@@ -33,15 +36,15 @@ python3 -m http.server 4173
 
 Then open `http://127.0.0.1:4173/login.html`.
 
-## Prototype Login
+## Supabase Backend
 
-The login is a static prototype gate. It accepts any non-empty email and password, stores an employee session in `sessionStorage`, and protects `dashboard.html` visually.
+WP5 uses Supabase for staff authentication, test assignments, student submissions, scoring, and admin results.
 
-This is not real authentication. Add server-side or hosted identity authentication before using private employee accounts.
+Run `supabase/schema.sql` in your Supabase project, then add your project URL and anon key to `assets/js/supabase-config.js`.
 
 ## Current Tools
 
-- `apps/admin-tests/`: admin test dashboard and mock assignment flow.
+- `apps/admin-tests/`: admin test dashboard and Supabase assignment flow.
 - `apps/starter-listening/`: student details landing page and Starter Progress Listening exam.
 
 ## Deploy

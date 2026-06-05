@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Starter Progress Listening - Student Details</title>
   <link rel="stylesheet" href="styles.css?v=student-split">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="../../assets/js/supabase-config.js"></script>
+  <script defer src="../../assets/js/keaes-api.js"></script>
   <script defer src="landing.js?v=student-split"></script>
 </head>
 <body class="landing-page">
@@ -16,7 +19,7 @@
         <div>
           <p class="eyebrow">Starter Progress Listening</p>
           <h1 id="studentGateTitle">Enter your information before starting.</h1>
-          <p class="hint">Your details will be attached to your submitted score for admin review.</p>
+          <p class="hint" data-assignment-status>Your details will be attached to your submitted score for admin review.</p>
         </div>
         <form class="student-form" data-student-form>
           <label>Full name <input name="fullName" autocomplete="name" required></label>

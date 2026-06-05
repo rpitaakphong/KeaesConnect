@@ -1,67 +1,52 @@
 (function () {
   "use strict";
 
-  const RESULT_STORAGE_KEY = "keaes-test-results-v1";
-  const SESSION_KEY = "keaes-workspace-employee-session";
   const tests = [
     {
       id: "starter-progress-listening",
       title: "Starter Progress Listening",
       subject: "English",
       level: "Cambridge Starters",
-      href: "../starter-listening/index.html?testId=starter-progress-listening",
       status: "active",
     },
   ];
 
   let selectedResultId = null;
+  let selectedAssignment = null;
+  let results = [];
 
-  document.addEventListener("DOMContentLoaded", () => {
-    requireAdminSession();
-    renderChrome();
-    renderDashboard();
+  document.addEventListener("DOMContentLoaded", async () => {
+    await requireAdminSession();
+    await window.KeaesWorkspacePortal?.refreshChrome?.();
+    renderTests();
+    renderLinkGenerator();
     bindActions();
+    await refreshResults();
   });
 
-  function requireAdminSession() {
-    if (!sessionStorage.getItem(SESSION_KEY)) {
-      window.location.href = "../../login.html";
+  async function requireAdminSession() {
+    if (!window.KeaesApi?.isConfigured()) {
+      renderSetupMode();
+      return;
     }
-  }
-
-  function renderChrome() {
-    try {
-      const employee = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
-      document.querySelectorAll("[data-employee-badge]").forEach((badge) => {
-        badge.classList.toggle("hidden", !employee);
-        if (employee) badge.textContent = employee.name || employee.email || "Employee";
-      });
-      document.querySelectorAll("[data-logout-button]").forEach((button) => button.classList.toggle("hidden", !employee));
-    } catch {
-      // Keep chrome empty if the mock session is malformed.
-    }
+    await window.KeaesApi.requireStaffSession("../../login.html");
   }
 
   function bindActions() {
-    document.querySelector("[data-test-select]").addEventListener("change", updateGeneratedLink);
+    document.querySelector("[data-test-select]").addEventListener("change", () => {
+      selectedAssignment = null;
+      updateGeneratedLink();
+    });
     document.querySelector("[data-copy-link]").addEventListener("click", copyLink);
-    document.querySelector("[data-seed-results]").addEventListener("click", () => {
-      if (!readResults().length) localStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(sampleResults()));
-      renderDashboard();
-    });
-    document.querySelectorAll("[data-logout-button]").forEach((button) => {
-      button.addEventListener("click", () => {
-        sessionStorage.removeItem(SESSION_KEY);
-        window.location.href = "../../login.html";
-      });
-    });
+    document.querySelector("[data-open-link]").addEventListener("click", ensureGeneratedAssignment);
+    document.querySelector("[data-refresh-results]").addEventListener("click", refreshResults);
   }
 
-  function renderDashboard() {
-    renderTests();
-    renderLinkGenerator();
-    renderResults();
-    renderMetrics();
+  function renderSetupMode() {
+    document.querySelector("[data-backend-status]").textContent = "Setup required";
+    document.querySelector("[data-results-table]").innerHTML = `
+      <tr><td colspan="6">Supabase is not configured. Add your project URL and anon key in assets/js/supabase-config.js.</td></tr>
+    `;
   }
 
   function renderTests() {
@@ -82,12 +67,34 @@
     updateGeneratedLink();
   }
 
+  async function ensureGeneratedAssignment(event) {
+    event?.preventDefault();
+    if (!window.KeaesApi?.isConfigured()) {
+      setShareMessage("Supabase setup required before generating assignment links.");
+      return null;
+    }
+    if (!selectedAssignment) {
+      const selected = selectedTest();
+      selectedAssignment = await window.KeaesApi.createAssignment(selected.id);
+      updateGeneratedLink();
+    }
+    if (event?.currentTarget?.tagName === "A") window.open(event.currentTarget.href, "_blank", "noopener");
+    return selectedAssignment;
+  }
+
   function updateGeneratedLink() {
-    const selected = tests.find((test) => test.id === document.querySelector("[data-test-select]").value) || tests[0];
-    const absoluteUrl = new URL(selected.href, window.location.href).href;
-    document.querySelector("[data-share-url]").value = absoluteUrl;
-    document.querySelector("[data-open-link]").href = absoluteUrl;
-    document.querySelector("[data-message-template]").value = [
+    const selected = selectedTest();
+    const shareInput = document.querySelector("[data-share-url]");
+    const openLink = document.querySelector("[data-open-link]");
+    const message = document.querySelector("[data-message-template]");
+    const assignmentToken = selectedAssignment?.assignment_token;
+    const studentUrl = new URL("../starter-listening/index.html", window.location.href);
+    studentUrl.searchParams.set("testId", selected.id);
+    if (assignmentToken) studentUrl.searchParams.set("assignment", assignmentToken);
+    const absoluteUrl = assignmentToken ? studentUrl.href : "Click Open test or Copy link to generate an assignment URL.";
+    shareInput.value = absoluteUrl;
+    openLink.href = assignmentToken ? studentUrl.href : "#";
+    message.value = [
       `Please complete: ${selected.title}`,
       "",
       absoluteUrl,
@@ -97,7 +104,9 @@
   }
 
   async function copyLink() {
+    await ensureGeneratedAssignment();
     const input = document.querySelector("[data-share-url]");
+    if (!selectedAssignment) return;
     try {
       await navigator.clipboard.writeText(input.value);
       document.querySelector("[data-copy-link]").textContent = "Copied";
@@ -108,8 +117,26 @@
     }
   }
 
+  async function refreshResults() {
+    if (!window.KeaesApi?.isConfigured()) {
+      renderSetupMode();
+      renderMetrics();
+      return;
+    }
+    try {
+      results = (await window.KeaesApi.listResults()).map(normalizeResult);
+      if (!selectedResultId && results[0]) selectedResultId = results[0].id;
+      renderResults();
+      renderMetrics();
+    } catch (err) {
+      document.querySelector("[data-results-table]").innerHTML = `
+        <tr><td colspan="6">Could not load Supabase results: ${escapeHtml(err.message)}</td></tr>
+      `;
+      renderMetrics();
+    }
+  }
+
   function renderMetrics() {
-    const results = readResults();
     const completed = results.length;
     const avg = completed ? Math.round(results.reduce((sum, result) => sum + result.score.percent, 0) / completed) : 0;
     const activeTests = tests.filter((test) => test.status === "active").length;
@@ -128,8 +155,6 @@
   }
 
   function renderResults() {
-    const results = readResults();
-    if (!selectedResultId && results[0]) selectedResultId = results[0].id;
     const tbody = document.querySelector("[data-results-table]");
     tbody.innerHTML = results.length ? results.map((result) => `
       <tr data-result-id="${result.id}" class="${result.id === selectedResultId ? "is-selected" : ""}">
@@ -141,7 +166,7 @@
         <td>${formatDate(result.submittedAt)}</td>
       </tr>
     `).join("") : `
-      <tr><td colspan="6">No submitted results yet. Complete the test in this browser or load sample data.</td></tr>
+      <tr><td colspan="6">No submitted results yet. Generate an assignment link and complete the test from a student browser.</td></tr>
     `;
     tbody.querySelectorAll("[data-result-id]").forEach((row) => {
       row.addEventListener("click", () => {
@@ -171,7 +196,7 @@
         `).join("")}
       </div>
       <div class="correction-list">
-        ${result.answers.slice(0, 8).map((answer) => `
+        ${result.answers.slice(0, 20).map((answer) => `
           <div class="correction-row ${answer.correct ? "" : "is-wrong"}">
             <strong>${escapeHtml(answer.part)}: ${escapeHtml(answer.prompt)}</strong>
             <span>Student: ${escapeHtml(answer.response)} · Correct: ${escapeHtml(answer.correctAnswer)}</span>
@@ -181,43 +206,37 @@
     `;
   }
 
-  function readResults() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(RESULT_STORAGE_KEY) || "[]");
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
+  function normalizeResult(row) {
+    return {
+      id: row.attempt_id,
+      testId: row.test_id,
+      testTitle: row.test_title,
+      student: {
+        fullName: row.full_name,
+        nickname: row.nickname,
+        dateOfBirth: row.date_of_birth,
+        subject: row.subject,
+        level: row.level,
+        testDate: row.test_date,
+      },
+      score: {
+        total: row.score_total,
+        possible: row.score_possible,
+        percent: row.score_percent,
+      },
+      partScores: row.part_scores || [],
+      answers: row.answers || [],
+      submittedAt: row.submitted_at,
+    };
   }
 
-  function sampleResults() {
-    return [
-      {
-        id: "sample-result-1",
-        testId: "starter-progress-listening",
-        testTitle: "Starter Progress Listening",
-        student: {
-          fullName: "Mina Chen",
-          nickname: "Mina",
-          dateOfBirth: "2016-04-18",
-          subject: "English",
-          level: "Cambridge Starters",
-          testDate: new Date().toISOString().slice(0, 10),
-        },
-        score: { total: 18, possible: 20, percent: 90 },
-        partScores: [
-          { part: "Part 1", total: 5, possible: 5 },
-          { part: "Part 2", total: 4, possible: 5 },
-          { part: "Part 3", total: 5, possible: 5 },
-          { part: "Part 4", total: 4, possible: 5 },
-        ],
-        answers: [
-          { part: "Part 1", prompt: "Put the clock between the two pictures.", response: "between the two pictures", correctAnswer: "Clock -> between the two pictures", correct: true },
-          { part: "Part 2", prompt: "Which class are the two children in at school?", response: "7", correctAnswer: "8 / eight", correct: false },
-        ],
-        submittedAt: new Date().toISOString(),
-      },
-    ];
+  function selectedTest() {
+    return tests.find((test) => test.id === document.querySelector("[data-test-select]").value) || tests[0];
+  }
+
+  function setShareMessage(message) {
+    document.querySelector("[data-share-url]").value = message;
+    document.querySelector("[data-message-template]").value = message;
   }
 
   function formatDate(value) {

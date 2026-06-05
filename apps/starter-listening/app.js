@@ -16,14 +16,19 @@ const state = {
   },
   activeColour: "#ef4444",
   submitted: false,
+  submissionPending: false,
+  submitError: "",
+  submittedScore: null,
   savedResultId: null,
 };
 
-const RESULT_STORAGE_KEY = "keaes-test-results-v1";
-const PROFILE_STORAGE_KEY = `keaes-test-profile-v1:${new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening"}`;
+const params = new URLSearchParams(window.location.search);
+const assignmentToken = params.get("assignment") || "";
+const testId = params.get("testId") || "starter-progress-listening";
+const PROFILE_STORAGE_KEY = `keaes-test-profile-v1:${assignmentToken || testId}`;
 const WINDOW_NAME_PROFILE_KEY = "__keaesTestProfilesV1";
 const testMetadata = {
-  id: new URLSearchParams(window.location.search).get("testId") || "starter-progress-listening",
+  id: testId,
   title: "Starter Progress Listening",
   subject: "English",
   level: "Cambridge Starters",
@@ -242,6 +247,7 @@ function loadStudentProfile() {
   if (!profile) {
     const landingUrl = new URL("index.html", window.location.href);
     landingUrl.searchParams.set("testId", testMetadata.id);
+    if (assignmentToken) landingUrl.searchParams.set("assignment", assignmentToken);
     window.location.replace(landingUrl.href);
     return false;
   }
@@ -279,8 +285,10 @@ function normalizeStudentProfile(value) {
     subject: cleanText(value.subject),
     level: cleanText(value.level),
     testDate: cleanText(value.testDate),
+    testId: cleanText(value.testId || testMetadata.id),
+    assignmentToken: cleanText(value.assignmentToken || assignmentToken),
   };
-  return Object.values(profile).every(Boolean) ? profile : null;
+  return ["fullName", "nickname", "dateOfBirth", "subject", "level", "testDate", "assignmentToken"].every((key) => profile[key]) ? profile : null;
 }
 
 function bindNavigation() {
@@ -499,15 +507,27 @@ function confirmSubmit() {
 }
 
 function finalizeSubmission() {
-  if (state.submitted) return;
-  state.submitted = true;
+  if (state.submitted || state.submissionPending) return;
+  state.submissionPending = true;
+  state.submitError = "";
   state.audioEnded = true;
   state.audioStartPending = false;
   state.selectedObject = null;
   stopAudioForSubmission();
   state.currentPart = "review";
-  saveMockResult();
   renderAll();
+  saveResult()
+    .then((score) => {
+      state.submittedScore = score;
+      state.submitted = true;
+    })
+    .catch((err) => {
+      state.submitError = err.message;
+    })
+    .finally(() => {
+      state.submissionPending = false;
+      renderAll();
+    });
 }
 
 function stopAudioForSubmission() {
@@ -540,7 +560,7 @@ function renderAll() {
 function renderStudentProfile() {
   const startButton = document.querySelector("[data-start-audio]");
   const summary = document.querySelector("[data-student-summary]");
-  if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending || state.submitted;
+  if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending || state.submitted || state.submissionPending;
   if (summary) {
     summary.hidden = !state.studentProfile;
     if (state.studentProfile) {
@@ -566,10 +586,10 @@ function renderPart1() {
     const objectId = button.dataset.objectPoint;
     button.classList.toggle("is-selected", state.selectedObject === objectId);
     button.classList.toggle("is-linked", Boolean(state.connections[objectId]));
-    button.disabled = state.submitted;
+    button.disabled = state.submitted || state.submissionPending;
   });
   document.querySelectorAll("[data-target]").forEach((button) => {
-    button.disabled = state.submitted;
+    button.disabled = state.submitted || state.submissionPending;
   });
 
   const lineLayer = document.querySelector("[data-line-layer]");
@@ -609,14 +629,14 @@ function renderPart2() {
   document.querySelectorAll("[data-text-answer]").forEach((input) => {
     const stored = state.textAnswers[input.dataset.textAnswer] || "";
     if (input.value !== stored) input.value = stored;
-    input.disabled = state.submitted;
+    input.disabled = state.submitted || state.submissionPending;
   });
 }
 
 function renderPart3() {
   document.querySelectorAll("[data-choice-answer]").forEach((input) => {
     input.checked = state.choices[input.dataset.choiceAnswer] === input.value;
-    input.disabled = state.submitted;
+    input.disabled = state.submitted || state.submissionPending;
   });
   document.querySelectorAll("[data-choice-card]").forEach((card) => {
     const input = card.querySelector("input");
@@ -627,10 +647,10 @@ function renderPart3() {
 function renderPart4() {
   document.querySelectorAll("[data-colour]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.colour === state.activeColour);
-    button.disabled = state.submitted;
+    button.disabled = state.submitted || state.submissionPending;
   });
   document.querySelectorAll("[data-region]").forEach((button) => {
-    button.disabled = state.submitted;
+    button.disabled = state.submitted || state.submissionPending;
     const colour = state.colours[button.dataset.region];
     if (colour) {
       button.style.setProperty("--fill", colour);
@@ -658,14 +678,20 @@ function renderReview() {
     })
     .join("");
   submitButtons.forEach((button) => {
-    button.disabled = state.submitted;
-    button.textContent = state.submitted ? "Submitted" : "Submit test";
+    button.disabled = state.submitted || state.submissionPending;
+    button.textContent = state.submitted ? "Submitted" : state.submissionPending ? "Submitting..." : "Submit test";
   });
 
   const result = document.querySelector("[data-result-card]");
-  result.hidden = !state.submitted;
+  result.hidden = !state.submitted && !state.submitError;
   if (state.submitted) {
-    result.innerHTML = renderScoreSummary(scoreSubmission());
+    result.innerHTML = renderScoreSummary(state.submittedScore);
+  } else if (state.submitError) {
+    result.innerHTML = `
+      <div class="pending-note">
+        Submission failed: ${escapeHtml(state.submitError)}
+      </div>
+    `;
   }
 }
 
@@ -746,47 +772,35 @@ function scoreSubmission() {
   };
 }
 
-function saveMockResult() {
-  if (!state.studentProfile || state.savedResultId) return;
-  const score = scoreSubmission();
-  const result = {
-    id: `result-${Date.now()}`,
-    testId: testMetadata.id,
-    testTitle: testMetadata.title,
+async function saveResult() {
+  if (!state.studentProfile || state.savedResultId) return state.submittedScore;
+  if (!window.KeaesApi?.isConfigured()) {
+    throw new Error("Supabase is not configured. Ask staff to configure the database before accepting test submissions.");
+  }
+  const result = await window.KeaesApi.submitAttempt({
+    assignmentToken: state.studentProfile.assignmentToken,
     student: state.studentProfile,
-    score: {
-      total: score.total,
-      possible: score.possible,
-      percent: Math.round((score.total / score.possible) * 100),
-    },
-    partScores: Object.entries(score.sections).map(([part, items]) => ({
-      part: part.replace("part", "Part "),
-      total: items.filter((item) => item.correct).length,
-      possible: items.length,
-    })),
-    answers: Object.values(score.sections).flat().map((item) => ({
-      part: item.part,
-      prompt: item.prompt,
-      response: item.response,
-      correctAnswer: item.correctAnswer,
-      correct: item.correct,
-      transcript: item.transcript,
-    })),
-    submittedAt: new Date().toISOString(),
-  };
-  const results = readResults();
-  results.unshift(result);
-  localStorage.setItem(RESULT_STORAGE_KEY, JSON.stringify(results.slice(0, 250)));
-  state.savedResultId = result.id;
+    answers: buildSubmissionPayload(),
+  });
+  state.savedResultId = result.attemptId;
+  return normalizeServerScore(result);
 }
 
-function readResults() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(RESULT_STORAGE_KEY) || "[]");
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+function buildSubmissionPayload() {
+  return {
+    connections: state.connections,
+    textAnswers: state.textAnswers,
+    choices: state.choices,
+    colours: state.colours,
+  };
+}
+
+function normalizeServerScore(result) {
+  return {
+    total: result.total,
+    possible: result.possible,
+    sections: result.sections || {},
+  };
 }
 
 function buildResult({ part, prompt, response, correctAnswer, correct, transcript }) {

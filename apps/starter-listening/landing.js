@@ -3,13 +3,17 @@
 
   const params = new URLSearchParams(window.location.search);
   const testId = params.get("testId") || "starter-progress-listening";
-  const profileStorageKey = `keaes-test-profile-v1:${testId}`;
+  const assignmentToken = params.get("assignment") || "";
+  const profileStorageKey = `keaes-test-profile-v1:${assignmentToken || testId}`;
   const windowNameKey = "__keaesTestProfilesV1";
+  let assignment = null;
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     const form = document.querySelector("[data-student-form]");
+    await loadAssignment(form);
     form?.addEventListener("submit", (event) => {
       event.preventDefault();
+      if (!assignment) return;
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -19,20 +23,60 @@
         fullName: cleanText(data.get("fullName")),
         nickname: cleanText(data.get("nickname")),
         dateOfBirth: cleanText(data.get("dateOfBirth")),
-        subject: cleanText(data.get("subject")),
-        level: cleanText(data.get("level")),
+        subject: assignment.subject,
+        level: assignment.level,
         testDate: cleanText(data.get("testDate")),
+        testId: assignment.test_id,
+        assignmentToken: assignment.assignment_token,
       };
-      if (Object.values(profile).some((value) => !value)) {
+      if (["fullName", "nickname", "dateOfBirth", "testDate"].some((key) => !profile[key])) {
         form.reportValidity();
         return;
       }
       saveStudentProfile(profile);
       const testUrl = new URL("test.html", window.location.href);
-      testUrl.searchParams.set("testId", testId);
+      testUrl.searchParams.set("testId", assignment.test_id);
+      testUrl.searchParams.set("assignment", assignment.assignment_token);
       window.location.href = testUrl.href;
     });
   });
+
+  async function loadAssignment(form) {
+    const status = document.querySelector("[data-assignment-status]");
+    if (!window.KeaesApi?.isConfigured()) {
+      blockForm(form, status, "This test is not connected to Supabase yet. Ask staff to configure the database before sending test links.");
+      return;
+    }
+    if (!assignmentToken) {
+      blockForm(form, status, "This link is missing an assignment token. Ask staff to generate a fresh test link from Test Admin.");
+      return;
+    }
+    try {
+      assignment = await window.KeaesApi.getAssignment(assignmentToken);
+      if (!assignment) {
+        blockForm(form, status, "This assignment link is invalid or inactive. Ask staff for a new link.");
+        return;
+      }
+      document.querySelector(".student-gate .eyebrow").textContent = assignment.title;
+      document.querySelectorAll(".fixed-field").forEach((field) => {
+        const label = field.querySelector("span")?.textContent;
+        const value = label === "Subject" ? assignment.subject : assignment.level;
+        field.querySelector("strong").textContent = value;
+        field.querySelector("input").value = value;
+      });
+      status.textContent = "Your details will be attached to your submitted score for admin review.";
+      form.querySelector("[data-student-submit]").disabled = false;
+    } catch (err) {
+      blockForm(form, status, `Could not load assignment: ${err.message}`);
+    }
+  }
+
+  function blockForm(form, status, message) {
+    if (status) status.textContent = message;
+    form?.querySelectorAll("input, button").forEach((control) => {
+      control.disabled = true;
+    });
+  }
 
   function cleanText(value) {
     return String(value ?? "").trim().replace(/\s+/g, " ");
