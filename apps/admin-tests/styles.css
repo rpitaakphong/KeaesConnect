@@ -72,14 +72,11 @@ button { cursor: pointer; }
   text-decoration: none;
 }
 
-.brand-mark span {
-  background: var(--gradient);
-  border-radius: 14px;
-  color: #ffffff;
-  display: grid;
-  height: 38px;
-  place-items: center;
-  width: 38px;
+.brand-mark img {
+  display: block;
+  height: 48px;
+  object-fit: contain;
+  width: 260px;
 }
 
 .admin-shell {
