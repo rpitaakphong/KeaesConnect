@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Starter Progress Listening - Interactive Test</title>
-  <link rel="stylesheet" href="styles.css?v=early-submit">
+  <link rel="stylesheet" href="styles.css?v=aside-submit-menu">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
   <script defer src="../../assets/js/keaes-api.js"></script>
@@ -17,13 +17,9 @@
     <div class="exam-title">
       <p class="eyebrow">Cambridge Starter Progress</p>
       <h1>Listening Interactive Test</h1>
-      <div class="status-pill" aria-live="polite">
-        <span data-progress-count>0</span>/20 answers
-      </div>
-      <button class="header-submit-button" type="button" data-submit>Submit test</button>
     </div>
     <section class="audio-bar" aria-label="Listening exam audio">
-      <div>
+      <div class="audio-title">
         <p class="eyebrow">Listening exam audio</p>
         <h2>Starter Progress Listening</h2>
       </div>
@@ -45,6 +41,10 @@
       <button class="part-tab" type="button" data-part-button="part3">Part 3</button>
       <button class="part-tab" type="button" data-part-button="part4">Part 4</button>
       <button class="part-tab submit-tab" type="button" data-part-button="review">Review</button>
+      <button class="header-submit-button" type="button" data-submit>Submit test</button>
+      <div class="status-pill aside-status" aria-live="polite">
+        <span data-progress-count>0</span>/20 answers
+      </div>
     </aside>
 
     <section class="test-panel">

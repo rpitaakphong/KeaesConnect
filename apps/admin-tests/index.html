@@ -3,8 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Test Admin | Keaes Workspace</title>
-  <link rel="stylesheet" href="styles.css?v=portal-theme">
+  <link rel="stylesheet" href="styles.css?v=dashboard-header-match">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
   <script defer src="../../assets/js/keaes-api.js"></script>
@@ -13,11 +16,13 @@
 </head>
 <body data-page="admin-tests">
   <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="admin-topbar">
+  <header class="site-nav">
     <a class="brand-mark" href="../../dashboard.html" aria-label="Back to Keaes Workspace dashboard"><img src="../../assets/brand/keaes-workspace-logo.png" alt="Keaes Workspace Tests"></a>
-    <div class="top-actions">
+    <nav aria-label="Primary navigation">
+      <a class="nav-link is-active" href="../../dashboard.html">Home</a>
+    </nav>
+    <div class="nav-actions">
       <span data-employee-badge class="badge soft hidden">Employee</span>
-      <a class="ghost-button" href="../../dashboard.html">Portal</a>
       <button data-logout-button class="ghost-button hidden" type="button">Log out</button>
     </div>
   </header>
