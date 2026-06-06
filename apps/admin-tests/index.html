@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Test Admin | Keaes Workspace</title>
   <link rel="stylesheet" href="styles.css?v=portal-theme">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="../../assets/js/supabase-config.js"></script>
+  <script defer src="../../assets/js/keaes-api.js"></script>
   <script defer src="../../assets/js/portal.js"></script>
   <script defer src="app.js?v=portal-theme"></script>
 </head>
 <body data-page="admin-tests">
   <a class="skip-link" href="#main">Skip to main content</a>
   <header class="admin-topbar">
-    <a class="brand-mark" href="../../dashboard.html" aria-label="Back to Keaes Workspace dashboard"><span>K</span><strong>Keaes Workspace Tests</strong></a>
+    <a class="brand-mark" href="../../dashboard.html" aria-label="Back to Keaes Workspace dashboard"><img src="../../assets/brand/keaes-workspace-logo.png" alt="Keaes Workspace Tests"></a>
     <div class="top-actions">
       <span data-employee-badge class="badge soft hidden">Employee</span>
       <a class="ghost-button" href="../../dashboard.html">Portal</a>
@@ -22,11 +25,11 @@
   <main id="main" class="admin-shell">
     <section class="hero-panel">
       <div>
-        <p class="eyebrow">WP4 admin dashboard</p>
+        <p class="eyebrow">WP5 admin dashboard</p>
         <h1>Send tests and review student performance.</h1>
-        <p>Mock localStorage data is used in WP4. WP5 will replace this with a shared database.</p>
+        <p>Assignments and submitted results are stored in Supabase for shared admin access.</p>
       </div>
-      <div class="mock-badge">Local mock mode</div>
+      <div class="backend-badge" data-backend-status>Database mode</div>
     </section>
 
     <section class="metric-grid" data-metrics></section>
@@ -73,7 +76,7 @@
           <p class="eyebrow">Student performance</p>
           <h2>Submitted results</h2>
         </div>
-        <button class="ghost-button" type="button" data-seed-results>Load sample data</button>
+        <button class="ghost-button" type="button" data-refresh-results>Refresh</button>
       </div>
       <div class="results-layout">
         <div class="table-wrap">

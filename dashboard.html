@@ -7,13 +7,16 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/portal.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="assets/js/supabase-config.js"></script>
+  <script defer src="assets/js/keaes-api.js"></script>
   <script defer src="assets/js/portal.js"></script>
   <script async src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
 <body data-page="dashboard">
   <a class="skip-link" href="#main">Skip to main content</a>
   <header class="site-nav">
-    <a class="brand-mark" href="dashboard.html" aria-label="Keaes Workspace dashboard"><span>K</span><strong>Keaes Workspace</strong></a>
+    <a class="brand-mark" href="dashboard.html" aria-label="Keaes Workspace dashboard"><img src="assets/brand/keaes-workspace-logo.png" alt="Keaes Workspace"></a>
     <nav aria-label="Primary navigation">
       <a class="nav-link is-active" href="dashboard.html">Home</a>
     </nav>
@@ -36,9 +39,9 @@
     <section class="tool-grid" aria-label="Keaes Workspace tools">
       <article class="tool-card is-ready">
         <div class="tool-icon"><i data-lucide="clipboard-check"></i></div>
-        <span class="badge soft">WP4 mock</span>
+        <span class="badge soft">WP5 database</span>
         <h2>Test Admin</h2>
-        <p>Generate student test links, review mock submissions, and inspect Starter Listening performance.</p>
+        <p>Generate student test links, review submitted results, and inspect Starter Listening performance.</p>
         <a class="primary-button" href="apps/admin-tests/index.html">Open</a>
       </article>
     </section>
