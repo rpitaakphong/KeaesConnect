@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Starter Progress Listening - Student Details</title>
-  <link rel="stylesheet" href="styles.css?v=landing-field-order">
+  <title>Starter Progress Test - Student Details</title>
+  <link rel="stylesheet" href="styles.css?v=rw-part3-example-card">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
   <script defer src="../../assets/js/keaes-api.js"></script>
-  <script defer src="landing.js?v=student-split"></script>
+  <script defer src="landing.js?v=clear-stale-answers"></script>
 </head>
 <body class="landing-page">
   <a class="skip-link" href="#studentDetails">Skip to student details</a>
@@ -17,7 +17,7 @@
     <section class="student-gate" data-student-gate aria-labelledby="studentGateTitle">
       <div class="student-gate-card">
         <div>
-          <p class="eyebrow">Starter Progress Listening</p>
+          <p class="eyebrow">Starter Progress Test</p>
           <h1 id="studentGateTitle">Enter your information before starting.</h1>
           <p class="hint" data-assignment-status>Your details will be attached to your submitted score for admin review.</p>
         </div>
@@ -36,7 +36,7 @@
           <label>Nickname <input name="nickname" autocomplete="nickname" required></label>
           <label>Date of birth <input name="dateOfBirth" type="date" required></label>
           <label>Test date <input name="testDate" type="date" required></label>
-          <button class="primary-action" type="submit" data-student-submit>Continue to test</button>
+          <button class="primary-action" type="submit" data-student-submit disabled>Continue to test</button>
         </form>
       </div>
     </section>

@@ -3,8 +3,8 @@
 
   const tests = [
     {
-      id: "starter-progress-listening",
-      title: "Starter Progress Listening",
+      id: "starter-progress-test",
+      title: "Starter Progress Test",
       subject: "English",
       level: "Cambridge Starters",
       status: "active",
@@ -99,7 +99,7 @@
       "",
       absoluteUrl,
       "",
-      "Enter your student details before starting. Once the listening exam starts, the audio will continue until it finishes.",
+      "Enter your student details before starting. Complete Listening first, then Reading & Writing. Once the listening exam starts, the audio will continue until it finishes.",
     ].join("\n");
   }
 
@@ -196,7 +196,7 @@
         `).join("")}
       </div>
       <div class="correction-list">
-        ${result.answers.slice(0, 20).map((answer) => `
+        ${result.answers.map((answer) => `
           <div class="correction-row ${answer.correct ? "" : "is-wrong"}">
             <strong>${escapeHtml(answer.part)}: ${escapeHtml(answer.prompt)}</strong>
             <span>Student: ${escapeHtml(answer.response)} · Correct: ${escapeHtml(answer.correctAnswer)}</span>

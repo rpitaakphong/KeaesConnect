@@ -111,7 +111,9 @@ drop policy if exists "staff can read answers" on attempt_answers;
 create policy "staff can read answers" on attempt_answers for select using (is_staff());
 
 insert into tests (id, title, subject, level, status, total_points)
-values ('starter-progress-listening', 'Starter Progress Listening', 'English', 'Cambridge Starters', 'active', 20)
+values
+  ('starter-progress-listening', 'Starter Progress Listening', 'English', 'Cambridge Starters', 'inactive', 20),
+  ('starter-progress-test', 'Starter Progress Test', 'English', 'Cambridge Starters', 'active', 45)
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -121,27 +123,54 @@ on conflict (id) do update set
 
 insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
 values
-  ('p1q1', 'starter-progress-listening', 'Part 1', 'Put the clock between the two pictures.', '{"source":"connections","object":"clock","target":"between-pictures","display":"Clock -> between the two pictures"}', '00:01:19', 1),
-  ('p1q2', 'starter-progress-listening', 'Part 1', 'Put the book under the small table.', '{"source":"connections","object":"book","target":"under-table","display":"Book -> under the small table"}', '00:01:29', 2),
-  ('p1q3', 'starter-progress-listening', 'Part 1', 'Put the phone on the mat.', '{"source":"connections","object":"phone","target":"rug","display":"Phone -> mat"}', '00:01:45', 3),
-  ('p1q4', 'starter-progress-listening', 'Part 1', 'Put the camera in the cupboard.', '{"source":"connections","object":"camera","target":"cupboard","display":"Camera -> cupboard"}', '00:02:12', 4),
-  ('p1q5', 'starter-progress-listening', 'Part 1', 'Put the shell on the table next to the robot.', '{"source":"connections","object":"shell","target":"robot","display":"Shell -> table next to the robot"}', '00:02:28', 5),
-  ('p2q1', 'starter-progress-listening', 'Part 2', 'What is Lucy''s friend''s name?', '{"source":"textAnswers","accepted":["alex"],"display":"Alex"}', '00:05:19', 6),
-  ('p2q2', 'starter-progress-listening', 'Part 2', 'Which class are the two children in at school?', '{"source":"textAnswers","accepted":["8","eight","class 8","class eight"],"display":"8 / eight"}', '00:05:50', 7),
-  ('p2q3', 'starter-progress-listening', 'Part 2', 'How many dogs are there at Lucy''s house?', '{"source":"textAnswers","accepted":["3","three"],"display":"3 / three"}', '00:06:15', 8),
-  ('p2q4', 'starter-progress-listening', 'Part 2', 'What''s the name of Lucy''s favourite dog?', '{"source":"textAnswers","accepted":["socks"],"display":"Socks"}', '00:06:42', 9),
-  ('p2q5', 'starter-progress-listening', 'Part 2', 'How many fish has Lucy''s friend got?', '{"source":"textAnswers","accepted":["12","twelve"],"display":"12 / twelve"}', '00:07:32', 10),
-  ('p3q1', 'starter-progress-listening', 'Part 3', 'Which is May?', '{"source":"choices","correct":"a","display":"A"}', '00:10:34', 11),
-  ('p3q2', 'starter-progress-listening', 'Part 3', 'Which is Nick''s favourite ice-cream?', '{"source":"choices","correct":"b","display":"B"}', '00:11:03', 12),
-  ('p3q3', 'starter-progress-listening', 'Part 3', 'What''s Ben doing?', '{"source":"choices","correct":"b","display":"B"}', '00:11:34', 13),
-  ('p3q4', 'starter-progress-listening', 'Part 3', 'Where''s Kim''s doll?', '{"source":"choices","correct":"c","display":"C"}', '00:11:56', 14),
-  ('p3q5', 'starter-progress-listening', 'Part 3', 'What''s Dad doing?', '{"source":"choices","correct":"a","display":"A"}', '00:12:22', 15),
-  ('p4q1', 'starter-progress-listening', 'Part 4', 'Bird on the man''s head', '{"source":"colours","region":"man-bird","colour":"#f472b6","display":"pink"}', '00:15:35', 16),
-  ('p4q2', 'starter-progress-listening', 'Part 4', 'Bird in the tree', '{"source":"colours","region":"tree-bird","colour":"#facc15","display":"yellow"}', '00:16:05', 17),
-  ('p4q3', 'starter-progress-listening', 'Part 4', 'Bird next to the plane', '{"source":"colours","region":"flying-bird","colour":"#22c55e","display":"green"}', '00:16:29', 18),
-  ('p4q4', 'starter-progress-listening', 'Part 4', 'Bird in front of the door', '{"source":"colours","region":"standing-bird","colour":"#8b5a2b","display":"brown"}', '00:17:05', 19),
-  ('p4q5', 'starter-progress-listening', 'Part 4', 'Bird between the flowers', '{"source":"colours","region":"flower-bird","colour":"#ef4444","display":"red"}', '00:17:54', 20)
+  ('p1q1', 'starter-progress-test', 'Listening Part 1', 'Put the clock between the two pictures.', '{"source":"connections","object":"clock","target":"between-pictures","display":"Clock -> between the two pictures"}', '00:01:19', 1),
+  ('p1q2', 'starter-progress-test', 'Listening Part 1', 'Put the book under the small table.', '{"source":"connections","object":"book","target":"under-table","display":"Book -> under the small table"}', '00:01:29', 2),
+  ('p1q3', 'starter-progress-test', 'Listening Part 1', 'Put the phone on the mat.', '{"source":"connections","object":"phone","target":"rug","display":"Phone -> mat"}', '00:01:45', 3),
+  ('p1q4', 'starter-progress-test', 'Listening Part 1', 'Put the camera in the cupboard.', '{"source":"connections","object":"camera","target":"cupboard","display":"Camera -> cupboard"}', '00:02:12', 4),
+  ('p1q5', 'starter-progress-test', 'Listening Part 1', 'Put the shell on the table next to the robot.', '{"source":"connections","object":"shell","target":"robot","display":"Shell -> table next to the robot"}', '00:02:28', 5),
+  ('p2q1', 'starter-progress-test', 'Listening Part 2', 'What is Lucy''s friend''s name?', '{"source":"textAnswers","accepted":["alex"],"display":"Alex"}', '00:05:19', 6),
+  ('p2q2', 'starter-progress-test', 'Listening Part 2', 'Which class are the two children in at school?', '{"source":"textAnswers","accepted":["8","eight","class 8","class eight"],"display":"8 / eight"}', '00:05:50', 7),
+  ('p2q3', 'starter-progress-test', 'Listening Part 2', 'How many dogs are there at Lucy''s house?', '{"source":"textAnswers","accepted":["3","three"],"display":"3 / three"}', '00:06:15', 8),
+  ('p2q4', 'starter-progress-test', 'Listening Part 2', 'What''s the name of Lucy''s favourite dog?', '{"source":"textAnswers","accepted":["socks"],"display":"Socks"}', '00:06:42', 9),
+  ('p2q5', 'starter-progress-test', 'Listening Part 2', 'How many fish has Lucy''s friend got?', '{"source":"textAnswers","accepted":["12","twelve"],"display":"12 / twelve"}', '00:07:32', 10),
+  ('p3q1', 'starter-progress-test', 'Listening Part 3', 'Which is May?', '{"source":"choices","correct":"a","display":"A"}', '00:10:34', 11),
+  ('p3q2', 'starter-progress-test', 'Listening Part 3', 'Which is Nick''s favourite ice-cream?', '{"source":"choices","correct":"b","display":"B"}', '00:11:03', 12),
+  ('p3q3', 'starter-progress-test', 'Listening Part 3', 'What''s Ben doing?', '{"source":"choices","correct":"b","display":"B"}', '00:11:34', 13),
+  ('p3q4', 'starter-progress-test', 'Listening Part 3', 'Where''s Kim''s doll?', '{"source":"choices","correct":"c","display":"C"}', '00:11:56', 14),
+  ('p3q5', 'starter-progress-test', 'Listening Part 3', 'What''s Dad doing?', '{"source":"choices","correct":"a","display":"A"}', '00:12:22', 15),
+  ('p4q1', 'starter-progress-test', 'Listening Part 4', 'Bird on the man''s head', '{"source":"colours","region":"man-bird","colour":"#f472b6","display":"pink"}', '00:15:35', 16),
+  ('p4q2', 'starter-progress-test', 'Listening Part 4', 'Bird in the tree', '{"source":"colours","region":"tree-bird","colour":"#facc15","display":"yellow"}', '00:16:05', 17),
+  ('p4q3', 'starter-progress-test', 'Listening Part 4', 'Bird next to the plane', '{"source":"colours","region":"flying-bird","colour":"#22c55e","display":"green"}', '00:16:29', 18),
+  ('p4q4', 'starter-progress-test', 'Listening Part 4', 'Bird in front of the door', '{"source":"colours","region":"standing-bird","colour":"#8b5a2b","display":"brown"}', '00:17:05', 19),
+  ('p4q5', 'starter-progress-test', 'Listening Part 4', 'Bird between the flowers', '{"source":"colours","region":"flower-bird","colour":"#ef4444","display":"red"}', '00:17:54', 20),
+  ('rw1q1', 'starter-progress-test', 'Reading & Writing Part 1', 'This is a lizard.', '{"source":"rwAnswers","accepted":["cross","x"],"display":"cross"}', null, 21),
+  ('rw1q2', 'starter-progress-test', 'Reading & Writing Part 1', 'This is a bike.', '{"source":"rwAnswers","accepted":["tick","check"],"display":"tick"}', null, 22),
+  ('rw1q3', 'starter-progress-test', 'Reading & Writing Part 1', 'This is a pineapple.', '{"source":"rwAnswers","accepted":["tick","check"],"display":"tick"}', null, 23),
+  ('rw1q4', 'starter-progress-test', 'Reading & Writing Part 1', 'This is a television.', '{"source":"rwAnswers","accepted":["cross","x"],"display":"cross"}', null, 24),
+  ('rw1q5', 'starter-progress-test', 'Reading & Writing Part 1', 'This is a guitar.', '{"source":"rwAnswers","accepted":["tick","check"],"display":"tick"}', null, 25),
+  ('rw2q1', 'starter-progress-test', 'Reading & Writing Part 2', 'There are two children in the sea.', '{"source":"rwAnswers","accepted":["yes"],"display":"yes"}', null, 26),
+  ('rw2q2', 'starter-progress-test', 'Reading & Writing Part 2', 'The duck is walking behind the two elephants.', '{"source":"rwAnswers","accepted":["yes"],"display":"yes"}', null, 27),
+  ('rw2q3', 'starter-progress-test', 'Reading & Writing Part 2', 'The girls are playing with a ball.', '{"source":"rwAnswers","accepted":["no"],"display":"no"}', null, 28),
+  ('rw2q4', 'starter-progress-test', 'Reading & Writing Part 2', 'The woman in the boat has got a camera.', '{"source":"rwAnswers","accepted":["yes"],"display":"yes"}', null, 29),
+  ('rw2q5', 'starter-progress-test', 'Reading & Writing Part 2', 'The crocodile is eating a coconut.', '{"source":"rwAnswers","accepted":["no"],"display":"no"}', null, 30),
+  ('rw3q1', 'starter-progress-test', 'Reading & Writing Part 3', 'Blue trousers', '{"source":"rwAnswers","accepted":["jeans"],"display":"jeans"}', null, 31),
+  ('rw3q2', 'starter-progress-test', 'Reading & Writing Part 3', 'Purple shoes', '{"source":"rwAnswers","accepted":["shoes"],"display":"shoes"}', null, 32),
+  ('rw3q3', 'starter-progress-test', 'Reading & Writing Part 3', 'Green jacket', '{"source":"rwAnswers","accepted":["jacket"],"display":"jacket"}', null, 33),
+  ('rw3q4', 'starter-progress-test', 'Reading & Writing Part 3', 'Handbag', '{"source":"rwAnswers","accepted":["handbag","bag"],"display":"handbag"}', null, 34),
+  ('rw3q5', 'starter-progress-test', 'Reading & Writing Part 3', 'Green trousers', '{"source":"rwAnswers","accepted":["trousers"],"display":"trousers"}', null, 35),
+  ('rw4q1', 'starter-progress-test', 'Reading & Writing Part 4', 'Long _____ on my head.', '{"source":"rwAnswers","accepted":["hair"],"display":"hair"}', null, 36),
+  ('rw4q2', 'starter-progress-test', 'Reading & Writing Part 4', 'I don''t live in a _____ or a garden.', '{"source":"rwAnswers","accepted":["house"],"display":"house"}', null, 37),
+  ('rw4q3', 'starter-progress-test', 'Reading & Writing Part 4', 'I like eating _____ and apples.', '{"source":"rwAnswers","accepted":["carrots"],"display":"carrots"}', null, 38),
+  ('rw4q4', 'starter-progress-test', 'Reading & Writing Part 4', 'I drink _____.', '{"source":"rwAnswers","accepted":["water"],"display":"water"}', null, 39),
+  ('rw4q5', 'starter-progress-test', 'Reading & Writing Part 4', 'A woman, a _____ or a child can ride me.', '{"source":"rwAnswers","accepted":["man"],"display":"man"}', null, 40),
+  ('rw5q1', 'starter-progress-test', 'Reading & Writing Part 5', 'What is the teacher drawing?', '{"source":"rwAnswers","accepted":["fish"],"display":"fish"}', null, 41),
+  ('rw5q2', 'starter-progress-test', 'Reading & Writing Part 5', 'Who is holding the cat?', '{"source":"rwAnswers","accepted":["girl"],"display":"girl"}', null, 42),
+  ('rw5q3', 'starter-progress-test', 'Reading & Writing Part 5', 'What is the teacher doing now?', '{"source":"rwAnswers","accepted":["writing"],"display":"writing"}', null, 43),
+  ('rw5q4', 'starter-progress-test', 'Reading & Writing Part 5', 'Where is the cat now?', '{"source":"rwAnswers","accepted":["window"],"display":"window"}', null, 44),
+  ('rw5q5', 'starter-progress-test', 'Reading & Writing Part 5', 'How many children are looking at the cat?', '{"source":"rwAnswers","accepted":["2","two"],"display":"two"}', null, 45)
 on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
   prompt = excluded.prompt,
   answer_key = excluded.answer_key,
   transcript_ref = excluded.transcript_ref,
@@ -171,6 +200,8 @@ begin
     return coalesce(p_answers->'choices'->>(p_answer_key->>'id'), '');
   elsif source_name = 'colours' then
     return coalesce(p_answers->'colours'->>(p_answer_key->>'region'), '');
+  elsif source_name = 'rwAnswers' then
+    return coalesce(p_answers->'rwAnswers'->>(p_answer_key->>'id'), '');
   end if;
   return '';
 end;
@@ -194,6 +225,10 @@ begin
     return p_response = p_answer_key->>'correct';
   elsif source_name = 'colours' then
     return lower(p_response) = lower(p_answer_key->>'colour');
+  elsif source_name = 'rwAnswers' then
+    return normalize_answer(p_response) in (
+      select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
+    );
   end if;
   return false;
 end;

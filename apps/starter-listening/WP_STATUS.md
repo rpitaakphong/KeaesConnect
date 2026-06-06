@@ -13,5 +13,11 @@
 ## WP3
 - Transcript-derived answer key is documented in `WP3_TRANSCRIPT_KEY.md`.
 - Scoring is implemented after final submit.
-- Submit is disabled until the listening audio finishes.
+- Early final submit is supported with confirmation.
 - Part 2 uses lenient text matching with accepted variants for numerals/words.
+
+## WP6
+- The test is extended to the full Starter Progress Test: Listening plus Reading & Writing.
+- Reading & Writing Parts 1-5 are implemented as a second student page after Listening.
+- Full-test scoring is 45 points: 20 Listening and 25 Reading & Writing.
+- Reading & Writing draft answers are documented in `WP6_READING_WRITING_KEY.md` and require teacher verification before trusted production use.

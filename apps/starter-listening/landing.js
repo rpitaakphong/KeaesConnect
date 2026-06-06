@@ -2,7 +2,7 @@
   "use strict";
 
   const params = new URLSearchParams(window.location.search);
-  const testId = params.get("testId") || "starter-progress-listening";
+  const testId = params.get("testId") || "starter-progress-test";
   const assignmentToken = params.get("assignment") || "";
   const profileStorageKey = `keaes-test-profile-v1:${assignmentToken || testId}`;
   const windowNameKey = "__keaesTestProfilesV1";
@@ -34,6 +34,7 @@
         return;
       }
       saveStudentProfile(profile);
+      clearSavedAnswers(profile);
       const testUrl = new URL("test.html", window.location.href);
       testUrl.searchParams.set("testId", assignment.test_id);
       testUrl.searchParams.set("assignment", assignment.assignment_token);
@@ -73,9 +74,8 @@
 
   function blockForm(form, status, message) {
     if (status) status.textContent = message;
-    form?.querySelectorAll("input, button").forEach((control) => {
-      control.disabled = true;
-    });
+    const submitButton = form?.querySelector("[data-student-submit]");
+    if (submitButton) submitButton.disabled = true;
   }
 
   function cleanText(value) {
@@ -94,6 +94,15 @@
     const data = readWindowNameData();
     data[profileStorageKey] = profile;
     window.name = JSON.stringify({ [windowNameKey]: data });
+  }
+
+  function clearSavedAnswers(profile) {
+    const answerStorageKey = `keaes-test-answers-v1:${profile.assignmentToken || profile.testId}`;
+    try {
+      window.sessionStorage?.removeItem(answerStorageKey);
+    } catch {
+      // Clearing stale answer state is best effort.
+    }
   }
 
   function readWindowNameData() {

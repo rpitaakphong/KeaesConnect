@@ -45,7 +45,7 @@ Run `supabase/schema.sql` in your Supabase project, then add your project URL an
 ## Current Tools
 
 - `apps/admin-tests/`: admin test dashboard and Supabase assignment flow.
-- `apps/starter-listening/`: student details landing page and Starter Progress Listening exam.
+- `apps/starter-listening/`: student details landing page and full Starter Progress Test.
 
 ## Deploy
 

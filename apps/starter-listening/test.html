@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Starter Progress Listening - Interactive Test</title>
-  <link rel="stylesheet" href="styles.css?v=aside-submit-menu">
+  <title>Starter Progress Test - Listening</title>
+  <link rel="stylesheet" href="styles.css?v=rw-part3-example-card">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
   <script defer src="../../assets/js/keaes-api.js"></script>
-  <script defer src="app.js?v=early-submit"></script>
+  <script defer src="app.js?v=rw-page-version-link"></script>
 </head>
 <body>
   <a class="skip-link" href="#test">Skip to test</a>
@@ -41,10 +41,10 @@
       <button class="part-tab" type="button" data-part-button="part3">Part 3</button>
       <button class="part-tab" type="button" data-part-button="part4">Part 4</button>
       <button class="part-tab submit-tab" type="button" data-part-button="review">Review</button>
-      <button class="header-submit-button" type="button" data-submit>Submit test</button>
       <div class="status-pill aside-status" aria-live="polite">
-        <span data-progress-count>0</span>/20 answers
+        <span data-progress-count>0</span>/45 answers
       </div>
+      <a class="secondary-action stage-link" href="reading-writing.html" data-reading-writing-link>Continue to Reading & Writing</a>
     </aside>
 
     <section class="test-panel">
@@ -165,32 +165,20 @@
       <section class="part" id="review" data-part>
         <div class="part-heading">
           <div>
-            <p class="eyebrow">Final review</p>
-            <h2>Check your answers before submitting.</h2>
+            <p class="eyebrow">Listening review</p>
+            <h2>Check your Listening answers.</h2>
           </div>
-          <p class="hint">Your answers are marked after final submission.</p>
+          <p class="hint">Continue to Reading & Writing when you are ready.</p>
         </div>
 
         <div class="pending-note">
-          You may submit early, but final submission ends the test and your answers cannot be changed.
+          Final submission is on the Reading & Writing review page.
         </div>
         <div class="student-summary" data-student-summary hidden></div>
         <div class="review-grid" data-review-grid></div>
-        <button class="primary-action" type="button" data-submit disabled>Submit test</button>
         <div class="result-card" hidden data-result-card></div>
       </section>
     </section>
   </main>
-
-  <dialog class="confirm-dialog" data-submit-dialog aria-labelledby="submitDialogTitle">
-    <form method="dialog">
-      <h2 id="submitDialogTitle">Submit test now?</h2>
-      <p>You are submitting before the listening audio has finished. Your answers will be marked and you cannot continue the test.</p>
-      <div class="dialog-actions">
-        <button class="secondary-action" type="submit" value="cancel">Cancel</button>
-        <button class="primary-action" type="submit" value="confirm">Submit test</button>
-      </div>
-    </form>
-  </dialog>
 </body>
 </html>

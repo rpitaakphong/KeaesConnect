@@ -14,6 +14,7 @@ const state = {
   colours: {
     exampleDuck: "#f59e0b",
   },
+  rwAnswers: {},
   activeColour: "#ef4444",
   submitted: false,
   submissionPending: false,
@@ -24,12 +25,13 @@ const state = {
 
 const params = new URLSearchParams(window.location.search);
 const assignmentToken = params.get("assignment") || "";
-const testId = params.get("testId") || "starter-progress-listening";
+const testId = params.get("testId") || "starter-progress-test";
 const PROFILE_STORAGE_KEY = `keaes-test-profile-v1:${assignmentToken || testId}`;
+const ANSWER_STORAGE_KEY = `keaes-test-answers-v1:${assignmentToken || testId}`;
 const WINDOW_NAME_PROFILE_KEY = "__keaesTestProfilesV1";
 const testMetadata = {
   id: testId,
-  title: "Starter Progress Listening",
+  title: "Starter Progress Test",
   subject: "English",
   level: "Cambridge Starters",
 };
@@ -228,10 +230,16 @@ const assessedCounts = {
   part2: 5,
   part3: 5,
   part4: 5,
+  rwPart1: 5,
+  rwPart2: 5,
+  rwPart3: 5,
+  rwPart4: 5,
+  rwPart5: 5,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!loadStudentProfile()) return;
+  loadSavedAnswers();
   buildPart3();
   bindNavigation();
   bindAudio();
@@ -289,6 +297,28 @@ function normalizeStudentProfile(value) {
     assignmentToken: cleanText(value.assignmentToken || assignmentToken),
   };
   return ["fullName", "nickname", "dateOfBirth", "subject", "level", "testDate", "assignmentToken"].every((key) => profile[key]) ? profile : null;
+}
+
+function loadSavedAnswers() {
+  try {
+    const stored = JSON.parse(window.sessionStorage?.getItem(ANSWER_STORAGE_KEY) || "null");
+    if (!stored || typeof stored !== "object") return;
+    state.connections = { radio: "bookcase", ...(stored.connections || {}) };
+    state.textAnswers = stored.textAnswers || {};
+    state.choices = stored.choices || {};
+    state.colours = { exampleDuck: "#f59e0b", ...(stored.colours || {}) };
+    state.rwAnswers = stored.rwAnswers || {};
+  } catch {
+    // Ignore corrupt session answer state and start fresh.
+  }
+}
+
+function saveAnswers() {
+  try {
+    window.sessionStorage?.setItem(ANSWER_STORAGE_KEY, JSON.stringify(buildSubmissionPayload()));
+  } catch {
+    // Session persistence is best effort; final submit still uses in-memory state.
+  }
 }
 
 function bindNavigation() {
@@ -427,6 +457,7 @@ function buildPart3() {
     input.addEventListener("change", () => {
       if (state.submitted) return;
       state.choices[input.dataset.choiceAnswer] = input.value;
+      saveAnswers();
       renderAll();
     });
   });
@@ -448,6 +479,7 @@ function bindPart1() {
       if (state.selectedObject === "radio") return;
       state.connections[state.selectedObject] = button.dataset.target;
       state.selectedObject = null;
+      saveAnswers();
       renderAll();
     });
   });
@@ -458,6 +490,7 @@ function bindPart2() {
     input.addEventListener("input", () => {
       if (state.submitted) return;
       state.textAnswers[input.dataset.textAnswer] = input.value;
+      saveAnswers();
       renderAll();
     });
   });
@@ -468,6 +501,7 @@ function bindPart4() {
     button.addEventListener("click", () => {
       if (state.submitted) return;
       state.activeColour = button.dataset.colour;
+      saveAnswers();
       renderPart4();
     });
   });
@@ -476,6 +510,7 @@ function bindPart4() {
     button.addEventListener("click", () => {
       if (state.submitted) return;
       state.colours[button.dataset.region] = state.activeColour;
+      saveAnswers();
       renderAll();
     });
   });
@@ -560,7 +595,15 @@ function renderAll() {
 function renderStudentProfile() {
   const startButton = document.querySelector("[data-start-audio]");
   const summary = document.querySelector("[data-student-summary]");
+  const readingWritingLink = document.querySelector("[data-reading-writing-link]");
   if (startButton) startButton.disabled = !state.studentReady || state.audioStarted || state.audioEnded || state.audioStartPending || state.submitted || state.submissionPending;
+  if (readingWritingLink) {
+    const nextUrl = new URL("reading-writing.html", window.location.href);
+    nextUrl.searchParams.set("testId", testMetadata.id);
+    if (assignmentToken) nextUrl.searchParams.set("assignment", assignmentToken);
+    nextUrl.searchParams.set("v", "rw-example-symbols");
+    readingWritingLink.href = nextUrl.href;
+  }
   if (summary) {
     summary.hidden = !state.studentProfile;
     if (state.studentProfile) {
@@ -668,7 +711,7 @@ function renderReview() {
   const submitButtons = document.querySelectorAll("[data-submit]");
   reviewGrid.innerHTML = Object.entries(partStatus)
     .map(([part, status]) => {
-      const label = part.replace("part", "Part ");
+      const label = status.label || part;
       return `
         <article class="review-card">
           <h3>${label}</h3>
@@ -707,12 +750,23 @@ function getPartStatus() {
   }).length;
   const part3Completed = answerKey.part3.filter((item) => state.choices[item.id]).length;
   const part4Completed = answerKey.part4.filter((item) => state.colours[item.region]).length;
+  const rw = state.rwAnswers || {};
+  const rwPart1Completed = ["rw1q1", "rw1q2", "rw1q3", "rw1q4", "rw1q5"].filter((id) => rw[id]).length;
+  const rwPart2Completed = ["rw2q1", "rw2q2", "rw2q3", "rw2q4", "rw2q5"].filter((id) => rw[id]).length;
+  const rwPart3Completed = ["rw3q1", "rw3q2", "rw3q3", "rw3q4", "rw3q5"].filter((id) => (rw[id] || "").trim()).length;
+  const rwPart4Completed = ["rw4q1", "rw4q2", "rw4q3", "rw4q4", "rw4q5"].filter((id) => (rw[id] || "").trim()).length;
+  const rwPart5Completed = ["rw5q1", "rw5q2", "rw5q3", "rw5q4", "rw5q5"].filter((id) => (rw[id] || "").trim()).length;
 
   return {
-    part1: { completed: part1Completed, total: assessedCounts.part1 },
-    part2: { completed: part2Completed, total: assessedCounts.part2 },
-    part3: { completed: part3Completed, total: assessedCounts.part3 },
-    part4: { completed: part4Completed, total: assessedCounts.part4 },
+    listeningPart1: { completed: part1Completed, total: assessedCounts.part1, label: "Listening Part 1" },
+    listeningPart2: { completed: part2Completed, total: assessedCounts.part2, label: "Listening Part 2" },
+    listeningPart3: { completed: part3Completed, total: assessedCounts.part3, label: "Listening Part 3" },
+    listeningPart4: { completed: part4Completed, total: assessedCounts.part4, label: "Listening Part 4" },
+    rwPart1: { completed: rwPart1Completed, total: assessedCounts.rwPart1, label: "Reading & Writing Part 1" },
+    rwPart2: { completed: rwPart2Completed, total: assessedCounts.rwPart2, label: "Reading & Writing Part 2" },
+    rwPart3: { completed: rwPart3Completed, total: assessedCounts.rwPart3, label: "Reading & Writing Part 3" },
+    rwPart4: { completed: rwPart4Completed, total: assessedCounts.rwPart4, label: "Reading & Writing Part 4" },
+    rwPart5: { completed: rwPart5Completed, total: assessedCounts.rwPart5, label: "Reading & Writing Part 5" },
   };
 }
 
@@ -792,6 +846,7 @@ function buildSubmissionPayload() {
     textAnswers: state.textAnswers,
     choices: state.choices,
     colours: state.colours,
+    rwAnswers: state.rwAnswers,
   };
 }
 
