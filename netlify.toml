@@ -1,0 +1,28 @@
+[build]
+  publish = "."
+  command = ""
+
+[[redirects]]
+  from = "/"
+  to = "/login.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/index.html"
+  to = "/login.html"
+  status = 301
+  force = true
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
