@@ -52,7 +52,6 @@
   function renderTests() {
     document.querySelector("[data-test-list]").innerHTML = tests.map((test) => `
       <article class="test-card">
-        <span class="badge">Active</span>
         <h3>${escapeHtml(test.title)}</h3>
         <p>${escapeHtml(test.subject)} · ${escapeHtml(test.level)}</p>
       </article>
@@ -120,38 +119,17 @@
   async function refreshResults() {
     if (!window.KeaesApi?.isConfigured()) {
       renderSetupMode();
-      renderMetrics();
       return;
     }
     try {
       results = (await window.KeaesApi.listResults()).map(normalizeResult);
       if (!selectedResultId && results[0]) selectedResultId = results[0].id;
       renderResults();
-      renderMetrics();
     } catch (err) {
       document.querySelector("[data-results-table]").innerHTML = `
         <tr><td colspan="6">Could not load Supabase results: ${escapeHtml(err.message)}</td></tr>
       `;
-      renderMetrics();
     }
-  }
-
-  function renderMetrics() {
-    const completed = results.length;
-    const avg = completed ? Math.round(results.reduce((sum, result) => sum + result.score.percent, 0) / completed) : 0;
-    const activeTests = tests.filter((test) => test.status === "active").length;
-    const recent = results[0] ? formatDate(results[0].submittedAt) : "No submissions";
-    document.querySelector("[data-metrics]").innerHTML = [
-      ["Active tests", activeTests],
-      ["Completed attempts", completed],
-      ["Average score", `${avg}%`],
-      ["Recent activity", recent],
-    ].map(([label, value]) => `
-      <article class="metric-card">
-        <span>${label}</span>
-        <strong>${value}</strong>
-      </article>
-    `).join("");
   }
 
   function renderResults() {

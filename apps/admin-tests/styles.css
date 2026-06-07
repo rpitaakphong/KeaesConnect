@@ -27,6 +27,14 @@
   --shadow-soft: 0 16px 34px rgba(56, 142, 150, 0.12);
   --radius: 30px;
   --max: 1440px;
+  --font-xs: 0.75rem;
+  --font-sm: 0.8125rem;
+  --font-base: 0.875rem;
+  --font-md: 0.95rem;
+  --font-lg: 1.05rem;
+  --font-xl: 1.25rem;
+  --font-2xl: clamp(1.45rem, 2.4vw, 2.1rem);
+  --font-hero: clamp(1.8rem, 3vw, 2.65rem);
 }
 
 * { box-sizing: border-box; }
@@ -36,6 +44,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: var(--font-base);
   letter-spacing: 0;
 }
 
@@ -107,7 +116,7 @@ button { cursor: pointer; }
 
 .site-nav .badge {
   padding: 7px 11px;
-  font-size: 0.78rem;
+  font-size: var(--font-xs);
 }
 
 .admin-shell {
@@ -122,7 +131,7 @@ button { cursor: pointer; }
   box-shadow: var(--shadow);
 }
 
-.hero-panel, .panel, .metric-card {
+.hero-panel, .panel {
   background: #ffffff;
   border: 0;
   border-radius: 28px;
@@ -152,17 +161,21 @@ button { cursor: pointer; }
   width: 13rem;
 }
 
-.hero-panel h1, .section-head h2, .metric-card strong {
+.hero-panel h1, .section-head h2 {
   letter-spacing: 0;
   margin: 0;
 }
 
 .hero-panel h1 {
-  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-size: var(--font-hero);
   line-height: 1.05;
 }
 
-.hero-panel p, .detail-panel p, .metric-card span {
+.section-head h2 {
+  font-size: var(--font-xl);
+}
+
+.hero-panel p, .detail-panel p {
   color: var(--muted);
 }
 
@@ -172,7 +185,7 @@ button { cursor: pointer; }
 
 .eyebrow {
   color: var(--brand-dark);
-  font-size: 0.78rem;
+  font-size: var(--font-xs);
   font-weight: 900;
   letter-spacing: 0.08em;
   margin: 0 0 0.25rem;
@@ -184,6 +197,7 @@ button { cursor: pointer; }
   border: 0;
   border-radius: 999px;
   color: var(--brand-dark);
+  font-size: var(--font-xs);
   font-weight: 900;
   padding: 0.55rem 0.8rem;
   white-space: nowrap;
@@ -195,35 +209,6 @@ button { cursor: pointer; }
 }
 
 .hidden { display: none !important; }
-
-.metric-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.metric-card {
-  display: grid;
-  gap: 0.35rem;
-  overflow: hidden;
-  min-height: 112px;
-  padding: 1.1rem;
-  position: relative;
-}
-
-.metric-card::before {
-  background: var(--gradient-primary);
-  border-radius: 999px;
-  content: "";
-  height: 0.35rem;
-  inset: 0.75rem 1rem auto;
-  position: absolute;
-}
-
-.metric-card strong {
-  font-size: 1.75rem;
-  margin-top: 0.35rem;
-}
 
 .admin-grid {
   display: grid;
@@ -267,6 +252,7 @@ button { cursor: pointer; }
 label {
   color: var(--ink);
   display: grid;
+  font-size: var(--font-sm);
   gap: 0.4rem;
   font-weight: 850;
 }
@@ -276,6 +262,7 @@ input, select, textarea {
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--ink);
+  font-size: var(--font-base);
   min-height: 2.55rem;
   overflow: hidden;
   padding: 0.65rem 0.75rem;
@@ -297,6 +284,7 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   border-radius: 999px;
   display: inline-flex;
+  font-size: var(--font-base);
   font-weight: 900;
   justify-content: center;
   min-height: 2.6rem;
@@ -347,7 +335,7 @@ th, td {
 
 th {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--font-xs);
   text-transform: uppercase;
 }
 
@@ -399,11 +387,11 @@ tbody tr:hover, tbody tr.is-selected {
 
 .part-row span, .correction-row span {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--font-sm);
 }
 
 @media (max-width: 980px) {
-  .metric-grid, .admin-grid, .results-layout {
+  .admin-grid, .results-layout {
     grid-template-columns: 1fr;
   }
 }

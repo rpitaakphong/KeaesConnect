@@ -83,7 +83,7 @@
 .login-copy, .login-card { padding: 28px; }
 .login-card { display: grid; gap: 16px; }
 .login-copy h1, .dashboard-heading h1 {
-  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-size: var(--font-hero);
   line-height: 1.08;
 }
 .dashboard-heading {
