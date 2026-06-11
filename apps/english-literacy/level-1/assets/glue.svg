@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title">
+  <title id="title">Glue</title>
+  <rect width="240" height="160" fill="#f8fbfa"/>
+  <path d="M98 28h44l10 22v78a12 12 0 0 1-12 12H100a12 12 0 0 1-12-12V50z" fill="#ffffff" stroke="#50656b" stroke-width="5"/>
+  <path d="M106 18h28l8 20H98z" fill="#f3bd35"/>
+  <rect x="102" y="64" width="36" height="46" rx="4" fill="#e9f6ff" stroke="#8fc1df" stroke-width="4"/>
+  <path d="M108 96h24M110 76l20 12-20 12z" fill="#4f8fcf"/>
+</svg>

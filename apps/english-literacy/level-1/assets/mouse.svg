@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" role="img" aria-labelledby="title">
+  <title id="title">Mouse</title>
+  <rect width="180" height="140" fill="#f8fbfa"/>
+  <ellipse cx="94" cy="82" rx="46" ry="28" fill="#9aa5a8"/>
+  <circle cx="52" cy="70" r="20" fill="#9aa5a8"/>
+  <circle cx="44" cy="52" r="13" fill="#b7c0c2"/>
+  <circle cx="46" cy="68" r="4" fill="#25333a"/>
+  <path d="M138 84c22 0 26 22 6 24" stroke="#9aa5a8" stroke-width="6" fill="none" stroke-linecap="round"/>
+</svg>

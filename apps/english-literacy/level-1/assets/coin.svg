@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" role="img" aria-labelledby="title">
+  <title id="title">Coin</title>
+  <rect width="180" height="140" fill="#f8fbfa"/>
+  <circle cx="72" cy="70" r="34" fill="#f3bd35" stroke="#b98014" stroke-width="5"/>
+  <circle cx="108" cy="70" r="34" fill="#ffd966" stroke="#b98014" stroke-width="5"/>
+  <text x="62" y="77" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#7a5635">$</text>
+  <text x="98" y="77" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#7a5635">$</text>
+</svg>

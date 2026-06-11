@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" role="img" aria-labelledby="title">
+  <title id="title">Boy</title>
+  <rect width="180" height="140" fill="#f8fbfa"/>
+  <circle cx="90" cy="48" r="24" fill="#f1b47c"/>
+  <path d="M66 46c6-24 42-32 54-6-18-8-34 8-54 6z" fill="#6b3d24"/>
+  <rect x="62" y="74" width="56" height="42" rx="12" fill="#4f8fcf"/>
+  <path d="M62 88 42 100M118 88l20 12" stroke="#f1b47c" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="82" cy="48" r="3" fill="#25333a"/><circle cx="98" cy="48" r="3" fill="#25333a"/>
+  <path d="M80 60c8 6 12 6 20 0" stroke="#25333a" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" role="img" aria-labelledby="title">
+  <title id="title">Money</title>
+  <rect width="180" height="140" fill="#f8fbfa"/>
+  <rect x="38" y="46" width="98" height="54" rx="4" fill="#78c47c" stroke="#3f8f45" stroke-width="5" transform="rotate(-8 87 73)"/>
+  <rect x="52" y="38" width="98" height="54" rx="4" fill="#99d79c" stroke="#3f8f45" stroke-width="5" transform="rotate(8 101 65)"/>
+  <circle cx="100" cy="66" r="14" fill="#e8f8e8" stroke="#3f8f45" stroke-width="4"/>
+  <text x="94" y="73" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#3f8f45">$</text>
+</svg>

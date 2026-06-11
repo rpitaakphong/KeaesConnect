@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" role="img" aria-labelledby="title">
+  <title id="title">Boat</title>
+  <rect width="180" height="140" fill="#f8fbfa"/>
+  <path d="M36 78h108l-16 34H54z" fill="#4f8fcf" stroke="#2f6fae" stroke-width="5" stroke-linejoin="round"/>
+  <rect x="72" y="48" width="52" height="28" rx="4" fill="#dff4ff" stroke="#50656b" stroke-width="4"/>
+  <path d="M28 116c20 10 40 10 60 0s40-10 64 0" stroke="#7cb6d5" stroke-width="6" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 140" role="img" aria-labelledby="title">
+  <title id="title">Toys</title>
+  <rect width="180" height="140" fill="#f8fbfa"/>
+  <circle cx="62" cy="76" r="24" fill="#e85f55"/>
+  <rect x="86" y="50" width="44" height="44" rx="8" fill="#f3bd35"/>
+  <path d="M108 36c16 0 24 12 24 22H84c0-10 8-22 24-22z" fill="#8f6bd4"/>
+  <circle cx="54" cy="70" r="6" fill="#ffffff"/><circle cx="74" cy="82" r="6" fill="#ffffff"/>
+</svg>

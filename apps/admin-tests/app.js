@@ -1,15 +1,27 @@
 (function () {
   "use strict";
 
-  const tests = [
+  const builtinTests = [
     {
       id: "starter-progress-test",
       title: "Starter Progress Test",
       subject: "English",
       level: "Cambridge Starters",
       status: "active",
+      appPath: "../starter-listening/index.html",
+      databaseReady: true,
+    },
+    {
+      id: "english-literacy-1",
+      title: "English Literacy Level 1",
+      subject: "English",
+      level: "English Literacy 1",
+      status: "active",
+      appPath: "../english-literacy/level-1/index.html",
+      databaseReady: false,
     },
   ];
+  let tests = builtinTests;
 
   let selectedResultId = null;
   let selectedAssignment = null;
@@ -18,6 +30,7 @@
   document.addEventListener("DOMContentLoaded", async () => {
     await requireAdminSession();
     await window.KeaesWorkspacePortal?.refreshChrome?.();
+    await loadTests();
     renderTests();
     renderLinkGenerator();
     bindActions();
@@ -49,11 +62,32 @@
     `;
   }
 
+  async function loadTests() {
+    if (!window.KeaesApi?.isConfigured()) return;
+    try {
+      const rows = await window.KeaesApi.listTests();
+      tests = mergeTests(rows.map((test) => ({
+        id: test.id,
+        title: test.title,
+        subject: test.subject,
+        level: test.level,
+        status: test.status,
+        appPath: normalizeAppPath(test),
+        databaseReady: true,
+      })));
+      document.querySelector("[data-backend-status]").textContent = "Database mode";
+    } catch (err) {
+      document.querySelector("[data-backend-status]").textContent = "Catalog fallback";
+      setShareMessage(`Could not load test catalog: ${err.message}`);
+    }
+  }
+
   function renderTests() {
     document.querySelector("[data-test-list]").innerHTML = tests.map((test) => `
-      <article class="test-card">
+      <article class="test-card ${test.databaseReady ? "" : "is-pending"}">
         <h3>${escapeHtml(test.title)}</h3>
         <p>${escapeHtml(test.subject)} · ${escapeHtml(test.level)}</p>
+        ${test.databaseReady ? "" : "<p class=\"catalog-note\">Database setup needed before assignment links work.</p>"}
       </article>
     `).join("");
   }
@@ -74,8 +108,17 @@
     }
     if (!selectedAssignment) {
       const selected = selectedTest();
-      selectedAssignment = await window.KeaesApi.createAssignment(selected.id);
-      updateGeneratedLink();
+      if (!selected.databaseReady) {
+        setShareMessage(`Run supabase/schema.sql before generating ${selected.title} assignment links.`);
+        return null;
+      }
+      try {
+        selectedAssignment = await window.KeaesApi.createAssignment(selected.id);
+        updateGeneratedLink();
+      } catch (err) {
+        setShareMessage(`Could not create assignment for ${selected.title}: ${err.message}. Run supabase/schema.sql if this test is new.`);
+        return null;
+      }
     }
     if (event?.currentTarget?.tagName === "A") window.open(event.currentTarget.href, "_blank", "noopener");
     return selectedAssignment;
@@ -87,7 +130,7 @@
     const openLink = document.querySelector("[data-open-link]");
     const message = document.querySelector("[data-message-template]");
     const assignmentToken = selectedAssignment?.assignment_token;
-    const studentUrl = new URL("../starter-listening/index.html", window.location.href);
+    const studentUrl = new URL(selected.appPath || "../starter-listening/index.html", window.location.href);
     studentUrl.searchParams.set("testId", selected.id);
     if (assignmentToken) studentUrl.searchParams.set("assignment", assignmentToken);
     const absoluteUrl = assignmentToken ? studentUrl.href : "Click Open test or Copy link to generate an assignment URL.";
@@ -98,7 +141,7 @@
       "",
       absoluteUrl,
       "",
-      "Enter your student details before starting. Complete Listening first, then Reading & Writing. Once the listening exam starts, the audio will continue until it finishes.",
+      "Enter your student details before starting. Complete the test in one sitting and submit when finished.",
     ].join("\n");
   }
 
@@ -210,6 +253,24 @@
 
   function selectedTest() {
     return tests.find((test) => test.id === document.querySelector("[data-test-select]").value) || tests[0];
+  }
+
+  function mergeTests(databaseTests) {
+    const byId = new Map(builtinTests.map((test) => [test.id, test]));
+    databaseTests.forEach((test) => byId.set(test.id, { ...byId.get(test.id), ...test }));
+    return Array.from(byId.values()).filter((test) => test.status === "active");
+  }
+
+  function normalizeAppPath(test) {
+    const path = test.app_path || defaultAppPath(test.id);
+    if (!path) return "../starter-listening/index.html";
+    if (path.startsWith("/apps/")) return `..${path.replace("/apps", "")}`;
+    return path;
+  }
+
+  function defaultAppPath(testId) {
+    if (testId === "english-literacy-1") return "/apps/english-literacy/level-1/index.html";
+    return "/apps/starter-listening/index.html";
   }
 
   function setShareMessage(message) {

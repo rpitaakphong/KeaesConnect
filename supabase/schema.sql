@@ -18,6 +18,8 @@ create table if not exists tests (
   created_at timestamptz not null default now()
 );
 
+alter table tests add column if not exists app_path text not null default '/apps/starter-listening/index.html';
+
 create table if not exists test_questions (
   id text primary key,
   test_id text not null references tests(id) on delete cascade,
@@ -110,16 +112,18 @@ create policy "staff can read attempts" on test_attempts for select using (is_st
 drop policy if exists "staff can read answers" on attempt_answers;
 create policy "staff can read answers" on attempt_answers for select using (is_staff());
 
-insert into tests (id, title, subject, level, status, total_points)
+insert into tests (id, title, subject, level, status, total_points, app_path)
 values
-  ('starter-progress-listening', 'Starter Progress Listening', 'English', 'Cambridge Starters', 'inactive', 20),
-  ('starter-progress-test', 'Starter Progress Test', 'English', 'Cambridge Starters', 'active', 45)
+  ('starter-progress-listening', 'Starter Progress Listening', 'English', 'Cambridge Starters', 'inactive', 20, '/apps/starter-listening/index.html'),
+  ('starter-progress-test', 'Starter Progress Test', 'English', 'Cambridge Starters', 'active', 45, '/apps/starter-listening/index.html'),
+  ('english-literacy-1', 'English Literacy Level 1', 'English', 'English Literacy 1', 'active', 30, '/apps/english-literacy/level-1/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
   level = excluded.level,
   status = excluded.status,
-  total_points = excluded.total_points;
+  total_points = excluded.total_points,
+  app_path = excluded.app_path;
 
 insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
 values
@@ -176,6 +180,46 @@ on conflict (id) do update set
   transcript_ref = excluded.transcript_ref,
   position = excluded.position;
 
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
+values
+  ('el1-q1', 'english-literacy-1', 'Part A - Rhyming Words', 'Boat', '{"source":"questionMap","accepted":["coat"],"display":"coat"}', null, 1),
+  ('el1-q2', 'english-literacy-1', 'Part A - Rhyming Words', 'Glad', '{"source":"questionMap","accepted":["sad"],"display":"sad"}', null, 2),
+  ('el1-q3', 'english-literacy-1', 'Part A - Rhyming Words', 'Cage', '{"source":"questionMap","accepted":["page"],"display":"page"}', null, 3),
+  ('el1-q4', 'english-literacy-1', 'Part A - Rhyming Words', 'Wish', '{"source":"questionMap","accepted":["fish"],"display":"fish"}', null, 4),
+  ('el1-q5', 'english-literacy-1', 'Part A - Rhyming Words', 'Play', '{"source":"questionMap","accepted":["bay"],"display":"bay"}', null, 5),
+  ('el1-q6', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 6.', '{"source":"questionMap","accepted":["truck"],"display":"truck"}', null, 6),
+  ('el1-q7', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 7.', '{"source":"questionMap","accepted":["crab"],"display":"crab"}', null, 7),
+  ('el1-q8', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 8.', '{"source":"questionMap","accepted":["flag"],"display":"flag"}', null, 8),
+  ('el1-q9', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 9.', '{"source":"questionMap","accepted":["glue"],"display":"glue"}', null, 9),
+  ('el1-q10', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 10.', '{"source":"questionMap","accepted":["oven"],"display":"oven"}', null, 10),
+  ('el1-q11', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 11.', '{"source":"questionMap","accepted":["clock"],"display":"clock"}', null, 11),
+  ('el1-q12', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 12.', '{"source":"questionMap","accepted":["crown"],"display":"crown"}', null, 12),
+  ('el1-q13', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 13.', '{"source":"questionMap","accepted":["broom"],"display":"broom"}', null, 13),
+  ('el1-q14', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 14.', '{"source":"questionMap","accepted":["frog"],"display":"frog"}', null, 14),
+  ('el1-q15', 'english-literacy-1', 'Part 2 - Picture Naming', 'Name the picture for question 15.', '{"source":"questionMap","accepted":["spoon"],"display":"spoon"}', null, 15),
+  ('el1-q16', 'english-literacy-1', 'Part 3 - Odd One Out', 'Choose the odd one out: star, cloud, car.', '{"source":"questionMap","accepted":["cloud"],"display":"cloud"}', null, 16),
+  ('el1-q17', 'english-literacy-1', 'Part 3 - Odd One Out', 'Choose the odd one out: coin, toys, boy.', '{"source":"questionMap","accepted":["coin"],"display":"coin"}', null, 17),
+  ('el1-q18', 'english-literacy-1', 'Part 3 - Odd One Out', 'Choose the odd one out: glass, grass, boat.', '{"source":"questionMap","accepted":["boat"],"display":"boat"}', null, 18),
+  ('el1-q19', 'english-literacy-1', 'Part 3 - Odd One Out', 'Choose the odd one out: mouse, house, dog.', '{"source":"questionMap","accepted":["dog"],"display":"dog"}', null, 19),
+  ('el1-q20', 'english-literacy-1', 'Part 3 - Odd One Out', 'Choose the odd one out: honey, bee, money.', '{"source":"questionMap","accepted":["bee"],"display":"bee"}', null, 20),
+  ('el1-q21', 'english-literacy-1', 'Part 4 - Missing Letters', 'sup __ market', '{"source":"questionMap","accepted":["er"],"display":"er"}', null, 21),
+  ('el1-q22', 'english-literacy-1', 'Part 4 - Missing Letters', '__ agonfly', '{"source":"questionMap","accepted":["dr"],"display":"dr"}', null, 22),
+  ('el1-q23', 'english-literacy-1', 'Part 4 - Missing Letters', 'rainb __', '{"source":"questionMap","accepted":["ow"],"display":"ow"}', null, 23),
+  ('el1-q24', 'english-literacy-1', 'Part 4 - Missing Letters', 'bestfr __ nd', '{"source":"questionMap","accepted":["ie"],"display":"ie"}', null, 24),
+  ('el1-q25', 'english-literacy-1', 'Part 4 - Missing Letters', 'bedr __ m', '{"source":"questionMap","accepted":["oo"],"display":"oo"}', null, 25),
+  ('el1-q26', 'english-literacy-1', 'Part 5 - Reading True or False', 'It is New Year''s Day.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 26),
+  ('el1-q27', 'english-literacy-1', 'Part 5 - Reading True or False', 'Marla and Tio are playing in the park.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 27),
+  ('el1-q28', 'english-literacy-1', 'Part 5 - Reading True or False', 'Their parents are watching TV.', '{"source":"questionMap","accepted":["true"],"display":"true"}', null, 28),
+  ('el1-q29', 'english-literacy-1', 'Part 5 - Reading True or False', 'The children are planting flowers.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 29),
+  ('el1-q30', 'english-literacy-1', 'Part 5 - Reading True or False', 'Their teachers said trees provide home for birds.', '{"source":"questionMap","accepted":["true"],"display":"true"}', null, 30)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  position = excluded.position;
+
 create or replace function normalize_answer(value text)
 returns text
 language sql
@@ -192,7 +236,9 @@ as $$
 declare
   source_name text := p_answer_key->>'source';
 begin
-  if source_name = 'connections' then
+  if source_name = 'questionMap' then
+    return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name = 'connections' then
     return coalesce(p_answers->'connections'->>(p_answer_key->>'object'), '');
   elsif source_name = 'textAnswers' then
     return coalesce(p_answers->'textAnswers'->>(p_answer_key->>'id'), '');
@@ -215,7 +261,11 @@ as $$
 declare
   source_name text := p_answer_key->>'source';
 begin
-  if source_name = 'connections' then
+  if source_name = 'questionMap' then
+    return normalize_answer(p_response) in (
+      select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
+    );
+  elsif source_name = 'connections' then
     return p_response = p_answer_key->>'target';
   elsif source_name = 'textAnswers' then
     return normalize_answer(p_response) in (
@@ -458,4 +508,5 @@ grant execute on function get_assignment(text) to anon, authenticated;
 grant execute on function submit_attempt(text, jsonb, jsonb) to anon, authenticated;
 grant execute on function create_test_assignment(text) to authenticated;
 grant execute on function get_staff_profile() to authenticated;
+grant select on tests to authenticated;
 grant select on admin_attempt_results to authenticated;

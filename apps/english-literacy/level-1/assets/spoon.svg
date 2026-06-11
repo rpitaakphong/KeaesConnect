@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title">
+  <title id="title">Spoon</title>
+  <rect width="240" height="160" fill="#f8fbfa"/>
+  <ellipse cx="78" cy="66" rx="26" ry="38" transform="rotate(-28 78 66)" fill="#d9e3e1" stroke="#50656b" stroke-width="5"/>
+  <path d="M98 88 176 132" stroke="#50656b" stroke-width="12" stroke-linecap="round"/>
+  <path d="M98 88 176 132" stroke="#eef5f3" stroke-width="4" stroke-linecap="round"/>
+</svg>

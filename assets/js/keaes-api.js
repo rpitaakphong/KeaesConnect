@@ -50,6 +50,24 @@
     return data;
   }
 
+  async function listTests() {
+    assertConfigured();
+    const withAppPath = await client
+      .from("tests")
+      .select("id,title,subject,level,status,total_points,app_path")
+      .eq("status", "active")
+      .order("title", { ascending: true });
+    if (!withAppPath.error) return withAppPath.data || [];
+
+    const { data, error } = await client
+      .from("tests")
+      .select("id,title,subject,level,status,total_points")
+      .eq("status", "active")
+      .order("title", { ascending: true });
+    if (error) throw error;
+    return data || [];
+  }
+
   async function createAssignment(testId) {
     assertConfigured();
     const { data, error } = await client.rpc("create_test_assignment", { p_test_id: testId });
@@ -92,6 +110,7 @@
     getSession,
     requireStaffSession,
     getStaffProfile,
+    listTests,
     createAssignment,
     getAssignment,
     listResults,

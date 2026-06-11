@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title">
+  <title id="title">Clock</title>
+  <rect width="240" height="160" fill="#f8fbfa"/>
+  <circle cx="120" cy="80" r="58" fill="#ffffff" stroke="#50656b" stroke-width="6"/>
+  <circle cx="120" cy="80" r="5" fill="#50656b"/>
+  <path d="M120 80V42M120 80l34-24M120 80 90 58" stroke="#25333a" stroke-width="6" stroke-linecap="round"/>
+  <g fill="#25333a" font-family="Arial, sans-serif" font-size="16" font-weight="700">
+    <text x="114" y="38">12</text><text x="165" y="85">3</text><text x="116" y="129">6</text><text x="62" y="85">9</text>
+  </g>
+</svg>
