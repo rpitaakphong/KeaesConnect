@@ -1,50 +1,8 @@
-:root {
-  --ink: #25333a;
-  --muted: #7f9096;
-  --faint: #9aa8ac;
-  --blue: #58b6d6;
-  --blue-deep: #3397bd;
-  --blue-soft: #e8f7fb;
-  --mint: #53d0c8;
-  --violet: #58b6d6;
-  --pink: #38c5bd;
-  --coral: #ffd45c;
-  --warm: #ffd45c;
-  --panel: rgba(255, 255, 255, 0.94);
-  --panel-strong: rgba(255, 255, 255, 0.98);
-  --line: rgba(75, 177, 183, 0.16);
-  --white-line: rgba(255, 255, 255, 0.76);
-  --shadow: 0 28px 64px rgba(56, 142, 150, 0.18);
-  --soft-shadow: 0 18px 42px rgba(56, 142, 150, 0.12);
-  --gradient-primary: linear-gradient(145deg, #53d0c8 0%, #58b6d6 100%);
-  --gradient-warm: linear-gradient(145deg, #ffe078 0%, #ffc84d 100%);
-  --gradient-cool: linear-gradient(145deg, #48c8c0 0%, #58aeda 100%);
-  --font-xs: 0.75rem;
-  --font-sm: 0.8125rem;
-  --font-base: 0.875rem;
-  --font-md: 0.95rem;
-  --font-lg: 1.05rem;
-  --font-xl: 1.25rem;
-  --font-2xl: clamp(1.45rem, 2.4vw, 2.1rem);
-  --font-hero: clamp(1.8rem, 3vw, 2.65rem);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  min-height: 100%;
-}
-
 body {
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: var(--font-base);
-  letter-spacing: 0;
   background:
     linear-gradient(135deg, #a9e6e0 0%, #b9eee8 100%);
 }
@@ -65,22 +23,6 @@ body::before {
 #app {
   max-width: 100vw;
   overflow-x: clip;
-}
-
-button,
-input {
-  font: inherit;
-}
-
-button {
-  border: 0;
-  cursor: pointer;
-}
-
-button:focus-visible,
-input:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 3px;
 }
 
 svg {
@@ -373,7 +315,6 @@ svg {
   color: var(--ink);
   font-size: var(--font-hero);
   line-height: 1;
-  letter-spacing: 0;
 }
 
 .eyebrow {
@@ -393,7 +334,6 @@ svg {
   color: var(--ink);
   font-size: var(--font-2xl);
   line-height: 1.14;
-  letter-spacing: 0;
 }
 
 .lesson-meta {

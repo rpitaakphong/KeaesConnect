@@ -103,6 +103,15 @@
     return data;
   }
 
+  async function gradeEnglishLiteracyShortAnswers(payload) {
+    assertConfigured();
+    const { data, error } = await client.functions.invoke("grade-english-literacy", {
+      body: payload,
+    });
+    if (error) throw error;
+    return data?.grades || {};
+  }
+
   window.KeaesApi = {
     isConfigured,
     signIn,
@@ -115,5 +124,6 @@
     getAssignment,
     listResults,
     submitAttempt,
+    gradeEnglishLiteracyShortAnswers,
   };
 })();

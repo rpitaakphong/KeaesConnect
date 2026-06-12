@@ -7,12 +7,13 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Test Admin | Keaes Workspace</title>
-  <link rel="stylesheet" href="styles.css?v=typography-standard">
+  <link rel="stylesheet" href="../../assets/css/base.css?v=shared-theme">
+  <link rel="stylesheet" href="styles.css?v=result-filters">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
   <script defer src="../../assets/js/keaes-api.js"></script>
   <script defer src="../../assets/js/portal.js"></script>
-  <script defer src="app.js?v=english-literacy-catalog"></script>
+  <script defer src="app.js?v=result-filters"></script>
 </head>
 <body data-page="admin-tests">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -56,9 +57,7 @@
           </div>
         </div>
         <form class="link-form" data-link-form>
-          <label>Selected test
-            <select name="testId" data-test-select></select>
-          </label>
+          <div class="selected-test-summary" data-selected-test-summary></div>
           <label>Share URL
             <input name="shareUrl" data-share-url readonly>
           </label>
@@ -81,6 +80,16 @@
         </div>
         <button class="ghost-button" type="button" data-refresh-results>Refresh</button>
       </div>
+      <div class="results-controls">
+        <label>Search student
+          <input type="search" data-result-search placeholder="Student name or nickname">
+        </label>
+        <label>Filter course
+          <select data-course-filter>
+            <option value="">All courses</option>
+          </select>
+        </label>
+      </div>
       <div class="results-layout">
         <div class="table-wrap">
           <table>
@@ -92,17 +101,19 @@
                 <th>Level</th>
                 <th>Score</th>
                 <th>Date</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody data-results-table></tbody>
           </table>
         </div>
-        <aside class="detail-panel" data-result-detail>
-          <h3>No result selected</h3>
-          <p>Select a student result to see score details and corrections.</p>
-        </aside>
       </div>
     </section>
   </main>
+  <dialog class="result-modal" data-result-modal>
+    <div class="result-modal-card">
+      <div data-result-detail></div>
+    </div>
+  </dialog>
 </body>
 </html>

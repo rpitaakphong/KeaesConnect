@@ -27,7 +27,7 @@ create table if not exists test_questions (
   prompt text not null,
   answer_key jsonb not null,
   transcript_ref text,
-  points int not null default 1,
+  points numeric not null default 1,
   position int not null
 );
 
@@ -54,8 +54,8 @@ create table if not exists test_attempts (
   student_id uuid not null references students(id),
   test_id text not null references tests(id),
   test_date date not null,
-  score_total int not null,
-  score_possible int not null,
+  score_total numeric not null,
+  score_possible numeric not null,
   score_percent int not null,
   submitted_at timestamptz not null default now()
 );
@@ -69,9 +69,26 @@ create table if not exists attempt_answers (
   response text not null,
   correct_answer text not null,
   is_correct boolean not null,
+  awarded_points numeric not null default 0,
+  possible_points numeric not null default 1,
+  grading_details jsonb not null default '{}'::jsonb,
   transcript_ref text,
   position int not null
 );
+
+drop view if exists admin_attempt_results;
+
+alter table test_questions alter column points type numeric using points::numeric;
+alter table test_attempts alter column score_total type numeric using score_total::numeric;
+alter table test_attempts alter column score_possible type numeric using score_possible::numeric;
+alter table attempt_answers add column if not exists awarded_points numeric not null default 0;
+alter table attempt_answers add column if not exists possible_points numeric not null default 1;
+alter table attempt_answers add column if not exists grading_details jsonb not null default '{}'::jsonb;
+update attempt_answers
+set awarded_points = possible_points
+where is_correct = true
+  and awarded_points = 0
+  and grading_details = '{}'::jsonb;
 
 alter table staff_users enable row level security;
 alter table tests enable row level security;
@@ -116,7 +133,11 @@ insert into tests (id, title, subject, level, status, total_points, app_path)
 values
   ('starter-progress-listening', 'Starter Progress Listening', 'English', 'Cambridge Starters', 'inactive', 20, '/apps/starter-listening/index.html'),
   ('starter-progress-test', 'Starter Progress Test', 'English', 'Cambridge Starters', 'active', 45, '/apps/starter-listening/index.html'),
-  ('english-literacy-1', 'English Literacy Level 1', 'English', 'English Literacy 1', 'active', 30, '/apps/english-literacy/level-1/index.html')
+  ('english-literacy-1', 'English Literacy Level 1', 'English', 'English Literacy 1', 'active', 30, '/apps/english-literacy/level-1/index.html'),
+  ('english-literacy-2', 'English Literacy Level 2', 'English', 'English Literacy 2', 'active', 30, '/apps/english-literacy/level-2/index.html'),
+  ('english-literacy-3', 'English Literacy Level 3', 'English', 'English Literacy 3', 'active', 30, '/apps/english-literacy/level-3/index.html'),
+  ('english-literacy-4', 'English Literacy Level 4', 'English', 'English Literacy 4', 'active', 30, '/apps/english-literacy/level-4/index.html'),
+  ('english-literacy-5', 'English Literacy Level 5', 'English', 'English Literacy 5', 'active', 30, '/apps/english-literacy/level-5/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -220,6 +241,166 @@ on conflict (id) do update set
   transcript_ref = excluded.transcript_ref,
   position = excluded.position;
 
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
+values
+  ('el2-q1', 'english-literacy-2', 'Part A - Homophones', 'I (eight / ate) a lot for breakfast today.', '{"source":"questionMap","accepted":["ate"],"display":"ate"}', null, 1),
+  ('el2-q2', 'english-literacy-2', 'Part A - Homophones', 'Mr. Smith is an (I / eye) doctor.', '{"source":"questionMap","accepted":["eye"],"display":"eye"}', null, 2),
+  ('el2-q3', 'english-literacy-2', 'Part A - Homophones', 'Vic is spending his (week / weak) in the province.', '{"source":"questionMap","accepted":["week"],"display":"week"}', null, 3),
+  ('el2-q4', 'english-literacy-2', 'Part A - Homophones', 'I can''t (wait / weight) to see you.', '{"source":"questionMap","accepted":["wait"],"display":"wait"}', null, 4),
+  ('el2-q5', 'english-literacy-2', 'Part A - Homophones', 'My mom bought (too / two) shirts for me.', '{"source":"questionMap","accepted":["two"],"display":"two"}', null, 5),
+  ('el2-q6', 'english-literacy-2', 'Part 2 - Plurals', 'Truck', '{"source":"questionMap","accepted":["trucks"],"display":"trucks"}', null, 6),
+  ('el2-q7', 'english-literacy-2', 'Part 2 - Plurals', 'Box', '{"source":"questionMap","accepted":["boxes"],"display":"boxes"}', null, 7),
+  ('el2-q8', 'english-literacy-2', 'Part 2 - Plurals', 'Tomato', '{"source":"questionMap","accepted":["tomatoes"],"display":"tomatoes"}', null, 8),
+  ('el2-q9', 'english-literacy-2', 'Part 2 - Plurals', 'Key', '{"source":"questionMap","accepted":["keys"],"display":"keys"}', null, 9),
+  ('el2-q10', 'english-literacy-2', 'Part 3 - Syllables', 'Effect', '{"source":"questionMap","accepted":["ef/fect","ef fect"],"display":"ef/fect"}', null, 10),
+  ('el2-q11', 'english-literacy-2', 'Part 3 - Syllables', 'Faster', '{"source":"questionMap","accepted":["fast/er","fast er"],"display":"fast/er"}', null, 11),
+  ('el2-q12', 'english-literacy-2', 'Part 3 - Syllables', 'Happens', '{"source":"questionMap","accepted":["hap/pens","hap pens"],"display":"hap/pens"}', null, 12),
+  ('el2-q13', 'english-literacy-2', 'Part 3 - Syllables', 'Beautiful', '{"source":"questionMap","accepted":["beau/ti/ful","beau ti ful"],"display":"beau/ti/ful"}', null, 13),
+  ('el2-q14', 'english-literacy-2', 'Part 3 - Syllables', 'Light', '{"source":"questionMap","accepted":["light"],"display":"light"}', null, 14),
+  ('el2-q15', 'english-literacy-2', 'Part 3 - Syllables', 'Elephant', '{"source":"questionMap","accepted":["el/e/phant","el e phant"],"display":"el/e/phant"}', null, 15),
+  ('el2-q16', 'english-literacy-2', 'Part 4 - Pronouns', 'The boys are over there. Can you see (they / them)?', '{"source":"questionMap","accepted":["them"],"display":"them"}', null, 16),
+  ('el2-q17', 'english-literacy-2', 'Part 4 - Pronouns', 'Listen to (him / he)!', '{"source":"questionMap","accepted":["him"],"display":"him"}', null, 17),
+  ('el2-q18', 'english-literacy-2', 'Part 4 - Pronouns', 'Look at (she / her). She''s very pretty.', '{"source":"questionMap","accepted":["her"],"display":"her"}', null, 18),
+  ('el2-q19', 'english-literacy-2', 'Part 4 - Pronouns', 'Can you tell (we / us) your name?', '{"source":"questionMap","accepted":["us"],"display":"us"}', null, 19),
+  ('el2-q20', 'english-literacy-2', 'Part 4 - Pronouns', 'Please help (I / me).', '{"source":"questionMap","accepted":["me"],"display":"me"}', null, 20),
+  ('el2-q21', 'english-literacy-2', 'Part 5 - Reading Comprehension', 'What did the lady give to Rima?', '{"source":"aiSplitGrade","display":"The lady gave Rima saplings and seeds of flower plants."}', null, 21),
+  ('el2-q22', 'english-literacy-2', 'Part 5 - Reading Comprehension', 'What did she do with the seeds?', '{"source":"aiSplitGrade","display":"Rima planted the saplings/seeds and sowed or watered them."}', null, 22),
+  ('el2-q23', 'english-literacy-2', 'Part 5 - Reading Comprehension', 'How did Rima put up a small flower shop?', '{"source":"aiSplitGrade","display":"She saved or earned money from selling flowers."}', null, 23),
+  ('el2-q24', 'english-literacy-2', 'Part 5 - Reading Comprehension', 'Why did she call it green gold?', '{"source":"aiSplitGrade","display":"The plants or flowers helped her earn money or improve her life."}', null, 24),
+  ('el2-q25', 'english-literacy-2', 'Part 6 - Sentence Order', 'She saved enough money to open a small flower shop in the market.', '{"source":"questionMap","accepted":["5"],"display":"5"}', null, 25),
+  ('el2-q26', 'english-literacy-2', 'Part 6 - Sentence Order', 'She thanked the lady who gave her the green gold.', '{"source":"questionMap","accepted":["6"],"display":"6"}', null, 26),
+  ('el2-q27', 'english-literacy-2', 'Part 6 - Sentence Order', 'She watered the plants.', '{"source":"questionMap","accepted":["3"],"display":"3"}', null, 27),
+  ('el2-q28', 'english-literacy-2', 'Part 6 - Sentence Order', 'Rima went to her small hut and dug the ground then she planted seeds.', '{"source":"questionMap","accepted":["2"],"display":"2"}', null, 28),
+  ('el2-q29', 'english-literacy-2', 'Part 6 - Sentence Order', 'A lady gave her seeds and told her to plant it.', '{"source":"questionMap","accepted":["1"],"display":"1"}', null, 29),
+  ('el2-q30', 'english-literacy-2', 'Part 6 - Sentence Order', 'Flowers bloomed and people bought flowers.', '{"source":"questionMap","accepted":["4"],"display":"4"}', null, 30)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  position = excluded.position;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
+values
+  ('el3-q1', 'english-literacy-3', 'Part I - Synonyms', 'I like this song. It makes me at ease.', '{"source":"questionMap","accepted":["comfortable"],"display":"comfortable"}', null, 1),
+  ('el3-q2', 'english-literacy-3', 'Part I - Synonyms', 'The ground is moist this morning.', '{"source":"questionMap","accepted":["wet"],"display":"wet"}', null, 2),
+  ('el3-q3', 'english-literacy-3', 'Part I - Synonyms', 'The bullies at school irritate me.', '{"source":"questionMap","accepted":["annoy"],"display":"annoy"}', null, 3),
+  ('el3-q4', 'english-literacy-3', 'Part I - Synonyms', 'The school is close to our house.', '{"source":"questionMap","accepted":["near"],"display":"near"}', null, 4),
+  ('el3-q5', 'english-literacy-3', 'Part I - Synonyms', 'We can predict the weather.', '{"source":"questionMap","accepted":["forecast"],"display":"forecast"}', null, 5),
+  ('el3-q6', 'english-literacy-3', 'Part II - Adjective or Adverb', 'Charlotte made a delicious salad.', '{"source":"questionMap","accepted":["adjective"],"display":"adjective"}', null, 6),
+  ('el3-q7', 'english-literacy-3', 'Part II - Adjective or Adverb', 'Amy speaks softly.', '{"source":"questionMap","accepted":["adverb"],"display":"adverb"}', null, 7),
+  ('el3-q8', 'english-literacy-3', 'Part II - Adjective or Adverb', 'The grumpy lady never smiles.', '{"source":"questionMap","accepted":["adjective"],"display":"adjective"}', null, 8),
+  ('el3-q9', 'english-literacy-3', 'Part II - Adjective or Adverb', 'Jessie narrated a funny story.', '{"source":"questionMap","accepted":["adjective"],"display":"adjective"}', null, 9),
+  ('el3-q10', 'english-literacy-3', 'Part II - Adjective or Adverb', 'Joe left the party happily.', '{"source":"questionMap","accepted":["adverb"],"display":"adverb"}', null, 10),
+  ('el3-q11', 'english-literacy-3', 'Part III - Plurals', 'Mouse', '{"source":"questionMap","accepted":["mice"],"display":"mice"}', null, 11),
+  ('el3-q12', 'english-literacy-3', 'Part III - Plurals', 'House', '{"source":"questionMap","accepted":["houses"],"display":"houses"}', null, 12),
+  ('el3-q13', 'english-literacy-3', 'Part III - Plurals', 'Fairy', '{"source":"questionMap","accepted":["fairies"],"display":"fairies"}', null, 13),
+  ('el3-q14', 'english-literacy-3', 'Part III - Plurals', 'Shelf', '{"source":"questionMap","accepted":["shelves"],"display":"shelves"}', null, 14),
+  ('el3-q15', 'english-literacy-3', 'Part III - Plurals', 'Sheep', '{"source":"questionMap","accepted":["sheep"],"display":"sheep"}', null, 15),
+  ('el3-q16', 'english-literacy-3', 'Part IV - Subjects', 'The boys are playing in the park.', '{"source":"questionMap","accepted":["the boys","boys"],"display":"the boys"}', null, 16),
+  ('el3-q17', 'english-literacy-3', 'Part IV - Subjects', 'Ravi is drinking juice.', '{"source":"questionMap","accepted":["ravi"],"display":"Ravi"}', null, 17),
+  ('el3-q18', 'english-literacy-3', 'Part IV - Subjects', 'The Eiffel Tower is amazing.', '{"source":"questionMap","accepted":["the eiffel tower","eiffel tower"],"display":"the Eiffel Tower"}', null, 18),
+  ('el3-q19', 'english-literacy-3', 'Part IV - Subjects', 'He is a clever but lazy boy.', '{"source":"questionMap","accepted":["he"],"display":"he"}', null, 19),
+  ('el3-q20', 'english-literacy-3', 'Part IV - Subjects', 'The parrot was sitting on the branch of the tree.', '{"source":"questionMap","accepted":["the parrot","parrot"],"display":"the parrot"}', null, 20),
+  ('el3-q21', 'english-literacy-3', 'Part V - Reading True or False', 'Coca Cola was invented in June, 1886.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 21),
+  ('el3-q22', 'english-literacy-3', 'Part V - Reading True or False', 'Dr. John Pemberton is a pharmacist.', '{"source":"questionMap","accepted":["true"],"display":"true"}', null, 22),
+  ('el3-q23', 'english-literacy-3', 'Part V - Reading True or False', 'Dr. Pemberton used a four-legged brass kettle to make the soft drink.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 23),
+  ('el3-q24', 'english-literacy-3', 'Part V - Reading True or False', 'Frank Robinson is a librarian.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 24),
+  ('el3-q25', 'english-literacy-3', 'Part V - Reading True or False', 'Mr. Robinson has bad penmanship.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 25),
+  ('el3-q26', 'english-literacy-3', 'Part V - Reading Comprehension', 'Who invented Coca Cola?', '{"source":"aiSplitGrade","display":"John Pemberton"}', null, 26),
+  ('el3-q27', 'english-literacy-3', 'Part V - Reading Comprehension', 'Who made the famous logo of Coca Cola?', '{"source":"aiSplitGrade","display":"Frank Robinson"}', null, 27),
+  ('el3-q28', 'english-literacy-3', 'Part V - Reading Comprehension', 'Where was Coca Cola first sold to the public?', '{"source":"aiSplitGrade","display":"at the soda fountain in Jacob''s Pharmacy in Atlanta"}', null, 28),
+  ('el3-q29', 'english-literacy-3', 'Part V - Reading Comprehension', 'When was Coca Cola first sold to the public?', '{"source":"aiSplitGrade","display":"May 8, 1886"}', null, 29),
+  ('el3-q30', 'english-literacy-3', 'Part V - Reading Comprehension', 'How much was the sales for the first year of Coca Cola?', '{"source":"aiSplitGrade","display":"about $50"}', null, 30)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  position = excluded.position;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
+values
+  ('el4-q1', 'english-literacy-4', 'Part I - Homophones', 'When Sami pulled the bird''s (tail / tale), it flapped its wings.', '{"source":"questionMap","accepted":["tail"],"display":"tail"}', null, 1),
+  ('el4-q2', 'english-literacy-4', 'Part I - Homophones', 'Please (right / write) down the following information.', '{"source":"questionMap","accepted":["write"],"display":"write"}', null, 2),
+  ('el4-q3', 'english-literacy-4', 'Part I - Homophones', 'The (whole / hole) family will be attending the reunion.', '{"source":"questionMap","accepted":["whole"],"display":"whole"}', null, 3),
+  ('el4-q4', 'english-literacy-4', 'Part I - Homophones', 'We must try our best to (caste / cast) away all our prejudices.', '{"source":"questionMap","accepted":["cast"],"display":"cast"}', null, 4),
+  ('el4-q5', 'english-literacy-4', 'Part I - Homophones', 'The time is half (passed / past) ten.', '{"source":"questionMap","accepted":["past"],"display":"past"}', null, 5),
+  ('el4-q6', 'english-literacy-4', 'Part II - Word Box', 'She can ___ the gift nicely.', '{"source":"questionMap","accepted":["wrap"],"display":"wrap"}', null, 6),
+  ('el4-q7', 'english-literacy-4', 'Part II - Word Box', 'The little girl has a ___ attitude.', '{"source":"questionMap","accepted":["pleasant"],"display":"pleasant"}', null, 7),
+  ('el4-q8', 'english-literacy-4', 'Part II - Word Box', 'He will give me a ___ on my birthday.', '{"source":"questionMap","accepted":["present"],"display":"present"}', null, 8),
+  ('el4-q9', 'english-literacy-4', 'Part II - Word Box', 'I love to ___ butter on my bread.', '{"source":"questionMap","accepted":["spread"],"display":"spread"}', null, 9),
+  ('el4-q10', 'english-literacy-4', 'Part II - Word Box', 'This perfume has a good ___.', '{"source":"questionMap","accepted":["scent"],"display":"scent"}', null, 10),
+  ('el4-q11', 'english-literacy-4', 'Part III - Fact or Opinion', 'Spring is the most beautiful season of all.', '{"source":"questionMap","accepted":["opinion"],"display":"opinion"}', null, 11),
+  ('el4-q12', 'english-literacy-4', 'Part III - Fact or Opinion', 'Your birthday comes only one day a year.', '{"source":"questionMap","accepted":["fact"],"display":"fact"}', null, 12),
+  ('el4-q13', 'english-literacy-4', 'Part III - Fact or Opinion', 'April is a month with 30 days.', '{"source":"questionMap","accepted":["fact"],"display":"fact"}', null, 13),
+  ('el4-q14', 'english-literacy-4', 'Part III - Fact or Opinion', 'Some families eat turkey on Thanksgiving.', '{"source":"questionMap","accepted":["fact"],"display":"fact"}', null, 14),
+  ('el4-q15', 'english-literacy-4', 'Part III - Fact or Opinion', 'Everyone should make Valentine''s Day cards.', '{"source":"questionMap","accepted":["opinion"],"display":"opinion"}', null, 15),
+  ('el4-q16', 'english-literacy-4', 'Part IV - Past Tense', 'We ___ the research together last time. (do)', '{"source":"questionMap","accepted":["did"],"display":"did"}', null, 16),
+  ('el4-q17', 'english-literacy-4', 'Part IV - Past Tense', 'When he ___ from work, his wife ___. (come back / sleep)', '{"source":"questionMap","accepted":["came back / was sleeping","came back was sleeping"],"display":"came back / was sleeping"}', null, 17),
+  ('el4-q18', 'english-literacy-4', 'Part IV - Past Tense', 'Andrew ___ his last weekend with his parents on the farm. (spend)', '{"source":"questionMap","accepted":["spent"],"display":"spent"}', null, 18),
+  ('el4-q19', 'english-literacy-4', 'Part IV - Past Tense', 'Tom ___ the fence in the garden when his friend ___. (paint / drop by)', '{"source":"questionMap","accepted":["was painting / dropped by","was painting dropped by"],"display":"was painting / dropped by"}', null, 19),
+  ('el4-q20', 'english-literacy-4', 'Part IV - Past Tense', 'My mother ___ a lot of sweets when she ___ in the supermarket. (buy / be)', '{"source":"questionMap","accepted":["bought / was","bought was"],"display":"bought / was"}', null, 20),
+  ('el4-q21', 'english-literacy-4', 'Part V - Reading True or False', 'Dolphins are aquatic mammals.', '{"source":"questionMap","accepted":["true"],"display":"true"}', null, 21),
+  ('el4-q22', 'english-literacy-4', 'Part V - Reading True or False', 'There are 30 different species of dolphins that have been recognized.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 22),
+  ('el4-q23', 'english-literacy-4', 'Part V - Reading True or False', 'Dolphins are intelligent and curious.', '{"source":"questionMap","accepted":["true"],"display":"true"}', null, 23),
+  ('el4-q24', 'english-literacy-4', 'Part V - Reading True or False', 'Four species of dolphins live in the river.', '{"source":"questionMap","accepted":["true"],"display":"true"}', null, 24),
+  ('el4-q25', 'english-literacy-4', 'Part V - Reading True or False', 'The skin of the dolphin is not sensitive to human touch.', '{"source":"questionMap","accepted":["false"],"display":"false"}', null, 25),
+  ('el4-q26', 'english-literacy-4', 'Part V - Reading Comprehension', 'How many species of dolphins are marine dolphins?', '{"source":"aiSplitGrade","display":"32 species of dolphins are marine dolphins."}', null, 26),
+  ('el4-q27', 'english-literacy-4', 'Part V - Reading Comprehension', 'What is the color of the dolphin''s body?', '{"source":"aiSplitGrade","display":"The dolphin''s body is grayish blue."}', null, 27),
+  ('el4-q28', 'english-literacy-4', 'Part V - Reading Comprehension', 'How high can a dolphin leap in the air?', '{"source":"aiSplitGrade","display":"A dolphin can leap up to 30 feet in the air."}', null, 28),
+  ('el4-q29', 'english-literacy-4', 'Part V - Reading Comprehension', 'What is the average life span for a dolphin in the wild?', '{"source":"aiSplitGrade","display":"The average lifespan is 17 years."}', null, 29),
+  ('el4-q30', 'english-literacy-4', 'Part V - Reading Comprehension', 'Why are the dolphins at risk?', '{"source":"aiSplitGrade","display":"Dolphins are at risk because of habitat destruction, food problems, pollutants, fishing nets, boats, injuries, or death."}', null, 30)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  position = excluded.position;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
+values
+  ('el5-q1', 'english-literacy-5', 'Part I - Correct Spelling', 'Choose the correctly spelled word: experiment, experement, iksperement, expirement.', '{"source":"questionMap","accepted":["experiment"],"display":"experiment"}', null, 1),
+  ('el5-q2', 'english-literacy-5', 'Part I - Correct Spelling', 'Choose the correctly spelled word: sphaggetti, spaghetti, sphagheti, spagethie.', '{"source":"questionMap","accepted":["spaghetti"],"display":"spaghetti"}', null, 2),
+  ('el5-q3', 'english-literacy-5', 'Part I - Correct Spelling', 'Choose the correctly spelled word: beleve, bileive, believe, belive.', '{"source":"questionMap","accepted":["believe"],"display":"believe"}', null, 3),
+  ('el5-q4', 'english-literacy-5', 'Part I - Correct Spelling', 'Choose the correctly spelled word: business, buseness, businesse, bussiness.', '{"source":"questionMap","accepted":["business"],"display":"business"}', null, 4),
+  ('el5-q5', 'english-literacy-5', 'Part I - Correct Spelling', 'Choose the correctly spelled word: article, artecle, arteckle, artickel.', '{"source":"questionMap","accepted":["article"],"display":"article"}', null, 5),
+  ('el5-q6', 'english-literacy-5', 'Part II - Appropriate Word', 'My best friend is very (thoughtfully / thoughtful).', '{"source":"questionMap","accepted":["thoughtful"],"display":"thoughtful"}', null, 6),
+  ('el5-q7', 'english-literacy-5', 'Part II - Appropriate Word', 'This problem is very (complication / complicated).', '{"source":"questionMap","accepted":["complicated"],"display":"complicated"}', null, 7),
+  ('el5-q8', 'english-literacy-5', 'Part II - Appropriate Word', 'The reporter said the news (briefly / brief).', '{"source":"questionMap","accepted":["briefly"],"display":"briefly"}', null, 8),
+  ('el5-q9', 'english-literacy-5', 'Part II - Appropriate Word', 'Julie is a (talentful / talented) girl.', '{"source":"questionMap","accepted":["talented"],"display":"talented"}', null, 9),
+  ('el5-q10', 'english-literacy-5', 'Part II - Appropriate Word', 'Ballet dancers move (graceful / gracefully).', '{"source":"questionMap","accepted":["gracefully"],"display":"gracefully"}', null, 10),
+  ('el5-q11', 'english-literacy-5', 'Part III - Active or Passive Voice', 'My wallet was lost in the bus station.', '{"source":"questionMap","accepted":["p","passive"],"display":"passive"}', null, 11),
+  ('el5-q12', 'english-literacy-5', 'Part III - Active or Passive Voice', 'Sara writes a biography of a famous actress.', '{"source":"questionMap","accepted":["a","active"],"display":"active"}', null, 12),
+  ('el5-q13', 'english-literacy-5', 'Part III - Active or Passive Voice', 'The mechanic fixed the broken engine.', '{"source":"questionMap","accepted":["a","active"],"display":"active"}', null, 13),
+  ('el5-q14', 'english-literacy-5', 'Part III - Active or Passive Voice', 'This shop is owned by my father.', '{"source":"questionMap","accepted":["p","passive"],"display":"passive"}', null, 14),
+  ('el5-q15', 'english-literacy-5', 'Part III - Active or Passive Voice', 'The baby spilled the milk on the floor.', '{"source":"questionMap","accepted":["a","active"],"display":"active"}', null, 15),
+  ('el5-q16', 'english-literacy-5', 'Part IV - Odd One Out', 'Choose the word that does not belong: beauty, character, attitude, manner.', '{"source":"questionMap","accepted":["beauty"],"display":"beauty"}', null, 16),
+  ('el5-q17', 'english-literacy-5', 'Part IV - Odd One Out', 'Choose the word that does not belong: produce, remove, create, invent.', '{"source":"questionMap","accepted":["remove"],"display":"remove"}', null, 17),
+  ('el5-q18', 'english-literacy-5', 'Part IV - Odd One Out', 'Choose the word that does not belong: fresh, new, different, current.', '{"source":"questionMap","accepted":["different"],"display":"different"}', null, 18),
+  ('el5-q19', 'english-literacy-5', 'Part IV - Odd One Out', 'Choose the word that does not belong: true, real, fake, genuine.', '{"source":"questionMap","accepted":["fake"],"display":"fake"}', null, 19),
+  ('el5-q20', 'english-literacy-5', 'Part IV - Odd One Out', 'Choose the word that does not belong: strange, ordinary, normal, common.', '{"source":"questionMap","accepted":["strange"],"display":"strange"}', null, 20),
+  ('el5-q21', 'english-literacy-5', 'Part V - Adjective Forms', 'Spending your free time reading is far ___ than spending it watching TV. (good)', '{"source":"questionMap","accepted":["better"],"display":"better"}', null, 21),
+  ('el5-q22', 'english-literacy-5', 'Part V - Adjective Forms', 'February is the ___ month in Chicago. (cold)', '{"source":"questionMap","accepted":["coldest"],"display":"coldest"}', null, 22),
+  ('el5-q23', 'english-literacy-5', 'Part V - Adjective Forms', 'My friend is ___ than yours. (fabulous)', '{"source":"questionMap","accepted":["more fabulous"],"display":"more fabulous"}', null, 23),
+  ('el5-q24', 'english-literacy-5', 'Part V - Adjective Forms', 'Gulliver''s Travels is the ___ book that I''ve ever read. (interesting)', '{"source":"questionMap","accepted":["most interesting"],"display":"most interesting"}', null, 24),
+  ('el5-q25', 'english-literacy-5', 'Part V - Adjective Forms', 'You are the ___ person I know. (kind)', '{"source":"questionMap","accepted":["kindest"],"display":"kindest"}', null, 25),
+  ('el5-q26', 'english-literacy-5', 'Part VI - Reading Comprehension', 'Describe how an elephant seal''s movements are different on land than in the water.', '{"source":"aiSplitGrade","display":"On land, an elephant seal is clumsy and has difficulty moving; in water, it moves easily and gracefully."}', null, 26),
+  ('el5-q27', 'english-literacy-5', 'Part VI - Reading Comprehension', 'Why do male elephant seals arrive on land before females during the breeding season?', '{"source":"aiSplitGrade","display":"Males arrive first to fight for dominance and decide which males will have large harems of females."}', null, 27),
+  ('el5-q28', 'english-literacy-5', 'Part VI - Reading Comprehension', 'Describe two reasons why elephant seals come on land.', '{"source":"aiSplitGrade","display":"Elephant seals come on land to breed and give birth, and to molt."}', null, 28),
+  ('el5-q29', 'english-literacy-5', 'Part VI - Reading Comprehension', 'How does an elephant seal obtain its food? What foods are part of its diet?', '{"source":"aiSplitGrade","display":"An elephant seal obtains food by diving to hunt. It eats squid, octopus, and fish."}', null, 29),
+  ('el5-q30', 'english-literacy-5', 'Part VI - Reading Comprehension', 'Are elephant seals in danger of becoming extinct today? Why or why not?', '{"source":"aiSplitGrade","display":"Elephant seals are not in danger of becoming extinct today because laws protect their populations."}', null, 30)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  position = excluded.position;
+
 create or replace function normalize_answer(value text)
 returns text
 language sql
@@ -238,6 +419,10 @@ declare
 begin
   if source_name = 'questionMap' then
     return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name = 'aiGrade' then
+    return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name = 'aiSplitGrade' then
+    return coalesce(p_answers->>(p_answer_key->>'id'), '');
   elsif source_name = 'connections' then
     return coalesce(p_answers->'connections'->>(p_answer_key->>'object'), '');
   elsif source_name = 'textAnswers' then
@@ -253,34 +438,82 @@ begin
 end;
 $$;
 
-create or replace function is_correct_answer(p_question_id text, p_answer_key jsonb, p_response text)
-returns boolean
+create or replace function question_points(p_answer_key jsonb)
+returns numeric
+language sql
+immutable
+as $$
+  select coalesce(nullif(p_answer_key->>'points', '')::numeric, 1);
+$$;
+
+create or replace function answer_score(p_question_id text, p_answer_key jsonb, p_response text, p_answers jsonb default '{}'::jsonb)
+returns numeric
 language plpgsql
 stable
 as $$
 declare
   source_name text := p_answer_key->>'source';
+  possible numeric := question_points(p_answer_key);
+  raw_score numeric := 0;
 begin
   if source_name = 'questionMap' then
-    return normalize_answer(p_response) in (
+    if normalize_answer(p_response) in (
       select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
-    );
+    ) then
+      return possible;
+    end if;
+    return 0;
+  elsif source_name = 'aiGrade' then
+    raw_score := coalesce((p_answers->'aiGrades'->p_question_id->>'score')::numeric, 0);
+    return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'aiSplitGrade' then
+    raw_score := coalesce((p_answers->'aiGrades'->p_question_id->>'score')::numeric, 0);
+    return least(greatest(raw_score, 0), possible);
   elsif source_name = 'connections' then
-    return p_response = p_answer_key->>'target';
+    return case when p_response = p_answer_key->>'target' then possible else 0 end;
   elsif source_name = 'textAnswers' then
-    return normalize_answer(p_response) in (
+    if normalize_answer(p_response) in (
       select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
-    );
+    ) then
+      return possible;
+    end if;
+    return 0;
   elsif source_name = 'choices' then
-    return p_response = p_answer_key->>'correct';
+    return case when p_response = p_answer_key->>'correct' then possible else 0 end;
   elsif source_name = 'colours' then
-    return lower(p_response) = lower(p_answer_key->>'colour');
+    return case when lower(p_response) = lower(p_answer_key->>'colour') then possible else 0 end;
   elsif source_name = 'rwAnswers' then
-    return normalize_answer(p_response) in (
+    if normalize_answer(p_response) in (
       select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
-    );
+    ) then
+      return possible;
+    end if;
+    return 0;
   end if;
-  return false;
+  return 0;
+end;
+$$;
+
+create or replace function is_correct_answer(p_question_id text, p_answer_key jsonb, p_response text, p_answers jsonb default '{}'::jsonb)
+returns boolean
+language plpgsql
+stable
+as $$
+begin
+  return answer_score(p_question_id, p_answer_key, p_response, p_answers) >= question_points(p_answer_key);
+end;
+$$;
+
+create or replace function grading_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+begin
+  if p_answer_key->>'source' in ('aiGrade', 'aiSplitGrade') then
+    return coalesce(p_answers->'aiGrades'->p_question_id, '{}'::jsonb);
+  end if;
+  return '{}'::jsonb;
 end;
 $$;
 
@@ -364,8 +597,8 @@ declare
   assignment_row test_assignments%rowtype;
   v_student_id uuid;
   v_attempt_id uuid;
-  v_possible int;
-  v_total int;
+  v_possible numeric;
+  v_total numeric;
   sections jsonb;
 begin
   select * into assignment_row
@@ -387,18 +620,21 @@ begin
   with scored as (
     select
       q.*,
-      answer_response(q.answer_key || jsonb_build_object('id', q.id), p_answers) as response_value
+      q.answer_key || jsonb_build_object('id', q.id, 'points', q.points) as answer_key_with_meta,
+      answer_response(q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), p_answers) as response_value
     from test_questions q
     where q.test_id = assignment_row.test_id
   ),
   scored_display as (
     select
       *,
-      is_correct_answer(id, answer_key, response_value) as correct,
+      answer_score(id, answer_key_with_meta, response_value, p_answers) as awarded,
+      question_points(answer_key_with_meta) as possible,
+      is_correct_answer(id, answer_key_with_meta, response_value, p_answers) as correct,
       response_display(id, answer_key, response_value) as response_text
     from scored
   )
-  select count(*), count(*) filter (where correct)
+  select coalesce(sum(possible), 0), coalesce(sum(awarded), 0)
   into v_possible, v_total
   from scored_display;
 
@@ -414,7 +650,7 @@ begin
   )
   returning id into v_attempt_id;
 
-  insert into attempt_answers (attempt_id, question_id, part, prompt, response, correct_answer, is_correct, transcript_ref, position)
+  insert into attempt_answers (attempt_id, question_id, part, prompt, response, correct_answer, is_correct, awarded_points, possible_points, grading_details, transcript_ref, position)
   select
     v_attempt_id,
     id,
@@ -423,14 +659,21 @@ begin
     response_text,
     answer_key->>'display',
     correct,
+    awarded,
+    possible,
+    details,
     transcript_ref,
     position
   from (
     select
       q.*,
-      answer_response(q.answer_key || jsonb_build_object('id', q.id), p_answers) as response_value,
-      is_correct_answer(q.id, q.answer_key, answer_response(q.answer_key || jsonb_build_object('id', q.id), p_answers)) as correct,
-      response_display(q.id, q.answer_key, answer_response(q.answer_key || jsonb_build_object('id', q.id), p_answers)) as response_text
+      q.answer_key || jsonb_build_object('id', q.id, 'points', q.points) as answer_key_with_meta,
+      answer_response(q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), p_answers) as response_value,
+      answer_score(q.id, q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), answer_response(q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), p_answers), p_answers) as awarded,
+      question_points(q.answer_key || jsonb_build_object('id', q.id, 'points', q.points)) as possible,
+      is_correct_answer(q.id, q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), answer_response(q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), p_answers), p_answers) as correct,
+      grading_details(q.id, q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), p_answers) as details,
+      response_display(q.id, q.answer_key, answer_response(q.answer_key || jsonb_build_object('id', q.id, 'points', q.points), p_answers)) as response_text
     from test_questions q
     where q.test_id = assignment_row.test_id
   ) scored_rows;
@@ -446,6 +689,9 @@ begin
         'response', response,
         'correctAnswer', correct_answer,
         'correct', is_correct,
+        'score', awarded_points,
+        'possible', possible_points,
+        'gradingDetails', grading_details,
         'transcript', transcript_ref
       ) order by position) as part_items
     from attempt_answers
@@ -478,9 +724,9 @@ select
   a.score_percent,
   a.submitted_at,
   (
-    select jsonb_agg(jsonb_build_object('part', part, 'total', correct_count, 'possible', possible_count) order by part)
+    select jsonb_agg(jsonb_build_object('part', part, 'total', awarded_total, 'possible', possible_total) order by part)
     from (
-      select part, count(*) filter (where is_correct) as correct_count, count(*) as possible_count
+      select part, sum(awarded_points) as awarded_total, sum(possible_points) as possible_total
       from attempt_answers
       where attempt_id = a.id
       group by part
@@ -493,6 +739,9 @@ select
       'response', response,
       'correctAnswer', correct_answer,
       'correct', is_correct,
+      'score', awarded_points,
+      'possible', possible_points,
+      'gradingDetails', grading_details,
       'transcript', transcript_ref
     ) order by position)
     from attempt_answers

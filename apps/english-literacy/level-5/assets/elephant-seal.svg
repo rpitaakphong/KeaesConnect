@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 210" role="img" aria-label="Elephant seal illustration">
+  <defs>
+    <linearGradient id="sealBody" x1="50" x2="292" y1="144" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8f8177"/>
+      <stop offset="0.5" stop-color="#c7b8ad"/>
+      <stop offset="1" stop-color="#6d625c"/>
+    </linearGradient>
+    <linearGradient id="sealBelly" x1="80" x2="250" y1="165" y2="122" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d8d0c9"/>
+      <stop offset="1" stop-color="#a99c93"/>
+    </linearGradient>
+  </defs>
+  <path d="M46 150c27-34 79-56 144-60 54-3 97 11 124 43-38 28-100 39-169 31-43-5-75 2-99-14Z" fill="url(#sealBody)" stroke="#403936" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M71 150c51 9 112 11 188-8-35 28-113 42-178 22Z" fill="url(#sealBelly)" opacity="0.8"/>
+  <path d="M253 101c-4-31 5-56 25-70 20 14 25 43 17 72" fill="#8b7c72" stroke="#403936" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M277 59c10 9 15 22 12 39-13-3-23-2-33 3 7-16 13-30 21-42Z" fill="#b7a89d"/>
+  <path d="M285 104c22 1 39 9 46 21-19 6-38 4-55-7Z" fill="#6d625c" stroke="#403936" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M99 157c-19 7-32 19-39 36 24-4 41-12 52-26Z" fill="#776b63" stroke="#403936" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M210 158c17 9 28 22 34 39-23-3-39-13-49-28Z" fill="#776b63" stroke="#403936" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M50 150c-17 8-32 9-45 2 12-10 27-15 45-16Z" fill="#6d625c" stroke="#403936" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="274" cy="72" r="4" fill="#0f172a"/>
+  <path d="M287 85c10 0 17 3 23 9" fill="none" stroke="#403936" stroke-width="4" stroke-linecap="round"/>
+  <path d="M84 143c56-15 114-22 174-18" fill="none" stroke="#f1eee9" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+</svg>

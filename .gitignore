@@ -2,3 +2,4 @@
 outputs/
 deploy/
 *.zip
+supabase/.temp/
