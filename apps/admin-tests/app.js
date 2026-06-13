@@ -247,7 +247,12 @@
         <td>${escapeHtml(result.student.level)}</td>
         <td><span class="score-pill">${formatScore(result.score.total)}/${formatScore(result.score.possible)} (${result.score.percent}%)</span></td>
         <td>${formatDate(result.submittedAt)}</td>
-        <td><button class="inspect-button" type="button" data-inspect-result="${escapeHtml(result.id)}">Inspect</button></td>
+        <td>
+          <div class="result-actions">
+            <button class="inspect-button" type="button" data-inspect-result="${escapeHtml(result.id)}">Inspect</button>
+            <button class="inspect-button" type="button" data-report-result="${escapeHtml(result.id)}" onclick="window.location.href='report.html?attemptId=${encodeURIComponent(result.id)}'">Report</button>
+          </div>
+        </td>
       </tr>
     `).join("") : `
       <tr><td colspan="7">${results.length ? "No results match the current filters." : "No submitted results yet. Generate an assignment link and complete the test from a student browser."}</td></tr>
@@ -295,6 +300,13 @@
 
   function inspectResultFromTable(event) {
     const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+    const reportButton = target?.closest("[data-report-result]");
+    if (reportButton) {
+      const reportUrl = new URL("report.html", window.location.href);
+      reportUrl.searchParams.set("attemptId", reportButton.dataset.reportResult);
+      window.location.href = reportUrl.href;
+      return;
+    }
     const button = target?.closest("[data-inspect-result]");
     if (!button) return;
     selectedResultId = button.dataset.inspectResult;

@@ -92,6 +92,17 @@
     return data || [];
   }
 
+  async function getResult(attemptId) {
+    assertConfigured();
+    const { data, error } = await client
+      .from("admin_attempt_results")
+      .select("*")
+      .eq("attempt_id", attemptId)
+      .single();
+    if (error) throw error;
+    return data;
+  }
+
   async function submitAttempt({ assignmentToken, student, answers }) {
     assertConfigured();
     const { data, error } = await client.rpc("submit_attempt", {
@@ -123,6 +134,7 @@
     createAssignment,
     getAssignment,
     listResults,
+    getResult,
     submitAttempt,
     gradeEnglishLiteracyShortAnswers,
   };
