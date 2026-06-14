@@ -137,7 +137,8 @@ values
   ('english-literacy-2', 'English Literacy Level 2', 'English', 'English Literacy 2', 'active', 30, '/apps/english-literacy/level-2/index.html'),
   ('english-literacy-3', 'English Literacy Level 3', 'English', 'English Literacy 3', 'active', 30, '/apps/english-literacy/level-3/index.html'),
   ('english-literacy-4', 'English Literacy Level 4', 'English', 'English Literacy 4', 'active', 30, '/apps/english-literacy/level-4/index.html'),
-  ('english-literacy-5', 'English Literacy Level 5', 'English', 'English Literacy 5', 'active', 30, '/apps/english-literacy/level-5/index.html')
+  ('english-literacy-5', 'English Literacy Level 5', 'English', 'English Literacy 5', 'active', 30, '/apps/english-literacy/level-5/index.html'),
+  ('math-olympiad-1', 'Math Olympiad Level 1', 'Math', 'Math Olympiad 1', 'active', 30, '/apps/math-olympiad/level-1/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -199,6 +200,32 @@ on conflict (id) do update set
   prompt = excluded.prompt,
   answer_key = excluded.answer_key,
   transcript_ref = excluded.transcript_ref,
+  position = excluded.position;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('mo1-q1', 'math-olympiad-1', 'Part I', 'What are the missing numbers?', '{"source":"mathMultiPart","display":"5, 7, 9","parts":[{"id":"a","accepted":["5"],"points":0.34},{"id":"b","accepted":["7"],"points":0.33},{"id":"c","accepted":["9"],"points":0.33}]}', null, 1, 1),
+  ('mo1-q2', 'math-olympiad-1', 'Part I', 'Complete the number bond.', '{"source":"mathMultiPart","display":"3, 1","parts":[{"id":"top","accepted":["3"],"points":0.5},{"id":"bottom","accepted":["1"],"points":0.5}]}', null, 1, 2),
+  ('mo1-q3', 'math-olympiad-1', 'Part I', 'There are 5 oranges. Add 3 more oranges.', '{"source":"mathMultiPart","display":"8, 8","parts":[{"id":"equation","accepted":["8"],"points":1},{"id":"total","accepted":["8"],"points":1}]}', null, 2, 3),
+  ('mo1-q4', 'math-olympiad-1', 'Part I', 'There are 5 cakes. 2 cakes are burnt.', '{"source":"mathMultiPart","display":"3, 3","parts":[{"id":"equation","accepted":["3"],"points":1},{"id":"left","accepted":["3"],"points":1}]}', null, 2, 4),
+  ('mo1-q5', 'math-olympiad-1', 'Part I', 'Colour the shapes that match the name Square.', '{"source":"mathMultiPart","display":"upright square and tilted square","parts":[{"id":"selected","accepted":["upright-square","tilted-square"],"points":2,"normalizer":"set"}]}', null, 2, 5),
+  ('mo1-q6', 'math-olympiad-1', 'Part II', 'Which triangle is 5th from the left? Which triangle is 3rd from the right?', '{"source":"mathMultiPart","display":"E, D","parts":[{"id":"a","accepted":["E"],"points":1},{"id":"b","accepted":["D"],"points":1}]}', null, 2, 6),
+  ('mo1-q7', 'math-olympiad-1', 'Part II', 'Siti has 14 beads. She buys 2 more beads. How many beads does she have now?', '{"source":"mathMultiPart","display":"14 + 2 = 16; 16 beads","parts":[{"id":"first","accepted":["14"],"points":0.4},{"id":"operator","accepted":["+"],"points":0.4},{"id":"second","accepted":["2"],"points":0.4},{"id":"result","accepted":["16"],"points":0.4},{"id":"final","accepted":["16"],"points":0.4}]}', null, 2, 7),
+  ('mo1-q8', 'math-olympiad-1', 'Part II', 'Compare the lengths of the pencils.', '{"source":"mathMultiPart","display":"B, A","parts":[{"id":"a","accepted":["B"],"points":1},{"id":"b","accepted":["A"],"points":1}]}', null, 2, 8),
+  ('mo1-q9', 'math-olympiad-1', 'Part II', '1 more than 5 and 1 less than 7.', '{"source":"mathMultiPart","display":"6, 6","parts":[{"id":"a","accepted":["6"],"points":1},{"id":"b","accepted":["6"],"points":1}]}', null, 2, 9),
+  ('mo1-q10', 'math-olympiad-1', 'Part II', 'The graph shows the books on Meiling''s bookshelf.', '{"source":"mathMultiPart","display":"7; English Literature and Bedtime story; 3; 17","parts":[{"id":"a","accepted":["7"],"points":0.75},{"id":"b1","accepted":["English Literature","English"],"points":0.38},{"id":"b2","accepted":["Bedtime story","Bedtime"],"points":0.37},{"id":"c","accepted":["3"],"points":0.75},{"id":"d","accepted":["17"],"points":0.75}]}', null, 3, 10),
+  ('mo1-q11', 'math-olympiad-1', 'Part III', 'Subtract using base-ten blocks.', '{"source":"mathMultiPart","display":"4, 14, 24","parts":[{"id":"a","accepted":["4"],"points":0.67},{"id":"b","accepted":["14"],"points":0.67},{"id":"c","accepted":["24"],"points":0.66}]}', null, 2, 11),
+  ('mo1-q12', 'math-olympiad-1', 'Part III', 'There are groups of 4 triangles.', '{"source":"mathMultiPart","display":"2, 8","parts":[{"id":"groups","accepted":["2"],"points":1},{"id":"total","accepted":["8"],"points":1}]}', null, 2, 12),
+  ('mo1-q13', 'math-olympiad-1', 'Part III', 'Share 6 pears equally among 2 children.', '{"source":"mathMultiPart","display":"3","parts":[{"id":"each","accepted":["3"],"points":2}]}', null, 2, 13),
+  ('mo1-q14', 'math-olympiad-1', 'Part III', 'Uncle Tam and family came to visit at what time?', '{"source":"mathMultiPart","display":"10:30","parts":[{"id":"time","accepted":["10:30","10.30","10 30"],"points":2,"normalizer":"time"}]}', null, 2, 14),
+  ('mo1-q15', 'math-olympiad-1', 'Part III', 'Subtract.', '{"source":"mathMultiPart","display":"14, 14, 46, 46","parts":[{"id":"a1","accepted":["14"],"points":0.75},{"id":"a2","accepted":["14"],"points":0.75},{"id":"b1","accepted":["46"],"points":0.75},{"id":"b2","accepted":["46"],"points":0.75}]}', null, 3, 15)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
   position = excluded.position;
 
 insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
@@ -409,6 +436,85 @@ as $$
   select btrim(regexp_replace(lower(coalesce(value, '')), '[^a-z0-9]+', ' ', 'g'));
 $$;
 
+create or replace function normalize_math_answer(value text, mode text default 'text')
+returns text
+language sql
+immutable
+as $$
+  select case
+    when mode = 'time' then btrim(regexp_replace(regexp_replace(lower(coalesce(value, '')), '[\.\s]+', ':', 'g'), '[^0-9:]+', '', 'g'), ':')
+    else btrim(regexp_replace(lower(coalesce(value, '')), '[^a-z0-9+]+', ' ', 'g'))
+  end;
+$$;
+
+create or replace function math_part_scores(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  part_key jsonb;
+  part_id text;
+  mode text;
+  possible numeric;
+  raw_json jsonb;
+  raw_text text;
+  raw_norm text;
+  expected_norm text;
+  is_part_correct boolean;
+  items jsonb := '[]'::jsonb;
+begin
+  for part_key in select value from jsonb_array_elements(coalesce(p_answer_key->'parts', '[]'::jsonb))
+  loop
+    part_id := part_key->>'id';
+    mode := coalesce(part_key->>'normalizer', 'text');
+    possible := coalesce((part_key->>'points')::numeric, 0);
+    is_part_correct := false;
+    raw_text := '';
+    raw_norm := '';
+
+    if mode = 'set' then
+      raw_json := coalesce(p_answers->p_question_id->part_id, '[]'::jsonb);
+      if jsonb_typeof(raw_json) <> 'array' then
+        raw_json := '[]'::jsonb;
+      end if;
+
+      select coalesce(string_agg(normalize_math_answer(value, 'text'), ',' order by normalize_math_answer(value, 'text')), '')
+      into raw_norm
+      from jsonb_array_elements_text(raw_json) as response(value);
+
+      select coalesce(string_agg(normalize_math_answer(value, 'text'), ',' order by normalize_math_answer(value, 'text')), '')
+      into expected_norm
+      from jsonb_array_elements_text(coalesce(part_key->'accepted', '[]'::jsonb)) as accepted(value);
+
+      select coalesce(string_agg(value, ', ' order by value), '')
+      into raw_text
+      from jsonb_array_elements_text(raw_json) as response(value);
+
+      is_part_correct := raw_norm <> '' and raw_norm = expected_norm;
+    else
+      raw_text := coalesce(p_answers->p_question_id->>part_id, '');
+      raw_norm := normalize_math_answer(raw_text, mode);
+      is_part_correct := raw_norm <> '' and exists (
+        select 1
+        from jsonb_array_elements_text(coalesce(part_key->'accepted', '[]'::jsonb)) as accepted(value)
+        where normalize_math_answer(value, mode) = raw_norm
+      );
+    end if;
+
+    items := items || jsonb_build_array(jsonb_build_object(
+      'id', part_id,
+      'response', raw_text,
+      'score', case when is_part_correct then possible else 0 end,
+      'possible', possible,
+      'correct', is_part_correct
+    ));
+  end loop;
+
+  return jsonb_build_object('parts', items);
+end;
+$$;
+
 create or replace function answer_response(p_answer_key jsonb, p_answers jsonb)
 returns text
 language plpgsql
@@ -423,6 +529,8 @@ begin
     return coalesce(p_answers->>(p_answer_key->>'id'), '');
   elsif source_name = 'aiSplitGrade' then
     return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name = 'mathMultiPart' then
+    return coalesce((p_answers->(p_answer_key->>'id'))::text, '');
   elsif source_name = 'connections' then
     return coalesce(p_answers->'connections'->>(p_answer_key->>'object'), '');
   elsif source_name = 'textAnswers' then
@@ -455,6 +563,7 @@ declare
   source_name text := p_answer_key->>'source';
   possible numeric := question_points(p_answer_key);
   raw_score numeric := 0;
+  math_details jsonb;
 begin
   if source_name = 'questionMap' then
     if normalize_answer(p_response) in (
@@ -468,6 +577,12 @@ begin
     return least(greatest(raw_score, 0), possible);
   elsif source_name = 'aiSplitGrade' then
     raw_score := coalesce((p_answers->'aiGrades'->p_question_id->>'score')::numeric, 0);
+    return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'mathMultiPart' then
+    math_details := math_part_scores(p_question_id, p_answer_key, p_answers);
+    select coalesce(sum((value->>'score')::numeric), 0)
+    into raw_score
+    from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);
     return least(greatest(raw_score, 0), possible);
   elsif source_name = 'connections' then
     return case when p_response = p_answer_key->>'target' then possible else 0 end;
@@ -512,6 +627,8 @@ as $$
 begin
   if p_answer_key->>'source' in ('aiGrade', 'aiSplitGrade') then
     return coalesce(p_answers->'aiGrades'->p_question_id, '{}'::jsonb);
+  elsif p_answer_key->>'source' = 'mathMultiPart' then
+    return math_part_scores(p_question_id, p_answer_key, p_answers);
   end if;
   return '{}'::jsonb;
 end;
@@ -522,9 +639,43 @@ returns text
 language plpgsql
 stable
 as $$
+declare
+  response_json jsonb;
+  part_key jsonb;
+  part_id text;
+  raw_json jsonb;
+  raw_text text;
+  items text[] := array[]::text[];
 begin
   if p_response is null or p_response = '' then
     return 'No answer';
+  end if;
+  if p_answer_key->>'source' = 'mathMultiPart' then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then
+      return 'No answer';
+    end if;
+    for part_key in select value from jsonb_array_elements(coalesce(p_answer_key->'parts', '[]'::jsonb))
+    loop
+      part_id := part_key->>'id';
+      raw_json := response_json->part_id;
+      if raw_json is null then
+        raw_text := '';
+      elsif jsonb_typeof(raw_json) = 'array' then
+        select coalesce(string_agg(value, ', ' order by value), '')
+        into raw_text
+        from jsonb_array_elements_text(raw_json) as response(value);
+      else
+        raw_text := response_json->>part_id;
+      end if;
+      if coalesce(raw_text, '') <> '' then
+        items := array_append(items, part_id || ': ' || raw_text);
+      end if;
+    end loop;
+    if array_length(items, 1) is null then
+      return 'No answer';
+    end if;
+    return array_to_string(items, '; ');
   end if;
   if p_answer_key->>'source' = 'choices' then
     return upper(p_response);

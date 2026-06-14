@@ -56,6 +56,15 @@
       appPath: "../english-literacy/level-5/index.html",
       databaseReady: false,
     },
+    {
+      id: "math-olympiad-1",
+      title: "Math Olympiad Level 1",
+      subject: "Math",
+      level: "Math Olympiad 1",
+      status: "active",
+      appPath: "../math-olympiad/level-1/index.html",
+      databaseReady: false,
+    },
   ];
   let tests = builtinTests;
 
@@ -433,6 +442,7 @@
     if (testId === "english-literacy-3") return "/apps/english-literacy/level-3/index.html";
     if (testId === "english-literacy-4") return "/apps/english-literacy/level-4/index.html";
     if (testId === "english-literacy-5") return "/apps/english-literacy/level-5/index.html";
+    if (testId === "math-olympiad-1") return "/apps/math-olympiad/level-1/index.html";
     return "/apps/starter-listening/index.html";
   }
 
@@ -447,6 +457,11 @@
   }
 
   function renderGradingDetails(details) {
+    if (details?.parts?.length) {
+      return `
+        <span>Parts: ${details.parts.map((part) => `${escapeHtml(part.id)} ${formatScore(part.score)}/${formatScore(part.possible)}`).join(" · ")}</span>
+      `;
+    }
     if (!details || typeof details !== "object" || !("contentScore" in details)) return "";
     return `
       <span>Content: ${formatScore(details.contentScore)}/0.5 · Writing: ${formatScore(details.writingScore)}/0.5</span>

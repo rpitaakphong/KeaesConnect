@@ -273,6 +273,14 @@
   }
 
   function renderGradingDetails(details) {
+    if (details?.parts?.length) {
+      return `
+        <div class="feedback">
+          <strong>Subpart scoring</strong>
+          <p>${details.parts.map((part) => `${escapeHtml(part.id)}: ${formatScore(part.score)}/${formatScore(part.possible)}`).join(" · ")}</p>
+        </div>
+      `;
+    }
     if (!details || typeof details !== "object" || !("contentScore" in details)) return "";
     return `
       <div class="feedback">
@@ -292,7 +300,31 @@
       "english-literacy-3": readingRegistry("el3", 21, 30, "Cola History", "../english-literacy/level-3/assets/cola-bottle.svg", colaStory()),
       "english-literacy-4": readingRegistry("el4", 21, 30, "Dolphins", "../english-literacy/level-4/assets/dolphin.svg", dolphinStory()),
       "english-literacy-5": readingRegistry("el5", 26, 30, "World's Largest Seal", "../english-literacy/level-5/assets/elephant-seal.svg", sealStory()),
+      "math-olympiad-1": mathLevel1Registry(),
     };
+  }
+
+  function mathLevel1Registry() {
+    const questions = {};
+    const visuals = {
+      1: ["Number path", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 130"><rect width="620" height="130" fill="#fff"/><g fill="#fff" stroke="#203948" stroke-width="4"><rect x="20" y="30" width="70" height="70"/><rect x="125" y="30" width="70" height="70"/><rect x="230" y="30" width="70" height="70"/><rect x="335" y="30" width="70" height="70"/><rect x="440" y="30" width="70" height="70"/><rect x="545" y="30" width="70" height="70"/></g><g stroke="#203948" stroke-width="4"><line x1="90" y1="65" x2="125" y2="65"/><line x1="195" y1="65" x2="230" y2="65"/><line x1="300" y1="65" x2="335" y2="65"/><line x1="405" y1="65" x2="440" y2="65"/><line x1="510" y1="65" x2="545" y2="65"/></g><g font-family="Inter,Arial" font-size="34" font-weight="800" text-anchor="middle" fill="#203948"><text x="55" y="77">4</text><text x="265" y="77">6</text><text x="475" y="77">8</text></g></svg>`],
+      2: ["Notebooks and number bond", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220"><rect width="640" height="220" fill="#fff"/><g stroke="#203948" stroke-width="4"><g fill="#a9bccb"><rect x="55" y="38" width="58" height="72" rx="6" transform="rotate(-12 84 74)"/><rect x="135" y="38" width="58" height="72" rx="6" transform="rotate(-12 164 74)"/><rect x="215" y="38" width="58" height="72" rx="6" transform="rotate(-12 244 74)"/></g><rect x="60" y="138" width="58" height="72" rx="6" fill="#fff" transform="rotate(-12 89 174)"/><rect x="400" y="80" width="62" height="62" fill="#fff"/><rect x="540" y="35" width="62" height="62" fill="#fff"/><rect x="540" y="125" width="62" height="62" fill="#fff"/><line x1="462" y1="111" x2="540" y2="66"/><line x1="462" y1="111" x2="540" y2="156"/></g><text x="431" y="122" font-family="Inter,Arial" font-size="34" font-weight="800" text-anchor="middle" fill="#203948">4</text></svg>`],
+      3: ["Five oranges", objectRow("orange", 5)],
+      4: ["Five cakes with two burnt", objectRow("cake", 5)],
+      5: ["Square selection row", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 150"><rect width="720" height="150" fill="#fff"/><rect x="20" y="20" width="680" height="100" fill="#fff" stroke="#203948" stroke-width="4"/><line x1="170" y1="20" x2="170" y2="120" stroke="#203948" stroke-width="4"/><text x="95" y="82" font-family="Inter,Arial" font-size="30" font-weight="800" text-anchor="middle" fill="#203948">Square</text><path d="M230 40l32 58h-64z" fill="none" stroke="#203948" stroke-width="4"/><rect x="292" y="52" width="40" height="40" fill="none" stroke="#203948" stroke-width="4"/><rect x="368" y="34" width="38" height="72" fill="none" stroke="#203948" stroke-width="4"/><rect x="460" y="46" width="48" height="48" transform="rotate(-9 484 70)" fill="none" stroke="#203948" stroke-width="4"/><circle cx="570" cy="70" r="30" fill="none" stroke="#203948" stroke-width="4"/><path d="M630 40h58l-29 58z" fill="none" stroke="#203948" stroke-width="4"/></svg>`],
+      6: ["Triangles A-F", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 130"><rect width="640" height="130" fill="#fff"/><g font-family="Inter,Arial" font-size="30" font-weight="800" text-anchor="middle" fill="#203948">${["A","B","C","D","E","F"].map((letter, index) => `<path d="M${70 + index * 100} 22l45 78h-90z" fill="#fff" stroke="#203948" stroke-width="4"/><text x="${70 + index * 100}" y="77">${letter}</text>`).join("")}</g></svg>`],
+      7: ["Beads", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 190"><rect width="520" height="190" fill="#fff"/><g fill="none" stroke="#203948" stroke-width="3"><path d="M30 42c80 20 160 8 250 30"/><path d="M28 92c76 8 166-18 260 4"/><path d="M35 142c60 12 130 2 190 8"/></g><g fill="#fff" stroke="#203948" stroke-width="4">${[58,104,150,196,242].map((x)=>`<circle cx="${x}" cy="52" r="17"/>`).join("")}${[55,101,147,193,239].map((x)=>`<circle cx="${x}" cy="95" r="17"/>`).join("")}${[72,118,164,210].map((x)=>`<circle cx="${x}" cy="145" r="17"/>`).join("")}<circle cx="345" cy="95" r="17"/><circle cx="395" cy="95" r="17"/></g></svg>`],
+      8: ["Pencil length grid", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260"><rect width="720" height="260" fill="#fff"/><rect x="45" y="25" width="610" height="210" fill="#f8faf9" stroke="#203948" stroke-width="3"/>${Array.from({length:11},(_,i)=>`<line x1="${45+i*61}" y1="25" x2="${45+i*61}" y2="235" stroke="#203948" stroke-width="1.5"/>`).join("")}<line x1="45" y1="95" x2="655" y2="95" stroke="#203948"/><line x1="45" y1="165" x2="655" y2="165" stroke="#203948"/><g stroke="#203948" stroke-width="4" fill="#fff"><path d="M120 70h250l70 14-70 14H120z"/><path d="M165 140h380l70 14-70 14H165z"/><path d="M55 205h250l70 14-70 14H55z"/></g><g font-family="Inter,Arial" font-size="34" font-weight="800" fill="#203948"><text x="465" y="98">A</text><text x="630" y="168">B</text><text x="395" y="232">C</text></g></svg>`],
+      10: ["Book pictograph", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300"><rect width="760" height="300" fill="#fff"/><g stroke="#203948" stroke-width="3" fill="none"><rect x="20" y="20" width="720" height="240"/><line x1="190" y1="20" x2="190" y2="260"/><line x1="20" y1="80" x2="740" y2="80"/><line x1="20" y1="140" x2="740" y2="140"/><line x1="20" y1="200" x2="740" y2="200"/></g><g font-family="Inter,Arial" font-size="23" font-weight="800" fill="#203948"><text x="35" y="55">Chinese Literature</text><text x="35" y="116">English Literature</text><text x="35" y="176">Malay Literature</text><text x="35" y="236">Bedtime story</text></g>${bookSymbols(215,45,7)}${bookSymbols(215,105,3)}${bookSymbols(215,165,4)}${bookSymbols(215,225,3)}</svg>`],
+      11: ["Base-ten subtraction", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 240"><rect width="650" height="240" fill="#fff"/><rect x="20" y="20" width="610" height="190" fill="#fff" stroke="#203948" stroke-width="4"/>${smallBlocks(410,45,6,2)}${smallBlocks(270,105,16,2)}${smallBlocks(65,155,26,2)}</svg>`],
+      12: ["Two groups of four triangles", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 170"><rect width="320" height="170" fill="#fff"/><path d="M30 35c75 30 185 30 255 0M30 105c75 30 185 30 255 0" fill="none" stroke="#203948" stroke-width="4"/><g fill="#203948">${[72,116,160,204].map((x)=>`<path d="M${x} 44l20 38h-40z"/>`).join("")}${[72,116,160,204].map((x)=>`<path d="M${x} 114l20 38h-40z"/>`).join("")}</g></svg>`],
+      13: ["Six pears", objectRow("pear", 6)],
+      14: ["Family and clock", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 260"><rect width="620" height="260" fill="#fff"/><g stroke="#203948" stroke-width="4"><path d="M190 30h80v180h-80z" fill="#fff"/><path d="M190 30l80-24v180l-80 24z" fill="#eef7f5"/></g><g fill="#fff7df" stroke="#203948" stroke-width="3">${[55,95,135,170,75,120].map((x,i)=>`<circle cx="${x}" cy="${i>3?175:125}" r="18"/>`).join("")}</g><g transform="translate(360 45)"><circle cx="80" cy="80" r="70" fill="#fff" stroke="#203948" stroke-width="4"/><g font-family="Inter,Arial" font-size="12" font-weight="800" text-anchor="middle">${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2; const x=80+Math.sin(a)*54; const y=80-Math.cos(a)*54+4; return `<text x="${x}" y="${y}">${i===0?12:i}</text>`;}).join("")}</g><line x1="80" y1="80" x2="80" y2="130" stroke="#203948" stroke-width="5" stroke-linecap="round"/><line x1="80" y1="80" x2="48" y2="42" stroke="#203948" stroke-width="5" stroke-linecap="round"/></g></svg>`],
+    };
+    Object.entries(visuals).forEach(([number, [label, svg]]) => {
+      questions[`mo1-q${number}`] = imageQuestion(svgData(svg), label, true);
+    });
+    return { questions };
   }
 
   function starterRegistry() {
@@ -445,6 +477,36 @@
 
   function img(src, label, wide = false) {
     return { src, label, alt: label, wide };
+  }
+
+  function svgData(svg) {
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  }
+
+  function objectRow(kind, count) {
+    const symbols = {
+      orange: (x) => `<g><circle cx="${x}" cy="70" r="28" fill="#f59e0b" stroke="#203948" stroke-width="4"/><path d="M${x - 7} 42c12-14 20-8 20 3" stroke="#4d8c34" stroke-width="4" fill="none"/></g>`,
+      cake: (x, i) => `<g transform="translate(${x} 80)"><ellipse cx="0" cy="-22" rx="30" ry="20" fill="${i > 2 ? "#374151" : "#fff7df"}" stroke="#203948" stroke-width="4"/><path d="M-30-22v36c10 12 50 12 60 0v-36" fill="${i > 2 ? "#8b5a2b" : "#f9c27b"}" stroke="#203948" stroke-width="4"/></g>`,
+      pear: (x) => `<path d="M${x} 25c-2 12-13 14-17 34-4 21-15 31-6 45 10 15 36 15 46 0 9-14-3-24-7-45-4-20-15-22-16-34z" fill="#d9f2a3" stroke="#203948" stroke-width="4"/>`,
+    };
+    const width = Math.max(300, count * 88);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} 140"><rect width="${width}" height="140" fill="#fff"/>${Array.from({ length: count }, (_, i) => symbols[kind](55 + i * 82, i)).join("")}</svg>`;
+  }
+
+  function bookSymbols(x, y, count) {
+    return Array.from({ length: count }, (_, i) => {
+      const bx = x + i * 56;
+      return `<g transform="translate(${bx} ${y}) rotate(-12)"><path d="M0 0h34l14 16-34 8z" fill="#fff" stroke="#203948" stroke-width="2"/><path d="M0 0v22l14 10 34-16-34 8z" fill="#eef7f5" stroke="#203948" stroke-width="2"/></g>`;
+    }).join("");
+  }
+
+  function smallBlocks(x, y, count, crossed) {
+    return Array.from({ length: count }, (_, index) => {
+      const bx = x + (index % 10) * 22;
+      const by = y + Math.floor(index / 10) * 22;
+      const cross = index >= count - crossed ? `<path d="M${bx + 1} ${by + 17}L${bx + 17} ${by + 1}" stroke="#203948" stroke-width="2"/>` : "";
+      return `<g><rect x="${bx}" y="${by}" width="18" height="18" fill="#fff" stroke="#203948" stroke-width="2"/>${cross}</g>`;
+    }).join("");
   }
 
   function normalizeResult(row) {
