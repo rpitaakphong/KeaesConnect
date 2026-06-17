@@ -65,6 +65,51 @@
       appPath: "../math-olympiad/level-1/index.html",
       databaseReady: false,
     },
+    {
+      id: "math-olympiad-2",
+      title: "Math Olympiad Level 2",
+      subject: "Math",
+      level: "Math Olympiad 2",
+      status: "active",
+      appPath: "../math-olympiad/level-2/index.html",
+      databaseReady: false,
+    },
+    {
+      id: "math-olympiad-3",
+      title: "Math Olympiad Level 3",
+      subject: "Math",
+      level: "Math Olympiad 3",
+      status: "active",
+      appPath: "../math-olympiad/level-3/index.html",
+      databaseReady: false,
+    },
+    {
+      id: "math-olympiad-4",
+      title: "Math Olympiad Level 4",
+      subject: "Math",
+      level: "Math Olympiad 4",
+      status: "active",
+      appPath: "../math-olympiad/level-4/index.html",
+      databaseReady: false,
+    },
+    {
+      id: "math-olympiad-5",
+      title: "Math Olympiad Level 5",
+      subject: "Math",
+      level: "Math Olympiad 5",
+      status: "active",
+      appPath: "../math-olympiad/level-5/index.html",
+      databaseReady: false,
+    },
+    {
+      id: "math-olympiad-6",
+      title: "Math Olympiad Level 6",
+      subject: "Math",
+      level: "Math Olympiad 6",
+      status: "active",
+      appPath: "../math-olympiad/level-6/index.html",
+      databaseReady: false,
+    },
   ];
   let tests = builtinTests;
 
@@ -443,6 +488,11 @@
     if (testId === "english-literacy-4") return "/apps/english-literacy/level-4/index.html";
     if (testId === "english-literacy-5") return "/apps/english-literacy/level-5/index.html";
     if (testId === "math-olympiad-1") return "/apps/math-olympiad/level-1/index.html";
+    if (testId === "math-olympiad-2") return "/apps/math-olympiad/level-2/index.html";
+    if (testId === "math-olympiad-3") return "/apps/math-olympiad/level-3/index.html";
+    if (testId === "math-olympiad-4") return "/apps/math-olympiad/level-4/index.html";
+    if (testId === "math-olympiad-5") return "/apps/math-olympiad/level-5/index.html";
+    if (testId === "math-olympiad-6") return "/apps/math-olympiad/level-6/index.html";
     return "/apps/starter-listening/index.html";
   }
 

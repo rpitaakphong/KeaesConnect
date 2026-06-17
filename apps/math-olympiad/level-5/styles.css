@@ -1,0 +1,42 @@
+@import url("../level-1/styles.css?v=math-label-size-2px");
+@import url("../shared/math.css?v=math-olympiad-2-5");
+
+.booklet-diagram {
+  display: block;
+  width: min(100%, 880px);
+  height: auto;
+  margin: 0 auto;
+  background: #fff;
+}
+
+.math-booklet-image {
+  object-fit: contain;
+}
+
+.booklet-diagram-wide {
+  width: min(100%, 760px);
+}
+
+.booklet-diagram-q9 {
+  width: min(100%, 600px);
+}
+
+.booklet-diagram-q14 {
+  width: min(100%, 400px);
+}
+
+.booklet-diagram-tall {
+  width: min(100%, 300px);
+}
+
+.booklet-diagram-narrow {
+  width: min(100%, 360px);
+}
+
+.booklet-diagram-compact {
+  width: min(100%, 385px);
+}
+
+.balloon-packets-visual {
+  width: min(100%, 830px);
+}

@@ -18,14 +18,15 @@
     }
     try {
       const row = await window.KeaesApi.getResult(attemptId);
-      renderReport(normalizeResult(row));
+      const result = normalizeResult(row);
+      const registry = await buildReportRegistry(result.testId);
+      renderReport(result, registry);
     } catch (err) {
       renderError(`Could not load report: ${err.message}`);
     }
   });
 
-  function renderReport(result) {
-    const registry = buildReportRegistry();
+  function renderReport(result, registry) {
     const testContent = registry[result.testId] || {};
     const answers = result.answers.map((answer, index) => enrichAnswer(result.testId, {
       ...answer,
@@ -91,6 +92,10 @@
 
   function inferQuestionId(testId, index) {
     const position = index + 1;
+    if (testId.startsWith("math-olympiad-")) {
+      const level = testId.replace("math-olympiad-", "");
+      return `mo${level}-q${position}`;
+    }
     if (testId.startsWith("english-literacy-")) {
       const level = testId.replace("english-literacy-", "");
       return `el${level}-q${position}`;
@@ -291,8 +296,8 @@
     `;
   }
 
-  function buildReportRegistry() {
-    return {
+  async function buildReportRegistry(testId) {
+    const registry = {
       "starter-progress-test": starterRegistry(),
       "starter-progress-listening": starterRegistry(),
       "english-literacy-1": englishLevel1Registry(),
@@ -302,6 +307,84 @@
       "english-literacy-5": readingRegistry("el5", 26, 30, "World's Largest Seal", "../english-literacy/level-5/assets/elephant-seal.svg", sealStory()),
       "math-olympiad-1": mathLevel1Registry(),
     };
+    if (testId?.startsWith("math-olympiad-") && !registry[testId]) {
+      registry[testId] = await mathOlympiadRegistryFromConfig(testId);
+    }
+    return registry;
+  }
+
+  async function mathOlympiadRegistryFromConfig(testId) {
+    const level = testId.replace("math-olympiad-", "");
+    try {
+      const response = await fetch(`../math-olympiad/level-${level}/config.js?v=math-olympiad-2-5`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const source = await response.text();
+      const sandbox = {};
+      new Function("window", source)(sandbox);
+      return mathOlympiadRegistryFromData(sandbox.MathOlympiadData);
+    } catch {
+      return mathOlympiadGenericRegistry(`mo${level}`, `Math Olympiad Level ${level}`);
+    }
+  }
+
+  function mathOlympiadRegistryFromData(data) {
+    if (!data?.parts?.length) return { questions: {} };
+    const level = String(data.testId || "").replace("math-olympiad-", "");
+    const basePath = level ? `../math-olympiad/level-${level}/` : "";
+    const questions = {};
+    data.parts.flatMap((part) => part.questions || []).forEach((question) => {
+      const materialImages = [];
+      if (question.visualHtml?.trim().startsWith("<svg")) {
+        materialImages.push(img(svgData(question.visualHtml), `Question ${question.number} visual`, true));
+      }
+      const questionImage = imageFromHtml(question.visualHtml, basePath, `Question ${question.number} visual`);
+      if (questionImage) materialImages.push(questionImage);
+      (question.fields || [])
+        .filter((field) => field.visualHtml?.trim().startsWith("<svg"))
+        .forEach((field) => materialImages.push(img(svgData(field.visualHtml), field.label)));
+      (question.fields || [])
+        .map((field) => imageFromHtml(field.visualHtml, basePath, field.label))
+        .filter(Boolean)
+        .forEach((fieldImage) => materialImages.push(fieldImage));
+      const choiceImages = (question.choices || [])
+        .filter((choice) => choice.visualHtml?.trim().startsWith("<svg"))
+        .map((choice) => img(svgData(choice.visualHtml), `Choice ${choice.label}`));
+      questions[question.id] = {
+        materials: {
+          note: question.note || "",
+          images: [...materialImages, ...choiceImages],
+          choices: (question.choices || []).map((choice) => choice.label),
+        },
+      };
+    });
+    return { questions };
+  }
+
+  function imageFromHtml(html, basePath, fallbackAlt) {
+    const source = String(html || "");
+    if (!source.trim().startsWith("<img")) return null;
+    const src = source.match(/\bsrc=["']([^"']+)["']/i)?.[1];
+    if (!src) return null;
+    const alt = source.match(/\balt=["']([^"']*)["']/i)?.[1] || fallbackAlt;
+    const resolvedSrc = src.startsWith("http") || src.startsWith("/") ? src : `${basePath}${src}`;
+    return img(resolvedSrc, alt, true);
+  }
+
+  function mathOlympiadGenericRegistry(prefix, title) {
+    const questions = {};
+    for (let number = 1; number <= 15; number += 1) {
+      questions[`${prefix}-q${number}`] = {
+        materials: {
+          note: `${title} question ${number} is rendered as a generated web-native math activity in the student test.`,
+          images: [img(svgData(genericMathQuestionSvg(title, number)), `${title} question ${number}`, true)],
+        },
+      };
+    }
+    return { questions };
+  }
+
+  function genericMathQuestionSvg(title, number) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 160"><rect width="620" height="160" rx="18" fill="#fff"/><rect x="22" y="22" width="576" height="116" rx="16" fill="#eefbf8" stroke="#203948" stroke-width="3"/><text x="52" y="72" font-family="Inter,Arial" font-size="26" font-weight="800" fill="#203948">${escapeXml(title)}</text><text x="52" y="112" font-family="Inter,Arial" font-size="24" font-weight="800" fill="#008f9c">Question ${number}</text><path d="M430 54h96v52h-96zM454 80h48M478 56v48" fill="none" stroke="#203948" stroke-width="4" stroke-linecap="round"/></svg>`;
   }
 
   function mathLevel1Registry() {
@@ -578,5 +661,9 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function escapeXml(value) {
+    return escapeHtml(value);
   }
 })();

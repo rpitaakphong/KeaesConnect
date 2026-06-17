@@ -1,0 +1,25 @@
+@import url("../level-1/styles.css?v=math-label-size-2px");
+@import url("../shared/math.css?v=math-olympiad-q12-field-visuals");
+
+.math-booklet-image {
+  display: block;
+  height: auto;
+  max-inline-size: min(100%, 920px);
+  object-fit: contain;
+}
+
+.math-booklet-image-reduced {
+  max-inline-size: min(100%, 552px);
+}
+
+.math-booklet-image-q11 {
+  max-inline-size: min(100%, 727px);
+}
+
+.math-booklet-image-q13 {
+  max-inline-size: min(100%, 721px);
+}
+
+.generated-visual .solid-faces-visual {
+  inline-size: min(100%, 822px);
+}
