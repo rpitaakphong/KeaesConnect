@@ -47,7 +47,41 @@
     assertConfigured();
     const { data, error } = await client.rpc("get_staff_profile");
     if (error) throw error;
-    return data;
+    return normalizeProfile(data);
+  }
+
+  async function listStaffUsers() {
+    assertConfigured();
+    const { data, error } = await client.rpc("list_staff_users");
+    if (error) throw error;
+    return Array.isArray(data) ? data.map(normalizeProfile) : [];
+  }
+
+  async function createStaffUser(payload) {
+    assertConfigured();
+    const { data, error } = await client.functions.invoke("manage-staff-user", {
+      body: {
+        email: payload.email,
+        displayName: payload.displayName,
+        role: payload.role,
+        permissions: payload.permissions || [],
+        temporaryPassword: payload.temporaryPassword,
+      },
+    });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+    return normalizeProfile(data?.user);
+  }
+
+  async function updateStaffAccess(userId, payload) {
+    assertConfigured();
+    const { data, error } = await client.rpc("update_staff_access", {
+      p_staff_id: userId,
+      p_role: payload.role,
+      p_permissions: payload.permissions || [],
+    });
+    if (error) throw error;
+    return normalizeProfile(data);
   }
 
   async function listTests() {
@@ -84,23 +118,18 @@
 
   async function listResults() {
     assertConfigured();
-    const { data, error } = await client
-      .from("admin_attempt_results")
-      .select("*")
-      .order("submitted_at", { ascending: false });
+    const { data, error } = await client.rpc("list_admin_results");
     if (error) throw error;
     return data || [];
   }
 
   async function getResult(attemptId) {
     assertConfigured();
-    const { data, error } = await client
-      .from("admin_attempt_results")
-      .select("*")
-      .eq("attempt_id", attemptId)
-      .single();
+    const { data, error } = await client.rpc("get_admin_result", { p_attempt_id: attemptId });
     if (error) throw error;
-    return data;
+    const rows = Array.isArray(data) ? data : [];
+    if (!rows[0]) throw new Error("Result not found or not authorized.");
+    return rows[0];
   }
 
   async function submitAttempt({ assignmentToken, student, answers }) {
@@ -123,6 +152,27 @@
     return data?.grades || {};
   }
 
+  function normalizeProfile(profile) {
+    if (!profile) return null;
+    const permissions = Array.isArray(profile.permissions) ? profile.permissions : [];
+    const role = profile.role === "admin" ? "super_admin" : profile.role;
+    return {
+      ...profile,
+      role,
+      display_name: profile.display_name || profile.displayName || "",
+      displayName: profile.displayName || profile.display_name || "",
+      isSuperAdmin: Boolean(profile.isSuperAdmin || role === "super_admin"),
+      permissions,
+    };
+  }
+
+  function hasPermission(profile, featureKey) {
+    if (!profile) return false;
+    if (profile.isSuperAdmin || profile.role === "super_admin") return true;
+    if (featureKey === "staff_management") return false;
+    return Array.isArray(profile.permissions) && profile.permissions.includes(featureKey);
+  }
+
   window.KeaesApi = {
     isConfigured,
     signIn,
@@ -130,6 +180,10 @@
     getSession,
     requireStaffSession,
     getStaffProfile,
+    listStaffUsers,
+    createStaffUser,
+    updateStaffAccess,
+    hasPermission,
     listTests,
     createAssignment,
     getAssignment,

@@ -8,6 +8,44 @@ create table if not exists staff_users (
   created_at timestamptz not null default now()
 );
 
+do $$
+declare
+  constraint_name text;
+begin
+  select conname into constraint_name
+  from pg_constraint
+  where conrelid = 'public.staff_users'::regclass
+    and contype = 'c'
+    and pg_get_constraintdef(oid) like '%role%';
+
+  if constraint_name is not null then
+    execute format('alter table staff_users drop constraint %I', constraint_name);
+  end if;
+end $$;
+
+update staff_users
+set role = 'super_admin'
+where role = 'admin';
+
+alter table staff_users
+  alter column role set default 'staff',
+  add constraint staff_users_role_check check (role in ('staff', 'super_admin'));
+
+create table if not exists staff_permissions (
+  staff_id uuid not null references staff_users(id) on delete cascade,
+  feature_key text not null check (feature_key in (
+    'dashboard',
+    'test_catalog',
+    'generate_links',
+    'view_results',
+    'view_reports',
+    'staff_management'
+  )),
+  granted_by uuid references staff_users(id),
+  granted_at timestamptz not null default now(),
+  primary key (staff_id, feature_key)
+);
+
 create table if not exists tests (
   id text primary key,
   title text not null,
@@ -91,6 +129,7 @@ where is_correct = true
   and grading_details = '{}'::jsonb;
 
 alter table staff_users enable row level security;
+alter table staff_permissions enable row level security;
 alter table tests enable row level security;
 alter table test_questions enable row level security;
 alter table students enable row level security;
@@ -111,23 +150,74 @@ as $$
   );
 $$;
 
+create or replace function is_super_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from staff_users
+    where id = auth.uid()
+      and role = 'super_admin'
+  );
+$$;
+
+create or replace function has_staff_permission(p_feature_key text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from staff_users
+    where id = auth.uid()
+      and role = 'super_admin'
+  )
+  or exists (
+    select 1
+    from staff_permissions p
+    where p.staff_id = auth.uid()
+      and p.feature_key = p_feature_key
+  );
+$$;
+
+create or replace function require_staff_permission(p_feature_key text)
+returns void
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+begin
+  if not has_staff_permission(p_feature_key) then
+    raise exception 'Not authorized for %', p_feature_key;
+  end if;
+end;
+$$;
+
 drop policy if exists "staff can read tests" on tests;
-create policy "staff can read tests" on tests for select using (is_staff());
+create policy "staff can read tests" on tests for select using (has_staff_permission('test_catalog') or has_staff_permission('generate_links'));
 
 drop policy if exists "staff can read questions" on test_questions;
-create policy "staff can read questions" on test_questions for select using (is_staff());
+create policy "staff can read questions" on test_questions for select using (has_staff_permission('test_catalog') or has_staff_permission('generate_links'));
 
 drop policy if exists "staff can read students" on students;
-create policy "staff can read students" on students for select using (is_staff());
+create policy "staff can read students" on students for select using (has_staff_permission('view_results') or has_staff_permission('view_reports'));
 
 drop policy if exists "staff can read assignments" on test_assignments;
-create policy "staff can read assignments" on test_assignments for select using (is_staff());
+create policy "staff can read assignments" on test_assignments for select using (has_staff_permission('generate_links') or has_staff_permission('view_results') or has_staff_permission('view_reports'));
 
 drop policy if exists "staff can read attempts" on test_attempts;
-create policy "staff can read attempts" on test_attempts for select using (is_staff());
+create policy "staff can read attempts" on test_attempts for select using (has_staff_permission('view_results') or has_staff_permission('view_reports'));
 
 drop policy if exists "staff can read answers" on attempt_answers;
-create policy "staff can read answers" on attempt_answers for select using (is_staff());
+create policy "staff can read answers" on attempt_answers for select using (has_staff_permission('view_results') or has_staff_permission('view_reports'));
+
+drop policy if exists "staff can read own permissions" on staff_permissions;
+create policy "staff can read own permissions" on staff_permissions for select using (staff_id = auth.uid() or is_super_admin());
 
 insert into tests (id, title, subject, level, status, total_points, app_path)
 values
@@ -795,7 +885,136 @@ stable
 security definer
 set search_path = public
 as $$
-  select to_jsonb(s) from staff_users s where s.id = auth.uid();
+  select jsonb_build_object(
+    'id', s.id,
+    'email', s.email,
+    'display_name', s.display_name,
+    'role', s.role,
+    'isSuperAdmin', s.role = 'super_admin',
+    'permissions', coalesce((
+      select jsonb_agg(p.feature_key order by p.feature_key)
+      from staff_permissions p
+      where p.staff_id = s.id
+    ), '[]'::jsonb)
+  )
+  from staff_users s
+  where s.id = auth.uid();
+$$;
+
+create or replace function list_staff_users()
+returns jsonb
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+begin
+  if not is_super_admin() then
+    raise exception 'Not authorized';
+  end if;
+
+  return coalesce((
+    select jsonb_agg(jsonb_build_object(
+      'id', s.id,
+      'email', s.email,
+      'display_name', s.display_name,
+      'role', s.role,
+      'isSuperAdmin', s.role = 'super_admin',
+      'created_at', s.created_at,
+      'permissions', coalesce((
+        select jsonb_agg(p.feature_key order by p.feature_key)
+        from staff_permissions p
+        where p.staff_id = s.id
+      ), '[]'::jsonb)
+    ) order by s.created_at desc)
+    from staff_users s
+  ), '[]'::jsonb);
+end;
+$$;
+
+create or replace function update_staff_access(p_staff_id uuid, p_role text, p_permissions text[])
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  clean_role text := lower(trim(coalesce(p_role, 'staff')));
+  clean_permissions text[];
+  super_admin_count int;
+begin
+  if not is_super_admin() then
+    raise exception 'Not authorized';
+  end if;
+
+  if clean_role = 'admin' then
+    clean_role := 'super_admin';
+  end if;
+
+  if clean_role not in ('staff', 'super_admin') then
+    raise exception 'Invalid role';
+  end if;
+
+  if not exists (select 1 from staff_users where id = p_staff_id) then
+    raise exception 'Staff user not found';
+  end if;
+
+  select count(*) into super_admin_count
+  from staff_users
+  where role = 'super_admin'
+    and id <> p_staff_id;
+
+  if p_staff_id = auth.uid() and clean_role <> 'super_admin' and super_admin_count = 0 then
+    raise exception 'Cannot remove the last Super Admin';
+  end if;
+
+  clean_permissions := array(
+    select distinct permission
+    from unnest(coalesce(p_permissions, array[]::text[])) permission
+    where permission in (
+      'dashboard',
+      'test_catalog',
+      'generate_links',
+      'view_results',
+      'view_reports',
+      'staff_management'
+    )
+    order by permission
+  );
+
+  update staff_users
+  set role = clean_role
+  where id = p_staff_id;
+
+  delete from staff_permissions
+  where staff_id = p_staff_id;
+
+  if clean_role = 'staff' then
+    insert into staff_permissions (staff_id, feature_key, granted_by)
+    select p_staff_id, permission, auth.uid()
+    from unnest(clean_permissions) permission
+    on conflict (staff_id, feature_key) do update set
+      granted_by = excluded.granted_by,
+      granted_at = now();
+  end if;
+
+  return (
+    select jsonb_build_object(
+      'id', s.id,
+      'email', s.email,
+      'display_name', s.display_name,
+      'role', s.role,
+      'isSuperAdmin', s.role = 'super_admin',
+      'permissions', coalesce((
+        select jsonb_agg(p.feature_key order by p.feature_key)
+        from staff_permissions p
+        where p.staff_id = s.id
+      ), '[]'::jsonb)
+    )
+    from staff_users s
+    where s.id = p_staff_id
+  );
+end;
 $$;
 
 create or replace function create_test_assignment(p_test_id text)
@@ -805,9 +1024,7 @@ security definer
 set search_path = public
 as $$
 begin
-  if not is_staff() then
-    raise exception 'Not authorized';
-  end if;
+  perform require_staff_permission('generate_links');
   return query
     insert into test_assignments (test_id, created_by)
     values (p_test_id, auth.uid())
@@ -992,12 +1209,48 @@ select
 from test_attempts a
 join tests t on t.id = a.test_id
 join students s on s.id = a.student_id
-where is_staff();
+where has_staff_permission('view_results') or has_staff_permission('view_reports');
+
+create or replace function list_admin_results()
+returns setof admin_attempt_results
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+begin
+  perform require_staff_permission('view_results');
+  return query
+    select *
+    from admin_attempt_results
+    order by submitted_at desc;
+end;
+$$;
+
+create or replace function get_admin_result(p_attempt_id uuid)
+returns setof admin_attempt_results
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+begin
+  perform require_staff_permission('view_reports');
+  return query
+    select *
+    from admin_attempt_results
+    where attempt_id = p_attempt_id;
+end;
+$$;
 
 grant usage on schema public to anon, authenticated;
 grant execute on function get_assignment(text) to anon, authenticated;
 grant execute on function submit_attempt(text, jsonb, jsonb) to anon, authenticated;
 grant execute on function create_test_assignment(text) to authenticated;
 grant execute on function get_staff_profile() to authenticated;
+grant execute on function list_staff_users() to authenticated;
+grant execute on function update_staff_access(uuid, text, text[]) to authenticated;
+grant execute on function list_admin_results() to authenticated;
+grant execute on function get_admin_result(uuid) to authenticated;
 grant select on tests to authenticated;
 grant select on admin_attempt_results to authenticated;

@@ -117,13 +117,15 @@
   let selectedResultId = null;
   let selectedAssignment = null;
   let results = [];
+  let currentEmployee = null;
   const resultFilters = {
     search: "",
     course: "",
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    await requireAdminSession();
+    const authorized = await requireAdminSession();
+    if (!authorized) return;
     await window.KeaesWorkspacePortal?.refreshChrome?.();
     await loadTests();
     renderTests();
@@ -135,19 +137,26 @@
   async function requireAdminSession() {
     if (!window.KeaesApi?.isConfigured()) {
       renderSetupMode();
-      return;
+      return true;
     }
     await window.KeaesApi.requireStaffSession("../../login.html");
+    currentEmployee = await window.KeaesWorkspacePortal?.getEmployee?.();
+    const canOpenAdmin = hasPermission("test_catalog") || hasPermission("generate_links") || hasPermission("view_results") || hasPermission("view_reports");
+    if (!canOpenAdmin) {
+      await window.KeaesWorkspacePortal?.requirePermission?.("test_catalog");
+      return false;
+    }
+    return true;
   }
 
   function bindActions() {
     document.querySelector("[data-test-list]").addEventListener("click", selectCatalogTest);
-    document.querySelector("[data-copy-link]").addEventListener("click", copyLink);
-    document.querySelector("[data-open-link]").addEventListener("click", ensureGeneratedAssignment);
-    document.querySelector("[data-refresh-results]").addEventListener("click", refreshResults);
-    document.querySelector("[data-results-table]").addEventListener("click", inspectResultFromTable);
-    document.querySelector("[data-result-search]").addEventListener("input", updateResultFilters);
-    document.querySelector("[data-course-filter]").addEventListener("change", updateResultFilters);
+    document.querySelector("[data-copy-link]")?.addEventListener("click", copyLink);
+    document.querySelector("[data-open-link]")?.addEventListener("click", ensureGeneratedAssignment);
+    document.querySelector("[data-refresh-results]")?.addEventListener("click", refreshResults);
+    document.querySelector("[data-results-table]")?.addEventListener("click", inspectResultFromTable);
+    document.querySelector("[data-result-search]")?.addEventListener("input", updateResultFilters);
+    document.querySelector("[data-course-filter]")?.addEventListener("change", updateResultFilters);
     const modal = document.querySelector("[data-result-modal]");
     modal?.addEventListener("click", (event) => {
       if (event.target === modal) closeResultDetail();
@@ -162,7 +171,7 @@
   }
 
   async function loadTests() {
-    if (!window.KeaesApi?.isConfigured()) return;
+    if (!window.KeaesApi?.isConfigured() || !canCatalog()) return;
     try {
       const rows = await window.KeaesApi.listTests();
       tests = mergeTests(rows.map((test) => ({
@@ -182,6 +191,7 @@
   }
 
   function renderTests() {
+    if (!canCatalog() && !hasPermission("generate_links")) return;
     if (!tests.some((test) => test.id === selectedTestId)) selectedTestId = tests[0]?.id || null;
     document.querySelector("[data-test-list]").innerHTML = tests.map((test) => `
       <button class="test-card ${test.databaseReady ? "" : "is-pending"} ${test.id === selectedTestId ? "is-selected" : ""}" type="button" data-test-id="${escapeHtml(test.id)}" aria-pressed="${test.id === selectedTestId ? "true" : "false"}">
@@ -193,6 +203,7 @@
   }
 
   function renderLinkGenerator() {
+    if (!hasPermission("generate_links")) return;
     if (!tests.some((test) => test.id === selectedTestId)) selectedTestId = tests[0]?.id || null;
     updateGeneratedLink();
   }
@@ -211,6 +222,10 @@
     event?.preventDefault();
     if (!window.KeaesApi?.isConfigured()) {
       setShareMessage("Supabase setup required before generating assignment links.");
+      return null;
+    }
+    if (!hasPermission("generate_links")) {
+      setShareMessage("Your account does not have permission to generate assignment links.");
       return null;
     }
     if (!selectedAssignment) {
@@ -274,6 +289,7 @@
   }
 
   async function refreshResults() {
+    if (!hasPermission("view_results")) return;
     if (!window.KeaesApi?.isConfigured()) {
       renderSetupMode();
       return;
@@ -304,7 +320,7 @@
         <td>
           <div class="result-actions">
             <button class="inspect-button" type="button" data-inspect-result="${escapeHtml(result.id)}">Inspect</button>
-            <button class="inspect-button" type="button" data-report-result="${escapeHtml(result.id)}" onclick="window.location.href='report.html?attemptId=${encodeURIComponent(result.id)}'">Report</button>
+            ${hasPermission("view_reports") ? `<button class="inspect-button" type="button" data-report-result="${escapeHtml(result.id)}" onclick="window.location.href='report.html?attemptId=${encodeURIComponent(result.id)}'">Report</button>` : ""}
           </div>
         </td>
       </tr>
@@ -356,6 +372,7 @@
     const target = event.target instanceof Element ? event.target : event.target?.parentElement;
     const reportButton = target?.closest("[data-report-result]");
     if (reportButton) {
+      if (!hasPermission("view_reports")) return;
       const reportUrl = new URL("report.html", window.location.href);
       reportUrl.searchParams.set("attemptId", reportButton.dataset.reportResult);
       window.location.href = reportUrl.href;
@@ -366,6 +383,14 @@
     selectedResultId = button.dataset.inspectResult;
     renderResults();
     openResultDetail(results.find((result) => result.id === selectedResultId));
+  }
+
+  function canCatalog() {
+    return hasPermission("test_catalog") || hasPermission("generate_links");
+  }
+
+  function hasPermission(featureKey) {
+    return window.KeaesWorkspacePortal?.hasPermission?.(currentEmployee, featureKey) || false;
   }
 
   function openResultDetail(result) {

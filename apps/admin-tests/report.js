@@ -11,7 +11,8 @@
       renderError("Supabase is not configured. Open Test Admin after configuring Supabase.");
       return;
     }
-    await window.KeaesApi.requireStaffSession("../../login.html");
+    const employee = await window.KeaesWorkspacePortal?.requirePermission?.("view_reports");
+    if (!employee) return;
     if (!attemptId) {
       renderError("This report link is missing an attempt id.");
       return;

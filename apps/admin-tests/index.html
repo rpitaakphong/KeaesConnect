@@ -21,6 +21,7 @@
     <a class="brand-mark" href="../../dashboard.html" aria-label="Back to Keaes Workspace dashboard"><img src="../../assets/brand/keaes-workspace-logo.png" alt="Keaes Workspace Tests"></a>
     <nav aria-label="Primary navigation">
       <a class="nav-link is-active" href="../../dashboard.html">Home</a>
+      <a class="nav-link hidden" data-requires-permission="staff_management" href="staff.html">Staff</a>
     </nav>
     <div class="nav-actions">
       <span data-employee-badge class="badge soft hidden">Employee</span>
@@ -39,7 +40,7 @@
     </section>
 
     <section class="admin-grid">
-      <article class="panel">
+      <article class="panel hidden" data-requires-any-permission="test_catalog,generate_links">
         <div class="section-head">
           <div>
             <p class="eyebrow">Test catalog</p>
@@ -49,7 +50,7 @@
         <div class="test-list" data-test-list></div>
       </article>
 
-      <article class="panel">
+      <article class="panel hidden" data-requires-permission="generate_links">
         <div class="section-head">
           <div>
             <p class="eyebrow">Send test</p>
@@ -72,7 +73,7 @@
       </article>
     </section>
 
-    <section class="panel">
+    <section class="panel hidden" data-requires-permission="view_results">
       <div class="section-head">
         <div>
           <p class="eyebrow">Student performance</p>
