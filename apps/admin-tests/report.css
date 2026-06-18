@@ -1,26 +1,10 @@
-.report-toolbar {
-  align-items: center;
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 30px;
-  box-shadow: var(--shadow-soft);
-  display: flex;
-  justify-content: space-between;
-  margin: 18px auto;
-  padding: 10px 14px;
-  width: min(1120px, calc(100% - 32px));
-}
-
-.brand-mark img {
-  display: block;
-  height: 44px;
-  object-fit: contain;
-  width: 238px;
-}
-
 .report-actions {
+  width: min(1120px, calc(100% - 32px));
   display: flex;
   gap: 0.6rem;
   align-items: center;
+  justify-content: flex-end;
+  margin: 18px auto;
 }
 
 .primary-button,
@@ -412,7 +396,6 @@
 }
 
 @media (max-width: 760px) {
-  .report-toolbar,
   .report-actions,
   .question-head,
   .part-review-head,
@@ -438,7 +421,8 @@
     background: #ffffff;
   }
 
-  .report-toolbar {
+  .site-nav,
+  .report-actions {
     display: none;
   }
 

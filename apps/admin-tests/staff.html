@@ -8,6 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <title>Staff Management | Keaes Workspace</title>
   <link rel="stylesheet" href="../../assets/css/base.css?v=shared-theme">
+  <link rel="stylesheet" href="../../assets/css/portal.css?v=shared-theme">
   <link rel="stylesheet" href="styles.css?v=staff-access">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
@@ -17,17 +18,7 @@
 </head>
 <body data-page="staff-management">
   <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-nav">
-    <a class="brand-mark" href="../../dashboard.html" aria-label="Back to Keaes Workspace dashboard"><img src="../../assets/brand/keaes-workspace-logo.png" alt="Keaes Workspace"></a>
-    <nav aria-label="Primary navigation">
-      <a class="nav-link is-active" href="../../dashboard.html">Home</a>
-    </nav>
-    <div class="nav-actions">
-      <span data-employee-badge class="badge soft hidden">Employee</span>
-      <a data-login-link class="ghost-button" href="../../login.html">Log in</a>
-      <button data-logout-button class="ghost-button hidden" type="button">Log out</button>
-    </div>
-  </header>
+  <div data-portal-header></div>
 
   <main id="main" class="admin-shell">
     <section class="hero-panel">

@@ -4,6 +4,7 @@
   let employeePromise = null;
 
   document.addEventListener("DOMContentLoaded", async () => {
+    renderPortalHeader();
     await refreshChrome();
     bindLoginForm();
     bindLogoutButtons();
@@ -70,6 +71,27 @@
 
   function hasPermission(employee, featureKey) {
     return window.KeaesApi?.hasPermission?.(employee, featureKey) || false;
+  }
+
+  function renderPortalHeader() {
+    document.querySelectorAll("[data-portal-header]").forEach((placeholder) => {
+      const header = document.createElement("header");
+      header.className = "site-nav";
+      header.innerHTML = `
+        <a class="brand-mark" href="${escapeHtml(resolveRootPath("dashboard.html"))}" aria-label="Keaes Workspace dashboard">
+          <img src="${escapeHtml(resolveRootPath("assets/brand/keaes-workspace-logo.png"))}" alt="Keaes Workspace">
+        </a>
+        <nav aria-label="Primary navigation">
+          <a class="nav-link is-active" href="${escapeHtml(resolveRootPath("dashboard.html"))}">Home</a>
+        </nav>
+        <div class="nav-actions">
+          <span data-employee-badge class="badge soft hidden">Employee</span>
+          <a data-login-link class="ghost-button" href="${escapeHtml(resolveRootPath("login.html"))}">Log in</a>
+          <button data-logout-button class="ghost-button hidden" type="button">Log out</button>
+        </div>
+      `;
+      placeholder.replaceWith(header);
+    });
   }
 
   function bindLoginForm() {
@@ -154,5 +176,5 @@
       .replaceAll("'", "&#039;");
   }
 
-  window.KeaesWorkspacePortal = { login, logout, getEmployee, requireSession, requirePermission, hasPermission, refreshChrome };
+  window.KeaesWorkspacePortal = { login, logout, getEmployee, requireSession, requirePermission, hasPermission, refreshChrome, renderPortalHeader };
 })();
