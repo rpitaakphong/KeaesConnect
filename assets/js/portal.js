@@ -148,7 +148,9 @@
   }
 
   function resolveRootPath(path) {
-    const depth = window.location.pathname.split("/").filter(Boolean).length - 1;
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const lastPart = parts[parts.length - 1] || "";
+    const depth = parts.length - (lastPart.includes(".") ? 1 : 0);
     return `${"../".repeat(Math.max(depth, 0))}${path}`;
   }
 
