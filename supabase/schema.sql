@@ -114,6 +114,8 @@ create table if not exists attempt_answers (
   position int not null
 );
 
+drop function if exists list_admin_results();
+drop function if exists get_admin_result(uuid);
 drop view if exists admin_attempt_results;
 
 alter table test_questions alter column points type numeric using points::numeric;
