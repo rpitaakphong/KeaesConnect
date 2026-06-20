@@ -336,7 +336,6 @@
       <article class="review-card">
         <strong>${escapeHtml(part.label)}</strong>
         <span>${part.questions.filter((question) => cleanText(state.answers[question.id])).length}/${part.questions.length} answered</span>
-        ${part.questions.some((question) => question.pending) ? "<small>Listening scoring pending official materials.</small>" : ""}
       </article>
     `).join("");
   }
@@ -403,7 +402,7 @@
     card.innerHTML = `
       <p class="eyebrow">Submitted</p>
       <h3>${formatScore(state.submittedScore.score)}/${formatScore(state.submittedScore.possible)}</h3>
-      <p>Reading and Writing are included in this score. Listening questions remain pending official answer key review.</p>
+      <p>Listening, Reading, and Writing are included in this score.</p>
       ${state.savedResultId ? `<p>Result ID: ${escapeHtml(state.savedResultId)}</p>` : ""}
     `;
   }
@@ -441,12 +440,17 @@
         };
       }
       const response = normalizeAnswer(state.answers[question.id]);
-      const correct = normalizeAnswer(question.answer);
+      const accepted = acceptedAnswers(question);
       return {
-        score: score.score + (response && response === correct ? (question.points || 1) : 0),
+        score: score.score + (response && accepted.includes(response) ? (question.points || 1) : 0),
         possible: score.possible + (question.points || 1),
       };
     }, { score: 0, possible: 0 });
+  }
+
+  function acceptedAnswers(question) {
+    const values = Array.isArray(question.acceptedAnswers) ? question.acceptedAnswers : [question.answer];
+    return values.map(normalizeAnswer).filter(Boolean);
   }
 
   function demoWritingGrades() {

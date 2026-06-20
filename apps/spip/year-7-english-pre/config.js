@@ -31,21 +31,20 @@
     alt: `Listening question ${number}, option ${option.toUpperCase()} illustration`,
   }));
 
-  const pendingChoice = (id, number, prompt, visualChoices = listeningChoiceImages(number)) => choice(id, number, prompt, ["A", "B", "C"], null, {
-    points: 0,
-    pending: true,
+  const listeningPictureChoice = (id, number, prompt, answer, visualChoices = listeningChoiceImages(number)) => choice(id, number, prompt, ["A", "B", "C"], answer, {
     visualChoices,
   });
 
-  const listeningNote = "Official listening audio is available. The listening answer key is still pending, so these questions are not included in the current score.";
+  const listeningNote = "Official listening audio and answer key are available. Listening is included in the current score.";
+  const officialReadingNote = "Official answer key verified from the supplied SPIP answer PDF.";
 
   window.SpipEnglishPretestData = {
     testId: "spip-year-7-english-pre",
     title: "SPIP Year 7 English Pre-test",
     subject: "English",
     level: "SPIP Year 7",
-    totalPoints: 25,
-    answerKeyStatus: "draft-inferred-reading-ai-writing",
+    totalPoints: 50,
+    answerKeyStatus: "official-listening-reading-ai-writing",
     audioStatus: "official-audio-available",
     audioSrc: "assets/audio/spip-y7-english-listening.mp3",
     parts: [
@@ -56,13 +55,13 @@
         hint: "For each question, choose the correct answer.",
         note: listeningNote,
         questions: [
-          pendingChoice("spip-y7e-l1", 1, "What did the girl buy on her shopping trip?"),
-          pendingChoice("spip-y7e-l2", 2, "Why did the plane leave late?"),
-          pendingChoice("spip-y7e-l3", 3, "What activity does the woman want to book for the weekend?"),
-          pendingChoice("spip-y7e-l4", 4, "Which cake will the girl order?"),
-          pendingChoice("spip-y7e-l5", 5, "How much must customers spend to get a free gift?"),
-          pendingChoice("spip-y7e-l6", 6, "What did the family do on Sunday?"),
-          pendingChoice("spip-y7e-l7", 7, "Which programme is on first?"),
+          listeningPictureChoice("spip-y7e-l1", 1, "What did the girl buy on her shopping trip?", "b"),
+          listeningPictureChoice("spip-y7e-l2", 2, "Why did the plane leave late?", "b"),
+          listeningPictureChoice("spip-y7e-l3", 3, "What activity does the woman want to book for the weekend?", "a"),
+          listeningPictureChoice("spip-y7e-l4", 4, "Which cake will the girl order?", "c"),
+          listeningPictureChoice("spip-y7e-l5", 5, "How much must customers spend to get a free gift?", "b"),
+          listeningPictureChoice("spip-y7e-l6", 6, "What did the family do on Sunday?", "b"),
+          listeningPictureChoice("spip-y7e-l7", 7, "Which programme is on first?", "c"),
         ],
       },
       {
@@ -76,32 +75,32 @@
             { value: "a", label: "The staff are helpful." },
             { value: "b", label: "It only has the latest fashions." },
             { value: "c", label: "Prices are reduced at the moment." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
           choice("spip-y7e-l9", 9, "You will hear two friends talking about a pop band's website. They think the site would be better if", [
             { value: "a", label: "its information was up to date." },
             { value: "b", label: "it was easier to buy concert tickets." },
             { value: "c", label: "the band members answered messages." },
-          ], null, { points: 0, pending: true }),
+          ], "b"),
           choice("spip-y7e-l10", 10, "You will hear a woman telling a friend about an art competition she's won. How does she feel about it?", [
             { value: "a", label: "upset that the prize isn't valuable" },
             { value: "b", label: "excited that the judges liked her picture" },
             { value: "c", label: "disappointed that she can't use the prize" },
-          ], null, { points: 0, pending: true }),
+          ], "c"),
           choice("spip-y7e-l11", 11, "You will hear two friends talking about the girl's flatmate. The girl thinks that her flatmate", [
             { value: "a", label: "is too untidy." },
             { value: "b", label: "talks too much." },
             { value: "c", label: "plays music too loud." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
           choice("spip-y7e-l12", 12, "You will hear two friends talking about a football match. They agree that their team lost because", [
             { value: "a", label: "the players weren't confident enough." },
             { value: "b", label: "they were missing some key players." },
             { value: "c", label: "the players didn't do the right training." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
           choice("spip-y7e-l13", 13, "You will hear two friends talking about a tennis match they played. The boy wants the girl to", [
             { value: "a", label: "help him to get fitter." },
             { value: "b", label: "practise with him more often." },
             { value: "c", label: "enter more competitions with him." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
         ],
       },
       {
@@ -122,12 +121,12 @@
           ],
         },
         questions: [
-          text("spip-y7e-l14", 14, "In the National Gardens, the thing that attracted most people was the", null, { points: 0, pending: true }),
-          text("spip-y7e-l15", 15, "Electronic armbands kept the _____ away.", null, { points: 0, pending: true }),
-          text("spip-y7e-l16", 16, "Anita almost fell off a", null, { points: 0, pending: true }),
-          text("spip-y7e-l17", 17, "In the capital city, Anita saw a _____ in a theatre.", null, { points: 0, pending: true }),
-          text("spip-y7e-l18", 18, "Anita enjoyed visiting a farm where _____ is produced.", null, { points: 0, pending: true }),
-          text("spip-y7e-l19", 19, "Anita bought some _____ as gifts.", null, { points: 0, pending: true }),
+          text("spip-y7e-l14", 14, "In the National Gardens, the thing that attracted most people was the", "waterfall", { acceptedAnswers: ["waterfall", "waterfalls", "waterfal", "fantastic waterfall", "fantastic waterfalls", "fantastic waterfal", "a waterfall", "an waterfall", "the waterfall", "a fantastic waterfall", "an fantastic waterfall", "the fantastic waterfall"] }),
+          text("spip-y7e-l15", 15, "Electronic armbands kept the _____ away.", "shark", { acceptedAnswers: ["shark", "sharks", "a shark", "an shark", "the shark"] }),
+          text("spip-y7e-l16", 16, "Anita almost fell off a", "horse", { acceptedAnswers: ["horse", "a horse", "an horse", "her horse", "the horse"] }),
+          text("spip-y7e-l17", 17, "In the capital city, Anita saw a _____ in a theatre.", "musical", { acceptedAnswers: ["musical", "musical show", "musical play", "a musical", "an musical", "the musical", "a musical show", "an musical show", "the musical show", "a musical play", "an musical play", "the musical play"] }),
+          text("spip-y7e-l18", 18, "Anita enjoyed visiting a farm where _____ is produced.", "sugar", { acceptedAnswers: ["sugar", "suger"] }),
+          text("spip-y7e-l19", 19, "Anita bought some _____ as gifts.", "rings", { acceptedAnswers: ["ring", "rings", "some rings", "some ring"] }),
         ],
       },
       {
@@ -145,32 +144,32 @@
             { value: "a", label: "she had joined a swimming club." },
             { value: "b", label: "her parents were keen on swimming." },
             { value: "c", label: "her swimming teacher encouraged her." },
-          ], null, { points: 0, pending: true }),
+          ], "c"),
           choice("spip-y7e-l21", 21, "As a teenager, Vicky's training involved", [
             { value: "a", label: "exercising on land as well as in the water." },
             { value: "b", label: "going without meals during the day." },
             { value: "c", label: "travelling to a pool once a day." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
           choice("spip-y7e-l22", 22, "What did Vicky find hard about her training programme?", [
             { value: "a", label: "She couldn't go on school trips." },
             { value: "b", label: "She lost some of her friends." },
             { value: "c", label: "She missed lots of parties." },
-          ], null, { points: 0, pending: true }),
+          ], "b"),
           choice("spip-y7e-l23", 23, "What helped Vicky to do well in the national finals?", [
             { value: "a", label: "She was not expected to win." },
             { value: "b", label: "She trained harder than usual." },
             { value: "c", label: "She wanted to take a cup home." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
           choice("spip-y7e-l24", 24, "As a swimming coach, Vicky thinks she's best at teaching people", [
             { value: "a", label: "to deal with failure." },
             { value: "b", label: "to improve their technique." },
             { value: "c", label: "to get swimming qualifications." },
-          ], null, { points: 0, pending: true }),
+          ], "a"),
           choice("spip-y7e-l25", 25, "Why has Vicky started doing long-distance swimming?", [
             { value: "a", label: "She needed to get fit again." },
             { value: "b", label: "She thought it would be fun." },
             { value: "c", label: "She wanted to do some travelling." },
-          ], null, { points: 0, pending: true }),
+          ], "c"),
         ],
       },
       {
@@ -178,18 +177,18 @@
         label: "Reading Part 1",
         title: "Questions 1-5",
         hint: "For each question, choose the correct answer.",
-        note: "Draft inferred answer key. Verify against the official key before activation.",
+        note: officialReadingNote,
         questions: [
           choice("spip-y7e-r1", 1, "Choose the sentence that best matches the notice.", [
             { value: "a", label: "The competition is open to people over a certain age." },
             { value: "b", label: "There is a maximum age limit for this competition." },
             { value: "c", label: "Only eighteen-year-olds are allowed to enter this competition." },
-          ], "a", { visual: notice("Competition notice", "Entrants must be 18 or over.", "Draft web reconstruction from PDF text.") }),
+          ], "a", { visual: notice("Competition notice", "Entrants must be 18 or over.", "Web reconstruction from PDF text.") }),
           choice("spip-y7e-r2", 2, "Adam is telling Rachel to", [
             { value: "a", label: "post something for him." },
             { value: "b", label: "find out how to do something." },
             { value: "c", label: "give him something he needs." },
-          ], "c", { visual: noteCard("Adam to Rachel", "Could you bring the thing I need tomorrow? Draft reconstruction; verify with original source.") }),
+          ], "c", { visual: noteCard("Adam to Rachel", "Could you bring the thing I need tomorrow? Web reconstruction from PDF text.") }),
           choice("spip-y7e-r3", 3, "Choose the sentence that best matches the laboratory notice.", [
             { value: "a", label: "Members of staff must be accompanied if they wish to pass this point." },
             { value: "b", label: "Members of the public can't go through unless they are visiting someone working here." },
@@ -199,7 +198,7 @@
             { value: "a", label: "Tom wants to persuade Jane to take him to college tomorrow morning." },
             { value: "b", label: "Tom would like Jane to do him a favour tomorrow morning." },
             { value: "c", label: "Tom is reminding Jane they have to get up early tomorrow morning." },
-          ], "b", { visual: noteCard("Tom to Jane", "Morning favour message. Draft reconstruction; verify with original source.") }),
+          ], "b", { visual: noteCard("Tom to Jane", "Morning favour message. Web reconstruction from PDF text.") }),
           choice("spip-y7e-r5", 5, "Choose the sentence that best matches the Careers Centre notice.", [
             { value: "a", label: "The Careers Centre will give you a copy of any advertisement on this board." },
             { value: "b", label: "This board is used to advertise the work done by the Careers Centre." },
@@ -212,7 +211,7 @@
         label: "Reading Part 2",
         title: "Questions 6-10",
         hint: "Choose the market that is most suitable for each person.",
-        note: "Draft inferred answer key. Verify against the official key before activation.",
+        note: officialReadingNote,
         material: cityMarketsMaterial(),
         questions: [
           choice("spip-y7e-r6", 6, "Jenny wants locally-produced traditional food, somewhere convenient to eat, and a market near local attractions.", marketChoices(), "f"),
@@ -227,7 +226,7 @@
         label: "Reading Part 3",
         title: "Questions 11-15",
         hint: "Read the article and choose the correct answer.",
-        note: "Draft inferred answer key. Verify against the official key before activation.",
+        note: officialReadingNote,
         material: {
           title: "Artist Peter Fuller talks about his hobby",
           body: peterFullerText(),
@@ -270,7 +269,7 @@
         label: "Reading Part 4",
         title: "Questions 16-20",
         hint: "Five sentences have been removed from the text. Choose the correct sentence for each gap.",
-        note: "Draft inferred answer key. Verify against the official key before activation.",
+        note: officialReadingNote,
         material: newLifeMaterial(),
         questions: [
           choice("spip-y7e-r16", 16, "Gap 16", sentenceChoices(), "g"),
@@ -285,7 +284,7 @@
         label: "Writing",
         title: "Writing",
         hint: "Write 35-45 words.",
-        note: "This writing task is AI graded using a 5-mark rubric. The test remains inactive until staff review the full test.",
+        note: "This writing task is AI graded using a 5-mark rubric.",
         material: {
           title: "Writing",
           body: [

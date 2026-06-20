@@ -115,9 +115,9 @@
       title: "SPIP Year 7 English Pre-test",
       subject: "English",
       level: "SPIP Year 7",
-      status: "inactive",
+      status: "active",
       appPath: "../spip/year-7-english-pre/index.html",
-      databaseReady: false,
+      databaseReady: true,
     },
   ];
   let tests = builtinTests;
