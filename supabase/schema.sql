@@ -1085,7 +1085,7 @@ set search_path = public
 as $$
 begin
   perform require_staff_permission('generate_links');
-  if not exists (select 1 from tests where id = p_test_id and status = 'active') then
+  if not exists (select 1 from tests where tests.id = p_test_id and tests.status = 'active') then
     raise exception 'Cannot create assignment for inactive or missing test %', p_test_id;
   end if;
   return query
