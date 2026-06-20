@@ -233,7 +233,8 @@ values
   ('math-olympiad-3', 'Math Olympiad Level 3', 'Math', 'Math Olympiad 3', 'active', 30, '/apps/math-olympiad/level-3/index.html'),
   ('math-olympiad-4', 'Math Olympiad Level 4', 'Math', 'Math Olympiad 4', 'active', 30, '/apps/math-olympiad/level-4/index.html'),
   ('math-olympiad-5', 'Math Olympiad Level 5', 'Math', 'Math Olympiad 5', 'active', 30, '/apps/math-olympiad/level-5/index.html'),
-  ('math-olympiad-6', 'Math Olympiad Level 6', 'Math', 'Math Olympiad 6', 'active', 30, '/apps/math-olympiad/level-6/index.html')
+  ('math-olympiad-6', 'Math Olympiad Level 6', 'Math', 'Math Olympiad 6', 'active', 30, '/apps/math-olympiad/level-6/index.html'),
+  ('spip-year-7-english-pre', 'SPIP Year 7 English Pre-test', 'English', 'SPIP Year 7', 'inactive', 25, '/apps/spip/year-7-english-pre/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -241,6 +242,63 @@ on conflict (id) do update set
   status = excluded.status,
   total_points = excluded.total_points,
   app_path = excluded.app_path;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('spip-y7e-l1', 'spip-year-7-english-pre', 'Listening Part 1', 'What did the girl buy on her shopping trip?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 1),
+  ('spip-y7e-l2', 'spip-year-7-english-pre', 'Listening Part 1', 'Why did the plane leave late?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 2),
+  ('spip-y7e-l3', 'spip-year-7-english-pre', 'Listening Part 1', 'What activity does the woman want to book for the weekend?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 3),
+  ('spip-y7e-l4', 'spip-year-7-english-pre', 'Listening Part 1', 'Which cake will the girl order?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 4),
+  ('spip-y7e-l5', 'spip-year-7-english-pre', 'Listening Part 1', 'How much must customers spend to get a free gift?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 5),
+  ('spip-y7e-l6', 'spip-year-7-english-pre', 'Listening Part 1', 'What did the family do on Sunday?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 6),
+  ('spip-y7e-l7', 'spip-year-7-english-pre', 'Listening Part 1', 'Which programme is on first?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 7),
+  ('spip-y7e-l8', 'spip-year-7-english-pre', 'Listening Part 2', 'What does the girl say about the new clothes shop?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 8),
+  ('spip-y7e-l9', 'spip-year-7-english-pre', 'Listening Part 2', 'How would the pop band''s website be better?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 9),
+  ('spip-y7e-l10', 'spip-year-7-english-pre', 'Listening Part 2', 'How does the woman feel about winning an art competition?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 10),
+  ('spip-y7e-l11', 'spip-year-7-english-pre', 'Listening Part 2', 'What does the girl think about her flatmate?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 11),
+  ('spip-y7e-l12', 'spip-year-7-english-pre', 'Listening Part 2', 'Why do the friends agree their football team lost?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 12),
+  ('spip-y7e-l13', 'spip-year-7-english-pre', 'Listening Part 2', 'What does the boy want the girl to do after the tennis match?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 13),
+  ('spip-y7e-l14', 'spip-year-7-english-pre', 'Listening Part 3', 'In the National Gardens, the thing that attracted most people was the', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 14),
+  ('spip-y7e-l15', 'spip-year-7-english-pre', 'Listening Part 3', 'Electronic armbands kept the blank away.', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 15),
+  ('spip-y7e-l16', 'spip-year-7-english-pre', 'Listening Part 3', 'Anita almost fell off a', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 16),
+  ('spip-y7e-l17', 'spip-year-7-english-pre', 'Listening Part 3', 'In the capital city, Anita saw a blank in a theatre.', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 17),
+  ('spip-y7e-l18', 'spip-year-7-english-pre', 'Listening Part 3', 'Anita enjoyed visiting a farm where blank is produced.', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 18),
+  ('spip-y7e-l19', 'spip-year-7-english-pre', 'Listening Part 3', 'Anita bought some blank as gifts.', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 19),
+  ('spip-y7e-l20', 'spip-year-7-english-pre', 'Listening Part 4', 'Vicky first went in for competitions because', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 20),
+  ('spip-y7e-l21', 'spip-year-7-english-pre', 'Listening Part 4', 'As a teenager, Vicky''s training involved', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 21),
+  ('spip-y7e-l22', 'spip-year-7-english-pre', 'Listening Part 4', 'What did Vicky find hard about her training programme?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 22),
+  ('spip-y7e-l23', 'spip-year-7-english-pre', 'Listening Part 4', 'What helped Vicky to do well in the national finals?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 23),
+  ('spip-y7e-l24', 'spip-year-7-english-pre', 'Listening Part 4', 'As a swimming coach, Vicky thinks she is best at teaching people', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 24),
+  ('spip-y7e-l25', 'spip-year-7-english-pre', 'Listening Part 4', 'Why has Vicky started doing long-distance swimming?', '{"source":"rwAnswers","accepted":["__pending__"],"display":"Official listening key pending"}', null, 0, 25),
+  ('spip-y7e-r1', 'spip-year-7-english-pre', 'Reading Part 1', 'Choose the sentence that best matches the notice.', '{"source":"rwAnswers","accepted":["a"],"display":"A","status":"draft_inferred"}', null, 1, 26),
+  ('spip-y7e-r2', 'spip-year-7-english-pre', 'Reading Part 1', 'Adam is telling Rachel to', '{"source":"rwAnswers","accepted":["c"],"display":"C","status":"draft_inferred"}', null, 1, 27),
+  ('spip-y7e-r3', 'spip-year-7-english-pre', 'Reading Part 1', 'Choose the sentence that best matches the laboratory notice.', '{"source":"rwAnswers","accepted":["c"],"display":"C","status":"draft_inferred"}', null, 1, 28),
+  ('spip-y7e-r4', 'spip-year-7-english-pre', 'Reading Part 1', 'Choose the sentence that best matches Tom''s message to Jane.', '{"source":"rwAnswers","accepted":["b"],"display":"B","status":"draft_inferred"}', null, 1, 29),
+  ('spip-y7e-r5', 'spip-year-7-english-pre', 'Reading Part 1', 'Choose the sentence that best matches the Careers Centre notice.', '{"source":"rwAnswers","accepted":["a"],"display":"A","status":"draft_inferred"}', null, 1, 30),
+  ('spip-y7e-r6', 'spip-year-7-english-pre', 'Reading Part 2', 'Jenny wants locally-produced traditional food, somewhere convenient to eat, and a market near local attractions.', '{"source":"rwAnswers","accepted":["f"],"display":"F","status":"draft_inferred"}', null, 1, 31),
+  ('spip-y7e-r7', 'spip-year-7-english-pre', 'Reading Part 2', 'Matt wants reasonably priced clothes, something hot to eat, and rare recordings by different bands.', '{"source":"rwAnswers","accepted":["g"],"display":"G","status":"draft_inferred"}', null, 1, 32),
+  ('spip-y7e-r8', 'spip-year-7-english-pre', 'Reading Part 2', 'Sammie wants to visit after spending the day in the city, photograph a historic place, and buy a painting by an unknown artist.', '{"source":"rwAnswers","accepted":["b"],"display":"B","status":"draft_inferred"}', null, 1, 33),
+  ('spip-y7e-r9', 'spip-year-7-english-pre', 'Reading Part 2', 'Alexia wants a special necklace for her grandmother, to spend the whole day at the market, and to stay inside.', '{"source":"rwAnswers","accepted":["c"],"display":"C","status":"draft_inferred"}', null, 1, 34),
+  ('spip-y7e-r10', 'spip-year-7-english-pre', 'Reading Part 2', 'Ella wants objects from other countries, a second-hand book for the journey home, and a snack.', '{"source":"rwAnswers","accepted":["h"],"display":"H","status":"draft_inferred"}', null, 1, 35),
+  ('spip-y7e-r11', 'spip-year-7-english-pre', 'Reading Part 3', 'Peter enjoys mountain biking because', '{"source":"rwAnswers","accepted":["c"],"display":"C","status":"draft_inferred"}', null, 1, 36),
+  ('spip-y7e-r12', 'spip-year-7-english-pre', 'Reading Part 3', 'What does Peter say about cycling during his childhood?', '{"source":"rwAnswers","accepted":["c"],"display":"C","status":"draft_inferred"}', null, 1, 37),
+  ('spip-y7e-r13', 'spip-year-7-english-pre', 'Reading Part 3', 'Peter says he returned to cycling after several years', '{"source":"rwAnswers","accepted":["d"],"display":"D","status":"draft_inferred"}', null, 1, 38),
+  ('spip-y7e-r14', 'spip-year-7-english-pre', 'Reading Part 3', 'How does Peter feel about cycling now?', '{"source":"rwAnswers","accepted":["a"],"display":"A","status":"draft_inferred"}', null, 1, 39),
+  ('spip-y7e-r15', 'spip-year-7-english-pre', 'Reading Part 3', 'What would be a good introduction to this article?', '{"source":"rwAnswers","accepted":["b"],"display":"B","status":"draft_inferred"}', null, 1, 40),
+  ('spip-y7e-r16', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 16', '{"source":"rwAnswers","accepted":["g"],"display":"G","status":"draft_inferred"}', null, 1, 41),
+  ('spip-y7e-r17', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 17', '{"source":"rwAnswers","accepted":["e"],"display":"E","status":"draft_inferred"}', null, 1, 42),
+  ('spip-y7e-r18', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 18', '{"source":"rwAnswers","accepted":["f"],"display":"F","status":"draft_inferred"}', null, 1, 43),
+  ('spip-y7e-r19', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 19', '{"source":"rwAnswers","accepted":["b"],"display":"B","status":"draft_inferred"}', null, 1, 44),
+  ('spip-y7e-r20', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 20', '{"source":"rwAnswers","accepted":["d"],"display":"D","status":"draft_inferred"}', null, 1, 45),
+  ('spip-y7e-w1', 'spip-year-7-english-pre', 'Writing', 'Write a card to Jo apologising for not being able to go to the birthday party, explaining why you cannot go, and saying what present you are sending.', '{"source":"aiGrade","display":"5-mark AI writing rubric: apology, reason, present, and language/format/word count","status":"ai_graded"}', null, 5, 46)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
+  position = excluded.position;
 
 insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, position)
 values
@@ -1025,6 +1083,9 @@ set search_path = public
 as $$
 begin
   perform require_staff_permission('generate_links');
+  if not exists (select 1 from tests where id = p_test_id and status = 'active') then
+    raise exception 'Cannot create assignment for inactive or missing test %', p_test_id;
+  end if;
   return query
     insert into test_assignments (test_id, created_by)
     values (p_test_id, auth.uid())

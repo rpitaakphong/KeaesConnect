@@ -110,6 +110,15 @@
       appPath: "../math-olympiad/level-6/index.html",
       databaseReady: false,
     },
+    {
+      id: "spip-year-7-english-pre",
+      title: "SPIP Year 7 English Pre-test",
+      subject: "English",
+      level: "SPIP Year 7",
+      status: "inactive",
+      appPath: "../spip/year-7-english-pre/index.html",
+      databaseReady: false,
+    },
   ];
   let tests = builtinTests;
 
@@ -194,9 +203,10 @@
     if (!canCatalog() && !hasPermission("generate_links")) return;
     if (!tests.some((test) => test.id === selectedTestId)) selectedTestId = tests[0]?.id || null;
     document.querySelector("[data-test-list]").innerHTML = tests.map((test) => `
-      <button class="test-card ${test.databaseReady ? "" : "is-pending"} ${test.id === selectedTestId ? "is-selected" : ""}" type="button" data-test-id="${escapeHtml(test.id)}" aria-pressed="${test.id === selectedTestId ? "true" : "false"}">
+      <button class="test-card ${test.databaseReady ? "" : "is-pending"} ${test.status !== "active" ? "is-disabled" : ""} ${test.id === selectedTestId ? "is-selected" : ""}" type="button" data-test-id="${escapeHtml(test.id)}" aria-pressed="${test.id === selectedTestId ? "true" : "false"}">
         <h3>${escapeHtml(test.title)}</h3>
         <p>${escapeHtml(test.subject)} · ${escapeHtml(test.level)}</p>
+        ${test.status !== "active" ? `<p class="catalog-note">Inactive pilot · assignment links disabled</p>` : ""}
         ${test.databaseReady ? "" : "<p class=\"catalog-note\">Database setup needed before assignment links work.</p>"}
       </button>
     `).join("");
@@ -232,6 +242,10 @@
       const selected = selectedTest();
       if (!selected.databaseReady) {
         setShareMessage(`Run supabase/schema.sql before generating ${selected.title} assignment links.`);
+        return null;
+      }
+      if (selected.status !== "active") {
+        setShareMessage(`${selected.title} is inactive while official materials and answer keys are verified.`);
         return null;
       }
       try {
@@ -496,7 +510,7 @@
   function mergeTests(databaseTests) {
     const byId = new Map(builtinTests.map((test) => [test.id, test]));
     databaseTests.forEach((test) => byId.set(test.id, { ...byId.get(test.id), ...test }));
-    return Array.from(byId.values()).filter((test) => test.status === "active");
+    return Array.from(byId.values());
   }
 
   function normalizeAppPath(test) {
@@ -518,6 +532,7 @@
     if (testId === "math-olympiad-4") return "/apps/math-olympiad/level-4/index.html";
     if (testId === "math-olympiad-5") return "/apps/math-olympiad/level-5/index.html";
     if (testId === "math-olympiad-6") return "/apps/math-olympiad/level-6/index.html";
+    if (testId === "spip-year-7-english-pre") return "/apps/spip/year-7-english-pre/index.html";
     return "/apps/starter-listening/index.html";
   }
 

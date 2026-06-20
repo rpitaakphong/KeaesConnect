@@ -89,14 +89,12 @@
     const withAppPath = await client
       .from("tests")
       .select("id,title,subject,level,status,total_points,app_path")
-      .eq("status", "active")
       .order("title", { ascending: true });
     if (!withAppPath.error) return withAppPath.data || [];
 
     const { data, error } = await client
       .from("tests")
       .select("id,title,subject,level,status,total_points")
-      .eq("status", "active")
       .order("title", { ascending: true });
     if (error) throw error;
     return data || [];

@@ -288,6 +288,16 @@
       `;
     }
     if (!details || typeof details !== "object" || !("contentScore" in details)) return "";
+    if ("languageScore" in details || "wordCount" in details) {
+      return `
+        <div class="feedback">
+          <strong>AI writing feedback</strong>
+          <p>Content: ${formatScore(details.contentScore)}/3 · Language: ${formatScore(details.languageScore ?? details.writingScore)}/2 · Words: ${formatScore(details.wordCount)}</p>
+          <p>Apology: ${details.apology ? "yes" : "no"} · Reason: ${details.reason ? "yes" : "no"} · Present: ${details.present ? "yes" : "no"}</p>
+          ${details.feedback ? `<p>${escapeHtml(details.feedback)}</p>` : ""}
+        </div>
+      `;
+    }
     return `
       <div class="feedback">
         <strong>AI writing feedback</strong>
@@ -311,7 +321,59 @@
     if (testId?.startsWith("math-olympiad-") && !registry[testId]) {
       registry[testId] = await mathOlympiadRegistryFromConfig(testId);
     }
+    if (testId === "spip-year-7-english-pre") {
+      registry[testId] = await spipEnglishPretestRegistryFromConfig();
+    }
     return registry;
+  }
+
+  async function spipEnglishPretestRegistryFromConfig() {
+    try {
+      const response = await fetch("../spip/year-7-english-pre/config.js?v=spip-y7-english-pre");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const source = await response.text();
+      const sandbox = {};
+      new Function("window", source)(sandbox);
+      return spipRegistryFromData(sandbox.SpipEnglishPretestData);
+    } catch {
+      return { questions: {} };
+    }
+  }
+
+  function spipRegistryFromData(data) {
+    if (!data?.parts?.length) return { questions: {} };
+    const questions = {};
+    const partMaterials = {};
+    data.parts.forEach((part) => {
+      partMaterials[part.label] = spipMaterial(part);
+      (part.questions || []).forEach((question) => {
+        questions[question.id] = {
+          materials: {
+            note: question.pending
+              ? "Official listening answer key is pending for this question."
+              : part.note || "",
+            choices: (question.choices || []).map((choice) => choice.label),
+          },
+        };
+      });
+    });
+    return { questions, partMaterials };
+  }
+
+  function spipMaterial(part) {
+    const material = part.material || {};
+    const story = [
+      material.body || "",
+      material.lines ? material.lines.join("\n") : "",
+      material.cards ? material.cards.map(([letter, title, body]) => `${letter}. ${title}: ${body}`).join("\n\n") : "",
+    ].filter(Boolean).join("\n\n");
+    return {
+      note: part.note || "",
+      storyTitle: material.title || "",
+      story,
+      choices: material.choices ? material.choices.map((choice) => `${choice.value.toUpperCase()}. ${choice.label}`) : [],
+      images: [],
+    };
   }
 
   async function mathOlympiadRegistryFromConfig(testId) {
