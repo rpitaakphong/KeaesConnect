@@ -44,7 +44,7 @@
     subject: "English",
     level: "SPIP Year 7",
     totalPoints: 50,
-    answerKeyStatus: "official-listening-reading-ai-writing",
+    answerKeyStatus: "official-listening-reading-writing",
     audioStatus: "official-audio-available",
     audioSrc: "assets/audio/spip-y7-english-listening.mp3",
     parts: [
@@ -284,7 +284,7 @@
         label: "Writing",
         title: "Writing",
         hint: "Write 35-45 words.",
-        note: "This writing task is AI graded using a 5-mark rubric.",
+        note: "This writing task is scored using a 5-mark rubric.",
         material: {
           title: "Writing",
           body: [

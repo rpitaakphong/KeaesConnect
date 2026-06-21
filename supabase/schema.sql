@@ -292,7 +292,7 @@ values
   ('spip-y7e-r18', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 18', '{"source":"rwAnswers","accepted":["f"],"display":"F","status":"official"}', null, 1, 43),
   ('spip-y7e-r19', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 19', '{"source":"rwAnswers","accepted":["b"],"display":"B","status":"official"}', null, 1, 44),
   ('spip-y7e-r20', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 20', '{"source":"rwAnswers","accepted":["d"],"display":"D","status":"official"}', null, 1, 45),
-  ('spip-y7e-w1', 'spip-year-7-english-pre', 'Writing', 'Write a card to Jo apologising for not being able to go to the birthday party, explaining why you cannot go, and saying what present you are sending.', '{"source":"aiGrade","display":"5-mark AI writing rubric: apology, reason, present, and language/format/word count","status":"ai_graded"}', null, 5, 46)
+  ('spip-y7e-w1', 'spip-year-7-english-pre', 'Writing', 'Write a card to Jo apologising for not being able to go to the birthday party, explaining why you cannot go, and saying what present you are sending.', '{"source":"aiGrade","display":"5-mark writing rubric: apology, reason, present, and language/format/word count","status":"writing_rubric"}', null, 5, 46)
 on conflict (id) do update set
   test_id = excluded.test_id,
   part = excluded.part,

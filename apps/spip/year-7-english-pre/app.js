@@ -411,7 +411,7 @@
     const writingQuestions = allQuestions().filter((question) => question.responseType === "writing");
     if (!writingQuestions.length) return {};
     if (!window.KeaesApi?.gradeEnglishLiteracyShortAnswers) {
-      throw new Error("AI grading is not available. Ask staff to deploy the grading function before accepting SPIP writing submissions.");
+      throw new Error("Writing scoring is not available. Ask staff to deploy the grading function before accepting SPIP writing submissions.");
     }
     const grades = await window.KeaesApi.gradeEnglishLiteracyShortAnswers({
       testId,
@@ -425,7 +425,7 @@
     });
     const missingGrade = writingQuestions.find((question) => !grades?.[question.id] || typeof grades[question.id].score !== "number");
     if (missingGrade) {
-      throw new Error("AI grading did not return a complete SPIP writing score. Please try submitting again.");
+      throw new Error("Writing scoring did not return a complete SPIP writing score. Please try submitting again.");
     }
     return grades;
   }

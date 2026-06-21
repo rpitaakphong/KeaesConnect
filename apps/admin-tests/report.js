@@ -291,7 +291,7 @@
     if ("languageScore" in details || "wordCount" in details) {
       return `
         <div class="feedback">
-          <strong>AI writing feedback</strong>
+          <strong>Writing feedback</strong>
           <p>Content: ${formatScore(details.contentScore)}/3 · Language: ${formatScore(details.languageScore ?? details.writingScore)}/2 · Words: ${formatScore(details.wordCount)}</p>
           <p>Apology: ${details.apology ? "yes" : "no"} · Reason: ${details.reason ? "yes" : "no"} · Present: ${details.present ? "yes" : "no"}</p>
           ${details.feedback ? `<p>${escapeHtml(details.feedback)}</p>` : ""}
@@ -300,7 +300,7 @@
     }
     return `
       <div class="feedback">
-        <strong>AI writing feedback</strong>
+        <strong>Writing feedback</strong>
         <p>Content: ${formatScore(details.contentScore)}/0.5 · Writing: ${formatScore(details.writingScore)}/0.5</p>
         ${details.feedback ? `<p>${escapeHtml(details.feedback)}</p>` : ""}
       </div>
