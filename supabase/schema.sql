@@ -236,7 +236,8 @@ values
   ('math-olympiad-4', 'Math Olympiad Level 4', 'Math', 'Math Olympiad 4', 'active', 30, '/apps/math-olympiad/level-4/index.html'),
   ('math-olympiad-5', 'Math Olympiad Level 5', 'Math', 'Math Olympiad 5', 'active', 30, '/apps/math-olympiad/level-5/index.html'),
   ('math-olympiad-6', 'Math Olympiad Level 6', 'Math', 'Math Olympiad 6', 'active', 30, '/apps/math-olympiad/level-6/index.html'),
-  ('spip-year-7-english-pre', 'SPIP Year 7 English Pre-test', 'English', 'SPIP Year 7', 'active', 50, '/apps/spip/year-7-english-pre/index.html')
+  ('spip-year-7-english-pre', 'SPIP Year 7 English Pre-test', 'English', 'SPIP Year 7', 'active', 50, '/apps/spip/year-7-english-pre/index.html'),
+  ('spip-year-7-math-pre', 'SPIP Year 7 Math Pre-test', 'Math', 'SPIP Year 7', 'inactive', 40, '/apps/spip/year-7-math-pre/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -293,6 +294,47 @@ values
   ('spip-y7e-r19', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 19', '{"source":"rwAnswers","accepted":["b"],"display":"B","status":"official"}', null, 1, 44),
   ('spip-y7e-r20', 'spip-year-7-english-pre', 'Reading Part 4', 'A new life, gap 20', '{"source":"rwAnswers","accepted":["d"],"display":"D","status":"official"}', null, 1, 45),
   ('spip-y7e-w1', 'spip-year-7-english-pre', 'Writing', 'Write a card to Jo apologising for not being able to go to the birthday party, explaining why you cannot go, and saying what present you are sending.', '{"source":"aiGrade","display":"5-mark writing rubric: apology, reason, present, and language/format/word count","status":"writing_rubric"}', null, 5, 46)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
+  position = excluded.position;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('spip-y7m-q1', 'spip-year-7-math-pre', 'Questions 1-6', 'Join pairs of decimals to make 1.', '{"source":"mathMultiPart","display":"0.62+0.38; 0.25+0.75; 0.19+0.81; 0.56+0.44","parts":[{"id":"p1","accepted":["0.62 + 0.38","0.38 + 0.62","0.62,0.38","0.38,0.62"],"points":0.5},{"id":"p2","accepted":["0.25 + 0.75","0.75 + 0.25","0.25,0.75","0.75,0.25"],"points":0.5},{"id":"p3","accepted":["0.19 + 0.81","0.81 + 0.19","0.19,0.81","0.81,0.19"],"points":0.5},{"id":"p4","accepted":["0.56 + 0.44","0.44 + 0.56","0.56,0.44","0.44,0.56"],"points":0.5}]}', null, 2, 1),
+  ('spip-y7m-q2', 'spip-year-7-math-pre', 'Questions 1-6', 'Translate triangle A by 4 squares up and 2 squares left.', '{"source":"mathMultiPart","display":"Translated triangle, teacher reviewed","status":"review","parts":[{"id":"notes","accepted":["correct"],"points":1}]}', null, 1, 2),
+  ('spip-y7m-q3', 'spip-year-7-math-pre', 'Questions 1-6', 'Draw a ring around the largest number in each pair.', '{"source":"mathMultiPart","display":"9810; half a million; 15 060; 25; -271","parts":[{"id":"r1","accepted":["9810"],"points":0.4},{"id":"r2","accepted":["half a million","500000","500,000"],"points":0.4},{"id":"r3","accepted":["15060","15 060","15,060"],"points":0.4},{"id":"r4","accepted":["25"],"points":0.4},{"id":"r5","accepted":["-271"],"points":0.4}]}', null, 2, 3),
+  ('spip-y7m-q4', 'spip-year-7-math-pre', 'Questions 1-6', 'Write in figures: three hundredths.', '{"source":"mathMultiPart","display":"0.03","parts":[{"id":"answer","accepted":["0.03",".03","3/100"],"points":1}]}', null, 1, 4),
+  ('spip-y7m-q5', 'spip-year-7-math-pre', 'Questions 1-6', 'Calculate 6.8 + 17.38.', '{"source":"mathMultiPart","display":"24.18","parts":[{"id":"answer","accepted":["24.18"],"points":1}]}', null, 1, 5),
+  ('spip-y7m-q6', 'spip-year-7-math-pre', 'Questions 1-6', 'Write 1085 thousandths as a decimal.', '{"source":"mathMultiPart","display":"1.085","parts":[{"id":"answer","accepted":["1.085"],"points":1}]}', null, 1, 6),
+  ('spip-y7m-q7', 'spip-year-7-math-pre', 'Questions 7-14', 'The digital scale shows 16 500 g. Show this mass on the kg scale.', '{"source":"mathMultiPart","display":"16.5 kg","status":"review","parts":[{"id":"answer","accepted":["correct"],"points":1}]}', null, 1, 7),
+  ('spip-y7m-q8', 'spip-year-7-math-pre', 'Questions 7-14', 'The table shows the times for a race. Who was the third fastest runner and what was their time?', '{"source":"mathMultiPart","display":"Manjit, 14.5 seconds","parts":[{"id":"name","accepted":["manjit"],"points":1},{"id":"time","accepted":["14.5","14.50"],"points":1}]}', null, 2, 8),
+  ('spip-y7m-q9', 'spip-year-7-math-pre', 'Questions 7-14', 'Tick the two patterns that can be made with the stamp.', '{"source":"mathMultiPart","display":"Two correct patterns, teacher verified","status":"review","parts":[{"id":"selected","accepted":["correct"],"points":2}]}', null, 2, 9),
+  ('spip-y7m-q10', 'spip-year-7-math-pre', 'Questions 7-14', 'In the number 485 136, what is the value of the 4?', '{"source":"mathMultiPart","display":"400 000","parts":[{"id":"answer","accepted":["400000","400,000","four hundred thousand"],"points":1}]}', null, 1, 10),
+  ('spip-y7m-q11', 'spip-year-7-math-pre', 'Questions 7-14', 'A train leaves at 08:00 and the journey takes 7 hours. Write the start and finish times.', '{"source":"mathMultiPart","display":"8 am; 3 pm","parts":[{"id":"start","accepted":["8 am","8am","08:00","8:00"],"points":1},{"id":"finish","accepted":["3 pm","3pm","15:00","3:00 pm"],"points":1}]}', null, 2, 11),
+  ('spip-y7m-q12', 'spip-year-7-math-pre', 'Questions 7-14', 'Fill in the missing numbers.', '{"source":"mathMultiPart","display":"270; 5.5","parts":[{"id":"a","accepted":["270"],"points":0.5},{"id":"b","accepted":["5.5","5 1/2","11/2"],"points":0.5}]}', null, 1, 12),
+  ('spip-y7m-q13', 'spip-year-7-math-pre', 'Questions 7-14', 'Write the missing digits in the boxes.', '{"source":"mathMultiPart","display":"1; 9; 3; 7","parts":[{"id":"a","accepted":["1"],"points":0.5},{"id":"b","accepted":["9"],"points":0.5},{"id":"c","accepted":["3"],"points":0.5},{"id":"d","accepted":["7"],"points":0.5}]}', null, 2, 13),
+  ('spip-y7m-q14', 'spip-year-7-math-pre', 'Questions 7-14', 'Draw a line to match each statement to its likelihood.', '{"source":"mathMultiPart","display":"multiple of 4 -> unlikely; 4 digits -> impossible; odd -> even chance","status":"review","parts":[{"id":"matches","accepted":["correct"],"points":2}]}', null, 2, 14),
+  ('spip-y7m-q15', 'spip-year-7-math-pre', 'Questions 15-21', 'Write the missing numbers.', '{"source":"mathMultiPart","display":"1500; 100","parts":[{"id":"a","accepted":["1500","1,500"],"points":1},{"id":"b","accepted":["100"],"points":1}]}', null, 2, 15),
+  ('spip-y7m-q16', 'spip-year-7-math-pre', 'Questions 15-21', 'What is 25% of 56?', '{"source":"mathMultiPart","display":"14","parts":[{"id":"answer","accepted":["14"],"points":1}]}', null, 1, 16),
+  ('spip-y7m-q17', 'spip-year-7-math-pre', 'Questions 15-21', 'The sports club table shows pupils attending activities. Which pupils attended all three activities?', '{"source":"mathMultiPart","display":"Rajiv, Hassan, Youssef","parts":[{"id":"selected","accepted":["hassan,rajiv,youssef","hassan,youssef,rajiv","rajiv,hassan,youssef","rajiv,youssef,hassan","youssef,hassan,rajiv","youssef,rajiv,hassan"],"points":2}]}', null, 2, 17),
+  ('spip-y7m-q18', 'spip-year-7-math-pre', 'Questions 15-21', 'Write the time shown on the clock, then write the time 2 hours 15 minutes later.', '{"source":"mathMultiPart","display":"10:47; 13:02","parts":[{"id":"a","accepted":["10:47","10.47"],"points":1},{"id":"b","accepted":["13:02","1:02 pm","1.02 pm"],"points":1}]}', null, 2, 18),
+  ('spip-y7m-q19', 'spip-year-7-math-pre', 'Questions 15-21', 'Write the missing numbers in the multiplication grid.', '{"source":"mathMultiPart","display":"1.2; 0.4; 2.4; 2.8","parts":[{"id":"a","accepted":["1.2"],"points":0.5},{"id":"b","accepted":["0.4"],"points":0.5},{"id":"c","accepted":["2.4"],"points":0.5},{"id":"d","accepted":["2.8"],"points":0.5}]}', null, 2, 19),
+  ('spip-y7m-q20', 'spip-year-7-math-pre', 'Questions 15-21', 'Write the missing numbers in the sequence.', '{"source":"mathMultiPart","display":"255; -45","parts":[{"id":"a","accepted":["255"],"points":1},{"id":"b","accepted":["-45"],"points":1}]}', null, 2, 20),
+  ('spip-y7m-q21', 'spip-year-7-math-pre', 'Questions 15-21', 'Find the missing angles.', '{"source":"mathMultiPart","display":"33; 158","parts":[{"id":"a","accepted":["33","32","34"],"points":1},{"id":"b","accepted":["158","158 degrees"],"points":1}]}', null, 2, 21),
+  ('spip-y7m-q22', 'spip-year-7-math-pre', 'Questions 22-30', 'Write in the missing digits to make the calculation correct.', '{"source":"mathMultiPart","display":"3.58 + 2.05 = 5.63","parts":[{"id":"top","accepted":["5"],"points":0.34},{"id":"bottomLeft","accepted":["2"],"points":0.33},{"id":"bottomRight","accepted":["5"],"points":0.33}]}', null, 1, 22),
+  ('spip-y7m-q23', 'spip-year-7-math-pre', 'Questions 22-30', 'Write the missing number in each box.', '{"source":"mathMultiPart","display":"7450.3; 603.19","parts":[{"id":"a","accepted":["7450.3","7,450.3"],"points":1},{"id":"b","accepted":["603.19"],"points":1}]}', null, 2, 23),
+  ('spip-y7m-q24', 'spip-year-7-math-pre', 'Questions 22-30', 'Use 26 x 15 = 390 to show how to work out 26 x 14.', '{"source":"mathMultiPart","display":"390 - 26 = 364","status":"review","parts":[{"id":"answer","accepted":["correct"],"points":2}]}', null, 2, 24),
+  ('spip-y7m-q25', 'spip-year-7-math-pre', 'Questions 22-30', 'Put these values in order from smallest to largest: 0.65, 2/3, 0.57, 3/5.', '{"source":"mathMultiPart","display":"0.57, 3/5, 0.65, 2/3","parts":[{"id":"a","accepted":["0.57"],"points":0.25},{"id":"b","accepted":["3/5","0.6"],"points":0.25},{"id":"c","accepted":["0.65"],"points":0.25},{"id":"d","accepted":["2/3","0.666","0.667"],"points":0.25}]}', null, 1, 25),
+  ('spip-y7m-q26', 'spip-year-7-math-pre', 'Questions 22-30', 'Write three numbers with a mode of 6 and a mean of 7.', '{"source":"mathMultiPart","display":"6, 6, 9","parts":[{"id":"a","accepted":["6"],"points":0.67},{"id":"b","accepted":["6"],"points":0.67},{"id":"c","accepted":["9"],"points":0.66}]}', null, 2, 26),
+  ('spip-y7m-q27', 'spip-year-7-math-pre', 'Questions 22-30', 'Yuri says that 6/8 is larger than 3/4. Is Yuri correct? Use a calculation to explain.', '{"source":"mathMultiPart","display":"No, because 6/8 = 3/4","status":"review","parts":[{"id":"answer","accepted":["correct"],"points":2}]}', null, 2, 27),
+  ('spip-y7m-q28', 'spip-year-7-math-pre', 'Questions 22-30', 'Finn counts in steps of 0.3 starting at 1. What is the 10th number he says?', '{"source":"mathMultiPart","display":"3.7","parts":[{"id":"answer","accepted":["3.7"],"points":1}]}', null, 1, 28),
+  ('spip-y7m-q29', 'spip-year-7-math-pre', 'Questions 22-30', 'Write 8/5 as a mixed number.', '{"source":"mathMultiPart","display":"1 3/5","parts":[{"id":"answer","accepted":["1 3/5","1.6","8/5"],"points":1}]}', null, 1, 29),
+  ('spip-y7m-q30', 'spip-year-7-math-pre', 'Questions 22-30', 'Reflect the shaded shape in the mirror line.', '{"source":"mathMultiPart","display":"Correct reflected shape, teacher reviewed","status":"review","parts":[{"id":"cells","accepted":["correct"],"points":2}]}', null, 2, 30)
 on conflict (id) do update set
   test_id = excluded.test_id,
   part = excluded.part,

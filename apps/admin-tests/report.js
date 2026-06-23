@@ -324,6 +324,9 @@
     if (testId === "spip-year-7-english-pre") {
       registry[testId] = await spipEnglishPretestRegistryFromConfig();
     }
+    if (testId === "spip-year-7-math-pre") {
+      registry[testId] = await spipMathPretestRegistryFromConfig();
+    }
     return registry;
   }
 
@@ -335,6 +338,19 @@
       const sandbox = {};
       new Function("window", source)(sandbox);
       return spipRegistryFromData(sandbox.SpipEnglishPretestData);
+    } catch {
+      return { questions: {} };
+    }
+  }
+
+  async function spipMathPretestRegistryFromConfig() {
+    try {
+      const response = await fetch("../spip/year-7-math-pre/config.js?v=spip-y7-math-pre");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const source = await response.text();
+      const sandbox = {};
+      new Function("window", source)(sandbox);
+      return spipRegistryFromData(sandbox.SpipYear7MathPretestData);
     } catch {
       return { questions: {} };
     }
