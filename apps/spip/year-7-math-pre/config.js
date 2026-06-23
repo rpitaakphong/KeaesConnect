@@ -32,7 +32,7 @@
     title: "SPIP Year 7 Math Pre-test",
     subject: "Math",
     level: "SPIP Year 7",
-    status: "inactive",
+    status: "active",
     totalPoints: 40,
     answerKeyStatus: "official-paper-1-key-with-review-items",
     parts: [
@@ -100,7 +100,7 @@
         id: "paper1b",
         label: "Questions 7-14",
         title: "Measures, patterns, and fractions",
-        hint: "Some diagrams are for layout review before this inactive test is activated.",
+        hint: "Some drawing questions are collected for teacher review.",
         questions: [
           q("spip-y7m-q7", 7, "The digital scale shows 16 500 g. Show this mass on the kg scale.", 1, "scaleReview", {
             reviewRequired: true,

@@ -237,7 +237,7 @@ values
   ('math-olympiad-5', 'Math Olympiad Level 5', 'Math', 'Math Olympiad 5', 'active', 30, '/apps/math-olympiad/level-5/index.html'),
   ('math-olympiad-6', 'Math Olympiad Level 6', 'Math', 'Math Olympiad 6', 'active', 30, '/apps/math-olympiad/level-6/index.html'),
   ('spip-year-7-english-pre', 'SPIP Year 7 English Pre-test', 'English', 'SPIP Year 7', 'active', 50, '/apps/spip/year-7-english-pre/index.html'),
-  ('spip-year-7-math-pre', 'SPIP Year 7 Math Pre-test', 'Math', 'SPIP Year 7', 'inactive', 40, '/apps/spip/year-7-math-pre/index.html')
+  ('spip-year-7-math-pre', 'SPIP Year 7 Math Pre-test', 'Math', 'SPIP Year 7', 'active', 40, '/apps/spip/year-7-math-pre/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,

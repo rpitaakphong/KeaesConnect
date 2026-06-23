@@ -124,7 +124,7 @@
       title: "SPIP Year 7 Math Pre-test",
       subject: "Math",
       level: "SPIP Year 7",
-      status: "inactive",
+      status: "active",
       appPath: "../spip/year-7-math-pre/index.html",
       databaseReady: true,
     },
