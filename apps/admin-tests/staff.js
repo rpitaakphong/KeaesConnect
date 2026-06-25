@@ -7,6 +7,7 @@
     { key: "generate_links", label: "Generate links" },
     { key: "view_results", label: "View results" },
     { key: "view_reports", label: "View reports" },
+    { key: "hours_cross_check", label: "Hours cross-check" },
     { key: "staff_management", label: "Staff management" },
   ];
 

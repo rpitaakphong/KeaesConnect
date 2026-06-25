@@ -39,12 +39,39 @@ create table if not exists staff_permissions (
     'generate_links',
     'view_results',
     'view_reports',
+    'hours_cross_check',
     'staff_management'
   )),
   granted_by uuid references staff_users(id),
   granted_at timestamptz not null default now(),
   primary key (staff_id, feature_key)
 );
+
+do $$
+declare
+  permission_constraint_name text;
+begin
+  select conname into permission_constraint_name
+  from pg_constraint
+  where conrelid = 'public.staff_permissions'::regclass
+    and contype = 'c'
+    and pg_get_constraintdef(oid) like '%feature_key%';
+
+  if permission_constraint_name is not null then
+    execute format('alter table staff_permissions drop constraint %I', permission_constraint_name);
+  end if;
+end $$;
+
+alter table staff_permissions
+  add constraint staff_permissions_feature_key_check check (feature_key in (
+    'dashboard',
+    'test_catalog',
+    'generate_links',
+    'view_results',
+    'view_reports',
+    'hours_cross_check',
+    'staff_management'
+  ));
 
 create table if not exists tests (
   id text primary key,
@@ -1158,6 +1185,7 @@ begin
       'generate_links',
       'view_results',
       'view_reports',
+      'hours_cross_check',
       'staff_management'
     )
     order by permission

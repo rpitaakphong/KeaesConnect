@@ -12,6 +12,7 @@ const featureKeys = new Set([
   "generate_links",
   "view_results",
   "view_reports",
+  "hours_cross_check",
   "staff_management",
 ]);
 
