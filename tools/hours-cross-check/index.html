@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="../../assets/css/base.css?v=shared-theme">
   <link rel="stylesheet" href="../../assets/css/portal.css?v=shared-theme">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=admin-shell">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="../../assets/js/supabase-config.js"></script>
   <script defer src="../../assets/js/keaes-api.js"></script>
@@ -20,25 +20,15 @@
   <a class="skip-link" href="#main">Skip to main content</a>
   <div data-portal-header></div>
 
-  <main id="main" class="app-shell">
-    <div class="tool-topbar">
-      <a class="ghost-button" href="../../dashboard.html"><i data-lucide="arrow-left"></i> Back to Dashboard</a>
-      <span class="badge soft">Operations</span>
-    </div>
-    <header class="hero">
+  <main id="main" class="admin-shell">
+    <section class="hero-panel">
       <div>
-        <p class="eyebrow">Keaes Academics Tutorial Centre</p>
+        <p class="eyebrow">Operations</p>
         <h1>Class-Hours Reconciliation</h1>
-        <p class="hero-copy">Cross-check monthly Teach and Go records against the raw class-list CSV export, verify teacher names, and export an audit-ready report.</p>
+        <p>Cross-check monthly Teach and Go records against the raw class-list CSV export, verify teacher names, and export an audit-ready report.</p>
       </div>
-      <div class="privacy-card">
-        <i data-lucide="shield-check" aria-hidden="true"></i>
-        <div>
-          <strong>Private by design</strong>
-          <span>Your class data stays in this browser. No files are uploaded to a server.</span>
-        </div>
-      </div>
-    </header>
+      <div class="backend-badge">Local-only</div>
+    </section>
 
     <section id="uploadStep" class="panel step-panel is-active" aria-labelledby="uploadTitle">
       <div class="section-heading">
@@ -108,7 +98,7 @@
       </div>
     </section>
 
-    <section id="resultsStep" class="step-panel" aria-labelledby="resultsTitle">
+    <section id="resultsStep" class="panel step-panel" aria-labelledby="resultsTitle">
       <div class="dashboard-header">
         <div>
           <p class="eyebrow">Results dashboard</p>
