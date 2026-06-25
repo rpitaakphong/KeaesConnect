@@ -123,7 +123,7 @@
       hint: "Choose true or false, then answer the short questions.",
       storyTitle: "Dolphins",
       story: storyText,
-      storyImage: "assets/dolphin.svg",
+      storyImage: "assets/dolphin.png",
       questions: [
         choice("el4-q21", "21. Dolphins are aquatic mammals.", ["true", "false"]),
         choice("el4-q22", "22. There are 30 different species of dolphins that have been recognized.", ["true", "false"]),

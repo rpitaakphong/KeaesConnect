@@ -136,7 +136,7 @@
       hint: "Write short answers. These answers are graded by AI when you submit.",
       storyTitle: "World's Largest Seal",
       story: storyText,
-      storyImage: "assets/elephant-seal.svg",
+      storyImage: "assets/elephant-seal.png",
       questions: [
         shortAnswer("el5-q26", "26. Describe how an elephant seal's movements are different on land than in the water."),
         shortAnswer("el5-q27", "27. Why do male elephant seals arrive on land before females during the breeding season?"),

@@ -132,7 +132,7 @@
       hint: "Choose true or false, then answer the short questions.",
       storyTitle: "Coca Cola",
       story: storyText,
-      storyImage: "assets/cola-bottle.svg",
+      storyImage: "assets/cola-bottle.png",
       questions: [
         choice("el3-q21", "21. Coca Cola was invented in June, 1886.", ["true", "false"]),
         choice("el3-q22", "22. Dr. John Pemberton is a pharmacist.", ["true", "false"]),

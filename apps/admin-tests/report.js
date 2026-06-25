@@ -318,9 +318,9 @@
       "starter-progress-listening": starterRegistry(),
       "english-literacy-1": englishLevel1Registry(),
       "english-literacy-2": englishLevel2Registry(),
-      "english-literacy-3": readingRegistry("el3", 21, 30, "Cola History", "../english-literacy/level-3/assets/cola-bottle.svg", colaStory()),
-      "english-literacy-4": readingRegistry("el4", 21, 30, "Dolphins", "../english-literacy/level-4/assets/dolphin.svg", dolphinStory()),
-      "english-literacy-5": readingRegistry("el5", 26, 30, "World's Largest Seal", "../english-literacy/level-5/assets/elephant-seal.svg", sealStory()),
+      "english-literacy-3": readingRegistry("el3", 21, 30, "Cola History", "../english-literacy/level-3/assets/cola-bottle.png", colaStory()),
+      "english-literacy-4": readingRegistry("el4", 21, 30, "Dolphins", "../english-literacy/level-4/assets/dolphin.png", dolphinStory()),
+      "english-literacy-5": readingRegistry("el5", 26, 30, "World's Largest Seal", "../english-literacy/level-5/assets/elephant-seal.png", sealStory()),
       "math-olympiad-1": mathLevel1Registry(),
     };
     if (testId?.startsWith("math-olympiad-") && !registry[testId]) {
