@@ -126,7 +126,11 @@
   function needsReview(answer) {
     const possible = Number(answer.possible ?? 1);
     const score = Number(answer.score ?? (answer.correct ? possible : 0));
-    return !answer.correct || score < possible;
+    return !answer.correct || score < possible || hasReviewRecommendedPart(answer.gradingDetails);
+  }
+
+  function hasReviewRecommendedPart(details) {
+    return Boolean(details?.reviewRecommended) || Boolean(details?.parts?.some((part) => part.reviewRecommended));
   }
 
   function renderQuestionSummary(answers) {
@@ -284,6 +288,7 @@
         <div class="feedback">
           <strong>Subpart scoring</strong>
           <p>${details.parts.map((part) => `${escapeHtml(part.id)}: ${formatScore(part.score)}/${formatScore(part.possible)}`).join(" · ")}</p>
+          ${details.parts.some((part) => part.reviewRecommended) ? `<p>Teacher review recommended for keyword or drawing-based scoring.</p>` : ""}
         </div>
       `;
     }
@@ -327,6 +332,9 @@
     if (testId === "spip-year-7-math-pre") {
       registry[testId] = await spipMathPretestRegistryFromConfig();
     }
+    if (testId === "spip-year-7-science-pre") {
+      registry[testId] = await spipSciencePretestRegistryFromConfig();
+    }
     return registry;
   }
 
@@ -356,6 +364,19 @@
     }
   }
 
+  async function spipSciencePretestRegistryFromConfig() {
+    try {
+      const response = await fetch("../spip/year-7-science-pre/config.js?v=spip-y7-science-pre");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const source = await response.text();
+      const sandbox = {};
+      new Function("window", source)(sandbox);
+      return spipRegistryFromData(sandbox.SpipYear7SciencePretestData);
+    } catch {
+      return { questions: {} };
+    }
+  }
+
   function spipRegistryFromData(data) {
     if (!data?.parts?.length) return { questions: {} };
     const questions = {};
@@ -369,11 +390,30 @@
               ? "Official listening answer key is pending for this question."
               : part.note || "",
             choices: (question.choices || []).map((choice) => choice.label),
+            images: spipQuestionImages(data, question),
           },
         };
       });
     });
     return { questions, partMaterials };
+  }
+
+  function spipQuestionImages(data, question) {
+    const basePath = spipConfigBasePath(data.testId);
+    const visuals = question.visual ? (Array.isArray(question.visual) ? question.visual : [question.visual]) : [];
+    return visuals.map((visual) => ({
+      src: `${basePath}${visual.src}`,
+      alt: visual.alt || "",
+      label: visual.alt || "",
+      wide: Boolean(visual.wide || Number(visual.maxWidth || 0) > 760),
+    }));
+  }
+
+  function spipConfigBasePath(testId) {
+    if (testId === "spip-year-7-english-pre") return "../spip/year-7-english-pre/";
+    if (testId === "spip-year-7-math-pre") return "../spip/year-7-math-pre/";
+    if (testId === "spip-year-7-science-pre") return "../spip/year-7-science-pre/";
+    return "";
   }
 
   function spipMaterial(part) {

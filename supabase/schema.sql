@@ -237,7 +237,8 @@ values
   ('math-olympiad-5', 'Math Olympiad Level 5', 'Math', 'Math Olympiad 5', 'active', 30, '/apps/math-olympiad/level-5/index.html'),
   ('math-olympiad-6', 'Math Olympiad Level 6', 'Math', 'Math Olympiad 6', 'active', 30, '/apps/math-olympiad/level-6/index.html'),
   ('spip-year-7-english-pre', 'SPIP Year 7 English Pre-test', 'English', 'SPIP Year 7', 'active', 50, '/apps/spip/year-7-english-pre/index.html'),
-  ('spip-year-7-math-pre', 'SPIP Year 7 Math Pre-test', 'Math', 'SPIP Year 7', 'active', 40, '/apps/spip/year-7-math-pre/index.html')
+  ('spip-year-7-math-pre', 'SPIP Year 7 Math Pre-test', 'Math', 'SPIP Year 7', 'active', 40, '/apps/spip/year-7-math-pre/index.html'),
+  ('spip-year-7-science-pre', 'SPIP Year 7 Science Pre-test', 'Science', 'SPIP Year 7', 'active', 50, '/apps/spip/year-7-science-pre/index.html')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -335,6 +336,52 @@ values
   ('spip-y7m-q28', 'spip-year-7-math-pre', 'Questions 22-30', 'Finn counts in steps of 0.3 starting at 1. What is the 10th number he says?', '{"source":"mathMultiPart","display":"3.7","parts":[{"id":"answer","accepted":["3.7"],"points":1}]}', null, 1, 28),
   ('spip-y7m-q29', 'spip-year-7-math-pre', 'Questions 22-30', 'Write 8/5 as a mixed number.', '{"source":"mathMultiPart","display":"1 3/5","parts":[{"id":"answer","accepted":["1 3/5","1.6","8/5"],"points":1}]}', null, 1, 29),
   ('spip-y7m-q30', 'spip-year-7-math-pre', 'Questions 22-30', 'Reflect the shaded shape in the mirror line.', '{"source":"mathMultiPart","display":"Correct reflected shape, teacher reviewed","status":"review","parts":[{"id":"cells","accepted":["correct"],"points":2}]}', null, 2, 30)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
+  position = excluded.position;
+
+insert into test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('spip-y7s-q1', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 1: Some materials are electrical conductors and others are electrical insulators. Complete the table about these materials.', '{"source":"mathMultiPart","display":"copper: conductor; graphite: conductor; plastic, rubber, wood: insulator","parts":[{"id":"copper","accepted":["conductor"],"points":0.6},{"id":"graphite","accepted":["conductor"],"points":0.6},{"id":"plastic","accepted":["insulator"],"points":0.6},{"id":"rubber","accepted":["insulator"],"points":0.6},{"id":"wood","accepted":["insulator"],"points":0.6}],"scoreThresholds":[{"minCorrect":5,"points":3},{"minCorrect":3,"points":2},{"minCorrect":1,"points":1}]}', null, 3, 1),
+  ('spip-y7s-q2', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 2: Label the organs on the diagram of a human body.', '{"source":"mathMultiPart","display":"brain; heart; lung; stomach; kidney; small intestine","parts":[{"id":"brain","accepted":["brain"],"points":0.5},{"id":"heart","accepted":["heart"],"points":0.5},{"id":"kidney","accepted":["kidney","kidneys"],"points":0.5},{"id":"lungs","accepted":["lung","lungs"],"points":0.5},{"id":"stomach","accepted":["stomach"],"points":0.5},{"id":"intestines","accepted":["intestine","intestines","small intestine"],"points":0.5}],"scoreThresholds":[{"minCorrect":6,"points":3},{"minCorrect":4,"points":2},{"minCorrect":2,"points":1}]}', null, 3, 2),
+  ('spip-y7s-q3', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 3: Mike is exploring electrical circuits. The lamps are very dim. What can he do to make the lamps brighter?', '{"source":"mathMultiPart","display":"add another cell","parts":[{"id":"answer","accepted":["add another cell"],"points":1}]}', null, 1, 3),
+  ('spip-y7s-q4a', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 4(a): Blessy keeps the temperature of the water for each solid the same. Explain why.', '{"source":"mathMultiPart","display":"So it is a fair test because temperature affects how much solid dissolves.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["fair","test"],["temperature","affect","dissolv"],["same","compare"],["hotter","dissolv"],["colder","dissolv"],["different","amount"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 4),
+  ('spip-y7s-q4b', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 4(b): Blessy thinks it is a good idea to repeat her investigation. Explain why.', '{"source":"mathMultiPart","display":"Repeating makes the results more reliable and helps check for mistakes.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["reliable"],["accurate"],["check","mistake"],["average"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 5),
+  ('spip-y7s-q4c', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 4(c): Blessy has started to draw a bar chart of the results. Complete the bar chart. Include the scale on the y-axis, label on the y-axis, and the other three bars and their labels.', '{"source":"mathMultiPart","display":"scale 10, 20, 30; fertiliser 30 g; salt 8 g; baking powder 5 g","parts":[{"id":"scale_top","accepted":["30","30 g"],"points":0.25},{"id":"scale_middle","accepted":["20","20 g"],"points":0.25},{"id":"scale_bottom","accepted":["10","10 g"],"points":0.25},{"id":"solid_4","accepted":["fertiliser","fertilizer"],"points":0.25},{"id":"fertiliser","accepted":["30","30 g"],"points":0.5},{"id":"solid_5","accepted":["salt"],"points":0.25},{"id":"salt","accepted":["8","8 g"],"points":0.5},{"id":"solid_6","accepted":["baking powder"],"points":0.25},{"id":"baking_powder","accepted":["5","5 g"],"points":0.5}],"status":"reviewRecommended"}', null, 3, 6),
+  ('spip-y7s-q4d', 'spip-year-7-science-pre', 'Questions 1-4', 'Question 4(d): Which solid is the most soluble in water?', '{"source":"mathMultiPart","display":"fertiliser","parts":[{"id":"answer","accepted":["fertiliser","fertilizer"],"points":1}]}', null, 1, 7),
+  ('spip-y7s-q5a', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 5(a): Use the information to draw a food chain. Draw arrows between the boxes to show the direction of energy flow.', '{"source":"mathMultiPart","display":"leaf -> caterpillar -> bird -> snake -> owl","parts":[{"id":"pos1","accepted":["leaf"],"points":0.4},{"id":"pos2","accepted":["caterpillar"],"points":0.4},{"id":"pos3","accepted":["bird"],"points":0.4},{"id":"pos4","accepted":["snake"],"points":0.4},{"id":"pos5","accepted":["owl"],"points":0.4}]}', null, 2, 8),
+  ('spip-y7s-q5b', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 5(b): Which living thing is the producer in this food chain?', '{"source":"mathMultiPart","display":"leaf","parts":[{"id":"answer","accepted":["leaf","plant","the leaf","tree"],"points":1}]}', null, 1, 9),
+  ('spip-y7s-q6a', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 6(a): Yuri wants to separate a mixture of salt, sand and water. What dissolves in stage B?', '{"source":"mathMultiPart","display":"salt","parts":[{"id":"answer","accepted":["salt"],"points":1}]}', null, 1, 10),
+  ('spip-y7s-q6b', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 6(b): What is substance X?', '{"source":"mathMultiPart","display":"salt","parts":[{"id":"answer","accepted":["salt","wet salt"],"points":1}]}', null, 1, 11),
+  ('spip-y7s-q7a', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 7(a): Complete Lily''s sentences. Choose from: centimetres, kilograms, newtons, seconds.', '{"source":"mathMultiPart","display":"Mass: kilograms; Weight: newtons; Force: newtons","parts":[{"id":"mass","accepted":["kilograms","kg"],"points":1},{"id":"weight","accepted":["newtons","newton"],"points":1},{"id":"force","accepted":["newtons","newton"],"points":1}]}', null, 3, 12),
+  ('spip-y7s-q7b', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 7(b): Choose the arrow that shows the direction of the force of gravity on Lily.', '{"source":"mathMultiPart","display":"down","parts":[{"id":"answer","accepted":["down"],"points":1}]}', null, 1, 13),
+  ('spip-y7s-q8a', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 8(a): Only one solid can be separated from water by filtration. Which one?', '{"source":"mathMultiPart","display":"C","parts":[{"id":"answer","accepted":["C"],"points":1}]}', null, 1, 14),
+  ('spip-y7s-q8b', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 8(b): There is a reversible change when solid A is added to water. Describe how you could reverse this change.', '{"source":"mathMultiPart","display":"Heat it, evaporate the water, or leave it in the Sun to get the solid back.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["evaporat"],["heat"],["sun"],["water","solid"],["crystal"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 15),
+  ('spip-y7s-q8c', 'spip-year-7-science-pre', 'Questions 5-8', 'Question 8(c): Two of the solids have an irreversible change when added to water. Write the letter of one of these solids. Explain how you can tell from the results.', '{"source":"mathMultiPart","display":"D because it fizzes/forms gas, or E because the temperature changes/gets colder.","parts":[{"id":"letter","accepted":["D","E"],"points":1},{"id":"explanation","accepted":[],"points":1,"normalizer":"keywords","keywords":[["fizz"],["gas"],["bubble"],["colder"],["temperature","change"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 2, 16),
+  ('spip-y7s-q9a', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 9(a): Mike must use the heart machine to stay alive. Explain what the heart machine does.', '{"source":"mathMultiPart","display":"It does the work of the heart: it pumps blood around the body, supplying oxygen and food/nutrients to organs.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["does","heart"],["place","heart"],["instead","heart"],["takes","heart"],["heart","normally"]],"reviewRecommended":true},{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["pump","blood"],["circulat","blood"]],"reviewRecommended":true},{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["oxygen"]],"reviewRecommended":true},{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["food"],["nutrient"]],"reviewRecommended":true},{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["organ"],["around","body"],["body"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 2, 17),
+  ('spip-y7s-q9b', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 9(b): Mike takes the extra heart machine with him when he goes outside. Explain why Mike needs an extra heart machine.', '{"source":"mathMultiPart","display":"In case the first heart machine or its batteries stop working or break.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["break"],["stop","work"],["fail"],["backup"],["spare"],["battery"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 18),
+  ('spip-y7s-q10', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 10: Draw a line from the statement to the correct explanation.', '{"source":"mathMultiPart","display":"A rollercoaster is able to climb up the hill because its movement gives it the energy to get to the top of the hill.","parts":[{"id":"climb","accepted":["movement energy"],"points":1}]}', null, 1, 19),
+  ('spip-y7s-q11a', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 11(a): Glass, plastic and metal can be recycled. Write down the name of another material that can be recycled.', '{"source":"mathMultiPart","display":"paper, card/cardboard, cloth, books, magazines, batteries, or ink cartridges","parts":[{"id":"answer","accepted":["paper","cardboard","card","cloth","book","books","magazine","magazines","clothes","battery","batteries","ink cartridge","ink cartridges"],"points":1}]}', null, 1, 20),
+  ('spip-y7s-q11b', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 11(b): Complete the sentences about why the diaper cannot be recycled and how to reduce waste in the environment.', '{"source":"mathMultiPart","display":"It is dirty, toxic, or contains microbes; use a washable/reusable diaper, or compost a biodegradable one.","parts":[{"id":"cannot_recycle","accepted":[],"points":1,"normalizer":"keywords","keywords":[["dirty"],["waste"],["soiled"],["toxic"],["microbe"],["mixed","material"],["cannot","recycle"],["used"]],"reviewRecommended":true},{"id":"reduce_waste","accepted":[],"points":1,"normalizer":"keywords","keywords":[["reuse"],["wash"],["cloth"],["reusable"],["compost"],["biodegrad"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 2, 21),
+  ('spip-y7s-q12a', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 12(a): Complete the sentences about sugar water. Choose from: insoluble, soluble, solution, sugar, water.', '{"source":"mathMultiPart","display":"solvent: water; solute: sugar; sugar is soluble","parts":[{"id":"solvent","accepted":["water"],"points":0.67},{"id":"solute","accepted":["sugar","soluble"],"points":0.67},{"id":"soluble","accepted":["soluble"],"points":0.66}]}', null, 2, 22),
+  ('spip-y7s-q12b', 'spip-year-7-science-pre', 'Questions 9-12', 'Question 12(b): When sugar dissolves in water, is the sugar still in the water?', '{"source":"mathMultiPart","display":"yes","parts":[{"id":"answer","accepted":["yes"],"points":1}]}', null, 1, 23),
+  ('spip-y7s-q13a', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 13(a): Pierre is testing which materials are electrical conductors. Put each instruction letter in the correct order.', '{"source":"mathMultiPart","display":"D, A, C, B","parts":[{"id":"pos1","accepted":["D"],"points":0.5},{"id":"pos2","accepted":["A"],"points":0.5},{"id":"pos3","accepted":["C"],"points":0.5},{"id":"pos4","accepted":["B"],"points":0.5}]}', null, 2, 24),
+  ('spip-y7s-q13b', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 13(b): Pierre thinks one of his results is incorrect. He wants to test this material again. Which material does he test again?', '{"source":"mathMultiPart","display":"steel","parts":[{"id":"answer","accepted":["steel"],"points":1}]}', null, 1, 25),
+  ('spip-y7s-q13c', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 13(c): Pierre makes a conclusion from his results. What conclusion does Pierre make?', '{"source":"mathMultiPart","display":"Metals conduct electricity and non-metals do not.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["metal","conduct"],["non","metal","not"],["plastic","stone","not"],["iron","lead","copper"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 26),
+  ('spip-y7s-q14a', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 14(a): Aiko measures the volume of water collected from each tap. Write down the name of the apparatus she uses.', '{"source":"mathMultiPart","display":"measuring cylinder","parts":[{"id":"answer","accepted":["measuring cylinder","measuring cylinders","graduated cylinder"],"points":1}]}', null, 1, 27),
+  ('spip-y7s-q14b', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 14(b): Aiko writes down the results. Complete her table of results.', '{"source":"mathMultiPart","display":"tap 1: 0.0 cm3; tap 2: 1.8 cm3; tap 3: 2.9 cm3; tap 4: 3.8 cm3; tap 5: 3.3 cm3","parts":[{"id":"tap1_volume","accepted":["0.0","0","0.0 cm3","0 cm3"],"points":0.33},{"id":"tap2_number","accepted":["2","tap 2"],"points":0.33},{"id":"tap3_volume","accepted":["2.9","2.9 cm3"],"points":0.33},{"id":"tap4_number","accepted":["4","tap 4"],"points":0.33},{"id":"tap4_volume","accepted":["3.8","3.8 cm3"],"points":0.34},{"id":"tap5_volume","accepted":["3.3","3.3 cm3"],"points":0.34}],"scoreThresholds":[{"minCorrect":6,"points":2},{"minCorrect":4,"points":1}]}', null, 2, 28),
+  ('spip-y7s-q14c', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 14(c): There are drips from all the taps. One of the results is wrong. Circle the result that is wrong. Explain your answer.', '{"source":"mathMultiPart","display":"tap 1, because all taps drip but tap 1 has 0.0 cm3/no volume of water collected.","parts":[{"id":"choice","accepted":["tap 1"],"points":0.5},{"id":"explanation","accepted":[],"points":0.5,"normalizer":"keywords","keywords":[["all","tap","drip"],["0"],["no","water"],["no","volume"],["nothing","collected"],["other","volume"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 29),
+  ('spip-y7s-q15a', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 15(a): Complete the sentence: When the toy bounces up, the upward force is _____ than the downward force.', '{"source":"mathMultiPart","display":"greater","parts":[{"id":"answer","accepted":["greater","larger","more","bigger","stronger"],"points":1}]}', null, 1, 30),
+  ('spip-y7s-q15b', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 15(b): What does Jamila do to make the toy bounce faster?', '{"source":"mathMultiPart","display":"push on the spring more often","parts":[{"id":"answer","accepted":["push on the spring more often"],"points":1}]}', null, 1, 31),
+  ('spip-y7s-q16a', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 16(a): Chen cannot use a sieve to separate the mixture of sand and copper sulfate. Explain why.', '{"source":"mathMultiPart","display":"The particles are too small or similar size, so both solids would pass through the sieve.","parts":[{"id":"answer","accepted":[],"points":1,"normalizer":"keywords","keywords":[["particle","small"],["same","size"],["both","pass"],["powder"]],"reviewRecommended":true}],"status":"reviewRecommended"}', null, 1, 32),
+  ('spip-y7s-q16b', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 16(b): What substance does the residue contain?', '{"source":"mathMultiPart","display":"sand","parts":[{"id":"answer","accepted":["sand"],"points":1}]}', null, 1, 33),
+  ('spip-y7s-q16c', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 16(c): What is the name of the filtrate?', '{"source":"mathMultiPart","display":"copper sulfate solution","parts":[{"id":"answer","accepted":["copper sulfate solution","copper sulphate solution","copper sulfate","copper sulphate","blue solution"],"points":1}]}', null, 1, 34),
+  ('spip-y7s-q16d', 'spip-year-7-science-pre', 'Questions 13-16', 'Question 16(d): What colour is the filtrate?', '{"source":"mathMultiPart","display":"blue","parts":[{"id":"answer","accepted":["blue"],"points":1}]}', null, 1, 35)
 on conflict (id) do update set
   test_id = excluded.test_id,
   part = excluded.part,
@@ -775,6 +822,22 @@ begin
       from jsonb_array_elements_text(raw_json) as response(value);
 
       is_part_correct := raw_norm <> '' and raw_norm = expected_norm;
+    elsif mode = 'keywords' then
+      raw_text := coalesce(p_answers->p_question_id->>part_id, '');
+      raw_norm := normalize_math_answer(raw_text, 'text');
+      is_part_correct := raw_norm <> '' and exists (
+        select 1
+        from jsonb_array_elements(coalesce(part_key->'keywords', '[]'::jsonb)) as keyword_groups(group_value)
+        where not exists (
+          select 1
+          from jsonb_array_elements_text(keyword_groups.group_value) as words(word)
+          where position(normalize_math_answer(words.word, 'text') in raw_norm) = 0
+        )
+      );
+    elsif mode = 'arrowDown' then
+      raw_text := coalesce(p_answers->p_question_id->>part_id, '');
+      raw_norm := normalize_math_answer(raw_text, 'text');
+      is_part_correct := raw_norm = 'down';
     else
       raw_text := coalesce(p_answers->p_question_id->>part_id, '');
       raw_norm := normalize_math_answer(raw_text, mode);
@@ -790,7 +853,9 @@ begin
       'response', raw_text,
       'score', case when is_part_correct then possible else 0 end,
       'possible', possible,
-      'correct', is_part_correct
+      'correct', is_part_correct,
+      'normalizer', mode,
+      'reviewRecommended', coalesce((part_key->>'reviewRecommended')::boolean, mode in ('keywords', 'arrowDown'))
     ));
   end loop;
 
@@ -847,6 +912,7 @@ declare
   possible numeric := question_points(p_answer_key);
   raw_score numeric := 0;
   math_details jsonb;
+  correct_count integer := 0;
 begin
   if source_name = 'questionMap' then
     if normalize_answer(p_response) in (
@@ -863,6 +929,19 @@ begin
     return least(greatest(raw_score, 0), possible);
   elsif source_name = 'mathMultiPart' then
     math_details := math_part_scores(p_question_id, p_answer_key, p_answers);
+    if p_answer_key ? 'scoreThresholds' then
+      select count(*)
+      into correct_count
+      from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value)
+      where coalesce((value->>'correct')::boolean, false);
+
+      select coalesce(max((value->>'points')::numeric), 0)
+      into raw_score
+      from jsonb_array_elements(coalesce(p_answer_key->'scoreThresholds', '[]'::jsonb)) as thresholds(value)
+      where correct_count >= coalesce((value->>'minCorrect')::integer, 0);
+
+      return least(greatest(raw_score, 0), possible);
+    end if;
     select coalesce(sum((value->>'score')::numeric), 0)
     into raw_score
     from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);

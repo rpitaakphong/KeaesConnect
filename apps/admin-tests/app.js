@@ -128,6 +128,15 @@
       appPath: "../spip/year-7-math-pre/index.html",
       databaseReady: true,
     },
+    {
+      id: "spip-year-7-science-pre",
+      title: "SPIP Year 7 Science Pre-test",
+      subject: "Science",
+      level: "SPIP Year 7",
+      status: "active",
+      appPath: "../spip/year-7-science-pre/index.html",
+      databaseReady: true,
+    },
   ];
   let tests = builtinTests;
 
@@ -543,6 +552,7 @@
     if (testId === "math-olympiad-6") return "/apps/math-olympiad/level-6/index.html";
     if (testId === "spip-year-7-english-pre") return "/apps/spip/year-7-english-pre/index.html";
     if (testId === "spip-year-7-math-pre") return "/apps/spip/year-7-math-pre/index.html";
+    if (testId === "spip-year-7-science-pre") return "/apps/spip/year-7-science-pre/index.html";
     return "/apps/starter-listening/index.html";
   }
 
