@@ -474,14 +474,25 @@ tr:last-child td { border-bottom: 0; }
 }
 
 .starter-object-node {
-  min-width: 74px;
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  min-width: 30px;
   border: 3px solid #25333a;
   border-radius: 999px;
-  padding: 5px 9px;
+  padding: 0;
   background: #ffd45c;
   color: #25333a;
   font-weight: 900;
   box-shadow: 0 3px 0 rgba(37, 51, 58, 0.18);
+}
+
+.starter-object-node::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #25333a;
 }
 
 .starter-object-node.is-selected {
@@ -491,9 +502,17 @@ tr:last-child td { border-bottom: 0; }
   box-shadow: 0 0 0 4px rgba(22, 129, 245, 0.18);
 }
 
+.starter-object-node.is-selected::after {
+  background: #1681f5;
+}
+
 .starter-object-node.is-example {
   background: #e7eef1;
   color: #516169;
+}
+
+.starter-object-node.is-example::after {
+  background: #516169;
 }
 
 .starter-target-node {

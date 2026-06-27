@@ -396,7 +396,7 @@ function StarterListeningConnect({ answer, onChange }: { answer: Record<string, 
             style={{ left: `${object.x / 2140 * 100}%`, top: `${object.y / 2500 * 100}%` }}
             type="button"
           >
-            {object.label}
+            <span className="visually-hidden">{object.label}</span>
           </button>
         ))}
         {starterPart1Targets.map((target) => (
