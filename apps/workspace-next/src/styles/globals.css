@@ -1290,6 +1290,23 @@ tr:last-child td { border-bottom: 0; }
   height: auto;
   border-radius: 16px;
 }
+
+.test-story-starter-progress-reading-writing-part2 .story-with-image {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.test-story-starter-progress-reading-writing-part2 .story-figure {
+  order: -1;
+  width: min(920px, 100%);
+  max-width: min(920px, 100%) !important;
+}
+
+.test-story-starter-progress-reading-writing-part2 .story-panel p,
+.test-story-starter-progress-reading-writing-part2 p {
+  justify-self: start;
+}
+
 .word-bank {
   display: flex;
   flex-wrap: wrap;

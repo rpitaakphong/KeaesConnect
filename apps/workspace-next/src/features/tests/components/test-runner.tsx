@@ -116,7 +116,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                   </div>
                 ) : null}
                 {active.story?.length ? (
-                  <article className="story-panel">
+                  <article className={`story-panel test-story-${test.id}-${active.id}`}>
                     {active.storyTitle ? <h3>{active.storyTitle}</h3> : null}
                     <div className={active.storyImage ? "story-with-image" : ""}>
                       <div>

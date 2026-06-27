@@ -99,7 +99,7 @@ export const starterProgressReadingWriting: TestDefinition = {
       storyImage: {
         src: image("rw-p2-beach.jpg"),
         alt: "Beach scene with children, elephants, monkeys, a duck, a crocodile, and a boat",
-        maxWidth: 420,
+        maxWidth: 920,
       },
       questions: [
         choiceQuestion("starter-rw-p2q1", 1, "There are two children in the sea.", yesNoChoices, "yes"),
