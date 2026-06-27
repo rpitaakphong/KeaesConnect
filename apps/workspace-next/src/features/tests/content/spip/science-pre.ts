@@ -113,9 +113,9 @@ export const spipYear7SciencePre: TestDefinition = {
           "visuals": [
             {
               "type": "image",
-              "src": "/test-assets/spip/year-7-science-pre/spip-y7s-q2-organs-v2.png",
+              "src": "/test-assets/spip/year-7-science-pre/spip-y7s-q2-organs-v3.png",
               "alt": "Human body organs to label",
-              "maxWidth": 480
+              "maxWidth": 420
             }
           ],
           "type": "multiText",
@@ -541,7 +541,7 @@ export const spipYear7SciencePre: TestDefinition = {
         {
           "id": "spip-y7s-q5a",
           "number": 5,
-          "prompt": "5(a). Use the information to draw a food chain. Draw arrows between the boxes to show the direction of energy flow.",
+          "prompt": "5(a). Use the information to put the food chain in the correct order.",
           "points": 2,
           "note": "This question is about a food chain. Use these items: leaf | caterpillar | bird | snake | owl.",
           "visuals": [
@@ -1663,7 +1663,7 @@ export const spipYear7SciencePre: TestDefinition = {
           "number": 14,
           "prompt": "14(b). Aiko writes down the results. Complete her table of results.",
           "points": 2,
-          "note": "Results: tap 4 = 3.8 cm3 | tap 3 = 2.9 cm3 | tap 2 = 1.8 cm3 | tap 5 = 3.3 cm3 | tap 1 = 0.0 cm3. Table rows: 1 / [tap1_volume] | [tap2_number] / 1.8 | 3 / [tap3_volume] | [tap4_number] / [tap4_volume] | 5 / [tap5_volume].",
+          "note": "Aiko's measurements are shown below.",
           "visuals": [
             {
               "type": "image",

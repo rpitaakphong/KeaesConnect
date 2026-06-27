@@ -991,6 +991,19 @@ tr:last-child td { border-bottom: 0; }
   padding: 12px 14px;
 }
 .part-tab.is-active { background: var(--green-soft); color: var(--green-dark); }
+.review-submit-tab {
+  margin-top: 6px;
+  border-color: #54bfd5;
+  background: #eafaff;
+  color: #145f75;
+  font-weight: 950;
+}
+.review-submit-tab.is-active {
+  border-color: #1788a8;
+  background: #d3f4ff;
+  color: #0c566c;
+  box-shadow: inset 4px 0 0 #1788a8;
+}
 .test-panel { display: grid; gap: 16px; }
 .question-card {
   border: 1px solid var(--line);
@@ -1049,7 +1062,21 @@ tr:last-child td { border-bottom: 0; }
   gap: 14px;
   margin-bottom: 14px;
 }
-.choice-grid, .field-grid { display: grid; gap: 10px; }
+.choice-grid, .field-grid { display: grid; gap: 8px; }
+.text-choice-grid {
+  width: min(720px, 100%);
+}
+.compact-letter-choice-grid {
+  width: fit-content;
+  max-width: 100%;
+  grid-template-columns: repeat(8, minmax(58px, 72px));
+}
+.compact-image-choice-grid {
+  grid-template-columns: repeat(3, minmax(160px, 220px));
+  width: fit-content;
+  max-width: 100%;
+  align-items: stretch;
+}
 .question-visuals {
   display: flex;
   flex-wrap: wrap;
@@ -1121,6 +1148,69 @@ tr:last-child td { border-bottom: 0; }
 .math-field-visual {
   display: block;
 }
+.science-numbered-layout {
+  display: grid;
+  gap: 16px;
+}
+.science-table-task {
+  display: grid;
+  gap: 16px;
+}
+.science-table-task h5 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: var(--font-sm);
+}
+.science-answer-table .math-line-input {
+  width: min(220px, 100%);
+}
+.science-numbered-figure {
+  position: relative;
+  justify-self: center;
+}
+.science-figure-number {
+  position: absolute;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #25333a;
+  border-radius: 999px;
+  background: #ffd45c;
+  color: #25333a;
+  font-size: var(--font-sm);
+  font-weight: 900;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 0 rgba(37, 51, 58, 0.18);
+}
+.science-question-group {
+  gap: 20px;
+}
+.science-subquestion-list {
+  display: grid;
+  gap: 16px;
+}
+.science-subquestion {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.science-subquestion:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.science-subquestion-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.science-subquestion h4 {
+  margin: 0;
+  font-size: var(--font-lg);
+}
 .question-figure {
   width: 100%;
   margin: 0;
@@ -1145,19 +1235,87 @@ tr:last-child td { border-bottom: 0; }
   width: min(100%, 260px);
 }
 .choice-card {
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 12px;
-  display: flex;
+  min-height: 48px;
+  border: 1px solid #d9e5e2;
+  border-radius: 12px;
+  padding: 9px 12px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  background: var(--surface-2);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 850;
+  line-height: 1.2;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(37, 51, 58, 0.04);
+}
+.choice-card:hover,
+.choice-card:focus-within {
+  border-color: #8dcfc9;
+  background: #f8fffe;
+}
+.choice-card:has(input:checked) {
+  border-color: #58b6d6;
+  background: #f0f9ff;
+  box-shadow: 0 0 0 2px rgba(88, 182, 214, 0.18);
+}
+.choice-card input[type="radio"],
+.choice-card input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  max-width: 22px;
+  margin: 0;
+  padding: 0;
+  display: block;
+  border: 2px solid #8b9a9e;
+  border-radius: 7px;
+  background: #fff;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 12px 10px;
+  flex: 0 0 22px;
+}
+.choice-card input[type="radio"] {
+  border-radius: 999px;
+}
+.choice-card input[type="radio"]:checked,
+.choice-card input[type="checkbox"]:checked {
+  border-color: #58b6d6;
+}
+.choice-card input[type="radio"]:checked {
+  background-image: radial-gradient(circle, #58b6d6 0 5px, transparent 5.5px);
+}
+.choice-card input[type="checkbox"]:checked {
+  background-color: #58b6d6;
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='11' viewBox='0 0 14 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 5.5L5.2 9L12.5 1.5' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.compact-letter-choice-grid .choice-card {
+  min-height: 44px;
+  padding: 8px 10px;
+  justify-content: start;
+}
+.compact-image-choice-grid .image-choice-card {
+  min-height: 210px;
+  padding: 12px;
+}
+.compact-image-choice-grid .image-choice-card img {
+  width: 100%;
+  max-width: 168px;
+  height: 132px;
 }
 .image-choice-card {
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 10px;
   min-height: 180px;
+  padding: 12px;
   text-align: center;
 }
 .image-choice-card img {
@@ -1193,4 +1351,17 @@ tr:last-child td { border-bottom: 0; }
   .tool-grid { grid-template-columns: 1fr; }
   .results-controls, .score-summary { grid-template-columns: 1fr; }
   .section-head, .dashboard-heading, .exam-header { align-items: stretch; flex-direction: column; }
+  .compact-letter-choice-grid {
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .compact-image-choice-grid {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .compact-image-choice-grid {
+    grid-template-columns: 1fr;
+  }
 }

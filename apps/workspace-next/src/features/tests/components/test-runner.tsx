@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { StudentProfile, SubmitResult, TestAnswers, TestDefinition } from "@/features/tests/lib/types";
+import type { StudentProfile, SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
 import { loadAnswers, loadStudentProfile, saveAnswers } from "@/features/tests/lib/profile-storage";
 import { submitAttempt } from "@/features/tests/lib/submission-api";
-import { QuestionRenderer } from "@/features/tests/components/question-renderer";
+import { QuestionRenderer, QuestionVisuals } from "@/features/tests/components/question-renderer";
 
 export function TestRunner({ test }: { test: TestDefinition }) {
   const [assignmentToken, setAssignmentToken] = useState("");
@@ -31,6 +31,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
   const questions = useMemo(() => test.sections.flatMap((section) => section.questions), [test.sections]);
   const answeredCount = questions.filter((question) => isAnswered(answers[question.id])).length;
   const active = test.sections.find((section) => section.id === activeSection) || test.sections[0];
+  const activeQuestionItems = useMemo(() => groupScienceQuestions(active?.questions || []), [active]);
 
   function updateAnswer(questionId: string, value: TestAnswers[string]) {
     const next = { ...answers, [questionId]: value };
@@ -72,9 +73,6 @@ export function TestRunner({ test }: { test: TestDefinition }) {
         </div>
         <div className="header-actions">
           <span className="badge">{answeredCount}/{questions.length} answered</span>
-          <button className="primary-button" type="button" onClick={handleSubmit} disabled={pending || Boolean(result)}>
-            {pending ? "Submitting..." : result ? "Submitted" : "Submit test"}
-          </button>
         </div>
       </header>
 
@@ -91,8 +89,8 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                 {section.label}
               </button>
             ))}
-            <button className={`part-tab ${activeSection === "review" ? "is-active" : ""}`} type="button" onClick={() => setActiveSection("review")}>
-              Review
+            <button className={`part-tab review-submit-tab ${activeSection === "review" ? "is-active" : ""}`} type="button" onClick={() => setActiveSection("review")}>
+              Review and Submit
             </button>
           </aside>
 
@@ -137,12 +135,14 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                     </div>
                   </article>
                 ) : null}
-                {active.questions.map((question) => (
+                {activeQuestionItems.map((item) => isScienceQuestionGroup(item) ? (
+                  <ScienceQuestionGroupRenderer answers={answers} group={item} key={item.id} onChange={updateAnswer} />
+                ) : (
                   <QuestionRenderer
-                    answer={answers[question.id]}
-                    key={question.id}
-                    question={question}
-                    onChange={(value) => updateAnswer(question.id, value)}
+                    answer={answers[item.id]}
+                    key={item.id}
+                    question={item}
+                    onChange={(value) => updateAnswer(item.id, value)}
                   />
                 ))}
               </>
@@ -151,6 +151,103 @@ export function TestRunner({ test }: { test: TestDefinition }) {
         </div>
       </main>
     </>
+  );
+}
+
+type ScienceQuestionGroup = {
+  id: string;
+  number: number;
+  questions: TestQuestion[];
+  visuals?: NonNullable<TestQuestion["visuals"]>;
+};
+
+function groupScienceQuestions(questions: TestQuestion[]): Array<TestQuestion | ScienceQuestionGroup> {
+  const groupedNumbers = new Set([4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16]);
+  const groupByNumberOnly = new Set([4, 7, 11]);
+  const items: Array<TestQuestion | ScienceQuestionGroup> = [];
+  let index = 0;
+
+  while (index < questions.length) {
+    const question = questions[index];
+    if (!question.id.startsWith("spip-y7s-") || !groupedNumbers.has(question.number)) {
+      items.push(question);
+      index += 1;
+      continue;
+    }
+
+    const firstImage = firstImageSrc(question);
+    const hasSharedVisual = !groupByNumberOnly.has(question.number) && Boolean(firstImage);
+    const groupQuestions = [question];
+    let nextIndex = index + 1;
+    while (nextIndex < questions.length) {
+      const next = questions[nextIndex];
+      if (
+        next.number !== question.number ||
+        !next.id.startsWith("spip-y7s-") ||
+        (!groupByNumberOnly.has(question.number) && firstImageSrc(next) !== firstImage)
+      ) break;
+      groupQuestions.push(next);
+      nextIndex += 1;
+    }
+
+    if (groupQuestions.length > 1) {
+      items.push({
+        id: `spip-y7s-q${question.number}-group`,
+        number: question.number,
+        questions: groupQuestions,
+        visuals: hasSharedVisual ? question.visuals : undefined,
+      });
+    } else {
+      items.push(question);
+    }
+    index = nextIndex;
+  }
+
+  return items;
+}
+
+function firstImageSrc(question: TestQuestion) {
+  const visual = question.visuals?.find((item) => item.type === "image");
+  return visual?.type === "image" ? visual.src : "";
+}
+
+function isScienceQuestionGroup(item: TestQuestion | ScienceQuestionGroup): item is ScienceQuestionGroup {
+  return "questions" in item;
+}
+
+function ScienceQuestionGroupRenderer({
+  answers,
+  group,
+  onChange,
+}: {
+  answers: TestAnswers;
+  group: ScienceQuestionGroup;
+  onChange: (questionId: string, value: TestAnswers[string]) => void;
+}) {
+  const points = group.questions.reduce((total, question) => total + question.points, 0);
+  return (
+    <article className="question-card science-question-group">
+      <div className="question-head">
+        <div>
+          <p className="eyebrow">Question {group.number}</p>
+          <h3>Question {group.number}</h3>
+        </div>
+        <span className="badge">{points} {points === 1 ? "mark" : "marks"}</span>
+      </div>
+      {group.visuals?.length ? <QuestionVisuals visuals={group.visuals} /> : null}
+      <div className="science-subquestion-list">
+        {group.questions.map((question) => (
+          <QuestionRenderer
+            answer={answers[question.id]}
+            hideVisuals={Boolean(group.visuals?.length)}
+            key={question.id}
+            onChange={(value) => onChange(question.id, value)}
+            question={question}
+            variant="subquestion"
+          />
+        ))}
+      </div>
+    </article>
   );
 }
 

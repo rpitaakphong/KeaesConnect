@@ -6,33 +6,30 @@ import type { TestQuestion } from "@/features/tests/lib/types";
 
 export function QuestionRenderer({
   answer,
+  hideVisuals = false,
   onChange,
   question,
+  variant = "card",
 }: {
   answer: string | Record<string, string | string[]> | undefined;
+  hideVisuals?: boolean;
   onChange: (value: string | Record<string, string | string[]>) => void;
   question: TestQuestion;
+  variant?: "card" | "subquestion";
 }) {
   const objectAnswer = typeof answer === "object" && answer ? answer : {};
   const spipMathInteraction = question.id.startsWith("spip-y7m-")
     ? renderSpipMathInteraction(question, objectAnswer, onChange)
     : null;
-  return (
-    <article className="question-card">
-      <div className="question-head">
-        <div>
-          <p className="eyebrow">Question {question.number}</p>
-          <h3>{question.prompt}</h3>
-          {question.note ? <p>{question.note}</p> : null}
-        </div>
-        <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
-      </div>
-      {spipMathInteraction || (
-        <>
-      {question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
-      {question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
+  const spipScienceInteraction = question.id.startsWith("spip-y7s-")
+    ? renderSpipScienceInteraction(question, objectAnswer, onChange)
+    : null;
+  const responseContent = spipMathInteraction || spipScienceInteraction || (
+    <>
+      {!hideVisuals && question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
+      {!hideVisuals && question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
       {question.type === "singleChoice" ? (
-        <div className="choice-grid">
+        <div className={singleChoiceGridClass(question)}>
           {question.choices.map((choice) => (
             <label className={`choice-card ${choice.image ? "image-choice-card" : ""}`} key={choice.value}>
               <input
@@ -52,11 +49,11 @@ export function QuestionRenderer({
           ))}
         </div>
       ) : question.type === "multiChoice" ? (
-        <div className="choice-grid math-choice-grid">
+        <div className={multiChoiceGridClass(question)}>
           {question.choices.map((choice) => {
             const selected = Array.isArray(objectAnswer.selected) ? objectAnswer.selected : [];
             return (
-              <label className="choice-card image-choice-card" key={choice.value}>
+              <label className={`choice-card ${choice.visualHtml ? "image-choice-card" : ""}`} key={choice.value}>
                 <input
                   checked={selected.includes(choice.value)}
                   name={`${question.id}-${choice.value}`}
@@ -159,9 +156,63 @@ export function QuestionRenderer({
           {question.fields.map((field) => <MathField answer={objectAnswer} field={field} key={field.id} onChange={onChange} />)}
         </div>
       )}
-        </>
-      )}
+    </>
+  );
+
+  if (variant === "subquestion") {
+    return (
+      <section className="science-subquestion">
+        <div className="science-subquestion-head">
+          <h4>{question.prompt}</h4>
+          <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
+        </div>
+        {question.note ? <p>{question.note}</p> : null}
+        {responseContent}
+      </section>
+    );
+  }
+
+  return (
+    <article className="question-card">
+      <div className="question-head">
+        <div>
+          <p className="eyebrow">Question {question.number}</p>
+          <h3>{question.prompt}</h3>
+          {question.note ? <p>{question.note}</p> : null}
+        </div>
+        <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
+      </div>
+      {responseContent}
     </article>
+  );
+}
+
+function singleChoiceGridClass(question: Extract<TestQuestion, { type: "singleChoice" }>) {
+  const classes = ["choice-grid", question.choices.some((choice) => choice.image || choice.visualHtml) ? "visual-choice-grid" : "text-choice-grid"];
+  if (isCompactEnglishLetterChoice(question)) classes.push("compact-letter-choice-grid");
+  if (isCompactEnglishImageChoice(question)) classes.push("compact-image-choice-grid");
+  return classes.join(" ");
+}
+
+function multiChoiceGridClass(question: Extract<TestQuestion, { type: "multiChoice" }>) {
+  const classes = ["choice-grid", question.choices.some((choice) => choice.visualHtml) ? "visual-choice-grid math-choice-grid" : "text-choice-grid"];
+  if (isCompactEnglishLetterChoice(question)) classes.push("compact-letter-choice-grid");
+  return classes.join(" ");
+}
+
+function isCompactEnglishLetterChoice(question: Extract<TestQuestion, { type: "singleChoice" | "multiChoice" }>) {
+  return (
+    /^spip-y7e-r(6|7|8|9|10)$/.test(question.id) &&
+    question.choices.length === 8 &&
+    question.choices.every((choice) => /^[A-H]$/.test(choice.label))
+  );
+}
+
+function isCompactEnglishImageChoice(question: Extract<TestQuestion, { type: "singleChoice" }>) {
+  return (
+    /^spip-y7e-l[1-7]$/.test(question.id) &&
+    question.choices.length === 3 &&
+    question.choices.every((choice) => Boolean(choice.image) && /^[A-C]$/.test(choice.label))
   );
 }
 
@@ -186,6 +237,54 @@ function renderSpipMathInteraction(
   if (question.id === "spip-y7m-q25" && question.type === "multiText") return <SpipOrderBoxes answer={answer} onChange={onChange} question={question} />;
   if (question.id === "spip-y7m-q26" && question.type === "multiText") return <SpipThreeBoxes answer={answer} onChange={onChange} question={question} />;
   if (question.id === "spip-y7m-q30") return <SpipReflection answer={answer} onChange={onChange} />;
+  return null;
+}
+
+function renderSpipScienceInteraction(
+  question: TestQuestion,
+  answer: Record<string, string | string[]>,
+  onChange: (value: Record<string, string | string[]>) => void,
+) {
+  if (question.id === "spip-y7s-q2" && question.type === "multiText") {
+    return (
+      <SpipScienceNumberedLabels
+        answer={answer}
+        labelPositions={[
+          { id: "brain", x: 51, y: 8 },
+          { id: "heart", x: 51, y: 45 },
+          { id: "kidney", x: 31, y: 64 },
+          { id: "lungs", x: 65, y: 40 },
+          { id: "stomach", x: 59, y: 58 },
+          { id: "intestines", x: 52, y: 79 },
+        ]}
+        onChange={onChange}
+        question={question}
+      />
+    );
+  }
+  if (question.id === "spip-y7s-q4c" && question.type === "multiText") {
+    return (
+      <SpipScienceNumberedLabels
+        answer={answer}
+        labelPositions={[
+          { id: "scale_top", x: 18, y: 42 },
+          { id: "scale_middle", x: 18, y: 55 },
+          { id: "scale_bottom", x: 18, y: 67 },
+          { id: "solid_4", x: 48, y: 92 },
+          { id: "fertiliser", x: 48, y: 58 },
+          { id: "solid_5", x: 64, y: 92 },
+          { id: "salt", x: 64, y: 73 },
+          { id: "solid_6", x: 81, y: 92 },
+          { id: "baking_powder", x: 81, y: 78 },
+        ]}
+        onChange={onChange}
+        question={question}
+      />
+    );
+  }
+  if (question.id === "spip-y7s-q14b" && question.type === "multiText") {
+    return <SpipScienceTapResults answer={answer} onChange={onChange} question={question} />;
+  }
   return null;
 }
 
@@ -296,6 +395,104 @@ function correctPairId(values: string[]) {
     "0.44,0.56": "p4",
   };
   return map[values.join(",")] || "";
+}
+
+function SpipScienceNumberedLabels({
+  answer,
+  labelPositions,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  labelPositions: Array<{ id: string; x: number; y: number }>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "multiText" }>;
+}) {
+  const visual = question.visuals?.find((item) => item.type === "image");
+  return (
+    <div className="science-numbered-layout">
+      {visual && visual.type === "image" ? (
+        <figure className="question-figure science-numbered-figure" style={{ maxWidth: visual.maxWidth || 560 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={visual.src} alt={visual.alt} />
+          {labelPositions.map((position, index) => (
+            <span className="science-figure-number" key={position.id} style={{ left: `${position.x}%`, top: `${position.y}%` }}>
+              {index + 1}
+            </span>
+          ))}
+        </figure>
+      ) : null}
+      <div className={`field-grid ${question.compact ? "compact-lines" : ""}`}>
+        {labelPositions.map((position, index) => {
+          const field = findField(question, position.id);
+          return <MathField answer={answer} field={{ ...field, label: String(index + 1) }} key={position.id} onChange={onChange} />;
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SpipScienceTapResults({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "multiText" }>;
+}) {
+  return (
+    <div className="science-table-task">
+      <div>
+        <h5>Aiko&apos;s measurements</h5>
+        <SimpleDataTable
+          headers={["Tap", "Volume collected (cm3)"]}
+          rows={[
+            ["4", "3.8"],
+            ["3", "2.9"],
+            ["2", "1.8"],
+            ["5", "3.3"],
+            ["1", "0.0"],
+          ]}
+        />
+      </div>
+      <div>
+        <h5>Complete the table</h5>
+        <div className="spip-data-table-wrap">
+          <table className="spip-data-table science-answer-table">
+            <thead>
+              <tr>
+                <th>Tap number</th>
+                <th>Volume collected (cm3)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><MathInput answer={answer} field={findField(question, "tap1_volume")} onChange={onChange} /></td>
+              </tr>
+              <tr>
+                <td><MathInput answer={answer} field={findField(question, "tap2_number")} onChange={onChange} /></td>
+                <td>1.8</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><MathInput answer={answer} field={findField(question, "tap3_volume")} onChange={onChange} /></td>
+              </tr>
+              <tr>
+                <td><MathInput answer={answer} field={findField(question, "tap4_number")} onChange={onChange} /></td>
+                <td><MathInput answer={answer} field={findField(question, "tap4_volume")} onChange={onChange} /></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><MathInput answer={answer} field={findField(question, "tap5_volume")} onChange={onChange} /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function SpipTranslation({ answer, onChange }: { answer: Record<string, string | string[]>; onChange: (value: Record<string, string | string[]>) => void }) {
@@ -914,7 +1111,7 @@ function findField(question: Extract<TestQuestion, { type: "multiText" }>, field
   return question.fields.find((field) => field.id === fieldId) || { id: fieldId, label: fieldId };
 }
 
-function QuestionVisuals({ visuals }: { visuals: NonNullable<TestQuestion["visuals"]> }) {
+export function QuestionVisuals({ visuals }: { visuals: NonNullable<TestQuestion["visuals"]> }) {
   return (
     <div className="question-visuals">
       {visuals.map((visual, index) => {
