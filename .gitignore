@@ -3,3 +3,8 @@ outputs/
 deploy/
 *.zip
 supabase/.temp/
+.env*.local
+node_modules/
+.next/
+.playwright-cli/
+*.tsbuildinfo
