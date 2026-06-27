@@ -18,10 +18,11 @@ const nextRuntimeTests = new Set([
   "spip-year-7-english-pre",
   "spip-year-7-math-pre",
   "spip-year-7-science-pre",
+  "starter-progress-listening",
+  "starter-progress-reading-writing",
 ]);
 
 const builtinTests: CatalogTest[] = [
-  { id: "starter-progress-test", title: "Starter Progress Test", subject: "English", level: "Cambridge Starters", status: "active", appPath: "/apps/starter-listening/index.html", runtime: "legacy-static" },
   { id: "english-literacy-1", title: "English Literacy Level 1", subject: "English", level: "English Literacy 1", status: "active", appPath: "/tests/english-literacy-1/start", runtime: "next-shared-engine" },
   { id: "english-literacy-2", title: "English Literacy Level 2", subject: "English", level: "English Literacy 2", status: "active", appPath: "/tests/english-literacy-2/start", runtime: "next-shared-engine" },
   { id: "english-literacy-3", title: "English Literacy Level 3", subject: "English", level: "English Literacy 3", status: "active", appPath: "/tests/english-literacy-3/start", runtime: "next-shared-engine" },
@@ -36,6 +37,8 @@ const builtinTests: CatalogTest[] = [
   { id: "spip-year-7-english-pre", title: "SPIP Year 7 English Pre-test", subject: "English", level: "SPIP Year 7", status: "active", appPath: "/tests/spip-year-7-english-pre/start", runtime: "next-shared-engine" },
   { id: "spip-year-7-math-pre", title: "SPIP Year 7 Math Pre-test", subject: "Math", level: "SPIP Year 7", status: "active", appPath: "/tests/spip-year-7-math-pre/start", runtime: "next-shared-engine" },
   { id: "spip-year-7-science-pre", title: "SPIP Year 7 Science Pre-test", subject: "Science", level: "SPIP Year 7", status: "active", appPath: "/tests/spip-year-7-science-pre/start", runtime: "next-shared-engine" },
+  { id: "starter-progress-listening", title: "Starter Progress Listening", subject: "English", level: "Cambridge Starters", status: "active", appPath: "/tests/starter-progress-listening/start", runtime: "next-shared-engine" },
+  { id: "starter-progress-reading-writing", title: "Starter Progress Reading & Writing", subject: "English", level: "Cambridge Starters", status: "active", appPath: "/tests/starter-progress-reading-writing/start", runtime: "next-shared-engine" },
 ];
 
 export async function listTests(): Promise<CatalogTest[]> {
@@ -47,7 +50,9 @@ export async function listTests(): Promise<CatalogTest[]> {
 
   if (withAppPath.error) return builtinTests;
 
-  const databaseTests = (withAppPath.data || []).map((test) => normalizeCatalogTest(test));
+  const databaseTests = (withAppPath.data || [])
+    .map((test) => normalizeCatalogTest(test))
+    .filter((test) => test.id !== "starter-progress-test");
   return mergeTests(databaseTests);
 }
 

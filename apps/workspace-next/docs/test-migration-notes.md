@@ -42,6 +42,14 @@ The admin inventory page is available at `/admin/test-inventory`.
 - Image-overlay interactions use `ImageOverlay` and `ImageOverlayBoard` from `apps/workspace-next/src/features/tests/components/test-interactions.tsx`.
 - Compact image and letter choices are handled in `QuestionRenderer` with shared grid classes.
 
+## Staff tool migration
+
+- Staff login and dashboard are handled by Next.js at `/login` and `/dashboard`.
+- Test Admin is handled by Next.js at `/admin/tests`.
+- Staff Management is handled by Next.js at `/admin/staff`.
+- Hours Cross-Check is handled by Next.js at `/admin/hours-cross-check`.
+- The static student dashboard mockup remains deferred because it is not connected to the staff/test workflow yet.
+
 ## Known caveats
 
 - Starter Reading & Writing answer content should get a final teacher review before production grading is treated as official.
@@ -55,5 +63,8 @@ Keep these static pages until one full production verification cycle is complete
 
 - `apps/starter-listening/test.html`, replaced by `/tests/starter-progress-listening`
 - `apps/starter-listening/reading-writing.html`, replaced by `/tests/starter-progress-reading-writing`
+- `apps/admin-tests/staff.html`, replaced by `/admin/staff`
+- `tools/hours-cross-check/index.html`, replaced by `/admin/hours-cross-check`
+- `login.html`, replaced by `/login`
 
 Do not delete the fallback pages until production submissions, reporting, audio behavior, and review-submit flows have all been verified.
