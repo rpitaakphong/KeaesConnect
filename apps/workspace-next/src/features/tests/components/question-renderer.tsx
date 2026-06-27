@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 
 export function QuestionRenderer({
@@ -24,7 +24,10 @@ export function QuestionRenderer({
   const spipScienceInteraction = question.id.startsWith("spip-y7s-")
     ? renderSpipScienceInteraction(question, objectAnswer, onChange)
     : null;
-  const responseContent = spipMathInteraction || spipScienceInteraction || (
+  const starterListeningInteraction = question.id.startsWith("starter-listening-")
+    ? renderStarterListeningInteraction(question, objectAnswer, onChange)
+    : null;
+  const responseContent = spipMathInteraction || spipScienceInteraction || starterListeningInteraction || (
     <>
       {!hideVisuals && question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
       {!hideVisuals && question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
@@ -210,10 +213,24 @@ function isCompactEnglishLetterChoice(question: Extract<TestQuestion, { type: "s
 
 function isCompactEnglishImageChoice(question: Extract<TestQuestion, { type: "singleChoice" }>) {
   return (
-    /^spip-y7e-l[1-7]$/.test(question.id) &&
+    (/^spip-y7e-l[1-7]$/.test(question.id) || /^starter-listening-p3q[1-5]$/.test(question.id)) &&
     question.choices.length === 3 &&
     question.choices.every((choice) => Boolean(choice.image) && /^[A-C]$/.test(choice.label))
   );
+}
+
+function renderStarterListeningInteraction(
+  question: TestQuestion,
+  answer: Record<string, string | string[]>,
+  onChange: (value: Record<string, string | string[]>) => void,
+) {
+  if (question.id === "starter-listening-part1" && question.type === "multiText") {
+    return <StarterListeningConnect answer={answer} onChange={onChange} />;
+  }
+  if (question.id === "starter-listening-part4" && question.type === "multiText") {
+    return <StarterListeningColouring answer={answer} onChange={onChange} />;
+  }
+  return null;
 }
 
 function renderSpipMathInteraction(
@@ -289,6 +306,7 @@ function renderSpipScienceInteraction(
 }
 
 const spipMathAssets = "/test-assets/spip/year-7-math-pre";
+const starterListeningAssets = "/test-assets/starter-listening";
 
 function setAnswerPart(answer: Record<string, string | string[]>, onChange: (value: Record<string, string | string[]>) => void, id: string, value: string | string[]) {
   onChange({ ...answer, [id]: value });
@@ -297,6 +315,189 @@ function setAnswerPart(answer: Record<string, string | string[]>, onChange: (val
 function answerText(answer: Record<string, string | string[]>, id: string) {
   const value = answer[id];
   return typeof value === "string" ? value : "";
+}
+
+const starterPart1Objects = [
+  { id: "phone", label: "Phone", x: 205, y: 245 },
+  { id: "radio", label: "Radio", x: 685, y: 245, example: true },
+  { id: "shell", label: "Shell", x: 1115, y: 245 },
+  { id: "book", label: "Book", x: 1590, y: 235 },
+  { id: "clock", label: "Clock", x: 275, y: 2335 },
+  { id: "camera", label: "Camera", x: 910, y: 2340 },
+  { id: "lamp", label: "Lamp", x: 1605, y: 2315 },
+];
+
+const starterPart1Targets = [
+  { id: "woman", label: "woman in chair", x: 410, y: 1240 },
+  { id: "between-pictures", label: "between the two pictures", x: 230, y: 820 },
+  { id: "bookcase", label: "bookcase", x: 860, y: 1240 },
+  { id: "robot", label: "table next to the robot", x: 1285, y: 1565 },
+  { id: "under-table", label: "under the small table", x: 1185, y: 1765 },
+  { id: "armchair", label: "armchair", x: 300, y: 1765 },
+  { id: "rug", label: "mat", x: 690, y: 1825 },
+  { id: "cupboard", label: "cupboard", x: 1455, y: 1405 },
+  { id: "door", label: "door", x: 1835, y: 1185 },
+];
+
+function StarterListeningConnect({ answer, onChange }: { answer: Record<string, string | string[]>; onChange: (value: Record<string, string | string[]>) => void }) {
+  const selectedObject = answerText(answer, "_selectedObject");
+  const connections = [
+    { objectId: "radio", targetId: "bookcase", example: true },
+    ...starterPart1Objects.flatMap((object) => {
+      if (object.example) return [];
+      const targetId = answerText(answer, object.id);
+      return targetId ? [{ objectId: object.id, targetId, example: false }] : [];
+    }),
+  ];
+
+  function chooseObject(objectId: string) {
+    setAnswerPart(answer, onChange, "_selectedObject", selectedObject === objectId ? "" : objectId);
+  }
+
+  function chooseTarget(targetId: string) {
+    if (!selectedObject) return;
+    const next: Record<string, string | string[]> = { ...answer, _selectedObject: "" };
+    for (const object of starterPart1Objects) {
+      if (!object.example && next[object.id] === targetId) next[object.id] = "";
+    }
+    next[selectedObject] = targetId;
+    onChange(next);
+  }
+
+  return (
+    <div className="starter-connect-layout">
+      <div className="starter-connect-board">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${starterListeningAssets}/part1-board.png`} alt="Room scene for object and place matching" />
+        <svg viewBox="0 0 2140 2500" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          {connections.map((connection) => {
+            const object = starterPart1Objects.find((item) => item.id === connection.objectId);
+            const target = starterPart1Targets.find((item) => item.id === connection.targetId);
+            if (!object || !target) return null;
+            return (
+              <line
+                className={`starter-connect-line ${connection.example ? "is-example" : ""}`}
+                key={`${connection.objectId}-${connection.targetId}`}
+                x1={object.x}
+                y1={object.y}
+                x2={target.x}
+                y2={target.y}
+              />
+            );
+          })}
+        </svg>
+        {starterPart1Objects.map((object) => (
+          <button
+            aria-label={`${object.label}${object.example ? " example" : ""}`}
+            className={`starter-object-node ${selectedObject === object.id ? "is-selected" : ""} ${object.example ? "is-example" : ""}`}
+            disabled={object.example}
+            key={object.id}
+            onClick={() => chooseObject(object.id)}
+            style={{ left: `${object.x / 2140 * 100}%`, top: `${object.y / 2500 * 100}%` }}
+            type="button"
+          >
+            {object.label}
+          </button>
+        ))}
+        {starterPart1Targets.map((target) => (
+          <button
+            aria-label={target.label}
+            className={`starter-target-node ${selectedObject ? "is-ready" : ""}`}
+            key={target.id}
+            onClick={() => chooseTarget(target.id)}
+            style={{ left: `${target.x / 2140 * 100}%`, top: `${target.y / 2500 * 100}%` }}
+            type="button"
+          >
+            <span className="visually-hidden">{target.label}</span>
+          </button>
+        ))}
+      </div>
+      <div className="starter-connect-summary">
+        {starterPart1Objects.filter((object) => !object.example && object.id !== "lamp").map((object) => {
+          const target = starterPart1Targets.find((item) => item.id === answerText(answer, object.id));
+          return <span key={object.id}>{object.label}: {target?.label || "choose a place"}</span>;
+        })}
+      </div>
+    </div>
+  );
+}
+
+const starterPalette = [
+  { id: "red", label: "Red", value: "#ef4444" },
+  { id: "orange", label: "Orange", value: "#f97316" },
+  { id: "yellow", label: "Yellow", value: "#facc15" },
+  { id: "green", label: "Green", value: "#22c55e" },
+  { id: "blue", label: "Blue", value: "#38bdf8" },
+  { id: "purple", label: "Purple", value: "#a855f7" },
+  { id: "pink", label: "Pink", value: "#f472b6" },
+  { id: "brown", label: "Brown", value: "#8b5a2b" },
+];
+
+const starterColourRegions = [
+  { id: "tree-bird", label: "bird in the tree", x: 650, y: 1080, w: 115, h: 95 },
+  { id: "roof-bird", label: "bird on the roof", x: 1340, y: 980, w: 90, h: 80 },
+  { id: "flying-bird", label: "flying bird", x: 1270, y: 650, w: 150, h: 110 },
+  { id: "standing-bird", label: "bird near the house", x: 1500, y: 1420, w: 110, h: 95 },
+  { id: "man-bird", label: "bird on the man's head", x: 285, y: 1740, w: 130, h: 110 },
+  { id: "plane", label: "plane", x: 1020, y: 270, w: 210, h: 120 },
+  { id: "man-hat", label: "man's hat", x: 380, y: 1850, w: 130, h: 105 },
+  { id: "flower-bird", label: "bird between the flowers", x: 1450, y: 2310, w: 210, h: 145 },
+  { id: "left-flower", label: "left flower", x: 1180, y: 2210, w: 85, h: 95 },
+  { id: "right-flower", label: "right flower", x: 1810, y: 2195, w: 85, h: 95 },
+];
+
+function StarterListeningColouring({ answer, onChange }: { answer: Record<string, string | string[]>; onChange: (value: Record<string, string | string[]>) => void }) {
+  const [activeColor, setActiveColor] = useState(starterPalette[0].value);
+
+  function chooseRegion(regionId: string) {
+    setAnswerPart(answer, onChange, regionId, activeColor);
+  }
+
+  return (
+    <div className="starter-colour-layout">
+      <div className="starter-palette" aria-label="Colours">
+        {starterPalette.map((color) => (
+          <button
+            aria-label={color.label}
+            className={activeColor === color.value ? "is-selected" : ""}
+            key={color.id}
+            onClick={() => setActiveColor(color.value)}
+            style={{ "--swatch": color.value } as CSSProperties}
+            type="button"
+          >
+            <span />
+            {color.label}
+          </button>
+        ))}
+      </div>
+      <div className="starter-colour-scene">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${starterListeningAssets}/part4-scene.png`} alt="Outdoor scene with birds and objects to colour" />
+        <span className="starter-example-colour" style={{ left: `${1370 / 2110 * 100}%`, top: `${1550 / 2500 * 100}%` }}>orange</span>
+        {starterColourRegions.map((region) => {
+          const color = answerText(answer, region.id);
+          return (
+            <button
+              aria-label={region.label}
+              className={color ? "is-coloured" : ""}
+              key={region.id}
+              onClick={() => chooseRegion(region.id)}
+              style={{
+                "--region-color": color || activeColor,
+                left: `${region.x / 2110 * 100}%`,
+                top: `${region.y / 2500 * 100}%`,
+                width: `${region.w / 2110 * 100}%`,
+                height: `${region.h / 2500 * 100}%`,
+              } as CSSProperties}
+              type="button"
+            >
+              <span className="visually-hidden">{region.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 const pairNodes = [

@@ -17,6 +17,7 @@ export type TestDefinition = {
   totalPoints: number;
   status: "active" | "draft" | "legacy";
   audioSrc?: string;
+  audioMode?: "standard" | "lockedOnceStarted";
   answerPayload?: "default" | "rwAnswers";
   aiShortAnswerRubrics?: Record<string, string>;
   sections: TestSection[];

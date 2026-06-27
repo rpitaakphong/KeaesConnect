@@ -12,6 +12,7 @@ import { mathOlympiad6 } from "@/features/tests/content/math-olympiad/level-6";
 import { spipYear7EnglishPre } from "@/features/tests/content/spip/english-pre";
 import { spipYear7MathPre } from "@/features/tests/content/spip/math-pre";
 import { spipYear7SciencePre } from "@/features/tests/content/spip/science-pre";
+import { starterProgressListening } from "@/features/tests/content/starter/listening";
 import type { TestDefinition } from "@/features/tests/lib/types";
 
 const tests: Record<string, TestDefinition> = {
@@ -29,6 +30,7 @@ const tests: Record<string, TestDefinition> = {
   [spipYear7EnglishPre.id]: spipYear7EnglishPre,
   [spipYear7MathPre.id]: spipYear7MathPre,
   [spipYear7SciencePre.id]: spipYear7SciencePre,
+  [starterProgressListening.id]: starterProgressListening,
 };
 
 export function getTestDefinition(testId: string) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { StudentProfile, SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
 import { loadAnswers, loadStudentProfile, saveAnswers } from "@/features/tests/lib/profile-storage";
 import { submitAttempt } from "@/features/tests/lib/submission-api";
@@ -65,11 +65,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
           <p className="eyebrow">{test.level}</p>
           <h1>{test.title}</h1>
           <p>{profile.fullName} · {profile.nickname}</p>
-          {test.audioSrc ? (
-            <audio className="test-audio" controls src={test.audioSrc}>
-              Your browser does not support audio playback.
-            </audio>
-          ) : null}
+          <TestAudio mode={test.audioMode} src={test.audioSrc} />
         </div>
         <div className="header-actions">
           <span className="badge">{answeredCount}/{questions.length} answered</span>
@@ -152,6 +148,95 @@ export function TestRunner({ test }: { test: TestDefinition }) {
       </main>
     </>
   );
+}
+
+function TestAudio({ mode = "standard", src }: { mode?: TestDefinition["audioMode"]; src?: string }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [started, setStarted] = useState(false);
+  const [ended, setEnded] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [status, setStatus] = useState("Start when the teacher tells you to begin.");
+  const [time, setTime] = useState("00:00 / --:--");
+
+  useEffect(() => {
+    if (!src || mode !== "lockedOnceStarted") return;
+    const audio = audioRef.current;
+    if (!audio) return;
+    const audioElement = audio;
+
+    function updateTime() {
+      const duration = Number.isFinite(audioElement.duration) ? audioElement.duration : 0;
+      setTime(`${formatAudioTime(audioElement.currentTime)} / ${duration ? formatAudioTime(duration) : "--:--"}`);
+    }
+
+    function handlePause() {
+      if (!started || ended) return;
+      audioElement.play().catch(() => setStatus("Playback was interrupted. Keep this page active so the audio can continue."));
+    }
+
+    function handleEnded() {
+      setEnded(true);
+      setStatus("Listening audio finished.");
+    }
+
+    audioElement.addEventListener("loadedmetadata", updateTime);
+    audioElement.addEventListener("timeupdate", updateTime);
+    audioElement.addEventListener("pause", handlePause);
+    audioElement.addEventListener("ended", handleEnded);
+    return () => {
+      audioElement.removeEventListener("loadedmetadata", updateTime);
+      audioElement.removeEventListener("timeupdate", updateTime);
+      audioElement.removeEventListener("pause", handlePause);
+      audioElement.removeEventListener("ended", handleEnded);
+    };
+  }, [ended, mode, src, started]);
+
+  if (!src) return null;
+  if (mode !== "lockedOnceStarted") {
+    return (
+      <audio className="test-audio" controls src={src}>
+        Your browser does not support audio playback.
+      </audio>
+    );
+  }
+
+  async function startAudio() {
+    const audio = audioRef.current;
+    if (!audio || pending || started) return;
+    setPending(true);
+    try {
+      audio.currentTime = 0;
+      await audio.play();
+      setStarted(true);
+      setStatus("Listening audio is playing. It cannot be paused or replayed from this page.");
+    } catch {
+      setStatus("Audio could not start. Tap Start listening again.");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <div className="locked-audio">
+      <audio ref={audioRef} preload="auto" src={src}>
+        Your browser does not support audio playback.
+      </audio>
+      <button className="primary-button locked-audio-button" disabled={pending || started} onClick={startAudio} type="button">
+        {started ? "Audio locked" : pending ? "Starting..." : "Start listening"}
+      </button>
+      <div>
+        <strong>{time}</strong>
+        <span>{status}</span>
+      </div>
+    </div>
+  );
+}
+
+function formatAudioTime(seconds: number) {
+  const safeSeconds = Math.max(0, Math.floor(seconds));
+  const minutes = Math.floor(safeSeconds / 60);
+  const remainder = safeSeconds % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
 }
 
 type ScienceQuestionGroup = {
