@@ -38,3 +38,11 @@ const tests: Record<string, TestDefinition> = {
 export function getTestDefinition(testId: string) {
   return tests[testId] || null;
 }
+
+export function getAllTestDefinitions() {
+  return Object.values(tests).sort((a, b) => {
+    const subjectOrder = a.subject.localeCompare(b.subject);
+    if (subjectOrder !== 0) return subjectOrder;
+    return a.title.localeCompare(b.title);
+  });
+}

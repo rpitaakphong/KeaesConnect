@@ -1291,19 +1291,19 @@ tr:last-child td { border-bottom: 0; }
   border-radius: 16px;
 }
 
-.test-story-starter-progress-reading-writing-part2 .story-with-image {
+.story-panel-hero-image .story-with-image {
   grid-template-columns: 1fr;
   justify-items: center;
 }
 
-.test-story-starter-progress-reading-writing-part2 .story-figure {
+.story-panel-hero-image .story-figure {
   order: -1;
   width: min(920px, 100%);
   max-width: min(920px, 100%) !important;
 }
 
-.test-story-starter-progress-reading-writing-part2 .story-panel p,
-.test-story-starter-progress-reading-writing-part2 p {
+.story-panel-hero-image .story-panel p,
+.story-panel-hero-image p {
   justify-self: start;
 }
 

@@ -101,6 +101,7 @@ export const starterProgressReadingWriting: TestDefinition = {
         alt: "Beach scene with children, elephants, monkeys, a duck, a crocodile, and a boat",
         maxWidth: 920,
       },
+      storyLayout: "heroImage",
       questions: [
         choiceQuestion("starter-rw-p2q1", 1, "There are two children in the sea.", yesNoChoices, "yes"),
         choiceQuestion("starter-rw-p2q2", 2, "The duck is walking behind the two elephants.", yesNoChoices, "yes"),

@@ -125,7 +125,10 @@ export function TestAdminClient() {
           <h1>Send tests and migrate shared assessments.</h1>
           <p className="hero-copy">Next-ready tests generate `/tests/[testId]/start` links. Legacy tests continue to use their current static routes.</p>
         </div>
-        <span className="badge">{status}</span>
+        <div className="button-row">
+          <a className="button ghost-button" href="/admin/test-inventory">Inventory</a>
+          <span className="badge">{status}</span>
+        </div>
       </section>
 
       <section className="admin-grid">

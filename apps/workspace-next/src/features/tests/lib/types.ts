@@ -36,6 +36,7 @@ export type TestSection = {
     alt: string;
     maxWidth?: number;
   };
+  storyLayout?: "default" | "heroImage";
   questions: TestQuestion[];
 };
 

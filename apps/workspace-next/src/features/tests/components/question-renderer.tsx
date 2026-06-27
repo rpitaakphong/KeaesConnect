@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
+import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
 
 export function QuestionRenderer({
   answer,
@@ -364,28 +365,29 @@ function StarterListeningConnect({ answer, onChange }: { answer: Record<string, 
     onChange(next);
   }
 
+  const connectionLines = connections.flatMap((connection) => {
+    const object = starterPart1Objects.find((item) => item.id === connection.objectId);
+    const target = starterPart1Targets.find((item) => item.id === connection.targetId);
+    if (!object || !target) return [];
+    return [{
+      className: `starter-connect-line ${connection.example ? "is-example" : ""}`,
+      id: `${connection.objectId}-${connection.targetId}`,
+      x1: object.x,
+      y1: object.y,
+      x2: target.x,
+      y2: target.y,
+    }];
+  });
+
   return (
     <div className="starter-connect-layout">
-      <div className="starter-connect-board">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`${starterListeningAssets}/part1-board.png`} alt="Room scene for object and place matching" />
-        <svg viewBox="0 0 2140 2500" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          {connections.map((connection) => {
-            const object = starterPart1Objects.find((item) => item.id === connection.objectId);
-            const target = starterPart1Targets.find((item) => item.id === connection.targetId);
-            if (!object || !target) return null;
-            return (
-              <line
-                className={`starter-connect-line ${connection.example ? "is-example" : ""}`}
-                key={`${connection.objectId}-${connection.targetId}`}
-                x1={object.x}
-                y1={object.y}
-                x2={target.x}
-                y2={target.y}
-              />
-            );
-          })}
-        </svg>
+      <ImageOverlayBoard
+        alt="Room scene for object and place matching"
+        className="starter-connect-board"
+        lines={connectionLines}
+        src={`${starterListeningAssets}/part1-board.png`}
+        viewBox="0 0 2140 2500"
+      >
         {starterPart1Objects.map((object) => (
           <button
             aria-label={`${object.label}${object.example ? " example" : ""}`}
@@ -411,7 +413,7 @@ function StarterListeningConnect({ answer, onChange }: { answer: Record<string, 
             <span className="visually-hidden">{target.label}</span>
           </button>
         ))}
-      </div>
+      </ImageOverlayBoard>
       <div className="starter-connect-summary">
         {starterPart1Objects.filter((object) => !object.example && object.id !== "lamp").map((object) => {
           const target = starterPart1Targets.find((item) => item.id === answerText(answer, object.id));
@@ -470,9 +472,11 @@ function StarterListeningColouring({ answer, onChange }: { answer: Record<string
           </button>
         ))}
       </div>
-      <div className="starter-colour-scene">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`${starterListeningAssets}/part4-scene.png`} alt="Outdoor scene with birds and objects to colour" />
+      <ImageOverlay
+        alt="Outdoor scene with birds and objects to colour"
+        className="starter-colour-scene"
+        src={`${starterListeningAssets}/part4-scene.png`}
+      >
         <span className="starter-example-colour" style={{ left: `${1370 / 2110 * 100}%`, top: `${1550 / 2500 * 100}%` }}>orange</span>
         {starterColourRegions.map((region) => {
           const color = answerText(answer, region.id);
@@ -495,7 +499,7 @@ function StarterListeningColouring({ answer, onChange }: { answer: Record<string
             </button>
           );
         })}
-      </div>
+      </ImageOverlay>
     </div>
   );
 }
