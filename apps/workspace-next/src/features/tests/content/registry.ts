@@ -13,6 +13,7 @@ import { spipYear7EnglishPre } from "@/features/tests/content/spip/english-pre";
 import { spipYear7MathPre } from "@/features/tests/content/spip/math-pre";
 import { spipYear7SciencePre } from "@/features/tests/content/spip/science-pre";
 import { starterProgressListening } from "@/features/tests/content/starter/listening";
+import { starterProgressReadingWriting } from "@/features/tests/content/starter/reading-writing";
 import type { TestDefinition } from "@/features/tests/lib/types";
 
 const tests: Record<string, TestDefinition> = {
@@ -31,6 +32,7 @@ const tests: Record<string, TestDefinition> = {
   [spipYear7MathPre.id]: spipYear7MathPre,
   [spipYear7SciencePre.id]: spipYear7SciencePre,
   [starterProgressListening.id]: starterProgressListening,
+  [starterProgressReadingWriting.id]: starterProgressReadingWriting,
 };
 
 export function getTestDefinition(testId: string) {
