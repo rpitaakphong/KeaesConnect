@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title">
-  <title id="title">Broom</title>
-  <rect width="240" height="160" fill="#f8fbfa"/>
-  <path d="M150 22 94 110" stroke="#7a5635" stroke-width="8" stroke-linecap="round"/>
-  <path d="M74 108h46l-8 34H82z" fill="#d3a45a" stroke="#7a5635" stroke-width="5" stroke-linejoin="round"/>
-  <path d="M86 112v28M98 112v28M110 112v28" stroke="#7a5635" stroke-width="3"/>
-</svg>

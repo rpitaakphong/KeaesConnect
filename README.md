@@ -1,90 +1,52 @@
-# Keaes Workspace Employee Portal
+# Keaes Workspace
 
-Static workspace for Keaes learning resources, quizzes, exams, and student performance review.
+Keaes Workspace is now served by the Next.js app in `apps/workspace-next`.
 
-## Structure
+## Active App
 
-```text
-login.html
-dashboard.html
-netlify.toml
+- Staff login: `/login`
+- Staff dashboard: `/dashboard`
+- Test Admin: `/admin/tests`
+- Test inventory: `/admin/test-inventory`
+- Staff Management: `/admin/staff`
+- Hours Cross-Check: `/admin/hours-cross-check`
+- Student tests: `/tests/[testId]/start` and `/tests/[testId]/take`
 
-assets/
-  css/
-    base.css
-    portal.css
-  js/
-    portal.js
-
-apps/
-  admin-tests/
-  starter-listening/
-
-supabase/
-  schema.sql
-```
-
-## Run Locally
-
-Open `login.html` in a browser.
-
-For a local server:
+## Local Development
 
 ```bash
-cd "/Users/pitaakphong/Documents/New project"
-python3 -m http.server 4173
+cd apps/workspace-next
+cp .env.example .env.local
+npm install
+npm run dev -- --port 3000
 ```
 
-Then open `http://127.0.0.1:4173/login.html`.
+Open `http://localhost:3000`.
 
-## Supabase Backend
+Required environment variables:
 
-WP5 uses Supabase for staff authentication, test assignments, student submissions, scoring, and admin results.
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-Run `supabase/schema.sql` in your Supabase project, then add your project URL and anon key to `assets/js/supabase-config.js`.
+## Verification
 
-## Current Tools
+Before production cleanup or deploy promotion, run:
 
-- `apps/admin-tests/`: admin test dashboard and Supabase assignment flow.
-- `apps/starter-listening/`: student details landing page and full Starter Progress Test.
+```bash
+cd apps/workspace-next
+npm run lint
+npm run typecheck
+npm run build
+```
 
-## Deploy
+Then follow `apps/workspace-next/docs/production-verification-checklist.md`.
 
-WP7 deploys Keaes Workspace as a static Netlify site backed by Supabase.
+## Deployment
 
-### Netlify setup
+Netlify builds the Next app from `apps/workspace-next` using the root `netlify.toml`.
 
-1. In Netlify, create a new site from GitHub repository `rpitaakphong/KeaesCampus`.
-2. Use these build settings:
-   - Production branch: `main`
-   - Base directory: repository root
-   - Build command: leave empty
-   - Publish directory: `.`
-3. Netlify reads `netlify.toml` to:
-   - publish from the repository root
-   - redirect `/` and `/index.html` to `/login.html`
-   - keep HTML pages uncached so interface updates appear immediately
-4. After deploy, open the Netlify URL and confirm `/` redirects to `/login.html`.
+Legacy static pages have been removed from the working tree. Rollback uses git history or a previous Netlify deploy.
 
-### Domain and DNS
+## Supabase
 
-Use Netlify DNS for the production domain.
-
-1. Add or register the chosen domain in Netlify.
-2. Set the Netlify site as the primary domain.
-3. Enable Netlify automatic HTTPS.
-4. Keep the default `.netlify.app` URL as the fallback/staging reference.
-
-### Production verification
-
-After every production deploy:
-
-1. Open `/login.html` and sign in with a Supabase staff account.
-2. Confirm logged-out `/dashboard.html` redirects to login.
-3. Open Test Admin and generate a `starter-progress-test` assignment link.
-4. Open the student link in a separate browser or device.
-5. Submit the full test and confirm the result appears in Test Admin.
-
-### Supabase note
-
-The browser uses the public Supabase anon key in `assets/js/supabase-config.js`. This is expected for a Supabase frontend. Data protection depends on the RLS policies and RPC functions in `supabase/schema.sql`; rerun that SQL before production if the schema has changed.
+Supabase SQL and Edge Function setup lives in `supabase/`. The seed data now points at the Next routes.
