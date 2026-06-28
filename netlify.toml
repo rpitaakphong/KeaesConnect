@@ -1,7 +1,6 @@
 [build]
-  base = "apps/workspace-next"
-  command = "npm run build"
-  publish = ".next"
+  command = "cd apps/workspace-next && npm run build"
+  publish = "apps/workspace-next/.next"
 
 [[headers]]
   for = "/*.html"
