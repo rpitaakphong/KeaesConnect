@@ -27,12 +27,13 @@ Legacy static pages have been removed from the working tree. Rollback uses git h
 
 ## Production Deployment
 
-Netlify builds the Next app using the root `netlify.toml`. The command changes into this app directory explicitly so the deploy works even when Netlify's UI base directory is `/`:
+Netlify builds the Next app using the root `netlify.toml`:
 
 ```toml
 [build]
-  command = "cd apps/workspace-next && npm run build"
-  publish = "apps/workspace-next/.next"
+  base = "apps/workspace-next"
+  command = "npm run build"
+  publish = ".next"
 ```
 
 Set these environment variables in Netlify:
