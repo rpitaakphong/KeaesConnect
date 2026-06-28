@@ -12,6 +12,8 @@ export function TestAdminClient() {
   const [profile, setProfile] = useState<StaffProfile | null>(null);
   const [tests, setTests] = useState<CatalogTest[]>([]);
   const [selectedId, setSelectedId] = useState("math-olympiad-2");
+  const [catalogSubjectFilter, setCatalogSubjectFilter] = useState("");
+  const [catalogCourseFilter, setCatalogCourseFilter] = useState("");
   const [shareUrl, setShareUrl] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("Loading catalog...");
@@ -23,7 +25,14 @@ export function TestAdminClient() {
   const [selectedResult, setSelectedResult] = useState<AdminResult | null>(null);
   const [resultPending, setResultPending] = useState(false);
 
-  const selectedTest = useMemo(() => tests.find((test) => test.id === selectedId) || tests[0], [selectedId, tests]);
+  const catalogSubjectOptions = useMemo(() => uniqueSorted(tests.map((test) => test.subject)), [tests]);
+  const catalogCourseOptions = useMemo(() => uniqueSorted(tests.map(courseFamily)), [tests]);
+  const visibleCatalogTests = useMemo(() => tests.filter((test) => {
+    const matchesSubject = !catalogSubjectFilter || test.subject === catalogSubjectFilter;
+    const matchesCourse = !catalogCourseFilter || courseFamily(test) === catalogCourseFilter;
+    return matchesSubject && matchesCourse;
+  }), [catalogCourseFilter, catalogSubjectFilter, tests]);
+  const selectedTest = useMemo(() => visibleCatalogTests.find((test) => test.id === selectedId) || visibleCatalogTests[0], [selectedId, visibleCatalogTests]);
   const canCatalog = hasAnyPermission(profile, ["test_catalog", "generate_links"]);
   const canGenerate = hasPermission(profile, "generate_links");
   const canViewResults = hasPermission(profile, "view_results");
@@ -68,6 +77,14 @@ export function TestAdminClient() {
   useEffect(() => {
     if (profile) refreshResults();
   }, [profile, refreshResults]);
+
+  useEffect(() => {
+    if (!visibleCatalogTests.length) return;
+    if (visibleCatalogTests.some((test) => test.id === selectedId)) return;
+    setSelectedId(visibleCatalogTests[0].id);
+    setShareUrl("");
+    setMessage("");
+  }, [selectedId, visibleCatalogTests]);
 
   async function generateLink() {
     if (!selectedTest) return;
@@ -132,7 +149,7 @@ export function TestAdminClient() {
       </section>
 
       <section className="admin-grid">
-        <article className="panel">
+        <article className="panel test-catalog-panel">
           <div className="section-head">
             <div>
               <p className="eyebrow">Test catalog</p>
@@ -142,8 +159,24 @@ export function TestAdminClient() {
               <RefreshCcw aria-hidden="true" /> Refresh
             </button>
           </div>
+          <div className="catalog-filters" aria-label="Catalog filters">
+            <label>
+              Subject
+              <select value={catalogSubjectFilter} onChange={(event) => setCatalogSubjectFilter(event.target.value)}>
+                <option value="">All subjects</option>
+                {catalogSubjectOptions.map((subject) => <option key={subject} value={subject}>{subject}</option>)}
+              </select>
+            </label>
+            <label>
+              Course
+              <select value={catalogCourseFilter} onChange={(event) => setCatalogCourseFilter(event.target.value)}>
+                <option value="">All courses</option>
+                {catalogCourseOptions.map((course) => <option key={course} value={course}>{course}</option>)}
+              </select>
+            </label>
+          </div>
           <div className="test-list">
-            {tests.map((test) => (
+            {visibleCatalogTests.length ? visibleCatalogTests.map((test) => (
               <button
                 className={`test-list-item ${test.id === selectedTest?.id ? "is-active" : ""}`}
                 key={test.id}
@@ -154,11 +187,15 @@ export function TestAdminClient() {
                   setMessage("");
                 }}
               >
-                <span className="badge">Next shared engine</span>
-                <h3>{test.title}</h3>
-                <p>{test.subject} · {test.level}</p>
+                <div className="test-list-copy">
+                  <h3>{test.title}</h3>
+                  <p>
+                    <span>{test.subject} · {test.level}</span>
+                    <span className="test-course-pill">{courseFamily(test)}</span>
+                  </p>
+                </div>
               </button>
-            ))}
+            )) : <div className="notice">No tests match the selected filters.</div>}
           </div>
         </article>
 
@@ -176,7 +213,7 @@ export function TestAdminClient() {
                 <strong>{selectedTest.title}</strong>
                 <p>This test opens in the Next.js shared test shell.</p>
               </div>
-              <button className="primary-button" type="button" onClick={generateLink} disabled={!canGenerate || pending}>
+              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || pending}>
                 {pending ? "Generating..." : "Generate assignment link"}
               </button>
               <label>
@@ -370,6 +407,19 @@ function filterResults(results: AdminResult[], searchValue: string, courseFilter
     const matchesSearch = !search || searchableName.includes(search);
     return matchesCourse && matchesSearch;
   });
+}
+
+function courseFamily(test: CatalogTest) {
+  const source = `${test.id} ${test.title} ${test.level}`.toLowerCase();
+  if (source.includes("english-literacy")) return "English Literacy";
+  if (source.includes("math-olympiad")) return "Math Olympiad";
+  if (source.includes("spip")) return "SPIP Year 7";
+  if (source.includes("starter-progress") || source.includes("starter")) return "Starter Progress";
+  return test.level || "Other";
+}
+
+function uniqueSorted(values: string[]) {
+  return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
 }
 
 function renderGradingDetails(details: Record<string, unknown> | null | undefined) {
