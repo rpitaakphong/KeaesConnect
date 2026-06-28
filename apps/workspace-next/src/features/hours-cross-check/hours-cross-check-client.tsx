@@ -14,14 +14,12 @@ import {
   formatHours,
   formatMonth,
   loadTeacherMappings,
-  parseHoursFiles,
-  reconcile,
   saveTeacherMappings,
   sessionExportRows,
   signedHours,
   teacherExportRows,
 } from "@/features/hours-cross-check/hours-reconciliation";
-import type { ParsedHoursBundle, ReconciliationResults, TeacherMappings, TeacherReview } from "@/features/hours-cross-check/types";
+import type { HoursWorkerRequest, HoursWorkerResponse, ParsedHoursBundle, ReconciliationResults, TeacherMappings, TeacherReview } from "@/features/hours-cross-check/types";
 import { hasPermission } from "@/lib/permissions/permissions";
 
 type Step = "upload" | "review" | "results";
@@ -74,9 +72,16 @@ export function HoursCrossCheckClient() {
     });
     try {
       await waitForPaint();
-      const next = await parseHoursFiles(tngFile, classFile);
-      setParsed(next.parsed);
-      setReview(next.review);
+      const response = await runHoursWorker({
+        classListFile: classFile,
+        mappings,
+        requestId: cryptoId(),
+        tngFile,
+        type: "parse",
+      });
+      if (response.type !== "parse") throw new Error("Unexpected worker response while parsing files.");
+      setParsed(response.parsed);
+      setReview(response.review);
       setResults(null);
       setStep("review");
       setMessage("");
@@ -103,9 +108,16 @@ export function HoursCrossCheckClient() {
         ...review,
         items: review.items.map((item) => ({ ...item, selectedClassKey: nextMappings[item.tngKey] || item.selectedClassKey })),
       };
-      const nextResults = reconcile(parsed, refreshedReview, nextMappings);
+      const response = await runHoursWorker({
+        mappings: nextMappings,
+        parsed,
+        requestId: cryptoId(),
+        review: refreshedReview,
+        type: "reconcile",
+      });
+      if (response.type !== "reconcile") throw new Error("Unexpected worker response while building the report.");
       setReview(refreshedReview);
-      setResults(nextResults);
+      setResults(response.results);
       setStep("results");
       setActiveTab("synthesis");
     } catch (err) {
@@ -400,6 +412,32 @@ function waitForPaint() {
   return new Promise<void>((resolve) => {
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
   });
+}
+
+function runHoursWorker(request: HoursWorkerRequest): Promise<HoursWorkerResponse> {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(new URL("./hours-worker.ts", import.meta.url), { type: "module" });
+    const cleanup = () => worker.terminate();
+    worker.onmessage = (event: MessageEvent<HoursWorkerResponse>) => {
+      const response = event.data;
+      if (response.requestId !== request.requestId) return;
+      cleanup();
+      if (response.type === "error") {
+        reject(new Error(response.message));
+        return;
+      }
+      resolve(response);
+    };
+    worker.onerror = (event) => {
+      cleanup();
+      reject(new Error(event.message || "Hours Cross-Check worker failed."));
+    };
+    worker.postMessage(request);
+  });
+}
+
+function cryptoId() {
+  return globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`.replace(/[^a-z0-9-]/gi, "");
 }
 
 function TeacherMappingTable({ mappings, onMappingChange, review }: { mappings: TeacherMappings; onMappingChange: (tngKey: string, value: string) => void; review: TeacherReview }) {

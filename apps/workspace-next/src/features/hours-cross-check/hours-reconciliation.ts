@@ -1,5 +1,3 @@
-"use client";
-
 import * as XLSX from "xlsx";
 import type {
   CourseHoursRow,
@@ -22,7 +20,7 @@ export const hoursTolerance = 0.01;
 type RowObject = Record<string, unknown>;
 type TeacherAggregate = { hours: number; key: string; name: string; sessions: number };
 
-export async function parseHoursFiles(tngFile: File, classListFile: File): Promise<{ parsed: ParsedHoursBundle; review: TeacherReview }> {
+export async function parseHoursFiles(tngFile: File, classListFile: File, mappings: TeacherMappings = {}): Promise<{ parsed: ParsedHoursBundle; review: TeacherReview }> {
   const [tngRows, classRows] = await Promise.all([readTeachGoFile(tngFile), readCsvFile(classListFile)]);
   const tng = parseTeachGo(tngRows, tngFile.name);
   const classList = parseClassList(classRows, classListFile.name);
@@ -32,7 +30,7 @@ export async function parseHoursFiles(tngFile: File, classListFile: File): Promi
     range: detectDateRange([...tng.sessions, ...classList.sessions]),
     tng,
   };
-  return { parsed, review: buildTeacherReview(tng.sessions, classList.sessions, loadTeacherMappings()) };
+  return { parsed, review: buildTeacherReview(tng.sessions, classList.sessions, mappings) };
 }
 
 export async function readCsvFile(file: File): Promise<RowObject[]> {

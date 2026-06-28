@@ -1,18 +1,7 @@
 [build]
-  publish = "."
-  command = ""
-
-[[redirects]]
-  from = "/"
-  to = "/login.html"
-  status = 302
-  force = true
-
-[[redirects]]
-  from = "/index.html"
-  to = "/login.html"
-  status = 301
-  force = true
+  base = "apps/workspace-next"
+  command = "npm run build"
+  publish = ".next"
 
 [[headers]]
   for = "/*.html"

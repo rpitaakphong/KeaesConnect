@@ -125,3 +125,42 @@ export type ParsedHoursBundle = {
 };
 
 export type TeacherMappings = Record<string, string>;
+
+export type HoursWorkerParseRequest = {
+  classListFile: File;
+  mappings: TeacherMappings;
+  requestId: string;
+  tngFile: File;
+  type: "parse";
+};
+
+export type HoursWorkerReconcileRequest = {
+  mappings: TeacherMappings;
+  parsed: ParsedHoursBundle;
+  requestId: string;
+  review: TeacherReview;
+  type: "reconcile";
+};
+
+export type HoursWorkerRequest = HoursWorkerParseRequest | HoursWorkerReconcileRequest;
+
+export type HoursWorkerParseSuccess = {
+  parsed: ParsedHoursBundle;
+  requestId: string;
+  review: TeacherReview;
+  type: "parse";
+};
+
+export type HoursWorkerReconcileSuccess = {
+  requestId: string;
+  results: ReconciliationResults;
+  type: "reconcile";
+};
+
+export type HoursWorkerFailure = {
+  message: string;
+  requestId: string;
+  type: "error";
+};
+
+export type HoursWorkerResponse = HoursWorkerParseSuccess | HoursWorkerReconcileSuccess | HoursWorkerFailure;

@@ -48,12 +48,16 @@ The admin inventory page is available at `/admin/test-inventory`.
 - Test Admin is handled by Next.js at `/admin/tests`.
 - Staff Management is handled by Next.js at `/admin/staff`.
 - Hours Cross-Check is handled by Next.js at `/admin/hours-cross-check`.
+- Netlify is configured to build and serve `apps/workspace-next` as the primary app.
 - The static student dashboard mockup remains deferred because it is not connected to the staff/test workflow yet.
 
 ## Known caveats
 
 - Starter Reading & Writing answer content should get a final teacher review before production grading is treated as official.
 - Some SPIP Math and Science items still have bespoke interaction components because their UI rules are exam-specific.
+- Hours Cross-Check uses a browser Web Worker for parsing and reconciliation so large files do not block the UI.
+- Hours Cross-Check depends on `xlsx` for local Excel parsing. `npm audit` reports known advisories for that package with no clean non-breaking replacement in this phase.
+- `npm audit` also reports a `postcss` advisory through `next`; the suggested forced fix would downgrade Next to 9.3.3 and is not acceptable.
 - A full browser automation suite has not been added yet; current verification is lint, typecheck, manual smoke testing, and targeted browser checks.
 - Supabase submission should be spot-checked with a real assignment before retiring legacy fallbacks.
 
@@ -67,4 +71,6 @@ Keep these static pages until one full production verification cycle is complete
 - `tools/hours-cross-check/index.html`, replaced by `/admin/hours-cross-check`
 - `login.html`, replaced by `/login`
 
-Do not delete the fallback pages until production submissions, reporting, audio behavior, and review-submit flows have all been verified.
+Fallback pages are retained in git only after the Next app becomes the primary Netlify deployment. Use deploy rollback or git rollback if emergency static fallback is needed.
+
+Do not delete the fallback pages until production submissions, reporting, audio behavior, staff permissions, Hours Cross-Check, and review-submit flows have all been verified with `production-verification-checklist.md`.
