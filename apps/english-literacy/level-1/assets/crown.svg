@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title">
-  <title id="title">Crown</title>
-  <rect width="240" height="160" fill="#f8fbfa"/>
-  <path d="M42 120h156l-16-68-38 36-24-50-24 50-38-36z" fill="#f3bd35" stroke="#b98014" stroke-width="5" stroke-linejoin="round"/>
-  <rect x="54" y="112" width="132" height="18" rx="6" fill="#e4a727"/>
-  <circle cx="96" cy="94" r="8" fill="#3f8fc7"/>
-  <circle cx="120" cy="76" r="9" fill="#d94c4c"/>
-  <circle cx="144" cy="94" r="8" fill="#3f8fc7"/>
-</svg>

@@ -1,6 +1,6 @@
 # Production Verification Checklist
 
-Use this checklist on the Netlify deploy preview or production deployment before deleting any legacy static fallback pages.
+Use this checklist on the Netlify deploy preview or production deployment before promoting a release.
 
 ## Deploy Preview
 
@@ -45,8 +45,7 @@ After each submission:
 - Confirm Synthesis, Overview, Teachers, Courses, Sessions, Data Quality, and Teacher Names tabs render.
 - Download teacher CSV, course CSV, session CSV, data-quality CSV, and combined JSON report.
 
-## Rollback And Legacy Policy
+## Rollback Policy
 
-- Keep legacy static files in git during this verification cycle.
 - If production verification fails, roll back to the previous Netlify deploy or revert the deployment commit.
-- Delete legacy static fallback pages only in a separate cleanup commit after this checklist passes.
+- Legacy static files are no longer retained in the working tree; use git history if source-level rollback is needed.

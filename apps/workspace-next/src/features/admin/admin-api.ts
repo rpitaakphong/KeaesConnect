@@ -52,7 +52,7 @@ export async function listTests(): Promise<CatalogTest[]> {
 
   const databaseTests = (withAppPath.data || [])
     .map((test) => normalizeCatalogTest(test))
-    .filter((test) => test.id !== "starter-progress-test");
+    .filter((test) => nextRuntimeTests.has(test.id));
   return mergeTests(databaseTests);
 }
 
@@ -80,9 +80,7 @@ export async function getResult(attemptId: string): Promise<AdminResult> {
 }
 
 export function buildAssignmentUrl(test: CatalogTest, assignmentToken: string) {
-  const appPath = test.runtime === "next-shared-engine"
-    ? `/tests/${test.id}/start`
-    : test.appPath || `/apps/${test.id}/index.html`;
+  const appPath = `/tests/${test.id}/start`;
   const url = new URL(appPath, window.location.origin);
   url.searchParams.set("testId", test.id);
   url.searchParams.set("assignment", assignmentToken);
@@ -91,7 +89,6 @@ export function buildAssignmentUrl(test: CatalogTest, assignmentToken: string) {
 
 function normalizeCatalogTest(test: Record<string, unknown>): CatalogTest {
   const id = String(test.id || "");
-  const runtime = nextRuntimeTests.has(id) ? "next-shared-engine" : "legacy-static";
   return {
     id,
     title: String(test.title || id),
@@ -99,15 +96,9 @@ function normalizeCatalogTest(test: Record<string, unknown>): CatalogTest {
     level: String(test.level || ""),
     status: String(test.status || "active"),
     totalPoints: Number(test.total_points || 0),
-    appPath: runtime === "next-shared-engine" ? `/tests/${id}/start` : normalizeLegacyPath(String(test.app_path || "")),
-    runtime,
+    appPath: `/tests/${id}/start`,
+    runtime: "next-shared-engine",
   };
-}
-
-function normalizeLegacyPath(path: string) {
-  if (!path) return "";
-  if (path.startsWith("/")) return path;
-  return path.startsWith("apps/") ? `/${path}` : `/apps/admin-tests/${path}`;
 }
 
 function mergeTests(databaseTests: CatalogTest[]) {
@@ -116,7 +107,7 @@ function mergeTests(databaseTests: CatalogTest[]) {
     byId.set(test.id, {
       ...byId.get(test.id),
       ...test,
-      runtime: nextRuntimeTests.has(test.id) ? "next-shared-engine" : test.runtime,
+      runtime: "next-shared-engine",
     });
   }
   return Array.from(byId.values()).sort((a, b) => a.title.localeCompare(b.title));

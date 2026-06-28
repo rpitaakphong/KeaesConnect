@@ -49,7 +49,7 @@ The admin inventory page is available at `/admin/test-inventory`.
 - Staff Management is handled by Next.js at `/admin/staff`.
 - Hours Cross-Check is handled by Next.js at `/admin/hours-cross-check`.
 - Netlify is configured to build and serve `apps/workspace-next` as the primary app.
-- The static student dashboard mockup remains deferred because it is not connected to the staff/test workflow yet.
+- The static student dashboard mockup was removed because it was not connected to the staff/test workflow.
 
 ## Known caveats
 
@@ -61,16 +61,16 @@ The admin inventory page is available at `/admin/test-inventory`.
 - A full browser automation suite has not been added yet; current verification is lint, typecheck, manual smoke testing, and targeted browser checks.
 - Supabase submission should be spot-checked with a real assignment before retiring legacy fallbacks.
 
-## Legacy fallback pages
+## Legacy cleanup
 
-Keep these static pages until one full production verification cycle is complete:
+The legacy static app surface has been removed from the working tree:
 
-- `apps/starter-listening/test.html`, replaced by `/tests/starter-progress-listening`
-- `apps/starter-listening/reading-writing.html`, replaced by `/tests/starter-progress-reading-writing`
-- `apps/admin-tests/staff.html`, replaced by `/admin/staff`
-- `tools/hours-cross-check/index.html`, replaced by `/admin/hours-cross-check`
-- `login.html`, replaced by `/login`
+- root `login.html`, `dashboard.html`, `index.html`, and `assets/`
+- old static test apps under `apps/english-literacy`, `apps/math-olympiad`, `apps/spip`, and `apps/starter-listening`
+- old static admin app under `apps/admin-tests`
+- old static Hours Cross-Check tool under `tools/hours-cross-check`
+- old static student dashboard mockup under `apps/student-dashboard`
 
-Fallback pages are retained in git only after the Next app becomes the primary Netlify deployment. Use deploy rollback or git rollback if emergency static fallback is needed.
+Rollback now means git history or Netlify deploy rollback, not retained static fallback files.
 
-Do not delete the fallback pages until production submissions, reporting, audio behavior, staff permissions, Hours Cross-Check, and review-submit flows have all been verified with `production-verification-checklist.md`.
+Production submissions, reporting, audio behavior, staff permissions, Hours Cross-Check, and review-submit flows should still be verified with `production-verification-checklist.md` before promoting a deployment.

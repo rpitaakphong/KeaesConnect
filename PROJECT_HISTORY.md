@@ -1,5 +1,7 @@
 # Project History
 
+> Historical note: this file records the original static-site work packages. The active production app is now `apps/workspace-next`; legacy static pages have been removed from the working tree.
+
 Record date: 2026-06-07
 
 ## Work Package History

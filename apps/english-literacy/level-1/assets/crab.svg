@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title">
-  <title id="title">Crab</title>
-  <rect width="240" height="160" fill="#f8fbfa"/>
-  <ellipse cx="120" cy="88" rx="58" ry="34" fill="#e85f55"/>
-  <circle cx="98" cy="58" r="8" fill="#25333a"/>
-  <circle cx="142" cy="58" r="8" fill="#25333a"/>
-  <path d="M70 82 32 62M170 82l38-20M75 102 42 122M165 102l33 20" stroke="#b73a34" stroke-width="9" stroke-linecap="round"/>
-  <path d="M60 54c-15-22-36-18-40-2 15 1 24 7 40 2Zm120 0c15-22 36-18 40-2-15 1-24 7-40 2Z" fill="#e85f55"/>
-</svg>

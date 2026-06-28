@@ -123,7 +123,7 @@ export function TestAdminClient() {
         <div>
           <p className="eyebrow">Next.js test admin</p>
           <h1>Send tests and migrate shared assessments.</h1>
-          <p className="hero-copy">Next-ready tests generate `/tests/[testId]/start` links. Legacy tests continue to use their current static routes.</p>
+          <p className="hero-copy">All active tests generate `/tests/[testId]/start` links through the Next.js shared test runner.</p>
         </div>
         <div className="button-row">
           <a className="button ghost-button" href="/admin/test-inventory">Inventory</a>
@@ -154,7 +154,7 @@ export function TestAdminClient() {
                   setMessage("");
                 }}
               >
-                <span className="badge">{test.runtime === "next-shared-engine" ? "Next shared engine" : "Legacy static"}</span>
+                <span className="badge">Next shared engine</span>
                 <h3>{test.title}</h3>
                 <p>{test.subject} · {test.level}</p>
               </button>
@@ -174,7 +174,7 @@ export function TestAdminClient() {
             <div className="choice-grid">
               <div className="notice">
                 <strong>{selectedTest.title}</strong>
-                <p>{selectedTest.runtime === "next-shared-engine" ? "This test opens in the Next.js shared test shell." : "This test still opens in its current static route."}</p>
+                <p>This test opens in the Next.js shared test shell.</p>
               </div>
               <button className="primary-button" type="button" onClick={generateLink} disabled={!canGenerate || pending}>
                 {pending ? "Generating..." : "Generate assignment link"}

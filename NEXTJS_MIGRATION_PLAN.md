@@ -1,5 +1,7 @@
 # Keaes Workspace Next.js Migration Plan
 
+> Historical note: this document describes the original migration plan from the static site to Next.js. The static app surface has since been removed. Current production status and verification steps live in `apps/workspace-next/docs/test-migration-notes.md` and `apps/workspace-next/docs/production-verification-checklist.md`.
+
 ## Goal
 
 Move Keaes Workspace from a static multi-page HTML/CSS/JS site to a fully Next.js-supported webapp, with tests rendered through shared layouts, shared question components, shared scoring contracts, and a consistent Supabase integration.

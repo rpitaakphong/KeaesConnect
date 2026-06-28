@@ -6,7 +6,7 @@ export type CatalogTest = {
   status: string;
   totalPoints?: number;
   appPath?: string;
-  runtime: "legacy-static" | "next-shared-engine";
+  runtime: "next-shared-engine";
 };
 
 export type TestAssignment = {
