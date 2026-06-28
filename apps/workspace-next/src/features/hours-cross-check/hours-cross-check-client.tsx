@@ -26,6 +26,10 @@ import { hasPermission } from "@/lib/permissions/permissions";
 
 type Step = "upload" | "review" | "results";
 type Tab = "synthesis" | "overview" | "teachers" | "courses" | "sessions" | "quality" | "settings";
+type ProcessingState = {
+  detail: string;
+  title: string;
+};
 
 export function HoursCrossCheckClient() {
   const [profile, setProfile] = useState<StaffProfile | null>(null);
@@ -40,6 +44,7 @@ export function HoursCrossCheckClient() {
   const [mappings, setMappings] = useState<TeacherMappings>({});
   const [message, setMessage] = useState("");
   const [pending, setPending] = useState(false);
+  const [processing, setProcessing] = useState<ProcessingState | null>(null);
 
   useEffect(() => {
     setMappings(loadTeacherMappings());
@@ -63,7 +68,12 @@ export function HoursCrossCheckClient() {
     if (!tngFile || !classFile || pending) return;
     setPending(true);
     setMessage("Parsing files locally...");
+    setProcessing({
+      detail: "Reading Teach and Go and class-list files in this browser. Large Excel workbooks can take a moment.",
+      title: "Checking teacher names",
+    });
     try {
+      await waitForPaint();
       const next = await parseHoursFiles(tngFile, classFile);
       setParsed(next.parsed);
       setReview(next.review);
@@ -73,23 +83,37 @@ export function HoursCrossCheckClient() {
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Could not parse the selected files.");
     } finally {
+      setProcessing(null);
       setPending(false);
     }
   }
 
-  function runSummary(nextMappings = mappings) {
+  async function runSummary(nextMappings = mappings) {
     if (!parsed || !review) return;
-    saveTeacherMappings(nextMappings);
-    setMappings(nextMappings);
-    const refreshedReview = {
-      ...review,
-      items: review.items.map((item) => ({ ...item, selectedClassKey: nextMappings[item.tngKey] || item.selectedClassKey })),
-    };
-    const nextResults = reconcile(parsed, refreshedReview, nextMappings);
-    setReview(refreshedReview);
-    setResults(nextResults);
-    setStep("results");
-    setActiveTab("synthesis");
+    setPending(true);
+    setProcessing({
+      detail: "Saving teacher-name choices and calculating differences, summaries, exceptions, and export rows.",
+      title: "Building results dashboard",
+    });
+    try {
+      await waitForPaint();
+      saveTeacherMappings(nextMappings);
+      setMappings(nextMappings);
+      const refreshedReview = {
+        ...review,
+        items: review.items.map((item) => ({ ...item, selectedClassKey: nextMappings[item.tngKey] || item.selectedClassKey })),
+      };
+      const nextResults = reconcile(parsed, refreshedReview, nextMappings);
+      setReview(refreshedReview);
+      setResults(nextResults);
+      setStep("results");
+      setActiveTab("synthesis");
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Could not calculate the report.");
+    } finally {
+      setProcessing(null);
+      setPending(false);
+    }
   }
 
   function updateMapping(tngKey: string, value: string) {
@@ -171,6 +195,7 @@ export function HoursCrossCheckClient() {
           onBack={() => setStep("upload")}
           onMappingChange={updateMapping}
           onRun={() => runSummary(mappings)}
+          pending={pending}
           parsed={parsed}
           review={review}
         />
@@ -186,11 +211,13 @@ export function HoursCrossCheckClient() {
           onReset={resetAll}
           onRerun={() => runSummary(mappings)}
           onTab={setActiveTab}
+          pending={pending}
           parsed={parsed}
           results={results}
           review={review}
         />
       ) : null}
+      {processing ? <ProcessingOverlay detail={processing.detail} title={processing.title} /> : null}
     </>
   );
 }
@@ -238,6 +265,7 @@ function TeacherReviewStep({
   onBack,
   onMappingChange,
   onRun,
+  pending,
   parsed,
   review,
 }: {
@@ -245,6 +273,7 @@ function TeacherReviewStep({
   onBack: () => void;
   onMappingChange: (tngKey: string, value: string) => void;
   onRun: () => void;
+  pending: boolean;
   parsed: ParsedHoursBundle;
   review: TeacherReview;
 }) {
@@ -274,8 +303,8 @@ function TeacherReviewStep({
       <div className="notice warning">Choose the matching class-list tutor, or leave as no match if they are different people.</div>
       <TeacherMappingTable mappings={mappings} onMappingChange={onMappingChange} review={review} />
       <div className="footer-actions">
-        <button className="ghost-button" type="button" onClick={onBack}>Replace files</button>
-        <button className="primary-button" type="button" onClick={onRun}>Save Names & Run Summary</button>
+        <button className="ghost-button" disabled={pending} type="button" onClick={onBack}>Replace files</button>
+        <button className="primary-button" disabled={pending} type="button" onClick={onRun}>{pending ? "Building..." : "Save Names & Run Summary"}</button>
       </div>
     </section>
   );
@@ -290,6 +319,7 @@ function ResultsStep({
   onReset,
   onRerun,
   onTab,
+  pending,
   results,
   review,
 }: {
@@ -301,13 +331,14 @@ function ResultsStep({
   onReset: () => void;
   onRerun: () => void;
   onTab: (tab: Tab) => void;
+  pending: boolean;
   parsed: ParsedHoursBundle;
   results: ReconciliationResults;
   review: TeacherReview;
 }) {
   return (
     <section className="panel step-panel is-active">
-      <div className="dashboard-header">
+      <div className="dashboard-header hours-results-header">
         <div>
           <p className="eyebrow">Results dashboard</p>
           <h2>{results.title}</h2>
@@ -340,13 +371,35 @@ function ResultsStep({
             <div className="notice ok">Teacher-name mappings are stored only in this browser.</div>
             <TeacherMappingTable mappings={mappings} onMappingChange={onMappingChange} review={review} />
             <div className="footer-actions">
-              <button className="primary-button" type="button" onClick={onRerun}>Save Names & Re-run</button>
+              <button className="primary-button" disabled={pending} type="button" onClick={onRerun}>{pending ? "Re-running..." : "Save Names & Re-run"}</button>
             </div>
           </>
         ) : null}
       </div>
     </section>
   );
+}
+
+function ProcessingOverlay({ detail, title }: ProcessingState) {
+  return (
+    <div aria-live="polite" aria-modal="true" className="processing-overlay" role="alertdialog">
+      <div className="processing-card">
+        <div className="processing-spinner" aria-hidden="true" />
+        <div>
+          <p className="eyebrow">Processing</p>
+          <h2>{title}</h2>
+          <p>{detail}</p>
+          <p className="support-note">Please keep this tab open. Uploaded files stay local to this browser.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function waitForPaint() {
+  return new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  });
 }
 
 function TeacherMappingTable({ mappings, onMappingChange, review }: { mappings: TeacherMappings; onMappingChange: (tngKey: string, value: string) => void; review: TeacherReview }) {
