@@ -121,6 +121,12 @@ function mergeTests(databaseTests: CatalogTest[]) {
 
 function normalizeResult(row: Record<string, unknown>): AdminResult {
   return {
+    branch: normalizeBranch(row.branch),
+    createdBy: {
+      email: String(row.created_by_email || ""),
+      id: String(row.created_by || ""),
+      name: String(row.created_by_name || ""),
+    },
     id: String(row.attempt_id || ""),
     testId: String(row.test_id || ""),
     testTitle: String(row.test_title || ""),
@@ -141,6 +147,10 @@ function normalizeResult(row: Record<string, unknown>): AdminResult {
     answers: normalizeAnswers(row.answers),
     submittedAt: String(row.submitted_at || ""),
   };
+}
+
+function normalizeBranch(value: unknown): AdminResult["branch"] {
+  return value === "ram" || value === "ekamai" ? value : "";
 }
 
 function normalizePartScores(value: unknown): AdminPartScore[] {

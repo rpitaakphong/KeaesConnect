@@ -11,6 +11,7 @@ export type CatalogTest = {
 
 export type TestAssignment = {
   assignment_token: string;
+  branch?: "ram" | "ekamai" | "";
   test_id: string;
   title?: string;
   subject?: string;
@@ -18,6 +19,12 @@ export type TestAssignment = {
 };
 
 export type AdminResult = {
+  branch: "ram" | "ekamai" | "";
+  createdBy: {
+    email: string;
+    id: string;
+    name: string;
+  };
   id: string;
   testId: string;
   testTitle: string;

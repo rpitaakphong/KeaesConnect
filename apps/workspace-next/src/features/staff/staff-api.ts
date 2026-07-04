@@ -1,9 +1,10 @@
 "use client";
 
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import type { StaffAccessUpdatePayload, StaffCreatePayload, StaffPermissionKey, StaffRole, StaffUser } from "@/features/staff/types";
+import type { StaffAccessUpdatePayload, StaffBranchValue, StaffCreatePayload, StaffPermissionKey, StaffRole, StaffUser } from "@/features/staff/types";
 
 type RawStaffUser = {
+  branch?: string;
   display_name?: string;
   displayName?: string;
   email?: string;
@@ -24,6 +25,7 @@ export async function createStaffUser(payload: StaffCreatePayload): Promise<Staf
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.functions.invoke("manage-staff-user", {
     body: {
+      branch: payload.branch,
       displayName: payload.displayName,
       email: payload.email,
       permissions: payload.permissions,
@@ -41,6 +43,7 @@ export async function createStaffUser(payload: StaffCreatePayload): Promise<Staf
 export async function updateStaffAccess(userId: string, payload: StaffAccessUpdatePayload): Promise<StaffUser> {
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.rpc("update_staff_access", {
+    p_branch: payload.branch,
     p_permissions: payload.permissions,
     p_role: payload.role,
     p_staff_id: userId,
@@ -58,6 +61,7 @@ function normalizeStaffUser(value: unknown): StaffUser | null {
   const id = String(row.id || "");
   if (!id || !email) return null;
   return {
+    branch: normalizeBranch(row.branch),
     displayName: String(row.displayName || row.display_name || email || "Staff"),
     email,
     id,
@@ -65,6 +69,10 @@ function normalizeStaffUser(value: unknown): StaffUser | null {
     permissions: normalizePermissions(row.permissions),
     role,
   };
+}
+
+function normalizeBranch(value: unknown): StaffBranchValue {
+  return value === "ram" || value === "ekamai" ? value : "";
 }
 
 function normalizeRole(value: unknown): StaffRole {

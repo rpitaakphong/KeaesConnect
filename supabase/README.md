@@ -10,8 +10,8 @@ Supabase provides staff authentication, staff permissions, assignment creation, 
 4. Insert matching staff rows:
 
 ```sql
-insert into staff_users (id, email, display_name, role)
-values ('AUTH_USER_UUID', 'staff@example.com', 'Staff Name', 'super_admin');
+insert into staff_users (id, email, display_name, role, branch)
+values ('AUTH_USER_UUID', 'staff@example.com', 'Staff Name', 'super_admin', 'ram');
 ```
 
 5. Deploy Edge Functions and set required secrets:

@@ -311,7 +311,7 @@ a { color: inherit; }
 .results-panel { margin-top: 20px; }
 .results-controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
+  grid-template-columns: minmax(0, 1fr) 260px 220px;
   gap: 14px;
   margin: 16px 0;
 }
@@ -343,6 +343,10 @@ a { color: inherit; }
   color: var(--muted);
   font-size: var(--font-sm);
   margin-top: 3px;
+}
+.badge.warning {
+  background: #fff7ed;
+  color: #9a3412;
 }
 .permission-fieldset {
   display: grid;
@@ -651,7 +655,7 @@ tr:last-child td { border-bottom: 0; }
 }
 .score-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 .score-summary div, .part-row, .correction-row {

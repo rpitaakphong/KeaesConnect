@@ -4,6 +4,7 @@ import { getSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase/c
 
 export type Assignment = {
   assignment_token: string;
+  branch?: "ram" | "ekamai" | "";
   test_id: string;
   title: string;
   subject: string;

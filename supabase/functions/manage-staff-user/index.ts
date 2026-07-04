@@ -52,6 +52,7 @@ Deno.serve(async (request) => {
     }
 
     const payload = await request.json();
+    const branch = normalizeBranch(payload?.branch);
     const email = cleanEmail(payload?.email);
     const displayName = cleanText(payload?.displayName);
     const password = String(payload?.temporaryPassword || "");
@@ -60,6 +61,7 @@ Deno.serve(async (request) => {
 
     if (!email) return jsonResponse({ error: "Email is required" }, 400);
     if (!displayName) return jsonResponse({ error: "Display name is required" }, 400);
+    if (!branch) return jsonResponse({ error: "Branch is required" }, 400);
     if (password.length < 8) return jsonResponse({ error: "Temporary password must be at least 8 characters" }, 400);
 
     const { data: created, error: createError } = await admin.auth.admin.createUser({
@@ -76,6 +78,7 @@ Deno.serve(async (request) => {
       .from("staff_users")
       .upsert({
         id: created.user.id,
+        branch,
         email,
         display_name: displayName,
         role,
@@ -97,6 +100,7 @@ Deno.serve(async (request) => {
     return jsonResponse({
       user: {
         id: created.user.id,
+        branch,
         email,
         display_name: displayName,
         role,
@@ -118,6 +122,12 @@ function normalizeRole(value: unknown): "staff" | "super_admin" {
 function normalizePermissions(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return Array.from(new Set(value.map((item) => String(item || "").trim()).filter((item) => featureKeys.has(item)))).sort();
+}
+
+function normalizeBranch(value: unknown): "ram" | "ekamai" | "" {
+  const branch = String(value || "").trim().toLowerCase();
+  if (branch === "ram" || branch === "ekamai") return branch;
+  return "";
 }
 
 function cleanEmail(value: unknown): string {

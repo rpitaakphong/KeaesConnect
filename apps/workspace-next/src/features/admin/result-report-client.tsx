@@ -65,6 +65,7 @@ export function ResultReportClient({ attemptId }: { attemptId: string }) {
               <span>DOB: {result.student.dateOfBirth || "-"}</span>
               <span>Subject: {result.student.subject || "-"}</span>
               <span>Level: {result.student.level || "-"}</span>
+              <span>Branch: {formatBranch(result.branch)}</span>
               <span>Total: {formatScore(result.score.total)}/{formatScore(result.score.possible)}</span>
               <span>Percent: {result.score.percent}%</span>
             </div>
@@ -90,6 +91,7 @@ export function ResultReportClient({ attemptId }: { attemptId: string }) {
               <div><span>Total score</span><strong>{formatScore(result.score.total)}/{formatScore(result.score.possible)}</strong></div>
               <div><span>Percent</span><strong>{result.score.percent}%</strong></div>
               <div><span>Level</span><strong>{result.student.level}</strong></div>
+              <div><span>Branch</span><strong>{formatBranch(result.branch)}</strong></div>
             </section>
             <div className="part-list">
               {result.partScores.map((part) => (
@@ -125,6 +127,12 @@ function formatDate(value: string) {
 
 function formatScore(value: number) {
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function formatBranch(value: string) {
+  if (value === "ram") return "Ram";
+  if (value === "ekamai") return "Ekamai";
+  return "Unknown / legacy";
 }
 
 function buildResultPdf(result: AdminResult) {
@@ -231,7 +239,7 @@ function buildResultPdf(result: AdminResult) {
   const cardWidth = (contentWidth - cardGap * 2) / 3;
   const cards = [
     ["Student", result.student.fullName || "-", `${result.student.nickname ? `Nickname: ${result.student.nickname}` : "Nickname: -"}  DOB: ${result.student.dateOfBirth || "-"}`],
-    ["Course", result.student.level || "-", result.student.subject ? `Subject: ${result.student.subject}` : "Subject: -"],
+    ["Course", result.student.level || "-", `${result.student.subject ? `Subject: ${result.student.subject}` : "Subject: -"}  Branch: ${formatBranch(result.branch)}`],
     ["Dates", result.student.testDate || "-", `Submitted: ${formatDate(result.submittedAt)}`],
   ];
   cards.forEach((card, index) => {

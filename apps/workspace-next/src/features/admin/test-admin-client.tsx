@@ -6,6 +6,7 @@ import { buildAssignmentUrl, createAssignment, getResult, listResults, listTests
 import type { AdminResult, CatalogTest } from "@/features/admin/types";
 import { requireStaffProfile } from "@/features/auth/auth-api";
 import type { StaffProfile } from "@/features/auth/types";
+import { staffBranchOptions } from "@/features/staff/types";
 import { hasAnyPermission, hasPermission } from "@/lib/permissions/permissions";
 
 export function TestAdminClient() {
@@ -15,6 +16,7 @@ export function TestAdminClient() {
   const [catalogSubjectFilter, setCatalogSubjectFilter] = useState("");
   const [catalogCourseFilter, setCatalogCourseFilter] = useState("");
   const [shareUrl, setShareUrl] = useState("");
+  const [shareBranch, setShareBranch] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("Loading catalog...");
   const [pending, setPending] = useState(false);
@@ -22,6 +24,7 @@ export function TestAdminClient() {
   const [resultStatus, setResultStatus] = useState("Loading results...");
   const [resultSearch, setResultSearch] = useState("");
   const [courseFilter, setCourseFilter] = useState("");
+  const [branchFilter, setBranchFilter] = useState("");
   const [selectedResult, setSelectedResult] = useState<AdminResult | null>(null);
   const [resultPending, setResultPending] = useState(false);
 
@@ -34,11 +37,12 @@ export function TestAdminClient() {
   }), [catalogCourseFilter, catalogSubjectFilter, tests]);
   const selectedTest = useMemo(() => visibleCatalogTests.find((test) => test.id === selectedId) || visibleCatalogTests[0], [selectedId, visibleCatalogTests]);
   const selectedTestActive = selectedTest?.status === "active";
+  const staffHasBranch = profile?.branch === "ram" || profile?.branch === "ekamai";
   const canCatalog = hasAnyPermission(profile, ["test_catalog", "generate_links"]);
   const canGenerate = hasPermission(profile, "generate_links");
   const canViewResults = hasPermission(profile, "view_results");
   const canViewReports = hasPermission(profile, "view_reports");
-  const visibleResults = useMemo(() => filterResults(results, resultSearch, courseFilter), [courseFilter, resultSearch, results]);
+  const visibleResults = useMemo(() => filterResults(results, resultSearch, courseFilter, branchFilter), [branchFilter, courseFilter, resultSearch, results]);
   const resultCourses = useMemo(() => {
     const byId = new Map(results.map((result) => [result.testId, result.testTitle]));
     return Array.from(byId, ([id, title]) => ({ id, title })).sort((a, b) => a.title.localeCompare(b.title));
@@ -84,6 +88,7 @@ export function TestAdminClient() {
     if (visibleCatalogTests.some((test) => test.id === selectedId)) return;
     setSelectedId(visibleCatalogTests[0].id);
     setShareUrl("");
+    setShareBranch("");
     setMessage("");
   }, [selectedId, visibleCatalogTests]);
 
@@ -91,7 +96,14 @@ export function TestAdminClient() {
     if (!selectedTest) return;
     if (selectedTest.status !== "active") {
       setShareUrl("");
+      setShareBranch("");
       setMessage(`${selectedTest.title} is ${selectedTest.status} and cannot generate assignment links yet.`);
+      return;
+    }
+    if (!staffHasBranch) {
+      setShareUrl("");
+      setShareBranch("");
+      setMessage("Choose your staff branch before generating test links.");
       return;
     }
     setPending(true);
@@ -100,6 +112,7 @@ export function TestAdminClient() {
       const assignment = await createAssignment(selectedTest.id);
       const url = buildAssignmentUrl(selectedTest, assignment.assignment_token);
       setShareUrl(url);
+      setShareBranch(assignment.branch || profile?.branch || "");
       setMessage([
         `Please complete ${selectedTest.title}.`,
         "",
@@ -190,6 +203,7 @@ export function TestAdminClient() {
                 onClick={() => {
                   setSelectedId(test.id);
                   setShareUrl("");
+                  setShareBranch("");
                   setMessage("");
                 }}
               >
@@ -219,14 +233,16 @@ export function TestAdminClient() {
               <div className="notice">
                 <strong>{selectedTest.title}</strong>
                 <p>{selectedTestActive ? "This test opens in the Next.js shared test shell." : `This test is ${selectedTest.status} and cannot generate assignment links yet.`}</p>
+                {canGenerate && !staffHasBranch ? <p>Choose your staff branch before generating test links.</p> : null}
               </div>
-              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || !selectedTestActive || pending}>
+              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || !selectedTestActive || !staffHasBranch || pending}>
                 {pending ? "Generating..." : "Generate assignment link"}
               </button>
               <label>
                 Share URL
                 <input value={shareUrl} readOnly placeholder={canGenerate ? "Generate a link first" : "Missing generate_links permission"} />
               </label>
+              <p className="support-note">Branch: {formatBranch(shareBranch || profile.branch)}</p>
               <div className="button-row">
                 <button className="ghost-button" type="button" onClick={copyLink} disabled={!shareUrl}>
                   <Copy aria-hidden="true" /> Copy
@@ -270,6 +286,14 @@ export function TestAdminClient() {
               <select value={courseFilter} onChange={(event) => setCourseFilter(event.target.value)}>
                 <option value="">All courses</option>
                 {resultCourses.map((course) => <option key={course.id} value={course.id}>{course.title}</option>)}
+              </select>
+            </label>
+            <label>
+              Filter branch
+              <select value={branchFilter} onChange={(event) => setBranchFilter(event.target.value)}>
+                <option value="">All branches</option>
+                {staffBranchOptions.map((branch) => <option key={branch.value} value={branch.value}>{branch.label}</option>)}
+                <option value="unknown">Unknown / legacy</option>
               </select>
             </label>
           </div>
@@ -321,6 +345,7 @@ function ResultTable({
             <th>Test</th>
             <th>Subject</th>
             <th>Level</th>
+            <th>Branch</th>
             <th>Score</th>
             <th>Date</th>
             <th>Action</th>
@@ -333,6 +358,7 @@ function ResultTable({
               <td>{result.testTitle}</td>
               <td>{result.student.subject}</td>
               <td>{result.student.level}</td>
+              <td><span className="badge">{formatBranch(result.branch)}</span></td>
               <td><span className="score-pill">{formatScore(result.score.total)}/{formatScore(result.score.possible)} ({result.score.percent}%)</span></td>
               <td>{formatDate(result.submittedAt)}</td>
               <td>
@@ -365,6 +391,7 @@ function ResultDetail({ onClose, result }: { onClose: () => void; result: AdminR
             <h2 id="resultDetailTitle">{result.student.fullName}</h2>
             <p>{result.student.nickname} · DOB {result.student.dateOfBirth}</p>
             <p>{result.testTitle} · {formatDate(result.submittedAt)}</p>
+            <p>Branch: {formatBranch(result.branch)}{result.createdBy.name || result.createdBy.email ? ` · Created by ${result.createdBy.name || result.createdBy.email}` : ""}</p>
           </div>
           <button className="ghost-button compact-button" type="button" onClick={onClose} aria-label="Close result detail">
             <X aria-hidden="true" /> Close
@@ -375,6 +402,7 @@ function ResultDetail({ onClose, result }: { onClose: () => void; result: AdminR
           <div><span>Total score</span><strong>{formatScore(result.score.total)}/{formatScore(result.score.possible)}</strong></div>
           <div><span>Percent</span><strong>{result.score.percent}%</strong></div>
           <div><span>Level</span><strong>{result.student.level}</strong></div>
+          <div><span>Branch</span><strong>{formatBranch(result.branch)}</strong></div>
         </section>
 
         <section>
@@ -406,13 +434,14 @@ function ResultDetail({ onClose, result }: { onClose: () => void; result: AdminR
   );
 }
 
-function filterResults(results: AdminResult[], searchValue: string, courseFilter: string) {
+function filterResults(results: AdminResult[], searchValue: string, courseFilter: string, branchFilter: string) {
   const search = normalizeSearch(searchValue);
   return results.filter((result) => {
     const matchesCourse = !courseFilter || result.testId === courseFilter;
+    const matchesBranch = !branchFilter || (branchFilter === "unknown" ? !result.branch : result.branch === branchFilter);
     const searchableName = normalizeSearch(`${result.student.fullName} ${result.student.nickname}`);
     const matchesSearch = !search || searchableName.includes(search);
-    return matchesCourse && matchesSearch;
+    return matchesCourse && matchesBranch && matchesSearch;
   });
 }
 
@@ -427,6 +456,10 @@ function courseFamily(test: CatalogTest) {
 
 function uniqueSorted(values: string[]) {
   return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
+}
+
+function formatBranch(value: string) {
+  return staffBranchOptions.find((option) => option.value === value)?.label || "Unknown / legacy";
 }
 
 function renderGradingDetails(details: Record<string, unknown> | null | undefined) {

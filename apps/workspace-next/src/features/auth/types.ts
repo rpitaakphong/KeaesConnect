@@ -1,4 +1,5 @@
 export type StaffProfile = {
+  branch: "ram" | "ekamai" | "";
   id: string;
   email: string;
   displayName: string;

@@ -67,6 +67,8 @@ async function main() {
   });
   const signIn = await supabase.auth.signInWithPassword({ email: staffEmail, password: staffPassword });
   if (signIn.error) throw new Error(`Staff sign-in failed: ${signIn.error.message}`);
+  const staffProfile = await getSmokeStaffProfile(supabase);
+  const expectedBranch = staffProfile.branch;
 
   const databaseStatuses = await getDatabaseStatuses(supabase, definitionActiveTests.map((test) => test.id));
   const activeTests = definitionActiveTests.filter((test) => databaseStatuses.get(test.id)?.status === "active");
@@ -103,6 +105,7 @@ async function main() {
         missingPoints: null,
         hasAiGrading: hasAiGrading(test),
         screenshot: "",
+        branch: "",
         adminVerified: false,
         error: "",
       };
@@ -119,7 +122,9 @@ async function main() {
         result.scoreTotal = Number(submitResult.total);
         result.scorePossible = Number(submitResult.possible);
         result.screenshot = submitResult.screenshot || "";
-        result.adminVerified = await verifyAdminResult(supabase, result.attemptId, test.id);
+        const adminVerification = await verifyAdminResult(supabase, result.attemptId, test.id);
+        result.adminVerified = adminVerification.ok;
+        result.branch = adminVerification.branch;
         const scoring = scoringExpectation(test);
         result.objectiveExpected = scoring.objectiveExpected;
         result.manualReviewPoints = scoring.manualReviewPoints;
@@ -131,6 +136,7 @@ async function main() {
           && result.missingPoints <= result.manualReviewPoints;
         const aiCompleted = result.hasAiGrading && Boolean(result.attemptId) && result.scorePossible === result.expectedPossible;
         if (!result.adminVerified) throw new Error("Submission returned an attempt id, but get_admin_result did not verify it.");
+        if (result.branch !== expectedBranch) throw new Error(`Expected result branch ${expectedBranch}, got ${result.branch || "none"}.`);
         if (!objectiveFullCredit && !aiCompleted) {
           throw new Error(
             `Unexpected score ${result.scoreTotal}/${result.scorePossible}; expected possible ${result.expectedPossible}, objective ${result.objectiveExpected}, manual-review allowance ${result.manualReviewPoints}.`,
@@ -254,6 +260,14 @@ async function getDatabaseStatuses(supabase, testIds) {
   const { data, error } = await supabase.from("tests").select("id,status").in("id", testIds);
   if (error) throw new Error(`Could not read tests catalog from Supabase: ${error.message}`);
   return new Map((data || []).map((row) => [String(row.id), { status: String(row.status || "") }]));
+}
+
+async function getSmokeStaffProfile(supabase) {
+  const { data, error } = await supabase.rpc("get_staff_profile");
+  if (error) throw new Error(`Could not load staff profile: ${error.message}`);
+  const branch = data?.branch === "ram" || data?.branch === "ekamai" ? data.branch : "";
+  if (!branch) throw new Error("Smoke staff account must have branch ram or ekamai before generating test links.");
+  return { branch };
 }
 
 async function createAssignment(supabase, testId) {
@@ -432,11 +446,12 @@ function waitForSubmitAttemptResponse(page, timeoutMs) {
 }
 
 async function verifyAdminResult(supabase, attemptId, testId) {
-  if (!attemptId) return false;
+  if (!attemptId) return { branch: "", ok: false };
   const { data, error } = await supabase.rpc("get_admin_result", { p_attempt_id: attemptId });
   if (error) throw new Error(`get_admin_result failed: ${error.message}`);
   const row = Array.isArray(data) ? data[0] : data;
-  return row?.test_id === testId || row?.testId === testId;
+  const branch = row?.branch === "ram" || row?.branch === "ekamai" ? row.branch : "";
+  return { branch, ok: row?.test_id === testId || row?.testId === testId };
 }
 
 async function safeFailureScreenshot(browser, testId) {
@@ -541,15 +556,15 @@ function renderMarkdownReport(payload) {
     "",
     "## Results",
     "",
-    "| Status | Test | Score | Objective expected | Manual review | Attempt | Admin verified |",
-    "| --- | --- | --- | --- | --- | --- | --- |",
+    "| Status | Test | Branch | Score | Objective expected | Manual review | Attempt | Admin verified |",
+    "| --- | --- | --- | --- | --- | --- | --- | --- |",
   ];
   for (const result of payload.results) {
     const score = result.scoreTotal === null ? "-" : `${result.scoreTotal}/${result.scorePossible}`;
     const objectiveExpected = Number.isFinite(result.objectiveExpected) ? result.objectiveExpected : "-";
     const manualReviewPoints = Number.isFinite(result.manualReviewPoints) ? result.manualReviewPoints : "-";
-    lines.push(`| ${result.status} | ${result.testId} | ${score} | ${objectiveExpected} | ${manualReviewPoints} | ${result.attemptId || "-"} | ${result.adminVerified ? "yes" : "no"} |`);
-    if (result.error) lines.push(`|  | ${escapePipe(result.error)} |  |  |  |  |  |`);
+    lines.push(`| ${result.status} | ${result.testId} | ${result.branch || "-"} | ${score} | ${objectiveExpected} | ${manualReviewPoints} | ${result.attemptId || "-"} | ${result.adminVerified ? "yes" : "no"} |`);
+    if (result.error) lines.push(`|  | ${escapePipe(result.error)} |  |  |  |  |  |  |`);
   }
   if (payload.inactiveGenerationChecks.length) {
     lines.push("", "## Inactive Assignment Checks", "", "| Test | Blocked | Message |", "| --- | --- | --- |");

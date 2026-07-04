@@ -8,10 +8,18 @@ export const staffPermissionOptions = [
   { key: "staff_management", label: "Staff management" },
 ] as const;
 
+export const staffBranchOptions = [
+  { value: "ram", label: "Ram" },
+  { value: "ekamai", label: "Ekamai" },
+] as const;
+
 export type StaffPermissionKey = typeof staffPermissionOptions[number]["key"];
+export type StaffBranch = typeof staffBranchOptions[number]["value"];
+export type StaffBranchValue = StaffBranch | "";
 export type StaffRole = "staff" | "super_admin";
 
 export type StaffUser = {
+  branch: StaffBranchValue;
   id: string;
   email: string;
   displayName: string;
@@ -21,6 +29,7 @@ export type StaffUser = {
 };
 
 export type StaffCreatePayload = {
+  branch: StaffBranch;
   displayName: string;
   email: string;
   permissions: StaffPermissionKey[];
@@ -29,6 +38,7 @@ export type StaffCreatePayload = {
 };
 
 export type StaffAccessUpdatePayload = {
+  branch: StaffBranch;
   permissions: StaffPermissionKey[];
   role: StaffRole;
 };
