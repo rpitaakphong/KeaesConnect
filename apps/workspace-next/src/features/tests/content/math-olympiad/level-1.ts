@@ -18,7 +18,7 @@ export const mathOlympiad1 = mathTest("math-olympiad-1", "Math Olympiad Level 1"
       mathQ("mo1", 2, 1, "Complete the number bond.", [
         field("top", "Top number bond answer", 0.5, ["3"], "text", "?"),
         field("bottom", "Bottom number bond answer", 0.5, ["1"], "text", "?"),
-      ], { visualHtml: numberBondVisual() }),
+      ]),
       mathQ("mo1", 3, 2, "There are 5 oranges. Add 3 more oranges.", [
         field("equation", "5 + 3 =", 1, ["8"]),
         field("total", "There are ___ oranges altogether.", 1, ["8"]),
@@ -110,10 +110,6 @@ export const mathOlympiad1 = mathTest("math-olympiad-1", "Math Olympiad Level 1"
 
 function numberPathVisual() {
   return `<svg class="diagram-svg" viewBox="0 0 720 140" role="img" aria-label="Number path 4 blank 6 blank 8 blank"><rect width="720" height="140" fill="#fff"/><g font-size="28" font-weight="900" text-anchor="middle">${[4, 5, 6, 7, 8, 9].map((n, i) => `<circle cx="${80 + i * 110}" cy="70" r="34" fill="${i % 2 ? "#e9fbf8" : "#fff"}" stroke="#213b4d" stroke-width="4"/><text x="${80 + i * 110}" y="80">${[4, 6, 8].includes(n) ? n : "?"}</text>`).join("")}</g></svg>`;
-}
-
-function numberBondVisual() {
-  return `<svg class="diagram-svg" viewBox="0 0 520 250" role="img" aria-label="Number bond showing 4 split into 3 and 1"><rect width="520" height="250" fill="#fff"/><circle cx="260" cy="62" r="36" fill="#fff" stroke="#213b4d" stroke-width="4"/><text x="260" y="73" font-size="32" font-weight="900" text-anchor="middle">4</text><line x1="240" y1="95" x2="190" y2="155" stroke="#213b4d" stroke-width="4"/><line x1="280" y1="95" x2="330" y2="155" stroke="#213b4d" stroke-width="4"/><circle cx="180" cy="182" r="36" fill="#e9fbf8" stroke="#213b4d" stroke-width="4"/><circle cx="340" cy="182" r="36" fill="#e9fbf8" stroke="#213b4d" stroke-width="4"/><text x="180" y="192" font-size="28" font-weight="900" text-anchor="middle">?</text><text x="340" y="192" font-size="28" font-weight="900" text-anchor="middle">?</text></svg>`;
 }
 
 function rectSvg(x: number, y: number, w: number, h: number) {

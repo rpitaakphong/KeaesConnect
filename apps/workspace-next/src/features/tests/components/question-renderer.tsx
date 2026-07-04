@@ -265,15 +265,25 @@ function renderMathOlympiadInteraction(
   }
   if (question.id === "mo1-q2" && question.type === "multiText") {
     return (
-      <div className="mo1-number-bond" aria-label="Number bond showing 4 split into two parts">
-        <div className="mo1-bond-circle mo1-bond-total">4</div>
-        <div className="mo1-bond-line mo1-bond-line-left" aria-hidden="true" />
-        <div className="mo1-bond-line mo1-bond-line-right" aria-hidden="true" />
-        <div className="mo1-bond-circle mo1-bond-part mo1-bond-left">
-          <MathInput answer={answer} field={findField(question, "top")} onChange={onChange} />
-        </div>
-        <div className="mo1-bond-circle mo1-bond-part mo1-bond-right">
-          <MathInput answer={answer} field={findField(question, "bottom")} onChange={onChange} />
+      <div className="mo1-number-bond" aria-label="Number bond showing four notebooks split into two parts">
+        <div className="mo1-bond-composite">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt="Three shaded notebooks and one unshaded notebook"
+            className="mo1-bond-notebooks"
+            src="/test-assets/math-olympiad/level-1/m1_q2_notebooks.png"
+          />
+          <div className="mo1-bond-map" aria-label="Number bond answer boxes">
+            <div className="mo1-bond-box mo1-bond-total">4</div>
+            <div className="mo1-bond-line mo1-bond-line-top" aria-hidden="true" />
+            <div className="mo1-bond-line mo1-bond-line-bottom" aria-hidden="true" />
+            <div className="mo1-bond-box mo1-bond-answer mo1-bond-top">
+              <MathInput answer={answer} field={findField(question, "top")} onChange={onChange} />
+            </div>
+            <div className="mo1-bond-box mo1-bond-answer mo1-bond-bottom">
+              <MathInput answer={answer} field={findField(question, "bottom")} onChange={onChange} />
+            </div>
+          </div>
         </div>
       </div>
     );
