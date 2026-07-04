@@ -65,21 +65,21 @@ export async function listTests(): Promise<CatalogTest[]> {
 export async function createAssignment(testId: string): Promise<TestAssignment> {
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.rpc("create_test_assignment", { p_test_id: testId });
-  if (error) throw error;
+  if (error) throwSupabaseError(error, "Could not generate assignment link.");
   return Array.isArray(data) ? data[0] : data;
 }
 
 export async function listResults(): Promise<AdminResult[]> {
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.rpc("list_admin_results");
-  if (error) throw error;
+  if (error) throwSupabaseError(error, "Could not load results.");
   return Array.isArray(data) ? data.map(normalizeResult) : [];
 }
 
 export async function getResult(attemptId: string): Promise<AdminResult> {
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.rpc("get_admin_result", { p_attempt_id: attemptId });
-  if (error) throw error;
+  if (error) throwSupabaseError(error, "Could not load result.");
   const row = Array.isArray(data) ? data[0] : data;
   if (!row) throw new Error("Result not found or not authorized.");
   return normalizeResult(row);
@@ -117,6 +117,11 @@ function mergeTests(databaseTests: CatalogTest[]) {
     });
   }
   return Array.from(byId.values()).sort((a, b) => a.title.localeCompare(b.title));
+}
+
+function throwSupabaseError(error: { message?: string; details?: string; hint?: string }, fallback: string): never {
+  const detail = [error.message, error.details, error.hint].filter(Boolean).join(" ");
+  throw new Error(detail || fallback);
 }
 
 function normalizeResult(row: Record<string, unknown>): AdminResult {
