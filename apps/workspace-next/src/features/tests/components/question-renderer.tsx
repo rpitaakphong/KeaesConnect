@@ -308,20 +308,21 @@ function renderMathOlympiadInteraction(
     );
   }
   if (question.id === "mo1-q7" && question.type === "multiText") {
+    const equationField = (fieldId: string) => ({ ...findField(question, fieldId), placeholder: " " });
     return (
       <div className="mo1-equation-layout">
         <div className="mo1-equation-row" aria-label="Equation answer">
-          <MathInput answer={answer} field={findField(question, "first")} onChange={onChange} />
+          <MathInput answer={answer} field={equationField("first")} onChange={onChange} />
           <div className="mo1-equation-operator">
-            <MathInput answer={answer} field={findField(question, "operator")} onChange={onChange} />
+            <MathInput answer={answer} field={equationField("operator")} onChange={onChange} />
           </div>
-          <MathInput answer={answer} field={findField(question, "second")} onChange={onChange} />
+          <MathInput answer={answer} field={equationField("second")} onChange={onChange} />
           <span className="mo1-equation-equals">=</span>
-          <MathInput answer={answer} field={findField(question, "result")} onChange={onChange} />
+          <MathInput answer={answer} field={equationField("result")} onChange={onChange} />
         </div>
         <div className="mo1-equation-sentence">
           <span>Siti has</span>
-          <MathInput answer={answer} field={findField(question, "final")} onChange={onChange} />
+          <MathInput answer={answer} field={equationField("final")} onChange={onChange} />
           <span>beads now.</span>
         </div>
       </div>
