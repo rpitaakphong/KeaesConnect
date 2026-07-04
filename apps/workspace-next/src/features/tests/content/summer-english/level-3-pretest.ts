@@ -53,7 +53,7 @@ export const summerEnglishLevel3Pretest: TestDefinition = {
     {
       id: "part3",
       label: "Part III",
-      title: "Write F for fact or O for opinion.",
+      title: "Choose fact or opinion.",
       hint: "Choose fact or opinion.",
       questions: [
         single("sel3", 16, "The United States is the greatest country in the world.", ["F", "O"], "O", "O"),
@@ -66,14 +66,14 @@ export const summerEnglishLevel3Pretest: TestDefinition = {
     {
       id: "part4",
       label: "Part IV",
-      title: "Circle the correct verb in each sentence.",
+      title: "Select the correct verb in each sentence.",
       hint: "Choose one answer for each sentence.",
       questions: [
-        single("sel3", 21, "All of the dogs in the neighborhood (were, was) barking.", ["were", "was"], "were"),
-        single("sel3", 22, "My friends and my mother (like, likes) each other.", ["like", "likes"], "like"),
-        single("sel3", 23, "Fifty dollars (is, are) a lot to pay for a dinner.", ["is", "are"], "is"),
-        single("sel3", 24, "Six people (live, lives) in a small house.", ["live", "lives"], "live"),
-        single("sel3", 25, "Mathematics (is, are) a very difficult subject.", ["is", "are"], "is"),
+        single("sel3", 21, "All of the dogs in the neighborhood ___ barking.", ["were", "was"], "were"),
+        single("sel3", 22, "My friends and my mother ___ each other.", ["like", "likes"], "like"),
+        single("sel3", 23, "Fifty dollars ___ a lot to pay for a dinner.", ["is", "are"], "is"),
+        single("sel3", 24, "Six people ___ in a small house.", ["live", "lives"], "live"),
+        single("sel3", 25, "Mathematics ___ a very difficult subject.", ["is", "are"], "is"),
       ],
     },
     {
@@ -83,6 +83,11 @@ export const summerEnglishLevel3Pretest: TestDefinition = {
       hint: "Choose one answer for each question.",
       storyTitle: "Tetris",
       story: tetrisStory,
+      storyImage: {
+        src: "/test-assets/summer-english/level-3/tetris-blocks.png",
+        alt: "Colorful Tetris blocks and game board",
+        maxWidth: 300,
+      },
       questions: [
         single("sel3", 26, "What is the goal of Tetris?", ["To make tall piles of blocks", "To match the colors of blocks", "To make complete lines", "To get blocks to the top of the screen"], "To make complete lines", "c"),
         single("sel3", 27, "After which is Tetris named?", ["Fish", "The number ten", "Paris", "Tennis"], "Tennis", "d"),

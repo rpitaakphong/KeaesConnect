@@ -6,6 +6,7 @@ const profilePrefix = "keaes-test-profile-v1";
 const answerPrefix = "keaes-test-answers-v1";
 
 export function testStorageKey(testId: string, assignmentToken: string) {
+  if (assignmentToken === "demo") return `${testId}:demo`;
   return assignmentToken || testId;
 }
 
@@ -16,7 +17,11 @@ export function saveStudentProfile(profile: StudentProfile) {
 export function loadStudentProfile(testId: string, assignmentToken: string) {
   const raw = window.sessionStorage.getItem(`${profilePrefix}:${testStorageKey(testId, assignmentToken)}`);
   if (!raw) return null;
-  return JSON.parse(raw) as StudentProfile;
+  try {
+    return JSON.parse(raw) as StudentProfile;
+  } catch {
+    return null;
+  }
 }
 
 export function clearSavedAnswers(testId: string, assignmentToken: string) {
@@ -29,5 +34,10 @@ export function saveAnswers(testId: string, assignmentToken: string, answers: Te
 
 export function loadAnswers(testId: string, assignmentToken: string) {
   const raw = window.sessionStorage.getItem(`${answerPrefix}:${testStorageKey(testId, assignmentToken)}`);
-  return raw ? JSON.parse(raw) as TestAnswers : {};
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw) as TestAnswers;
+  } catch {
+    return {};
+  }
 }

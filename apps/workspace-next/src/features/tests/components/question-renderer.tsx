@@ -170,7 +170,7 @@ export function QuestionRenderer({
     return (
       <section className="science-subquestion">
         <div className="science-subquestion-head">
-          <h4>{question.prompt}</h4>
+          <h4><QuestionPrompt question={question} /></h4>
           <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
         </div>
         {question.note ? <p>{question.note}</p> : null}
@@ -184,13 +184,26 @@ export function QuestionRenderer({
       <div className="question-head">
         <div>
           <p className="eyebrow">Question {question.number}</p>
-          <h3>{question.prompt}</h3>
+          {question.hidePrompt ? null : <h3><QuestionPrompt question={question} /></h3>}
           {question.note ? <p>{question.note}</p> : null}
         </div>
         <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
       </div>
       {responseContent}
     </article>
+  );
+}
+
+function QuestionPrompt({ question }: { question: TestQuestion }) {
+  if (!question.promptParts?.length) return <>{question.prompt}</>;
+  return (
+    <>
+      {question.promptParts.map((part, index) => (
+        <span className={part.underline ? "question-prompt-underlined" : undefined} key={`${index}-${part.text}`}>
+          {part.text}
+        </span>
+      ))}
+    </>
   );
 }
 

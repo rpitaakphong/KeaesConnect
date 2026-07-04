@@ -1639,6 +1639,15 @@ tr:last-child td { border-bottom: 0; }
   justify-self: start;
 }
 
+.story-panel-image-first .story-with-image {
+  grid-template-columns: 1fr;
+  justify-items: start;
+}
+
+.story-panel-image-first .story-figure {
+  order: -1;
+}
+
 .word-bank {
   display: flex;
   flex-wrap: wrap;
@@ -1661,6 +1670,11 @@ tr:last-child td { border-bottom: 0; }
   justify-content: space-between;
   gap: 14px;
   margin-bottom: 14px;
+}
+.question-prompt-underlined {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
 }
 .choice-grid, .field-grid { display: grid; gap: 8px; }
 .text-choice-grid {

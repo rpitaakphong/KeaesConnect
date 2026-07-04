@@ -20,7 +20,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
     const token = params.get("assignment") || "";
     setAssignmentToken(token);
     const savedProfile = loadStudentProfile(test.id, token);
-    if (!savedProfile) {
+    if (!savedProfile || savedProfile.testId !== test.id) {
       window.location.href = `/tests/${test.id}/start?assignment=${encodeURIComponent(token)}`;
       return;
     }
@@ -116,13 +116,19 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                   </div>
                 ) : null}
                 {active.story?.length ? (
-                  <article className={`story-panel test-story-${test.id}-${active.id} ${active.storyLayout === "heroImage" ? "story-panel-hero-image" : ""}`}>
+                  <article className={`story-panel test-story-${test.id}-${active.id} ${storyPanelLayoutClass(active.storyLayout)}`}>
                     {active.storyTitle ? <h3>{active.storyTitle}</h3> : null}
                     <div className={active.storyImage ? "story-with-image" : ""}>
+                      {active.storyImage && active.storyLayout === "imageFirst" ? (
+                        <figure className="story-figure" style={{ maxWidth: active.storyImage.maxWidth || 260 }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={active.storyImage.src} alt={active.storyImage.alt} />
+                        </figure>
+                      ) : null}
                       <div>
                         {active.story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                       </div>
-                      {active.storyImage ? (
+                      {active.storyImage && active.storyLayout !== "imageFirst" ? (
                         <figure className="story-figure" style={{ maxWidth: active.storyImage.maxWidth || 260 }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={active.storyImage.src} alt={active.storyImage.alt} />
@@ -131,16 +137,20 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                     </div>
                   </article>
                 ) : null}
-                {activeQuestionItems.map((item) => isScienceQuestionGroup(item) ? (
-                  <ScienceQuestionGroupRenderer answers={answers} group={item} key={item.id} onChange={updateAnswer} />
+                {active.questionLayout === "grouped" ? (
+                  <GroupedQuestionCard answers={answers} questions={active.questions} onChange={updateAnswer} />
                 ) : (
-                  <QuestionRenderer
-                    answer={answers[item.id]}
-                    key={item.id}
-                    question={item}
-                    onChange={(value) => updateAnswer(item.id, value)}
-                  />
-                ))}
+                  activeQuestionItems.map((item) => isScienceQuestionGroup(item) ? (
+                    <ScienceQuestionGroupRenderer answers={answers} group={item} key={item.id} onChange={updateAnswer} />
+                  ) : (
+                    <QuestionRenderer
+                      answer={answers[item.id]}
+                      key={item.id}
+                      question={item}
+                      onChange={(value) => updateAnswer(item.id, value)}
+                    />
+                  ))
+                )}
               </>
             )}
           </section>
@@ -232,6 +242,12 @@ function TestAudio({ mode = "standard", src }: { mode?: TestDefinition["audioMod
   );
 }
 
+function storyPanelLayoutClass(layout: TestDefinition["sections"][number]["storyLayout"]) {
+  if (layout === "heroImage") return "story-panel-hero-image";
+  if (layout === "imageFirst") return "story-panel-image-first";
+  return "";
+}
+
 function formatAudioTime(seconds: number) {
   const safeSeconds = Math.max(0, Math.floor(seconds));
   const minutes = Math.floor(safeSeconds / 60);
@@ -298,6 +314,44 @@ function firstImageSrc(question: TestQuestion) {
 
 function isScienceQuestionGroup(item: TestQuestion | ScienceQuestionGroup): item is ScienceQuestionGroup {
   return "questions" in item;
+}
+
+function GroupedQuestionCard({
+  answers,
+  onChange,
+  questions,
+}: {
+  answers: TestAnswers;
+  onChange: (questionId: string, value: TestAnswers[string]) => void;
+  questions: TestQuestion[];
+}) {
+  const firstNumber = questions[0]?.number;
+  const lastNumber = questions[questions.length - 1]?.number;
+  const points = questions.reduce((total, question) => total + question.points, 0);
+  const numberLabel = firstNumber === lastNumber ? `Question ${firstNumber}` : `Questions ${firstNumber}-${lastNumber}`;
+
+  return (
+    <article className="question-card grouped-question-card">
+      <div className="question-head">
+        <div>
+          <p className="eyebrow">{numberLabel}</p>
+          <h3>Arrange these sentences in order.</h3>
+        </div>
+        <span className="badge">{points} {points === 1 ? "mark" : "marks"}</span>
+      </div>
+      <div className="science-subquestion-list">
+        {questions.map((question) => (
+          <QuestionRenderer
+            answer={answers[question.id]}
+            key={question.id}
+            onChange={(value) => onChange(question.id, value)}
+            question={question}
+            variant="subquestion"
+          />
+        ))}
+      </div>
+    </article>
+  );
 }
 
 function ScienceQuestionGroupRenderer({

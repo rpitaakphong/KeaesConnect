@@ -29,6 +29,7 @@ export type TestSection = {
   label: string;
   title: string;
   hint?: string;
+  questionLayout?: "cards" | "grouped";
   wordBank?: string[];
   storyTitle?: string;
   story?: string[];
@@ -37,7 +38,7 @@ export type TestSection = {
     alt: string;
     maxWidth?: number;
   };
-  storyLayout?: "default" | "heroImage";
+  storyLayout?: "default" | "heroImage" | "imageFirst";
   questions: TestQuestion[];
 };
 
@@ -47,6 +48,8 @@ export type QuestionBase = {
   id: string;
   number: number;
   prompt: string;
+  hidePrompt?: boolean;
+  promptParts?: Array<{ text: string; underline?: boolean }>;
   points: number;
   note?: string;
   visuals?: QuestionVisual[];

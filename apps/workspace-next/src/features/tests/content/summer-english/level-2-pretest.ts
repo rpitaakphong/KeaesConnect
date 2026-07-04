@@ -73,20 +73,51 @@ export const summerEnglishLevel2Pretest: TestDefinition = {
     {
       id: "part4",
       label: "Part IV",
-      title: "Rewrite each sentence using pronouns.",
+      title: "Rewrite each sentence using a pronoun in place of the underlined word or phrase.",
       hint: "Write a complete sentence. These draft answers are AI graded when submitted.",
       questions: [
-        aiText("sel2", 16, "Grandma's pictures tell stories about Grandma's life.", "They tell stories about her life.", ["they", "her"]),
-        aiText("sel2", 17, "Sarah gave a picture to Wally and Mike.", "She gave a picture to them.", ["she", "them"]),
-        aiText("sel2", 18, "Harry and I played boardgames with Mark.", "We played boardgames with him.", ["we", "him"]),
-        aiText("sel2", 19, "The chopping board is on the table.", "It is on the table.", ["it"]),
-        aiText("sel2", 20, "Thea and Ann are looking for the English book.", "They are looking for the English book.", ["they"]),
+        aiText("sel2", 16, "Grandma's pictures tell stories about Grandma's life.", "They tell stories about her life.", ["they", "her"], {
+          promptParts: [
+            { text: "Grandma's pictures", underline: true },
+            { text: " tell stories about " },
+            { text: "Grandma's", underline: true },
+            { text: " life." },
+          ],
+        }),
+        aiText("sel2", 17, "Sarah gave a picture to Wally and Mike.", "She gave a picture to them.", ["she", "them"], {
+          promptParts: [
+            { text: "Sarah", underline: true },
+            { text: " gave a picture to " },
+            { text: "Wally and Mike", underline: true },
+            { text: "." },
+          ],
+        }),
+        aiText("sel2", 18, "Harry and I played boardgames with Mark.", "We played boardgames with him.", ["we", "him"], {
+          promptParts: [
+            { text: "Harry and I", underline: true },
+            { text: " played boardgames with " },
+            { text: "Mark", underline: true },
+            { text: "." },
+          ],
+        }),
+        aiText("sel2", 19, "The chopping board is on the table.", "It is on the table.", ["it"], {
+          promptParts: [
+            { text: "The chopping board", underline: true },
+            { text: " is on the table." },
+          ],
+        }),
+        aiText("sel2", 20, "Thea and Ann are looking for the English book.", "They are looking for the English book.", ["they"], {
+          promptParts: [
+            { text: "Thea and Ann", underline: true },
+            { text: " are looking for the English book." },
+          ],
+        }),
       ],
     },
     {
       id: "part5",
       label: "Part V",
-      title: "Write F for fact or O for opinion.",
+      title: "Choose fact or opinion.",
       hint: "Choose fact or opinion.",
       questions: [
         single("sel2", 21, "Trees produce oxygen.", ["F", "O"], "F", "F"),
@@ -103,6 +134,12 @@ export const summerEnglishLevel2Pretest: TestDefinition = {
       hint: "Write a short answer. These draft answers are AI graded when submitted.",
       storyTitle: "What are clouds?",
       story: cloudStory,
+      storyLayout: "imageFirst",
+      storyImage: {
+        src: "/test-assets/summer-english/level-2/cloud-character.png",
+        alt: "Smiling cartoon cloud",
+        maxWidth: 260,
+      },
       questions: [
         aiText("sel2", 26, "What do drops of water turn into?", "water vapor", ["water vapor"]),
         aiText("sel2", 27, "What are two ways clouds get their names?", "Clouds get their names by where they are found in the sky and by their shape.", ["where", "sky", "shape"]),
