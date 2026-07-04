@@ -1,0 +1,115 @@
+import { aiText, single, text } from "@/features/tests/content/english-literacy/helpers";
+import type { TestDefinition } from "@/features/tests/lib/types";
+
+const cloudStory = [
+  "A cloud is made of water drops or ice crystals floating in the sky. There are many kinds of clouds. Clouds are an important part of Earth's weather.",
+  "The sky can be full of water. But most of the time you can't see the water. The drops of water are too small to see. They have turned into a gas called water vapor. As the water vapor goes higher in the sky, the air gets cooler. The cooler air causes the water droplets to start to stick to things like bits of dust, ice or sea salt.",
+  "Clouds get their names in two ways. One way is by where they are found in the sky. Some clouds are high up in the sky. Low clouds form closer to Earth's surface. In fact, low clouds can even touch the ground. These clouds are called fog. Middle clouds are found between low and high clouds. Another way clouds are named is by their shape. Cirrus clouds are high clouds. They look like feathers. Cumulus clouds are middle clouds. These clouds look like giant cotton balls in the sky. Stratus clouds are low clouds. They cover the sky like bed sheets.",
+  "Most of the water in clouds is in very small droplets. The droplets are so light they float in the air. Sometimes those droplets join with other droplets. Then they turn into larger drops. When that happens, gravity causes them to fall to Earth. We call the falling water drops \"rain\". When the air is colder, the water may form snowflakes instead. Freezing rain, sleet or even hail can fall from clouds.",
+  "Clouds are important for many reasons. Rain and snow are two of those reasons. At night, clouds reflect heat and keep the ground warmer. During the day, clouds make shade that can keep us cooler. Studying clouds helps NASA better understand Earth's weather. NASA uses satellites in space to study clouds. NASA also studies clouds on other planets. Mars has clouds that are like the clouds on Earth. But other planets have clouds that aren't made of water. For example, Jupiter has clouds made of a gas called ammonia.",
+];
+
+export const summerEnglishLevel2Pretest: TestDefinition = {
+  id: "summer-english-level-2-pretest",
+  title: "Summer English Level 2 Pre-test",
+  subject: "English",
+  level: "Summer English Level 2",
+  status: "draft",
+  durationMinutes: 40,
+  totalPoints: 30,
+  aiShortAnswerRubrics: {
+    "sel2-q16": "Correct if the rewrite uses 'They' for Grandma's pictures and 'her' for Grandma's life.",
+    "sel2-q17": "Correct if the rewrite uses 'She' for Sarah and 'them' for Wally and Mike.",
+    "sel2-q18": "Correct if the rewrite uses 'We' for Harry and I and 'him' for Mark.",
+    "sel2-q19": "Correct if the rewrite uses 'It' for the chopping board.",
+    "sel2-q20": "Correct if the rewrite uses 'They' for Thea and Ann.",
+    "sel2-q26": "Correct if the answer says drops of water turn into water vapor.",
+    "sel2-q27": "Correct if the answer says clouds are named by where they are found in the sky and by their shape.",
+    "sel2-q28": "Correct if the answer says cirrus clouds are high clouds.",
+    "sel2-q29": "Correct if the answer says cumulus clouds look like giant cotton balls.",
+    "sel2-q30": "Correct if the answer says gravity causes droplets or drops of water to fall to Earth.",
+  },
+  sections: [
+    {
+      id: "part1",
+      label: "Part I",
+      title: "Use the onomatopoeia words to complete each sentence.",
+      hint: "Type the correct word from the word bank.",
+      wordBank: ["slurp", "crack", "purred", "zoomed", "fluttered"],
+      questions: [
+        text("sel2", 1, "My brother likes to ___ his knuckles.", ["crack"], "crack"),
+        text("sel2", 2, "The kitten ___ softly as it rubbed against my legs.", ["purred"], "purred"),
+        text("sel2", 3, "The moth ___ in through the open window.", ["fluttered"], "fluttered"),
+        text("sel2", 4, "The speeding car ___ right past us.", ["zoomed"], "zoomed"),
+        text("sel2", 5, "The milkshake was too thick to ___ through a straw, so I asked for a spoon.", ["slurp"], "slurp"),
+      ],
+    },
+    {
+      id: "part2",
+      label: "Part II",
+      title: "Match the word to its meaning.",
+      hint: "Choose the matching meaning.",
+      questions: [
+        single("sel2", 6, "Errand", ["rough or rude", "an impressive display", "a trip to deliver a message or to do a particular thing", "a dock", "strong", "to carry"], "a trip to deliver a message or to do a particular thing", "c"),
+        single("sel2", 7, "Gruff", ["rough or rude", "an impressive display", "a trip to deliver a message or to do a particular thing", "a dock", "strong", "to carry"], "rough or rude", "a"),
+        single("sel2", 8, "Burly", ["rough or rude", "an impressive display", "a trip to deliver a message or to do a particular thing", "a dock", "strong", "to carry"], "strong", "e"),
+        single("sel2", 9, "Array", ["rough or rude", "an impressive display", "a trip to deliver a message or to do a particular thing", "a dock", "strong", "to carry"], "an impressive display", "b"),
+        single("sel2", 10, "Wharf", ["rough or rude", "an impressive display", "a trip to deliver a message or to do a particular thing", "a dock", "strong", "to carry"], "a dock", "d"),
+      ],
+    },
+    {
+      id: "part3",
+      label: "Part III",
+      title: "Write the correct past tense of each verb.",
+      hint: "Type the correct verb form.",
+      questions: [
+        text("sel2", 11, "Last week I ___ (go) horseback riding.", ["went"], "went"),
+        text("sel2", 12, "We ___ (lose) the championship game.", ["lost"], "lost"),
+        text("sel2", 13, "Josh ___ (tear) his knee ligaments during practice.", ["tore"], "tore"),
+        text("sel2", 14, "The boys ___ (eat) their supper without complaint.", ["ate"], "ate"),
+        text("sel2", 15, "Beverly was ___ (sting) by the wasp.", ["stung"], "stung"),
+      ],
+    },
+    {
+      id: "part4",
+      label: "Part IV",
+      title: "Rewrite each sentence using pronouns.",
+      hint: "Write a complete sentence. These draft answers are AI graded when submitted.",
+      questions: [
+        aiText("sel2", 16, "Grandma's pictures tell stories about Grandma's life.", "They tell stories about her life.", ["they", "her"]),
+        aiText("sel2", 17, "Sarah gave a picture to Wally and Mike.", "She gave a picture to them.", ["she", "them"]),
+        aiText("sel2", 18, "Harry and I played boardgames with Mark.", "We played boardgames with him.", ["we", "him"]),
+        aiText("sel2", 19, "The chopping board is on the table.", "It is on the table.", ["it"]),
+        aiText("sel2", 20, "Thea and Ann are looking for the English book.", "They are looking for the English book.", ["they"]),
+      ],
+    },
+    {
+      id: "part5",
+      label: "Part V",
+      title: "Write F for fact or O for opinion.",
+      hint: "Choose fact or opinion.",
+      questions: [
+        single("sel2", 21, "Trees produce oxygen.", ["F", "O"], "F", "F"),
+        single("sel2", 22, "Football is a fun sport.", ["F", "O"], "O", "O"),
+        single("sel2", 23, "Ice hockey is played with sticks and a puck.", ["F", "O"], "F", "F"),
+        single("sel2", 24, "Thailand's capital is Bangkok.", ["F", "O"], "F", "F"),
+        single("sel2", 25, "Dogs are the best pet animals in the world.", ["F", "O"], "O", "O"),
+      ],
+    },
+    {
+      id: "part6",
+      label: "Part VI",
+      title: "Read the passage and answer the questions.",
+      hint: "Write a short answer. These draft answers are AI graded when submitted.",
+      storyTitle: "What are clouds?",
+      story: cloudStory,
+      questions: [
+        aiText("sel2", 26, "What do drops of water turn into?", "water vapor", ["water vapor"]),
+        aiText("sel2", 27, "What are two ways clouds get their names?", "Clouds get their names by where they are found in the sky and by their shape.", ["where", "sky", "shape"]),
+        aiText("sel2", 28, "What kind of clouds are high clouds?", "Cirrus clouds are high clouds.", ["cirrus"]),
+        aiText("sel2", 29, "What clouds look like giant cotton balls?", "Cumulus clouds look like giant cotton balls.", ["cumulus"]),
+        aiText("sel2", 30, "What causes droplets of water to fall to Earth?", "Gravity causes droplets of water to fall to Earth.", ["gravity"]),
+      ],
+    },
+  ],
+};

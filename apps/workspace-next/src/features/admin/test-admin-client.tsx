@@ -33,6 +33,7 @@ export function TestAdminClient() {
     return matchesSubject && matchesCourse;
   }), [catalogCourseFilter, catalogSubjectFilter, tests]);
   const selectedTest = useMemo(() => visibleCatalogTests.find((test) => test.id === selectedId) || visibleCatalogTests[0], [selectedId, visibleCatalogTests]);
+  const selectedTestActive = selectedTest?.status === "active";
   const canCatalog = hasAnyPermission(profile, ["test_catalog", "generate_links"]);
   const canGenerate = hasPermission(profile, "generate_links");
   const canViewResults = hasPermission(profile, "view_results");
@@ -88,6 +89,11 @@ export function TestAdminClient() {
 
   async function generateLink() {
     if (!selectedTest) return;
+    if (selectedTest.status !== "active") {
+      setShareUrl("");
+      setMessage(`${selectedTest.title} is ${selectedTest.status} and cannot generate assignment links yet.`);
+      return;
+    }
     setPending(true);
     setMessage("");
     try {
@@ -192,6 +198,7 @@ export function TestAdminClient() {
                   <p>
                     <span>{test.subject} · {test.level}</span>
                     <span className="test-course-pill">{courseFamily(test)}</span>
+                    {test.status !== "active" ? <span className="test-course-pill">{test.status}</span> : null}
                   </p>
                 </div>
               </button>
@@ -211,9 +218,9 @@ export function TestAdminClient() {
             <div className="choice-grid">
               <div className="notice">
                 <strong>{selectedTest.title}</strong>
-                <p>This test opens in the Next.js shared test shell.</p>
+                <p>{selectedTestActive ? "This test opens in the Next.js shared test shell." : `This test is ${selectedTest.status} and cannot generate assignment links yet.`}</p>
               </div>
-              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || pending}>
+              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || !selectedTestActive || pending}>
                 {pending ? "Generating..." : "Generate assignment link"}
               </button>
               <label>

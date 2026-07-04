@@ -104,24 +104,37 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 2,
           "prompt": "Translate triangle A by 4 squares up and 2 squares left.",
           "points": 1,
-          "note": "Teacher review item.",
+          "note": "",
           "type": "multiText",
           "fields": [
             {
-              "id": "notes",
-              "label": "Answer / notes",
-              "placeholder": "Describe or place the translated triangle."
+              "id": "dx",
+              "label": "Horizontal movement",
+              "placeholder": "-2"
+            },
+            {
+              "id": "dy",
+              "label": "Vertical movement",
+              "placeholder": "4"
             }
           ],
           "grading": {
             "mode": "auto",
-            "display": "Translated triangle, teacher reviewed",
+            "display": "2 left, 4 up",
             "parts": [
               {
-                "id": "notes",
-                "accepted": [],
-                "points": 1,
-                "reviewRecommended": true
+                "id": "dx",
+                "accepted": [
+                  "-2"
+                ],
+                "points": 0.5
+              },
+              {
+                "id": "dy",
+                "accepted": [
+                  "4"
+                ],
+                "points": 0.5
               }
             ]
           }
@@ -306,7 +319,7 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 7,
           "prompt": "The digital scale shows 16 500 g. Show this mass on the kg scale.",
           "points": 1,
-          "note": "Teacher review item.",
+          "note": "",
           "type": "multiText",
           "fields": [
             {
@@ -335,9 +348,13 @@ export const spipYear7MathPre: TestDefinition = {
             "parts": [
               {
                 "id": "answer",
-                "accepted": [],
-                "points": 1,
-                "reviewRecommended": true
+                "accepted": [
+                  "16.5 kg",
+                  "16.5",
+                  "16.5kg",
+                  "16 1/2 kg"
+                ],
+                "points": 1
               }
             ]
           }
@@ -388,7 +405,7 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 9,
           "prompt": "Tick the two patterns that can be made with the stamp.",
           "points": 2,
-          "note": "Teacher review item. Choices: A, B, C, D",
+          "note": "Choices: A, B, C, D",
           "type": "multiText",
           "fields": [
             {
@@ -413,13 +430,14 @@ export const spipYear7MathPre: TestDefinition = {
           ],
           "grading": {
             "mode": "auto",
-            "display": "Two correct patterns, teacher verified",
+            "display": "A, B",
             "parts": [
               {
                 "id": "selected",
-                "accepted": [],
-                "points": 2,
-                "reviewRecommended": true
+                "accepted": [
+                  "a,b"
+                ],
+                "points": 2
               }
             ]
           }
@@ -612,7 +630,7 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 14,
           "prompt": "Draw a line to match each statement to its likelihood.",
           "points": 2,
-          "note": "Teacher review item.",
+          "note": "",
           "type": "multiText",
           "fields": [
             {
@@ -627,9 +645,11 @@ export const spipYear7MathPre: TestDefinition = {
             "parts": [
               {
                 "id": "matches",
-                "accepted": [],
-                "points": 2,
-                "reviewRecommended": true
+                "accepted": [
+                  "digits4:impossible,odd:even",
+                  "odd:even,digits4:impossible"
+                ],
+                "points": 2
               }
             ]
           }
@@ -1064,7 +1084,7 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 24,
           "prompt": "Use 26 x 15 = 390 to show how to work out 26 x 14.",
           "points": 2,
-          "note": "Teacher review item.",
+          "note": "",
           "type": "multiText",
           "fields": [
             {
@@ -1080,8 +1100,16 @@ export const spipYear7MathPre: TestDefinition = {
               {
                 "id": "answer",
                 "accepted": [],
+                "normalizer": "keywords",
+                "keywords": [
+                  [
+                    "390",
+                    "26",
+                    "364"
+                  ]
+                ],
                 "points": 2,
-                "reviewRecommended": true
+                "reviewRecommended": false
               }
             ]
           }
@@ -1212,7 +1240,7 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 27,
           "prompt": "Yuri says that 6/8 is larger than 3/4. Is Yuri correct? Use a calculation to explain.",
           "points": 2,
-          "note": "Teacher review item.",
+          "note": "",
           "type": "multiText",
           "fields": [
             {
@@ -1228,8 +1256,24 @@ export const spipYear7MathPre: TestDefinition = {
               {
                 "id": "answer",
                 "accepted": [],
+                "normalizer": "keywords",
+                "keywords": [
+                  [
+                    "no",
+                    "6/8",
+                    "3/4"
+                  ],
+                  [
+                    "no",
+                    "equal"
+                  ],
+                  [
+                    "no",
+                    "same"
+                  ]
+                ],
                 "points": 2,
-                "reviewRecommended": true
+                "reviewRecommended": false
               }
             ]
           }
@@ -1305,7 +1349,7 @@ export const spipYear7MathPre: TestDefinition = {
           "number": 30,
           "prompt": "Reflect the shaded shape in the mirror line.",
           "points": 2,
-          "note": "Teacher review item.",
+          "note": "",
           "type": "multiText",
           "fields": [
             {
@@ -1316,13 +1360,14 @@ export const spipYear7MathPre: TestDefinition = {
           ],
           "grading": {
             "mode": "auto",
-            "display": "Correct reflected shape, teacher reviewed",
+            "display": "Correct reflected shape",
             "parts": [
               {
                 "id": "cells",
-                "accepted": [],
-                "points": 2,
-                "reviewRecommended": true
+                "accepted": [
+                  "5-1,6-1,6-2,7-2,7-3,7-4"
+                ],
+                "points": 2
               }
             ]
           }

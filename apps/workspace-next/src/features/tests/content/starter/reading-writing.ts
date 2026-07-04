@@ -59,9 +59,9 @@ function textQuestion(
   };
 }
 
-const tickCrossChoices = [
-  { value: "tick", label: "Tick" },
-  { value: "cross", label: "Cross" },
+const trueFalseChoices = [
+  { value: "true", label: "True" },
+  { value: "false", label: "False" },
 ];
 
 const yesNoChoices = [
@@ -80,14 +80,14 @@ export const starterProgressReadingWriting: TestDefinition = {
     {
       id: "part1",
       label: "Reading & Writing Part 1",
-      title: "Look and read. Put a tick or a cross.",
-      hint: "Choose Tick if the sentence is true. Choose Cross if it is not true.",
+      title: "Look and read. Write true or false.",
+      hint: "Choose True if the sentence is true. Choose False if it is not true.",
       questions: [
-        choiceQuestion("starter-rw-p1q1", 1, "This is a lizard.", tickCrossChoices, "cross", { src: image("rw-p1-lizard.jpg"), alt: "Lizard picture", maxWidth: 260 }),
-        choiceQuestion("starter-rw-p1q2", 2, "This is a bike.", tickCrossChoices, "tick", { src: image("rw-p1-bike.jpg"), alt: "Bike picture", maxWidth: 260 }),
-        choiceQuestion("starter-rw-p1q3", 3, "This is a pineapple.", tickCrossChoices, "tick", { src: image("rw-p1-pineapple.jpg"), alt: "Pineapple picture", maxWidth: 260 }),
-        choiceQuestion("starter-rw-p1q4", 4, "This is a television.", tickCrossChoices, "cross", { src: image("rw-p1-phone.jpg"), alt: "Phone picture", maxWidth: 260 }),
-        choiceQuestion("starter-rw-p1q5", 5, "This is a guitar.", tickCrossChoices, "tick", { src: image("rw-p1-guitar.jpg"), alt: "Guitar picture", maxWidth: 260 }),
+        choiceQuestion("starter-rw-p1q1", 1, "This is a lizard.", trueFalseChoices, "false", { src: image("rw-p1-lizard.jpg"), alt: "Lizard picture", maxWidth: 260 }),
+        choiceQuestion("starter-rw-p1q2", 2, "This is a bike.", trueFalseChoices, "true", { src: image("rw-p1-bike.jpg"), alt: "Bike picture", maxWidth: 260 }),
+        choiceQuestion("starter-rw-p1q3", 3, "This is a pineapple.", trueFalseChoices, "true", { src: image("rw-p1-pineapple.jpg"), alt: "Pineapple picture", maxWidth: 260 }),
+        choiceQuestion("starter-rw-p1q4", 4, "This is a television.", trueFalseChoices, "false", { src: image("rw-p1-phone.jpg"), alt: "Phone picture", maxWidth: 260 }),
+        choiceQuestion("starter-rw-p1q5", 5, "This is a guitar.", trueFalseChoices, "true", { src: image("rw-p1-guitar.jpg"), alt: "Guitar picture", maxWidth: 260 }),
       ],
     },
     {
@@ -116,11 +116,11 @@ export const starterProgressReadingWriting: TestDefinition = {
       title: "Look at the pictures. Write the words.",
       hint: "Spell each word from the letters shown.",
       questions: [
-        textQuestion("starter-rw-p3q1", 1, "Blue trousers", "jeans", { note: "Letters: n a j s e", visual: { src: image("rw-p3-jeans.jpg"), alt: "Blue trousers", maxWidth: 220 } }),
-        textQuestion("starter-rw-p3q2", 2, "Purple shoes", "shoes", { note: "Letters: e s o h s", visual: { src: image("rw-p3-shoes.jpg"), alt: "Purple shoes", maxWidth: 220 } }),
-        textQuestion("starter-rw-p3q3", 3, "Green jacket", "jacket", { note: "Letters: c j t k e a", visual: { src: image("rw-p3-jacket.jpg"), alt: "Green jacket", maxWidth: 220 } }),
-        textQuestion("starter-rw-p3q4", 4, "Handbag", "handbag", { note: "Letters: n g a a b d h", visual: { src: image("rw-p3-handbag.jpg"), alt: "Handbag", maxWidth: 220 } }),
-        textQuestion("starter-rw-p3q5", 5, "Green trousers", "trousers", { note: "Letters: r o t s r e u s", visual: { src: image("rw-p3-trousers.jpg"), alt: "Green trousers", maxWidth: 220 } }),
+        textQuestion("starter-rw-p3q1", 1, "Write the word.", "jeans", { note: "Letters: n a j s e", visual: { src: image("rw-p3-jeans.jpg"), alt: "Blue trousers", maxWidth: 220 } }),
+        textQuestion("starter-rw-p3q2", 2, "Write the word.", "shoes", { note: "Letters: e s o h s", visual: { src: image("rw-p3-shoes.jpg"), alt: "Purple shoes", maxWidth: 220 } }),
+        textQuestion("starter-rw-p3q3", 3, "Write the word.", "jacket", { note: "Letters: c j t k e a", visual: { src: image("rw-p3-jacket.jpg"), alt: "Green jacket", maxWidth: 220 } }),
+        textQuestion("starter-rw-p3q4", 4, "Write the word.", "handbag", { note: "Letters: n g a a b d h", visual: { src: image("rw-p3-handbag.jpg"), alt: "Handbag", maxWidth: 220 } }),
+        textQuestion("starter-rw-p3q5", 5, "Write the word.", "trousers", { note: "Letters: r o t s r e u s", visual: { src: image("rw-p3-trousers.jpg"), alt: "Green trousers", maxWidth: 220 } }),
       ],
     },
     {
@@ -159,7 +159,7 @@ export const starterProgressReadingWriting: TestDefinition = {
         textQuestion("starter-rw-p5q2", 2, "Who is holding the cat? a ...", "girl", { visual: { src: image("rw-p5-classroom-2.jpg"), alt: "A girl holding a cat in the classroom", maxWidth: 420 } }),
         textQuestion("starter-rw-p5q3", 3, "What is the teacher doing now?", "writing", { visual: { src: image("rw-p5-classroom-2.jpg"), alt: "Teacher writing in the classroom", maxWidth: 420 } }),
         textQuestion("starter-rw-p5q4", 4, "Where is the cat now? at the ...", "window", { visual: { src: image("rw-p5-classroom-3.jpg"), alt: "The cat at the classroom window", maxWidth: 420 } }),
-        textQuestion("starter-rw-p5q5", 5, "How many children are looking at the cat?", "two", { visual: { src: image("rw-p5-classroom-3.jpg"), alt: "Children looking at the cat", maxWidth: 420 } }),
+        textQuestion("starter-rw-p5q5", 5, "How many children are looking at the cat?", "three", { visual: { src: image("rw-p5-classroom-3.jpg"), alt: "Children looking at the cat", maxWidth: 420 } }),
       ],
     },
   ],

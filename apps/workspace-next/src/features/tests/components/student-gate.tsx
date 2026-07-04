@@ -63,6 +63,7 @@ export function StudentGate({ test }: { test: TestDefinition }) {
           <article className="login-copy">
             <p className="eyebrow">{test.level}</p>
             <h1 id="studentGateTitle">{test.title}</h1>
+            {test.durationMinutes ? <p>{test.durationMinutes} minutes</p> : null}
             <p>{status}</p>
           </article>
           <form className="login-card" onSubmit={handleSubmit}>

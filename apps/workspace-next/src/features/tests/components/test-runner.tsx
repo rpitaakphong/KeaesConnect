@@ -64,7 +64,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
         <div>
           <p className="eyebrow">{test.level}</p>
           <h1>{test.title}</h1>
-          <p>{profile.fullName} · {profile.nickname}</p>
+          <p>{profile.fullName} · {profile.nickname}{test.durationMinutes ? ` · ${test.durationMinutes} minutes` : ""}</p>
           <TestAudio mode={test.audioMode} src={test.audioSrc} />
         </div>
         <div className="header-actions">

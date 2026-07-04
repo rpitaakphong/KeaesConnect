@@ -20,6 +20,9 @@ const nextRuntimeTests = new Set([
   "spip-year-7-science-pre",
   "starter-progress-listening",
   "starter-progress-reading-writing",
+  "summer-english-level-1-pretest",
+  "summer-english-level-2-pretest",
+  "summer-english-level-3-pretest",
 ]);
 
 const builtinTests: CatalogTest[] = [
@@ -39,6 +42,9 @@ const builtinTests: CatalogTest[] = [
   { id: "spip-year-7-science-pre", title: "SPIP Year 7 Science Pre-test", subject: "Science", level: "SPIP Year 7", status: "active", appPath: "/tests/spip-year-7-science-pre/start", runtime: "next-shared-engine" },
   { id: "starter-progress-listening", title: "Starter Progress Listening", subject: "English", level: "Cambridge Starters", status: "active", appPath: "/tests/starter-progress-listening/start", runtime: "next-shared-engine" },
   { id: "starter-progress-reading-writing", title: "Starter Progress Reading & Writing", subject: "English", level: "Cambridge Starters", status: "active", appPath: "/tests/starter-progress-reading-writing/start", runtime: "next-shared-engine" },
+  { id: "summer-english-level-1-pretest", title: "Summer English Level 1 Pre-test", subject: "English", level: "Summer English Level 1", status: "inactive", appPath: "/tests/summer-english-level-1-pretest/start", runtime: "next-shared-engine" },
+  { id: "summer-english-level-2-pretest", title: "Summer English Level 2 Pre-test", subject: "English", level: "Summer English Level 2", status: "inactive", appPath: "/tests/summer-english-level-2-pretest/start", runtime: "next-shared-engine" },
+  { id: "summer-english-level-3-pretest", title: "Summer English Level 3 Pre-test", subject: "English", level: "Summer English Level 3", status: "inactive", appPath: "/tests/summer-english-level-3-pretest/start", runtime: "next-shared-engine" },
 ];
 
 export async function listTests(): Promise<CatalogTest[]> {

@@ -14,7 +14,7 @@ export const englishLiteracy1: TestDefinition = {
   sections: [
     {
       id: "partA",
-      label: "Part A",
+      label: "Part 1",
       title: "Which word rhymes with the word on the left?",
       hint: "Choose one answer for each word.",
       questions: [

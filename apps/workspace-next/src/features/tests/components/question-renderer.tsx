@@ -28,7 +28,10 @@ export function QuestionRenderer({
   const starterListeningInteraction = question.id.startsWith("starter-listening-")
     ? renderStarterListeningInteraction(question, objectAnswer, onChange)
     : null;
-  const responseContent = spipMathInteraction || spipScienceInteraction || starterListeningInteraction || (
+  const mathOlympiadInteraction = question.id.startsWith("mo1-")
+    ? renderMathOlympiadInteraction(question, objectAnswer, onChange)
+    : null;
+  const responseContent = spipMathInteraction || spipScienceInteraction || starterListeningInteraction || mathOlympiadInteraction || (
     <>
       {!hideVisuals && question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
       {!hideVisuals && question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
@@ -230,6 +233,89 @@ function renderStarterListeningInteraction(
   }
   if (question.id === "starter-listening-part4" && question.type === "multiText") {
     return <StarterListeningColouring answer={answer} onChange={onChange} />;
+  }
+  return null;
+}
+
+function renderMathOlympiadInteraction(
+  question: TestQuestion,
+  answer: Record<string, string | string[]>,
+  onChange: (value: Record<string, string | string[]>) => void,
+) {
+  if (question.id === "mo1-q1" && question.type === "multiText") {
+    const circles: Array<{ key: string; value: string } | { key: string; fieldId: string }> = [
+      { key: "four", value: "4" },
+      { key: "a", fieldId: "a" },
+      { key: "six", value: "6" },
+      { key: "b", fieldId: "b" },
+      { key: "eight", value: "8" },
+      { key: "c", fieldId: "c" },
+    ];
+    return (
+      <div className="mo1-number-path" aria-label="Number path from 4 to 9">
+        {circles.map((circle) => (
+          <div className="mo1-number-circle" key={circle.key}>
+            {"fieldId" in circle
+              ? <MathInput answer={answer} field={findField(question, circle.fieldId)} onChange={onChange} />
+              : <span>{circle.value}</span>}
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if (question.id === "mo1-q2" && question.type === "multiText") {
+    return (
+      <div className="mo1-number-bond" aria-label="Number bond showing 4 split into two parts">
+        <div className="mo1-bond-circle mo1-bond-total">4</div>
+        <div className="mo1-bond-line mo1-bond-line-left" aria-hidden="true" />
+        <div className="mo1-bond-line mo1-bond-line-right" aria-hidden="true" />
+        <div className="mo1-bond-circle mo1-bond-part mo1-bond-left">
+          <MathInput answer={answer} field={findField(question, "top")} onChange={onChange} />
+        </div>
+        <div className="mo1-bond-circle mo1-bond-part mo1-bond-right">
+          <MathInput answer={answer} field={findField(question, "bottom")} onChange={onChange} />
+        </div>
+      </div>
+    );
+  }
+  if (question.id === "mo1-q5" && question.type === "singleChoice") {
+    return (
+      <div className="mo1-shape-choice-row" role="radiogroup" aria-label={question.prompt}>
+        {question.choices.map((choice) => (
+          <label className="mo1-shape-choice" key={choice.value}>
+            <input
+              aria-label={choice.label}
+              checked={answer.answer === choice.value}
+              name={question.id}
+              onChange={() => onChange({ ...answer, answer: choice.value })}
+              type="radio"
+              value={choice.value}
+            />
+            {choice.visualHtml ? <span className="math-choice-visual" dangerouslySetInnerHTML={{ __html: choice.visualHtml }} /> : null}
+          </label>
+        ))}
+      </div>
+    );
+  }
+  if (question.id === "mo1-q7" && question.type === "multiText") {
+    return (
+      <div className="mo1-equation-layout">
+        <div className="mo1-equation-row" aria-label="Equation answer">
+          <MathInput answer={answer} field={findField(question, "first")} onChange={onChange} />
+          <div className="mo1-equation-operator">
+            <MathInput answer={answer} field={findField(question, "operator")} onChange={onChange} />
+          </div>
+          <MathInput answer={answer} field={findField(question, "second")} onChange={onChange} />
+          <span className="mo1-equation-equals">=</span>
+          <MathInput answer={answer} field={findField(question, "result")} onChange={onChange} />
+        </div>
+        <div className="mo1-equation-sentence">
+          <span>Siti has</span>
+          <MathInput answer={answer} field={findField(question, "final")} onChange={onChange} />
+          <span>beads now.</span>
+        </div>
+      </div>
+    );
   }
   return null;
 }

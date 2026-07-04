@@ -62,7 +62,7 @@ export const englishLiteracy2: TestDefinition = {
   sections: [
     {
       id: "partA",
-      label: "Part A",
+      label: "Part 1",
       title: "Circle the words that best complete each sentence.",
       hint: "Choose one answer for each sentence.",
       questions: [

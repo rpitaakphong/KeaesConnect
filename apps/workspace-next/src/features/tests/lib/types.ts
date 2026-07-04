@@ -16,6 +16,7 @@ export type TestDefinition = {
   level: string;
   totalPoints: number;
   status: "active" | "draft" | "legacy";
+  durationMinutes?: number;
   audioSrc?: string;
   audioMode?: "standard" | "lockedOnceStarted";
   answerPayload?: "default" | "rwAnswers";
