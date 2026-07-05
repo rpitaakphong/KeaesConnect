@@ -132,6 +132,7 @@ a { color: inherit; }
 .primary-button { background: var(--gradient-primary); color: #fff; box-shadow: 0 14px 28px rgba(54, 196, 187, 0.26); }
 .secondary-button { background: var(--ink); color: #fff; }
 .ghost-button { background: rgba(255,255,255,0.9); color: #26352f; border: 1px solid var(--line); }
+.danger-button { color: #b91c1c; border-color: rgba(185, 28, 28, 0.35); background: #fff5f5; }
 .badge {
   display: inline-flex;
   align-items: center;

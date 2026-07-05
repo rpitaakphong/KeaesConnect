@@ -44,14 +44,20 @@ Deno.serve(async (request) => {
 
     const { data: callerProfile, error: profileError } = await admin
       .from("staff_users")
-      .select("id,role")
+      .select("id,role,deleted_at")
       .eq("id", callerData.user.id)
       .single();
-    if (profileError || callerProfile?.role !== "super_admin") {
+    if (profileError || callerProfile?.role !== "super_admin" || callerProfile?.deleted_at) {
       return jsonResponse({ error: "Not authorized" }, 403);
     }
 
     const payload = await request.json();
+    const action = String(payload?.action || "create").trim().toLowerCase();
+    if (action === "delete") {
+      return await deleteStaffUser(admin, callerData.user.id, payload?.userId);
+    }
+    if (action !== "create") return jsonResponse({ error: "Invalid staff action" }, 400);
+
     const branch = normalizeBranch(payload?.branch);
     const email = cleanEmail(payload?.email);
     const displayName = cleanText(payload?.displayName);
@@ -112,6 +118,47 @@ Deno.serve(async (request) => {
     return jsonResponse({ error: error instanceof Error ? error.message : "Could not create staff user" }, 500);
   }
 });
+
+async function deleteStaffUser(admin: ReturnType<typeof createClient>, callerId: string, userIdValue: unknown): Promise<Response> {
+  const userId = String(userIdValue || "").trim();
+  if (!userId) return jsonResponse({ error: "Staff user is required" }, 400);
+  if (userId === callerId) return jsonResponse({ error: "You cannot delete your own staff account" }, 400);
+
+  const { data: target, error: targetError } = await admin
+    .from("staff_users")
+    .select("id,email,display_name,role,deleted_at")
+    .eq("id", userId)
+    .single();
+  if (targetError || !target) return jsonResponse({ error: "Staff user not found" }, 404);
+  if (target.deleted_at) return jsonResponse({ error: "Staff user is already deleted" }, 400);
+
+  const { error: updateError } = await admin
+    .from("staff_users")
+    .update({ deleted_at: new Date().toISOString(), deleted_by: callerId })
+    .eq("id", userId)
+    .is("deleted_at", null);
+  if (updateError) return jsonResponse({ error: updateError.message }, 400);
+
+  const { error: permissionsError } = await admin
+    .from("staff_permissions")
+    .delete()
+    .eq("staff_id", userId);
+  if (permissionsError) return jsonResponse({ error: permissionsError.message }, 400);
+
+  const { error: banError } = await admin.auth.admin.updateUserById(userId, { ban_duration: "876000h" });
+  if (banError) return jsonResponse({ error: banError.message }, 400);
+
+  return jsonResponse({
+    user: {
+      id: target.id,
+      email: target.email,
+      display_name: target.display_name,
+      role: target.role,
+      deleted: true,
+      permissions: [],
+    },
+  });
+}
 
 function normalizeRole(value: unknown): "staff" | "super_admin" {
   const role = String(value || "staff").trim().toLowerCase();

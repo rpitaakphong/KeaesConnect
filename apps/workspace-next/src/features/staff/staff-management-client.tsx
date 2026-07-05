@@ -1,10 +1,10 @@
 "use client";
 
-import { RefreshCcw, ShieldCheck, UserPlus } from "lucide-react";
+import { RefreshCcw, ShieldCheck, Trash2, UserPlus, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { requireStaffProfile } from "@/features/auth/auth-api";
 import type { StaffProfile } from "@/features/auth/types";
-import { createStaffUser, listStaffUsers, updateStaffAccess } from "@/features/staff/staff-api";
+import { createStaffUser, deleteStaffUser, listStaffUsers, updateStaffAccess } from "@/features/staff/staff-api";
 import { staffBranchOptions, staffPermissionOptions, type StaffBranch, type StaffBranchValue, type StaffPermissionKey, type StaffRole, type StaffUser } from "@/features/staff/types";
 import { hasPermission } from "@/lib/permissions/permissions";
 
@@ -92,6 +92,12 @@ export function StaffManagementClient() {
     }
   }
 
+  async function handleDelete(userId: string) {
+    await deleteStaffUser(userId);
+    setStatus("Deleted staff user");
+    await refreshStaff();
+  }
+
   if (loading || !profile) return <div className="notice">{status}</div>;
   if (!canManageStaff) {
     return (
@@ -156,7 +162,7 @@ export function StaffManagementClient() {
           </div>
           <div className="staff-list">
             {sortedUsers.length ? sortedUsers.map((user) => (
-              <StaffAccessCard currentProfile={profile} key={user.id} onUpdate={handleUpdate} user={user} />
+              <StaffAccessCard currentProfile={profile} key={user.id} onDelete={handleDelete} onUpdate={handleUpdate} user={user} />
             )) : <div className="notice">No staff users found.</div>}
           </div>
         </article>
@@ -167,10 +173,12 @@ export function StaffManagementClient() {
 
 function StaffAccessCard({
   currentProfile,
+  onDelete,
   onUpdate,
   user,
 }: {
   currentProfile: StaffProfile;
+  onDelete: (userId: string) => Promise<void>;
   onUpdate: (userId: string, payload: { branch: StaffBranch; permissions: StaffPermissionKey[]; role: StaffRole }) => Promise<void>;
   user: StaffUser;
 }) {
@@ -178,12 +186,17 @@ function StaffAccessCard({
   const [role, setRole] = useState<StaffRole>(user.role);
   const [permissions, setPermissions] = useState<StaffPermissionKey[]>(user.permissions);
   const [message, setMessage] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deletePending, setDeletePending] = useState(false);
   const hasBranch = branch === "ram" || branch === "ekamai";
+  const isCurrentUser = user.id === currentProfile.id;
 
   useEffect(() => {
     setBranch(user.branch);
     setRole(user.role);
     setPermissions(user.permissions);
+    setConfirmDelete(false);
+    setDeletePending(false);
   }, [user.branch, user.permissions, user.role]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -201,6 +214,24 @@ function StaffAccessCard({
     }
   }
 
+  async function handleDeleteClick() {
+    if (isCurrentUser || deletePending) return;
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      setMessage("Click confirm delete to remove this staff account.");
+      return;
+    }
+    setDeletePending(true);
+    setMessage("Deleting...");
+    try {
+      await onDelete(user.id);
+    } catch (err) {
+      setDeletePending(false);
+      setConfirmDelete(false);
+      setMessage(err instanceof Error ? err.message : "Could not delete staff user.");
+    }
+  }
+
   return (
     <form className="staff-row" onSubmit={handleSubmit}>
       <div className="staff-row-head">
@@ -208,7 +239,7 @@ function StaffAccessCard({
           <strong>{user.displayName || user.email}</strong>
           <span>{user.email} · {formatBranch(user.branch)}</span>
         </div>
-        {user.id === currentProfile.id ? <span className="badge">You</span> : null}
+        {isCurrentUser ? <span className="badge">You</span> : null}
         {!user.branch ? <span className="badge warning">Branch required</span> : null}
       </div>
       <BranchField branch={branch} name={`branch-${user.id}`} onChange={setBranch} required />
@@ -221,6 +252,22 @@ function StaffAccessCard({
       />
       <div className="button-row">
         <button className="primary-button compact-button" type="submit" disabled={!hasBranch}>Save access</button>
+        <button
+          className={`ghost-button compact-button ${confirmDelete ? "danger-button" : ""}`}
+          disabled={isCurrentUser || deletePending}
+          onClick={handleDeleteClick}
+          type="button"
+        >
+          <Trash2 aria-hidden="true" /> {confirmDelete ? "Confirm delete" : "Delete staff"}
+        </button>
+        {confirmDelete && !deletePending ? (
+          <button className="ghost-button compact-button" onClick={() => {
+            setConfirmDelete(false);
+            setMessage("");
+          }} type="button">
+            <X aria-hidden="true" /> Cancel
+          </button>
+        ) : null}
         {message ? <span className="support-note">{message}</span> : null}
       </div>
     </form>

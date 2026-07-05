@@ -33,7 +33,7 @@ export async function createStaffUser(payload: StaffCreatePayload): Promise<Staf
       temporaryPassword: payload.temporaryPassword,
     },
   });
-  if (error) throw error;
+  if (error) throw new Error(await functionErrorMessage(error, "Could not create staff user."));
   if (data?.error) throw new Error(String(data.error));
   const user = normalizeStaffUser(data?.user ?? data);
   if (!user) throw new Error("Staff user was not returned after creation.");
@@ -52,6 +52,35 @@ export async function updateStaffAccess(userId: string, payload: StaffAccessUpda
   const user = normalizeStaffUser(data);
   if (!user) throw new Error("Staff user was not returned after update.");
   return user;
+}
+
+export async function deleteStaffUser(userId: string): Promise<void> {
+  const supabase = getSupabaseBrowserClient();
+  const { data, error } = await supabase.functions.invoke("manage-staff-user", {
+    body: {
+      action: "delete",
+      userId,
+    },
+  });
+  if (error) throw new Error(await functionErrorMessage(error, "Could not delete staff user."));
+  if (data?.error) throw new Error(String(data.error));
+}
+
+async function functionErrorMessage(error: unknown, fallback: string) {
+  const context = (error as { context?: { json?: () => Promise<unknown>; text?: () => Promise<string> } })?.context;
+  try {
+    const body = context?.json ? await context.json() : null;
+    const message = (body as { error?: unknown } | null)?.error;
+    if (message) return String(message);
+  } catch {
+    try {
+      const text = context?.text ? await context.text() : "";
+      if (text) return text;
+    } catch {
+      // Fall back to the SDK error message below.
+    }
+  }
+  return error instanceof Error ? error.message : fallback;
 }
 
 function normalizeStaffUser(value: unknown): StaffUser | null {

@@ -32,6 +32,8 @@ alter table staff_users
   add constraint staff_users_role_check check (role in ('staff', 'super_admin'));
 
 alter table staff_users add column if not exists branch text;
+alter table staff_users add column if not exists deleted_at timestamptz;
+alter table staff_users add column if not exists deleted_by uuid references staff_users(id);
 
 do $$
 begin
@@ -211,6 +213,7 @@ as $$
   select exists (
     select 1 from staff_users
     where id = auth.uid()
+      and deleted_at is null
   );
 $$;
 
@@ -225,6 +228,7 @@ as $$
     select 1 from staff_users
     where id = auth.uid()
       and role = 'super_admin'
+      and deleted_at is null
   );
 $$;
 
@@ -239,12 +243,15 @@ as $$
     select 1 from staff_users
     where id = auth.uid()
       and role = 'super_admin'
+      and deleted_at is null
   )
   or exists (
     select 1
     from staff_permissions p
+    join staff_users s on s.id = p.staff_id
     where p.staff_id = auth.uid()
       and p.feature_key = p_feature_key
+      and s.deleted_at is null
   );
 $$;
 
@@ -281,7 +288,7 @@ drop policy if exists "staff can read answers" on attempt_answers;
 create policy "staff can read answers" on attempt_answers for select using (has_staff_permission('view_results') or has_staff_permission('view_reports'));
 
 drop policy if exists "staff can read own permissions" on staff_permissions;
-create policy "staff can read own permissions" on staff_permissions for select using (staff_id = auth.uid() or is_super_admin());
+create policy "staff can read own permissions" on staff_permissions for select using ((staff_id = auth.uid() and is_staff()) or is_super_admin());
 
 insert into tests (id, title, subject, level, status, total_points, app_path)
 values
@@ -1235,7 +1242,8 @@ as $$
     ), '[]'::jsonb)
   )
   from staff_users s
-  where s.id = auth.uid();
+  where s.id = auth.uid()
+    and s.deleted_at is null;
 $$;
 
 create or replace function list_staff_users()
@@ -1266,6 +1274,7 @@ begin
       ), '[]'::jsonb)
     ) order by s.created_at desc)
     from staff_users s
+    where s.deleted_at is null
   ), '[]'::jsonb);
 end;
 $$;
@@ -1298,13 +1307,14 @@ begin
     raise exception 'Branch is required';
   end if;
 
-  if not exists (select 1 from staff_users where id = p_staff_id) then
+  if not exists (select 1 from staff_users where id = p_staff_id and deleted_at is null) then
     raise exception 'Staff user not found';
   end if;
 
   select count(*) into super_admin_count
   from staff_users
   where role = 'super_admin'
+    and deleted_at is null
     and id <> p_staff_id;
 
   if p_staff_id = auth.uid() and clean_role <> 'super_admin' and super_admin_count = 0 then
@@ -1359,6 +1369,7 @@ begin
     )
     from staff_users s
     where s.id = p_staff_id
+      and s.deleted_at is null
   );
 end;
 $$;
@@ -1375,7 +1386,8 @@ begin
   perform require_staff_permission('generate_links');
   select staff_users.branch into staff_branch
   from staff_users
-  where staff_users.id = auth.uid();
+  where staff_users.id = auth.uid()
+    and staff_users.deleted_at is null;
 
   if staff_branch is null or staff_branch not in ('ram', 'ekamai') then
     raise exception 'Choose your staff branch before generating test links.';
