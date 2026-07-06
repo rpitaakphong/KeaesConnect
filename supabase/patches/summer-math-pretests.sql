@@ -1,8 +1,8 @@
 insert into public.tests (id, title, subject, level, status, total_points, app_path)
 values
-  ('summer-math-level-1-pretest', 'Summer Math Level 1 Pre-test', 'Math', 'Summer Math Level 1', 'draft', 30, '/tests/summer-math-level-1-pretest/start'),
-  ('summer-math-level-2-pretest', 'Summer Math Level 2 Pre-test', 'Math', 'Summer Math Level 2', 'draft', 30, '/tests/summer-math-level-2-pretest/start'),
-  ('summer-math-level-3-pretest', 'Summer Math Level 3 Pre-test', 'Math', 'Summer Math Level 3', 'draft', 30, '/tests/summer-math-level-3-pretest/start')
+  ('summer-math-level-1-pretest', 'Summer Math Level 1 Pre-test', 'Math', 'Summer Math Level 1', 'inactive', 30, '/tests/summer-math-level-1-pretest/start'),
+  ('summer-math-level-2-pretest', 'Summer Math Level 2 Pre-test', 'Math', 'Summer Math Level 2', 'inactive', 30, '/tests/summer-math-level-2-pretest/start'),
+  ('summer-math-level-3-pretest', 'Summer Math Level 3 Pre-test', 'Math', 'Summer Math Level 3', 'inactive', 30, '/tests/summer-math-level-3-pretest/start')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,

@@ -329,9 +329,9 @@ values
   ('summer-english-level-1-pretest', 'Summer English Level 1 Pre-test', 'English', 'Summer English Level 1', 'active', 30, '/tests/summer-english-level-1-pretest/start'),
   ('summer-english-level-2-pretest', 'Summer English Level 2 Pre-test', 'English', 'Summer English Level 2', 'active', 30, '/tests/summer-english-level-2-pretest/start'),
   ('summer-english-level-3-pretest', 'Summer English Level 3 Pre-test', 'English', 'Summer English Level 3', 'active', 30, '/tests/summer-english-level-3-pretest/start'),
-  ('summer-math-level-1-pretest', 'Summer Math Level 1 Pre-test', 'Math', 'Summer Math Level 1', 'draft', 30, '/tests/summer-math-level-1-pretest/start'),
-  ('summer-math-level-2-pretest', 'Summer Math Level 2 Pre-test', 'Math', 'Summer Math Level 2', 'draft', 30, '/tests/summer-math-level-2-pretest/start'),
-  ('summer-math-level-3-pretest', 'Summer Math Level 3 Pre-test', 'Math', 'Summer Math Level 3', 'draft', 30, '/tests/summer-math-level-3-pretest/start')
+  ('summer-math-level-1-pretest', 'Summer Math Level 1 Pre-test', 'Math', 'Summer Math Level 1', 'inactive', 30, '/tests/summer-math-level-1-pretest/start'),
+  ('summer-math-level-2-pretest', 'Summer Math Level 2 Pre-test', 'Math', 'Summer Math Level 2', 'inactive', 30, '/tests/summer-math-level-2-pretest/start'),
+  ('summer-math-level-3-pretest', 'Summer Math Level 3 Pre-test', 'Math', 'Summer Math Level 3', 'inactive', 30, '/tests/summer-math-level-3-pretest/start')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
