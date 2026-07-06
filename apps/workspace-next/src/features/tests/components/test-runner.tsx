@@ -137,8 +137,9 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                     </div>
                   </article>
                 ) : null}
+                {active.visuals?.length ? <QuestionVisuals visuals={active.visuals} /> : null}
                 {active.questionLayout === "grouped" ? (
-                  <GroupedQuestionCard answers={answers} questions={active.questions} onChange={updateAnswer} />
+                  <GroupedQuestionCard answers={answers} questions={active.questions} title={active.title} onChange={updateAnswer} />
                 ) : (
                   activeQuestionItems.map((item) => isScienceQuestionGroup(item) ? (
                     <ScienceQuestionGroupRenderer answers={answers} group={item} key={item.id} onChange={updateAnswer} />
@@ -320,10 +321,12 @@ function GroupedQuestionCard({
   answers,
   onChange,
   questions,
+  title,
 }: {
   answers: TestAnswers;
   onChange: (questionId: string, value: TestAnswers[string]) => void;
   questions: TestQuestion[];
+  title: string;
 }) {
   const firstNumber = questions[0]?.number;
   const lastNumber = questions[questions.length - 1]?.number;
@@ -335,7 +338,7 @@ function GroupedQuestionCard({
       <div className="question-head">
         <div>
           <p className="eyebrow">{numberLabel}</p>
-          <h3>Arrange these sentences in order.</h3>
+          <h3>{title}</h3>
         </div>
         <span className="badge">{points} {points === 1 ? "mark" : "marks"}</span>
       </div>

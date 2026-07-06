@@ -17,6 +17,9 @@ import { starterProgressReadingWriting } from "@/features/tests/content/starter/
 import { summerEnglishLevel1Pretest } from "@/features/tests/content/summer-english/level-1-pretest";
 import { summerEnglishLevel2Pretest } from "@/features/tests/content/summer-english/level-2-pretest";
 import { summerEnglishLevel3Pretest } from "@/features/tests/content/summer-english/level-3-pretest";
+import { summerMathLevel1Pretest } from "@/features/tests/content/summer-math/level-1-pretest";
+import { summerMathLevel2Pretest } from "@/features/tests/content/summer-math/level-2-pretest";
+import { summerMathLevel3Pretest } from "@/features/tests/content/summer-math/level-3-pretest";
 import type { TestDefinition } from "@/features/tests/lib/types";
 
 const tests: Record<string, TestDefinition> = {
@@ -39,6 +42,9 @@ const tests: Record<string, TestDefinition> = {
   [summerEnglishLevel1Pretest.id]: summerEnglishLevel1Pretest,
   [summerEnglishLevel2Pretest.id]: summerEnglishLevel2Pretest,
   [summerEnglishLevel3Pretest.id]: summerEnglishLevel3Pretest,
+  [summerMathLevel1Pretest.id]: summerMathLevel1Pretest,
+  [summerMathLevel2Pretest.id]: summerMathLevel2Pretest,
+  [summerMathLevel3Pretest.id]: summerMathLevel3Pretest,
 };
 
 export function getTestDefinition(testId: string) {

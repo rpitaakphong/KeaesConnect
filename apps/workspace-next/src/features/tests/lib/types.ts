@@ -30,6 +30,7 @@ export type TestSection = {
   title: string;
   hint?: string;
   questionLayout?: "cards" | "grouped";
+  visuals?: QuestionVisual[];
   wordBank?: string[];
   storyTitle?: string;
   story?: string[];
@@ -109,7 +110,7 @@ export type MultiTextQuestion = QuestionBase & {
   type: "multiText";
   fields: Array<{ id: string; label: string; placeholder?: string; visualHtml?: string }>;
   compact?: boolean;
-  inlineRows?: Array<{ items: Array<{ text?: string; type?: "input"; id?: string }> }>;
+  inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input"; id?: string }> }>;
   rankRows?: Array<{ label: string; items: Array<{ text: string; id: string }> }>;
   answerTable?: {
     headers: string[];

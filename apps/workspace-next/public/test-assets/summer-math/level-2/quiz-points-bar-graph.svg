@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-label="Quiz points bar graph for Teams A through H">
+  <rect width="900" height="520" fill="#ffffff"/>
+  <text x="500" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700">Quiz Points</text>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#111827">
+    <line x1="220" y1="80" x2="220" y2="410" stroke="#1f2937" stroke-width="3"/>
+    <line x1="220" y1="410" x2="820" y2="410" stroke="#1f2937" stroke-width="3"/>
+    <g stroke="#d1d5db" stroke-width="1">
+      <line x1="320" y1="80" x2="320" y2="410"/>
+      <line x1="420" y1="80" x2="420" y2="410"/>
+      <line x1="520" y1="80" x2="520" y2="410"/>
+      <line x1="620" y1="80" x2="620" y2="410"/>
+      <line x1="720" y1="80" x2="720" y2="410"/>
+      <line x1="820" y1="80" x2="820" y2="410"/>
+    </g>
+    <g font-weight="700">
+      <text x="140" y="114">Team A</text>
+      <text x="140" y="154">Team B</text>
+      <text x="140" y="194">Team C</text>
+      <text x="140" y="234">Team D</text>
+      <text x="140" y="274">Team E</text>
+      <text x="140" y="314">Team F</text>
+      <text x="140" y="354">Team G</text>
+      <text x="140" y="394">Team H</text>
+    </g>
+    <g>
+      <rect x="220" y="95" width="200" height="25" fill="#f97316"/>
+      <rect x="220" y="135" width="450" height="25" fill="#facc15"/>
+      <rect x="220" y="175" width="250" height="25" fill="#0ea5e9"/>
+      <rect x="220" y="215" width="500" height="25" fill="#84cc16"/>
+      <rect x="220" y="255" width="400" height="25" fill="#ef4444"/>
+      <rect x="220" y="295" width="250" height="25" fill="#f59e0b"/>
+      <rect x="220" y="335" width="300" height="25" fill="#ec4899"/>
+      <rect x="220" y="375" width="550" height="25" fill="#0284c7"/>
+    </g>
+    <g text-anchor="middle" font-weight="700">
+      <text x="220" y="438">0</text>
+      <text x="320" y="438">20</text>
+      <text x="420" y="438">40</text>
+      <text x="520" y="438">60</text>
+      <text x="620" y="438">80</text>
+      <text x="720" y="438">100</text>
+      <text x="820" y="438">120</text>
+    </g>
+  </g>
+  <text x="500" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6b7280">Placeholder figure. Replace with final supplied artwork using the same filename.</text>
+</svg>

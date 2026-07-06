@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" role="img" aria-label="Double bar graph of donut boxes sold in Helen's shops">
+  <rect width="980" height="560" fill="#ffffff"/>
+  <text x="490" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700">Number of donut boxes sold in Helen's shops</text>
+  <g transform="translate(100 70)" font-family="Arial, sans-serif">
+    <line x1="80" y1="380" x2="760" y2="380" stroke="#1f2937" stroke-width="3"/>
+    <line x1="80" y1="20" x2="80" y2="380" stroke="#1f2937" stroke-width="3"/>
+    <g stroke="#d1d5db" stroke-width="1">
+      <line x1="80" y1="320" x2="760" y2="320"/>
+      <line x1="80" y1="260" x2="760" y2="260"/>
+      <line x1="80" y1="200" x2="760" y2="200"/>
+      <line x1="80" y1="140" x2="760" y2="140"/>
+      <line x1="80" y1="80" x2="760" y2="80"/>
+      <line x1="80" y1="20" x2="760" y2="20"/>
+    </g>
+    <g font-size="16" font-weight="700" text-anchor="end">
+      <text x="68" y="386">0</text>
+      <text x="68" y="326">20</text>
+      <text x="68" y="266">40</text>
+      <text x="68" y="206">60</text>
+      <text x="68" y="146">80</text>
+      <text x="68" y="86">100</text>
+      <text x="68" y="26">120</text>
+    </g>
+    <g>
+      <rect x="130" y="140" width="38" height="240" fill="#ec2fc6"/>
+      <rect x="170" y="80" width="38" height="300" fill="#faff00"/>
+      <rect x="250" y="50" width="38" height="330" fill="#ec2fc6"/>
+      <rect x="290" y="80" width="38" height="300" fill="#faff00"/>
+      <rect x="370" y="200" width="38" height="180" fill="#ec2fc6"/>
+      <rect x="410" y="110" width="38" height="270" fill="#faff00"/>
+      <rect x="490" y="110" width="38" height="270" fill="#ec2fc6"/>
+      <rect x="530" y="230" width="38" height="150" fill="#faff00"/>
+      <rect x="610" y="80" width="38" height="300" fill="#ec2fc6"/>
+      <rect x="650" y="140" width="38" height="240" fill="#faff00"/>
+    </g>
+    <g font-size="17" font-weight="700" text-anchor="middle">
+      <text x="169" y="412">Week 1</text>
+      <text x="289" y="412">Week 2</text>
+      <text x="409" y="412">Week 3</text>
+      <text x="529" y="412">Week 4</text>
+      <text x="649" y="412">Week 5</text>
+      <text x="420" y="455">Week</text>
+    </g>
+    <g transform="translate(785 35)" font-size="17">
+      <rect width="145" height="78" fill="#ffffff" stroke="#1f2937" stroke-width="2"/>
+      <rect x="16" y="15" width="32" height="18" fill="#ec2fc6"/>
+      <text x="58" y="30">Shop A</text>
+      <rect x="16" y="45" width="32" height="18" fill="#faff00"/>
+      <text x="58" y="60">Shop B</text>
+    </g>
+  </g>
+  <text x="490" y="535" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6b7280">Placeholder figure. Replace with final supplied artwork using the same filename.</text>
+</svg>

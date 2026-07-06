@@ -1778,6 +1778,36 @@ tr:last-child td { border-bottom: 0; }
   gap: 8px;
   flex-wrap: wrap;
 }
+.summer-math-sequence-row {
+  gap: clamp(12px, 4vw, 28px);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+.summer-math-sequence-row .math-line-input {
+  width: 84px;
+  min-width: 84px;
+  text-align: center;
+}
+.summer-math-expression {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 1.3rem;
+  font-weight: 850;
+}
+.summer-math-expression .mixed-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.summer-math-angle-image {
+  display: block;
+  width: min(100%, 520px);
+  max-height: 360px;
+  object-fit: contain;
+}
 .compact-lines {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }

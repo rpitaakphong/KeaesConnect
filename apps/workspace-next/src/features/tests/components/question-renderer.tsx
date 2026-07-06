@@ -103,7 +103,7 @@ export function QuestionRenderer({
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
-            <div className="math-inline-row" key={rowIndex}>
+            <div className={`math-inline-row ${row.className || ""}`} key={rowIndex}>
               {row.items.map((item, itemIndex) => item.type === "input" && item.id
                 ? <MathInput answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
                 : <span key={itemIndex}>{item.text}</span>)}
