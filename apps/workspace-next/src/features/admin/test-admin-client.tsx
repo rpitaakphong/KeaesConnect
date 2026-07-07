@@ -451,6 +451,8 @@ function courseFamily(test: CatalogTest) {
   if (source.includes("math-olympiad")) return "Math Olympiad";
   if (source.includes("spip")) return "SPIP Year 7";
   if (source.includes("starter-progress") || source.includes("starter")) return "Starter Progress";
+  if (source.includes("summer-english")) return "Summer English";
+  if (source.includes("summer-math")) return "Summer Math";
   return test.level || "Other";
 }
 
