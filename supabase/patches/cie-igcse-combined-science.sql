@@ -1,7 +1,7 @@
 insert into public.tests (id, title, subject, level, status, total_points, app_path)
 values
-  ('cie-igcse-combined-science-paper-1-core', 'CIE IGCSE Combined Science Paper 1 Core', 'Science', 'Core', 'active', 40, '/tests/cie-igcse-combined-science-paper-1-core/start'),
-  ('cie-igcse-combined-science-paper-2-extended', 'CIE IGCSE Combined Science Paper 2 Extended', 'Science', 'Extended', 'active', 40, '/tests/cie-igcse-combined-science-paper-2-extended/start')
+  ('cie-igcse-combined-science-paper-1-core', 'CIE IGCSE Combined Science Paper 1 Core', 'Combined Science', 'Core', 'active', 40, '/tests/cie-igcse-combined-science-paper-1-core/start'),
+  ('cie-igcse-combined-science-paper-2-extended', 'CIE IGCSE Combined Science Paper 2 Extended', 'Combined Science', 'Extended', 'active', 40, '/tests/cie-igcse-combined-science-paper-2-extended/start')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,

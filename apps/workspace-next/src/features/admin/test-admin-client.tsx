@@ -453,7 +453,7 @@ function courseFamily(test: CatalogTest) {
   if (source.includes("starter-progress") || source.includes("starter")) return "Starter Progress";
   if (source.includes("summer-english")) return "Summer English";
   if (source.includes("summer-math")) return "Summer Math";
-  if (source.includes("cie-igcse-combined-science") || source.includes("combined science")) return "CIE IGCSE Combined Science";
+  if (source.includes("cie-igcse") || source.includes("igcse")) return "CIE IGCSE";
   return test.level || "Other";
 }
 

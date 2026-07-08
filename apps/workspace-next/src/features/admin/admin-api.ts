@@ -31,8 +31,8 @@ const nextRuntimeTests = new Set([
 ]);
 
 const builtinTests: CatalogTest[] = [
-  { id: "cie-igcse-combined-science-paper-1-core", title: "CIE IGCSE Combined Science Paper 1 Core", subject: "Science", level: "Core", status: "active", appPath: "/tests/cie-igcse-combined-science-paper-1-core/start", runtime: "next-shared-engine" },
-  { id: "cie-igcse-combined-science-paper-2-extended", title: "CIE IGCSE Combined Science Paper 2 Extended", subject: "Science", level: "Extended", status: "active", appPath: "/tests/cie-igcse-combined-science-paper-2-extended/start", runtime: "next-shared-engine" },
+  { id: "cie-igcse-combined-science-paper-1-core", title: "CIE IGCSE Combined Science Paper 1 Core", subject: "Combined Science", level: "Core", status: "active", appPath: "/tests/cie-igcse-combined-science-paper-1-core/start", runtime: "next-shared-engine" },
+  { id: "cie-igcse-combined-science-paper-2-extended", title: "CIE IGCSE Combined Science Paper 2 Extended", subject: "Combined Science", level: "Extended", status: "active", appPath: "/tests/cie-igcse-combined-science-paper-2-extended/start", runtime: "next-shared-engine" },
   { id: "english-literacy-1", title: "English Literacy Level 1", subject: "English", level: "English Literacy 1", status: "active", appPath: "/tests/english-literacy-1/start", runtime: "next-shared-engine" },
   { id: "english-literacy-2", title: "English Literacy Level 2", subject: "English", level: "English Literacy 2", status: "active", appPath: "/tests/english-literacy-2/start", runtime: "next-shared-engine" },
   { id: "english-literacy-3", title: "English Literacy Level 3", subject: "English", level: "English Literacy 3", status: "active", appPath: "/tests/english-literacy-3/start", runtime: "next-shared-engine" },
@@ -105,10 +105,11 @@ export function buildAssignmentUrl(test: CatalogTest, assignmentToken: string) {
 
 function normalizeCatalogTest(test: Record<string, unknown>): CatalogTest {
   const id = String(test.id || "");
+  const subject = id.startsWith("cie-igcse-combined-science") ? "Combined Science" : String(test.subject || "");
   return {
     id,
     title: String(test.title || id),
-    subject: String(test.subject || ""),
+    subject,
     level: String(test.level || ""),
     status: String(test.status || "active"),
     totalPoints: Number(test.total_points || 0),

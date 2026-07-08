@@ -871,7 +871,7 @@ function sections(biology: TestQuestion[], chemistry: TestQuestion[], physics: T
 export const cieIgcseCombinedSciencePaper1Core: TestDefinition = {
   id: "cie-igcse-combined-science-paper-1-core",
   title: "CIE IGCSE Combined Science Paper 1 Core",
-  subject: "Science",
+  subject: "Combined Science",
   level: "Core",
   status: "active",
   durationMinutes: 45,
@@ -882,7 +882,7 @@ export const cieIgcseCombinedSciencePaper1Core: TestDefinition = {
 export const cieIgcseCombinedSciencePaper2Extended: TestDefinition = {
   id: "cie-igcse-combined-science-paper-2-extended",
   title: "CIE IGCSE Combined Science Paper 2 Extended",
-  subject: "Science",
+  subject: "Combined Science",
   level: "Extended",
   status: "active",
   durationMinutes: 45,
