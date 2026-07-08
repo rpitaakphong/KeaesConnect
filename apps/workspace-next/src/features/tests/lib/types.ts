@@ -103,6 +103,10 @@ export type AnswerPart = {
 export type SingleChoiceQuestion = QuestionBase & {
   type: "singleChoice";
   choices: Array<{ value: string; label: string; image?: string; alt?: string; visualHtml?: string }>;
+  choiceTable?: {
+    headers: string[];
+    rows: Array<{ value: string; cells: string[] }>;
+  };
   responseShape?: "value" | "object";
 };
 

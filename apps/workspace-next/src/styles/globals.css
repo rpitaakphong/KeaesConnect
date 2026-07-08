@@ -1762,6 +1762,85 @@ tr:last-child td { border-bottom: 0; }
   max-width: 100%;
   height: auto;
 }
+.cambridge-table-visual {
+  display: grid;
+  gap: 22px;
+  margin: 0 0 18px;
+  overflow-x: auto;
+  color: #000;
+}
+.cambridge-table-visual p {
+  margin: 0;
+  color: #000;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+.cambridge-data-table,
+.cambridge-choice-table {
+  width: max-content;
+  min-width: min(100%, 420px);
+  border-collapse: collapse;
+  border: 1.5px solid #111;
+  background: #fff;
+  color: #000;
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  line-height: 1.25;
+}
+.cambridge-data-table {
+  margin: 0 auto;
+}
+.cambridge-choice-table-wrap {
+  width: 100%;
+  margin: 4px 0 0;
+  overflow-x: auto;
+}
+.cambridge-choice-table {
+  min-width: min(100%, 560px);
+}
+.cambridge-data-table th,
+.cambridge-data-table td,
+.cambridge-choice-table th,
+.cambridge-choice-table td {
+  border: 1.5px solid #111;
+  padding: 10px 18px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 500;
+}
+.cambridge-choice-table thead th:first-child {
+  width: 56px;
+}
+.cambridge-choice-table tbody th {
+  width: 56px;
+  font-weight: 900;
+}
+.cambridge-choice-table tbody tr {
+  cursor: pointer;
+}
+.cambridge-choice-table tbody tr:hover,
+.cambridge-choice-table tbody tr:focus-within {
+  background: #f7fbfc;
+}
+.cambridge-choice-table tbody tr.is-selected {
+  background: #effaff;
+  box-shadow: inset 4px 0 0 #58b6d6;
+}
+.cambridge-choice-table input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin: 0 8px 0 0;
+  border: 2px solid #8b9a9e;
+  border-radius: 999px;
+  background: #fff;
+  vertical-align: -3px;
+}
+.cambridge-choice-table input[type="radio"]:checked {
+  border-color: #58b6d6;
+  background-image: radial-gradient(circle, #58b6d6 0 5px, transparent 5.5px);
+}
 .math-booklet-image {
   display: block;
   width: min(100%, 680px);

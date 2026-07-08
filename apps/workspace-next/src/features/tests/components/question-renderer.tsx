@@ -35,7 +35,9 @@ export function QuestionRenderer({
     <>
       {!hideVisuals && question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
       {!hideVisuals && question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
-      {question.type === "singleChoice" ? (
+      {question.type === "singleChoice" && question.choiceTable ? (
+        <CambridgeChoiceTable answer={answer} objectAnswer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "singleChoice" ? (
         <div className={singleChoiceGridClass(question)}>
           {question.choices.map((choice) => (
             <label className={`choice-card ${choice.image ? "image-choice-card" : ""}`} key={choice.value}>
@@ -218,6 +220,54 @@ function multiChoiceGridClass(question: Extract<TestQuestion, { type: "multiChoi
   const classes = ["choice-grid", question.choices.some((choice) => choice.visualHtml) ? "visual-choice-grid math-choice-grid" : "text-choice-grid"];
   if (isCompactEnglishLetterChoice(question)) classes.push("compact-letter-choice-grid");
   return classes.join(" ");
+}
+
+function CambridgeChoiceTable({
+  answer,
+  objectAnswer,
+  onChange,
+  question,
+}: {
+  answer: string | Record<string, string | string[]> | undefined;
+  objectAnswer: Record<string, string | string[]>;
+  onChange: (value: string | Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "singleChoice" }>;
+}) {
+  const selected = question.responseShape === "object" ? objectAnswer.answer : answer;
+  const choose = (value: string) => onChange(question.responseShape === "object" ? { ...objectAnswer, answer: value } : value);
+  return (
+    <div className="cambridge-choice-table-wrap">
+      <table className="cambridge-choice-table">
+        <thead>
+          <tr>
+            {question.choiceTable?.headers.map((header, index) => (
+              <th dangerouslySetInnerHTML={{ __html: header }} key={`${index}-${header}`} />
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {question.choiceTable?.rows.map((row) => (
+            <tr className={selected === row.value ? "is-selected" : ""} key={row.value} onClick={() => choose(row.value)}>
+              <th scope="row">
+                <input
+                  aria-label={`Answer ${row.value}`}
+                  checked={selected === row.value}
+                  name={question.id}
+                  onChange={() => choose(row.value)}
+                  type="radio"
+                  value={row.value}
+                />
+                <span>{row.value}</span>
+              </th>
+              {row.cells.map((cell, index) => (
+                <td dangerouslySetInnerHTML={{ __html: cell }} key={`${row.value}-${index}`} />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 function isCompactEnglishLetterChoice(question: Extract<TestQuestion, { type: "singleChoice" | "multiChoice" }>) {
