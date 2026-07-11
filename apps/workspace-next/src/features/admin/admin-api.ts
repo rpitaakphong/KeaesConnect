@@ -52,9 +52,9 @@ const builtinTests: CatalogTest[] = [
   { id: "summer-english-level-1-pretest", title: "Summer English Level 1 Pre-test", subject: "English", level: "Summer English Level 1", status: "active", appPath: "/tests/summer-english-level-1-pretest/start", runtime: "next-shared-engine" },
   { id: "summer-english-level-2-pretest", title: "Summer English Level 2 Pre-test", subject: "English", level: "Summer English Level 2", status: "active", appPath: "/tests/summer-english-level-2-pretest/start", runtime: "next-shared-engine" },
   { id: "summer-english-level-3-pretest", title: "Summer English Level 3 Pre-test", subject: "English", level: "Summer English Level 3", status: "active", appPath: "/tests/summer-english-level-3-pretest/start", runtime: "next-shared-engine" },
-  { id: "summer-math-level-1-pretest", title: "Summer Math Level 1 Pre-test", subject: "Math", level: "Summer Math Level 1", status: "draft", appPath: "/tests/summer-math-level-1-pretest/start", runtime: "next-shared-engine" },
-  { id: "summer-math-level-2-pretest", title: "Summer Math Level 2 Pre-test", subject: "Math", level: "Summer Math Level 2", status: "draft", appPath: "/tests/summer-math-level-2-pretest/start", runtime: "next-shared-engine" },
-  { id: "summer-math-level-3-pretest", title: "Summer Math Level 3 Pre-test", subject: "Math", level: "Summer Math Level 3", status: "draft", appPath: "/tests/summer-math-level-3-pretest/start", runtime: "next-shared-engine" },
+  { id: "summer-math-level-1-pretest", title: "Summer Math Level 1 Pre-test", subject: "Math", level: "Summer Math Level 1", status: "active", appPath: "/tests/summer-math-level-1-pretest/start", runtime: "next-shared-engine" },
+  { id: "summer-math-level-2-pretest", title: "Summer Math Level 2 Pre-test", subject: "Math", level: "Summer Math Level 2", status: "active", appPath: "/tests/summer-math-level-2-pretest/start", runtime: "next-shared-engine" },
+  { id: "summer-math-level-3-pretest", title: "Summer Math Level 3 Pre-test", subject: "Math", level: "Summer Math Level 3", status: "active", appPath: "/tests/summer-math-level-3-pretest/start", runtime: "next-shared-engine" },
 ];
 
 export async function listTests(): Promise<CatalogTest[]> {

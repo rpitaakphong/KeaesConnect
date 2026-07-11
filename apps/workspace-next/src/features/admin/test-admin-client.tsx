@@ -157,9 +157,8 @@ export function TestAdminClient() {
     <>
       <section className="dashboard-heading">
         <div>
-          <p className="eyebrow">Next.js test admin</p>
-          <h1>Send tests and migrate shared assessments.</h1>
-          <p className="hero-copy">All active tests generate `/tests/[testId]/start` links through the Next.js shared test runner.</p>
+          <p className="eyebrow">Test Admin</p>
+          <h1>Create test link and manage test results.</h1>
         </div>
         <div className="button-row">
           <a className="button ghost-button" href="/admin/test-inventory">Inventory</a>

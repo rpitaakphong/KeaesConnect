@@ -25,7 +25,7 @@ export const summerMathLevel2Pretest: TestDefinition = {
   title: "Summer Math Level 2 Pre-test",
   subject: "Math",
   level: "Summer Math Level 2",
-  status: "draft",
+  status: "active",
   durationMinutes: 40,
   totalPoints: 30,
   sections: [

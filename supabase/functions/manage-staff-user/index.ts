@@ -70,54 +70,127 @@ Deno.serve(async (request) => {
     if (!branch) return jsonResponse({ error: "Branch is required" }, 400);
     if (password.length < 8) return jsonResponse({ error: "Temporary password must be at least 8 characters" }, 400);
 
-    const { data: created, error: createError } = await admin.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-      user_metadata: { display_name: displayName },
-    });
-    if (createError || !created.user) {
-      return jsonResponse({ error: createError?.message || "Could not create staff user" }, 400);
-    }
-
-    const { error: upsertError } = await admin
+    const { data: existingStaff, error: existingStaffError } = await admin
       .from("staff_users")
-      .upsert({
-        id: created.user.id,
-        branch,
-        email,
-        display_name: displayName,
-        role,
-      });
-    if (upsertError) return jsonResponse({ error: upsertError.message }, 400);
-
-    await admin.from("staff_permissions").delete().eq("staff_id", created.user.id);
-    if (role === "staff" && permissions.length) {
-      const { error: permissionsError } = await admin
-        .from("staff_permissions")
-        .insert(permissions.map((featureKey) => ({
-          staff_id: created.user.id,
-          feature_key: featureKey,
-          granted_by: callerData.user.id,
-        })));
-      if (permissionsError) return jsonResponse({ error: permissionsError.message }, 400);
+      .select("id,deleted_at")
+      .eq("email", email)
+      .maybeSingle();
+    if (existingStaffError) return jsonResponse({ error: existingStaffError.message }, 400);
+    if (existingStaff && !existingStaff.deleted_at) {
+      return jsonResponse({ error: "A staff user with this email already exists." }, 400);
     }
 
-    return jsonResponse({
-      user: {
-        id: created.user.id,
-        branch,
+    let staffId = existingStaff?.id || "";
+    if (staffId) {
+      const { error: authUpdateError } = await admin.auth.admin.updateUserById(staffId, {
+        ban_duration: "none",
+        email_confirm: true,
+        password,
+        user_metadata: { display_name: displayName },
+      });
+      if (authUpdateError) return jsonResponse({ error: authUpdateError.message }, 400);
+    } else {
+      const { data: created, error: createError } = await admin.auth.admin.createUser({
         email,
-        display_name: displayName,
-        role,
-        isSuperAdmin: role === "super_admin",
-        permissions: role === "super_admin" ? [] : permissions,
-      },
+        password,
+        email_confirm: true,
+        user_metadata: { display_name: displayName },
+      });
+
+      if (createError || !created.user) {
+        const existingAuthUser = await findAuthUserByEmail(admin, email);
+        if (!existingAuthUser) {
+          return jsonResponse({ error: createError?.message || "Could not create staff user" }, 400);
+        }
+        staffId = existingAuthUser.id;
+        const { error: authUpdateError } = await admin.auth.admin.updateUserById(staffId, {
+          ban_duration: "none",
+          email_confirm: true,
+          password,
+          user_metadata: { display_name: displayName },
+        });
+        if (authUpdateError) return jsonResponse({ error: authUpdateError.message }, 400);
+      } else {
+        staffId = created.user.id;
+      }
+    }
+
+    return await saveStaffUser(admin, callerData.user.id, {
+      branch,
+      displayName,
+      email,
+      id: staffId,
+      permissions,
+      role,
     });
   } catch (error) {
     return jsonResponse({ error: error instanceof Error ? error.message : "Could not create staff user" }, 500);
   }
 });
+
+type StaffUserInput = {
+  branch: "ram" | "ekamai";
+  displayName: string;
+  email: string;
+  id: string;
+  permissions: string[];
+  role: "staff" | "super_admin";
+};
+
+async function saveStaffUser(admin: ReturnType<typeof createClient>, callerId: string, staffUser: StaffUserInput): Promise<Response> {
+  const { error: upsertError } = await admin
+    .from("staff_users")
+    .upsert({
+      id: staffUser.id,
+      branch: staffUser.branch,
+      deleted_at: null,
+      deleted_by: null,
+      email: staffUser.email,
+      display_name: staffUser.displayName,
+      role: staffUser.role,
+    });
+  if (upsertError) return jsonResponse({ error: upsertError.message }, 400);
+
+  const { error: deletePermissionsError } = await admin
+    .from("staff_permissions")
+    .delete()
+    .eq("staff_id", staffUser.id);
+  if (deletePermissionsError) return jsonResponse({ error: deletePermissionsError.message }, 400);
+
+  if (staffUser.role === "staff" && staffUser.permissions.length) {
+    const { error: permissionsError } = await admin
+      .from("staff_permissions")
+      .insert(staffUser.permissions.map((featureKey) => ({
+        staff_id: staffUser.id,
+        feature_key: featureKey,
+        granted_by: callerId,
+      })));
+    if (permissionsError) return jsonResponse({ error: permissionsError.message }, 400);
+  }
+
+  return jsonResponse({
+    user: {
+      id: staffUser.id,
+      branch: staffUser.branch,
+      email: staffUser.email,
+      display_name: staffUser.displayName,
+      role: staffUser.role,
+      isSuperAdmin: staffUser.role === "super_admin",
+      permissions: staffUser.role === "super_admin" ? [] : staffUser.permissions,
+    },
+  });
+}
+
+async function findAuthUserByEmail(admin: ReturnType<typeof createClient>, email: string): Promise<{ id: string } | null> {
+  for (let page = 1; page <= 20; page += 1) {
+    const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 1000 });
+    if (error) return null;
+    const user = data.users.find((candidate) => candidate.email?.toLowerCase() === email);
+    if (user) return { id: user.id };
+    if (data.users.length < 1000) return null;
+  }
+  return null;
+}
 
 async function deleteStaffUser(admin: ReturnType<typeof createClient>, callerId: string, userIdValue: unknown): Promise<Response> {
   const userId = String(userIdValue || "").trim();
