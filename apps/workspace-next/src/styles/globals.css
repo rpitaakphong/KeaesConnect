@@ -261,11 +261,10 @@ a { color: inherit; }
   margin-top: 18px;
 }
 .tool-card {
-  min-height: 230px;
   display: grid;
   align-content: flex-start;
-  gap: 14px;
-  padding: 24px;
+  gap: 12px;
+  padding: 20px;
 }
 .tool-card p { margin: 0; }
 .admin-grid {
