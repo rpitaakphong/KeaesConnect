@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { IdCard, KeyRound, LogOut, UserRound } from "lucide-react";
+import { House, IdCard, KeyRound, LogOut, UserRound } from "lucide-react";
 import { type FocusEvent, useEffect, useRef, useState } from "react";
 import { getCurrentStaffProfile, signOut } from "@/features/auth/auth-api";
 import type { StaffProfile } from "@/features/auth/types";
@@ -33,7 +33,9 @@ export function SiteNav() {
         <Image src="/brand/keaes-workspace-logo.png" alt="Keaes Workspace" width={260} height={48} priority />
       </Link>
       <nav aria-label="Primary navigation">
-        <Link className="nav-link is-active" href="/dashboard">Home</Link>
+        <Link aria-current="page" className="nav-link is-active" href="/dashboard">
+          <House aria-hidden="true" /> Home
+        </Link>
       </nav>
       <div className="nav-actions">
         {profile ? <span className="badge">{profile.displayName} · {profile.isSuperAdmin ? "Super Admin" : "Staff"}</span> : null}
