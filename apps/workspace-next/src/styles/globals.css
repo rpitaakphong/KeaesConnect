@@ -238,7 +238,7 @@ a { color: inherit; }
   text-decoration: none;
   font-weight: 900;
   border: 1px solid transparent;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 .nav-link svg {
   width: 18px;
@@ -246,19 +246,20 @@ a { color: inherit; }
   stroke-width: 2.7;
 }
 .nav-link:hover {
-  transform: translateY(-1px);
   color: var(--green-dark);
 }
 .nav-link.is-active {
-  background: linear-gradient(135deg, #22b8a8 0%, #3eb7dc 100%);
-  border-color: rgba(255, 255, 255, 0.72);
+  background: #169aa1;
+  border-color: #0f7f85;
   color: #ffffff;
-  box-shadow: 0 16px 28px rgba(22, 151, 169, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.48);
-  text-shadow: 0 1px 1px rgba(22, 63, 72, 0.2);
+  box-shadow: none;
+  text-shadow: none;
 }
 .nav-link.is-active:hover {
+  background: #118890;
+  border-color: #0b7278;
   color: #ffffff;
-  box-shadow: 0 18px 32px rgba(22, 151, 169, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.54);
+  box-shadow: none;
 }
 
 .login-layout {
