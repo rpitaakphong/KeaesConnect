@@ -249,16 +249,16 @@ a { color: inherit; }
   color: var(--green-dark);
 }
 .nav-link.is-active {
-  background: #169aa1;
-  border-color: #0f7f85;
-  color: #ffffff;
+  background: #d9f7f3;
+  border-color: #36c4bb;
+  color: #0f7f85;
   box-shadow: none;
   text-shadow: none;
 }
 .nav-link.is-active:hover {
-  background: #118890;
-  border-color: #0b7278;
-  color: #ffffff;
+  background: #c8f1ed;
+  border-color: #169aa1;
+  color: #0b7278;
   box-shadow: none;
 }
 
