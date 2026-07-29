@@ -5,7 +5,6 @@ import { cleanText, titleName } from "@/lib/formatting/text";
 import type { StaffGender, StaffProfile } from "@/features/auth/types";
 
 type RawStaffProfile = {
-  branch?: string;
   dateOfBirth?: string;
   id?: string;
   email?: string;
@@ -112,7 +111,6 @@ function normalizeStaffProfile(profile: RawStaffProfile | null, fallbackId: stri
   const email = profile?.email || fallbackEmail;
   const displayName = profile?.displayName || profile?.display_name || titleName((email || "Staff").split("@")[0].replace(/[._-]+/g, " "));
   return {
-    branch: normalizeBranch(profile?.branch),
     dateOfBirth: String(profile?.dateOfBirth || ""),
     id: profile?.id || fallbackId,
     email,
@@ -125,10 +123,6 @@ function normalizeStaffProfile(profile: RawStaffProfile | null, fallbackId: stri
     permissions: Array.isArray(profile?.permissions) ? profile.permissions : [],
     tel: String(profile?.tel || ""),
   };
-}
-
-function normalizeBranch(value: unknown): StaffProfile["branch"] {
-  return value === "ram" || value === "ekamai" ? value : "";
 }
 
 function normalizeGender(value: unknown): StaffGender {

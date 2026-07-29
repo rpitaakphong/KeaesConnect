@@ -2,6 +2,7 @@
 
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { AdminAnswer, AdminPartScore, AdminResult, CatalogTest, TestAssignment } from "@/features/admin/types";
+import type { AssignmentBranch } from "@/features/assignments/branches";
 
 const nextRuntimeTests = new Set([
   "cie-igcse-combined-science-paper-1-core",
@@ -72,9 +73,12 @@ export async function listTests(): Promise<CatalogTest[]> {
   return mergeTests(databaseTests);
 }
 
-export async function createAssignment(testId: string): Promise<TestAssignment> {
+export async function createAssignment(testId: string, branch: AssignmentBranch): Promise<TestAssignment> {
   const supabase = getSupabaseBrowserClient();
-  const { data, error } = await supabase.rpc("create_test_assignment", { p_test_id: testId });
+  const { data, error } = await supabase.rpc("create_test_assignment", {
+    p_branch: branch,
+    p_test_id: testId,
+  });
   if (error) throwSupabaseError(error, "Could not generate assignment link.");
   return Array.isArray(data) ? data[0] : data;
 }

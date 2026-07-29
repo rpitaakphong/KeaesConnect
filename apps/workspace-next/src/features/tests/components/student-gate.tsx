@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { getAssignment } from "@/features/assignments/assignment-api";
 import type { Assignment } from "@/features/assignments/assignment-api";
+import { formatAssignmentBranch } from "@/features/assignments/branches";
 import type { TestDefinition, StudentProfile } from "@/features/tests/lib/types";
 import { clearSavedAnswers, saveStudentProfile } from "@/features/tests/lib/profile-storage";
 import { cleanText } from "@/lib/formatting/text";
@@ -78,7 +79,7 @@ export function StudentGate({ test }: { test: TestDefinition }) {
             <div className="field-grid">
               <label>Subject<input value={test.subject} readOnly /></label>
               <label>Level<input value={test.level} readOnly /></label>
-              <label>Branch<input value={formatBranch(assignment?.branch || "")} readOnly /></label>
+              <label>Branch<input value={formatAssignmentBranch(assignment?.branch || "")} readOnly /></label>
             </div>
             <button className="primary-button" type="submit" disabled={!ready}>Start test</button>
           </form>
@@ -86,10 +87,4 @@ export function StudentGate({ test }: { test: TestDefinition }) {
       </main>
     </>
   );
-}
-
-function formatBranch(value: Assignment["branch"]) {
-  if (value === "ram") return "Ram";
-  if (value === "ekamai") return "Ekamai";
-  return "Unknown / legacy";
 }

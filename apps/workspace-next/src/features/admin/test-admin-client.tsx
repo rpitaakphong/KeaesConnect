@@ -4,9 +4,14 @@ import { Copy, ExternalLink, Link as LinkIcon, RefreshCcw, Search, X } from "luc
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { buildAssignmentUrl, createAssignment, getResult, listResults, listTests } from "@/features/admin/admin-api";
 import type { AdminResult, CatalogTest } from "@/features/admin/types";
+import {
+  assignmentBranchOptions,
+  formatAssignmentBranch,
+  normalizeAssignmentBranch,
+  type AssignmentBranchValue,
+} from "@/features/assignments/branches";
 import { requireStaffProfile } from "@/features/auth/auth-api";
 import type { StaffProfile } from "@/features/auth/types";
-import { staffBranchOptions } from "@/features/staff/types";
 import { hasAnyPermission, hasPermission } from "@/lib/permissions/permissions";
 
 export function TestAdminClient() {
@@ -15,8 +20,9 @@ export function TestAdminClient() {
   const [selectedId, setSelectedId] = useState("math-olympiad-2");
   const [catalogSubjectFilter, setCatalogSubjectFilter] = useState("");
   const [catalogCourseFilter, setCatalogCourseFilter] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState<AssignmentBranchValue>("");
   const [shareUrl, setShareUrl] = useState("");
-  const [shareBranch, setShareBranch] = useState("");
+  const [shareBranch, setShareBranch] = useState<AssignmentBranchValue>("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("Loading catalog...");
   const [pending, setPending] = useState(false);
@@ -37,7 +43,6 @@ export function TestAdminClient() {
   }), [catalogCourseFilter, catalogSubjectFilter, tests]);
   const selectedTest = useMemo(() => visibleCatalogTests.find((test) => test.id === selectedId) || visibleCatalogTests[0], [selectedId, visibleCatalogTests]);
   const selectedTestActive = selectedTest?.status === "active";
-  const staffHasBranch = profile?.branch === "ram" || profile?.branch === "ekamai";
   const canCatalog = hasAnyPermission(profile, ["test_catalog", "generate_links"]);
   const canGenerate = hasPermission(profile, "generate_links");
   const canViewResults = hasPermission(profile, "view_results");
@@ -87,6 +92,7 @@ export function TestAdminClient() {
     if (!visibleCatalogTests.length) return;
     if (visibleCatalogTests.some((test) => test.id === selectedId)) return;
     setSelectedId(visibleCatalogTests[0].id);
+    setSelectedBranch("");
     setShareUrl("");
     setShareBranch("");
     setMessage("");
@@ -95,26 +101,32 @@ export function TestAdminClient() {
   async function generateLink() {
     if (!selectedTest) return;
     if (selectedTest.status !== "active") {
+      setSelectedBranch("");
       setShareUrl("");
       setShareBranch("");
       setMessage(`${selectedTest.title} is ${selectedTest.status} and cannot generate assignment links yet.`);
       return;
     }
-    if (!staffHasBranch) {
+    if (!selectedBranch) {
       setShareUrl("");
       setShareBranch("");
-      setMessage("Choose your staff branch before generating test links.");
+      setMessage("Choose Ram or Ekamai before generating a test link.");
       return;
     }
+    setShareUrl("");
+    setShareBranch("");
     setPending(true);
     setMessage("");
     try {
-      const assignment = await createAssignment(selectedTest.id);
+      const assignment = await createAssignment(selectedTest.id, selectedBranch);
       const url = buildAssignmentUrl(selectedTest, assignment.assignment_token);
+      const generatedBranch = normalizeAssignmentBranch(assignment.branch || selectedBranch);
       setShareUrl(url);
-      setShareBranch(assignment.branch || profile?.branch || "");
+      setShareBranch(generatedBranch);
+      setSelectedBranch("");
       setMessage([
         `Please complete ${selectedTest.title}.`,
+        `Branch: ${formatAssignmentBranch(generatedBranch)}`,
         "",
         url,
         "",
@@ -201,6 +213,7 @@ export function TestAdminClient() {
                 type="button"
                 onClick={() => {
                   setSelectedId(test.id);
+                  setSelectedBranch("");
                   setShareUrl("");
                   setShareBranch("");
                   setMessage("");
@@ -232,16 +245,29 @@ export function TestAdminClient() {
               <div className="notice">
                 <strong>{selectedTest.title}</strong>
                 <p>{selectedTestActive ? "This test opens in the Next.js shared test shell." : `This test is ${selectedTest.status} and cannot generate assignment links yet.`}</p>
-                {canGenerate && !staffHasBranch ? <p>Choose your staff branch before generating test links.</p> : null}
               </div>
-              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || !selectedTestActive || !staffHasBranch || pending}>
+              <label>
+                Student branch
+                <select
+                  value={selectedBranch}
+                  onChange={(event) => setSelectedBranch(normalizeAssignmentBranch(event.target.value))}
+                  disabled={!canGenerate || !selectedTestActive || pending}
+                  required
+                >
+                  <option value="">Choose Ram or Ekamai</option>
+                  {assignmentBranchOptions.map((branch) => (
+                    <option key={branch.value} value={branch.value}>{branch.label}</option>
+                  ))}
+                </select>
+              </label>
+              <button className="primary-button" type="button" onClick={generateLink} disabled={!selectedTest || !canGenerate || !selectedTestActive || !selectedBranch || pending}>
                 {pending ? "Generating..." : "Generate assignment link"}
               </button>
               <label>
                 Share URL
                 <input value={shareUrl} readOnly placeholder={canGenerate ? "Generate a link first" : "Missing generate_links permission"} />
               </label>
-              <p className="support-note">Branch: {formatBranch(shareBranch || profile.branch)}</p>
+              <p className="support-note">Branch: {shareBranch ? formatAssignmentBranch(shareBranch) : "Generate a link first"}</p>
               <div className="button-row">
                 <button className="ghost-button" type="button" onClick={copyLink} disabled={!shareUrl}>
                   <Copy aria-hidden="true" /> Copy
@@ -291,7 +317,7 @@ export function TestAdminClient() {
               Filter branch
               <select value={branchFilter} onChange={(event) => setBranchFilter(event.target.value)}>
                 <option value="">All branches</option>
-                {staffBranchOptions.map((branch) => <option key={branch.value} value={branch.value}>{branch.label}</option>)}
+                {assignmentBranchOptions.map((branch) => <option key={branch.value} value={branch.value}>{branch.label}</option>)}
                 <option value="unknown">Unknown / legacy</option>
               </select>
             </label>
@@ -357,7 +383,7 @@ function ResultTable({
               <td>{result.testTitle}</td>
               <td>{result.student.subject}</td>
               <td>{result.student.level}</td>
-              <td><span className="badge">{formatBranch(result.branch)}</span></td>
+              <td><span className="badge">{formatAssignmentBranch(result.branch)}</span></td>
               <td><span className="score-pill">{formatScore(result.score.total)}/{formatScore(result.score.possible)} ({result.score.percent}%)</span></td>
               <td>{formatDate(result.submittedAt)}</td>
               <td>
@@ -390,7 +416,7 @@ function ResultDetail({ onClose, result }: { onClose: () => void; result: AdminR
             <h2 id="resultDetailTitle">{result.student.fullName}</h2>
             <p>{result.student.nickname} · DOB {result.student.dateOfBirth}</p>
             <p>{result.testTitle} · {formatDate(result.submittedAt)}</p>
-            <p>Branch: {formatBranch(result.branch)}{result.createdBy.name || result.createdBy.email ? ` · Created by ${result.createdBy.name || result.createdBy.email}` : ""}</p>
+            <p>Branch: {formatAssignmentBranch(result.branch)}{result.createdBy.name || result.createdBy.email ? ` · Created by ${result.createdBy.name || result.createdBy.email}` : ""}</p>
           </div>
           <button className="ghost-button compact-button" type="button" onClick={onClose} aria-label="Close result detail">
             <X aria-hidden="true" /> Close
@@ -401,7 +427,7 @@ function ResultDetail({ onClose, result }: { onClose: () => void; result: AdminR
           <div><span>Total score</span><strong>{formatScore(result.score.total)}/{formatScore(result.score.possible)}</strong></div>
           <div><span>Percent</span><strong>{result.score.percent}%</strong></div>
           <div><span>Level</span><strong>{result.student.level}</strong></div>
-          <div><span>Branch</span><strong>{formatBranch(result.branch)}</strong></div>
+          <div><span>Branch</span><strong>{formatAssignmentBranch(result.branch)}</strong></div>
         </section>
 
         <section>
@@ -458,10 +484,6 @@ function courseFamily(test: CatalogTest) {
 
 function uniqueSorted(values: string[]) {
   return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
-}
-
-function formatBranch(value: string) {
-  return staffBranchOptions.find((option) => option.value === value)?.label || "Unknown / legacy";
 }
 
 function renderGradingDetails(details: Record<string, unknown> | null | undefined) {

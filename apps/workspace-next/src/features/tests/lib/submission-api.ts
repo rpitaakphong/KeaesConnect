@@ -20,7 +20,13 @@ export async function submitAttempt(profile: StudentProfile, answers: TestAnswer
     p_student: profile,
     p_answers: finalAnswers,
   });
-  if (error) throw error;
+  if (error) {
+    const message = String(error.message || "");
+    if (/already been used|invalid or inactive assignment/i.test(message)) {
+      throw new Error("This test link has already been used. Ask staff for a new link.");
+    }
+    throw error;
+  }
   return {
     attemptId: data?.attemptId,
     total: Number(data?.total ?? data?.scoreTotal ?? 0),

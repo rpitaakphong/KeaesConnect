@@ -1,3 +1,5 @@
+import type { AssignmentBranchValue } from "@/features/assignments/branches";
+
 export type CatalogTest = {
   id: string;
   title: string;
@@ -11,7 +13,7 @@ export type CatalogTest = {
 
 export type TestAssignment = {
   assignment_token: string;
-  branch?: "ram" | "ekamai" | "";
+  branch?: AssignmentBranchValue;
   test_id: string;
   title?: string;
   subject?: string;
@@ -19,7 +21,7 @@ export type TestAssignment = {
 };
 
 export type AdminResult = {
-  branch: "ram" | "ekamai" | "";
+  branch: AssignmentBranchValue;
   createdBy: {
     email: string;
     id: string;

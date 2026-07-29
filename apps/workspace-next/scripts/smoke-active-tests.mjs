@@ -67,9 +67,6 @@ async function main() {
   });
   const signIn = await supabase.auth.signInWithPassword({ email: staffEmail, password: staffPassword });
   if (signIn.error) throw new Error(`Staff sign-in failed: ${signIn.error.message}`);
-  const staffProfile = await getSmokeStaffProfile(supabase);
-  const expectedBranch = staffProfile.branch;
-
   const databaseStatuses = await getDatabaseStatuses(supabase, definitionActiveTests.map((test) => test.id));
   const activeTests = definitionActiveTests.filter((test) => databaseStatuses.get(test.id)?.status === "active");
   const inactiveDefinitions = allDefinitions.filter((test) => test.status !== "active");
@@ -88,7 +85,8 @@ async function main() {
     const adminPage = await adminContext.newPage();
     await loginAdminThroughUi(adminPage, baseUrl, staffEmail, staffPassword);
     await openAdminTests(adminPage, baseUrl);
-    for (const test of limitedTests) {
+    for (const [testIndex, test] of limitedTests.entries()) {
+      const expectedBranch = testIndex % 2 === 0 ? "ram" : "ekamai";
       const startedAt = new Date().toISOString();
       const result = {
         testId: test.id,
@@ -112,12 +110,13 @@ async function main() {
       results.push(result);
       console.log(`Running ${test.id}...`);
       try {
-        const assignmentUrl = await generateAssignmentThroughAdminUi(adminPage, test);
+        const assignmentUrl = await generateAssignmentThroughAdminUi(adminPage, test, expectedBranch);
         result.assignmentToken = new URL(assignmentUrl).searchParams.get("assignment") || "";
         if (!result.assignmentToken) throw new Error(`Generated admin URL did not contain an assignment token: ${assignmentUrl}`);
         const answers = buildAnswers(test);
         const profile = buildProfile(test, result.assignmentToken, fixedDob, fixedTestDate);
         const submitResult = await submitThroughBrowser(browser, baseUrl, test, result.assignmentToken, profile, answers, submitTimeoutMs);
+        await verifyAssignmentSingleUse(supabase, result.assignmentToken, profile);
         result.attemptId = submitResult.attemptId || "";
         result.scoreTotal = Number(submitResult.total);
         result.scorePossible = Number(submitResult.possible);
@@ -262,16 +261,11 @@ async function getDatabaseStatuses(supabase, testIds) {
   return new Map((data || []).map((row) => [String(row.id), { status: String(row.status || "") }]));
 }
 
-async function getSmokeStaffProfile(supabase) {
-  const { data, error } = await supabase.rpc("get_staff_profile");
-  if (error) throw new Error(`Could not load staff profile: ${error.message}`);
-  const branch = data?.branch === "ram" || data?.branch === "ekamai" ? data.branch : "";
-  if (!branch) throw new Error("Smoke staff account must have branch ram or ekamai before generating test links.");
-  return { branch };
-}
-
-async function createAssignment(supabase, testId) {
-  const { data, error } = await supabase.rpc("create_test_assignment", { p_test_id: testId });
+async function createAssignment(supabase, testId, branch = "ram") {
+  const { data, error } = await supabase.rpc("create_test_assignment", {
+    p_branch: branch,
+    p_test_id: testId,
+  });
   if (error) throw new Error(`create_test_assignment failed: ${error.message}`);
   const assignment = Array.isArray(data) ? data[0] : data;
   if (!assignment?.assignment_token) throw new Error("create_test_assignment did not return an assignment token.");
@@ -292,13 +286,14 @@ async function openAdminTests(page, baseUrl) {
   await page.waitForSelector("text=Database mode", { timeout: 20000 }).catch(() => {});
 }
 
-async function generateAssignmentThroughAdminUi(page, test) {
+async function generateAssignmentThroughAdminUi(page, test, branch) {
   await openAdminTests(page, page.url().replace(/\/admin\/tests.*$/, ""));
   const testButton = page.locator("button.test-list-item").filter({ hasText: test.title }).first();
   await testButton.waitFor({ timeout: 20000 });
   await testButton.click();
   const shareUrlInput = page.getByLabel("Share URL");
   await shareUrlInput.fill("").catch(() => {});
+  await page.getByLabel("Student branch").selectOption(branch);
   await page.getByRole("button", { name: "Generate assignment link" }).click();
   await page.waitForFunction(() => {
     const labels = Array.from(document.querySelectorAll("label"));
@@ -306,7 +301,25 @@ async function generateAssignmentThroughAdminUi(page, test) {
     const input = shareLabel?.querySelector("input");
     return Boolean(input?.value && input.value.includes("assignment="));
   }, null, { timeout: 20000 });
+  const selectedBranch = await page.getByLabel("Student branch").inputValue();
+  if (selectedBranch) throw new Error("Branch selection did not reset after assignment generation.");
   return shareUrlInput.inputValue();
+}
+
+async function verifyAssignmentSingleUse(supabase, assignmentToken, profile) {
+  const retry = await supabase.rpc("submit_attempt", {
+    p_assignment_token: assignmentToken,
+    p_student: profile,
+    p_answers: {},
+  });
+  if (!retry.error || !/already been used/i.test(retry.error.message || "")) {
+    throw new Error("A second submission using the same assignment token was not rejected.");
+  }
+
+  const lookup = await supabase.rpc("get_assignment", { p_token: assignmentToken });
+  if (lookup.error) throw new Error(`get_assignment failed after submission: ${lookup.error.message}`);
+  const assignment = Array.isArray(lookup.data) ? lookup.data[0] : lookup.data;
+  if (assignment) throw new Error("Submitted assignment remains active after its first successful submission.");
 }
 
 function buildProfile(test, assignmentToken, dateOfBirth, testDate) {

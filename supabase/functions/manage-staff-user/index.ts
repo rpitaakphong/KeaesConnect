@@ -58,7 +58,6 @@ Deno.serve(async (request) => {
     }
     if (action !== "create") return jsonResponse({ error: "Invalid staff action" }, 400);
 
-    const branch = normalizeBranch(payload?.branch);
     const email = cleanEmail(payload?.email);
     const displayName = cleanText(payload?.displayName);
     const password = String(payload?.temporaryPassword || "");
@@ -67,7 +66,6 @@ Deno.serve(async (request) => {
 
     if (!email) return jsonResponse({ error: "Email is required" }, 400);
     if (!displayName) return jsonResponse({ error: "Display name is required" }, 400);
-    if (!branch) return jsonResponse({ error: "Branch is required" }, 400);
     if (password.length < 8) return jsonResponse({ error: "Temporary password must be at least 8 characters" }, 400);
 
     const { data: existingStaff, error: existingStaffError } = await admin
@@ -116,7 +114,6 @@ Deno.serve(async (request) => {
     }
 
     return await saveStaffUser(admin, callerData.user.id, {
-      branch,
       displayName,
       email,
       id: staffId,
@@ -129,7 +126,6 @@ Deno.serve(async (request) => {
 });
 
 type StaffUserInput = {
-  branch: "ram" | "ekamai";
   displayName: string;
   email: string;
   id: string;
@@ -142,7 +138,6 @@ async function saveStaffUser(admin: ReturnType<typeof createClient>, callerId: s
     .from("staff_users")
     .upsert({
       id: staffUser.id,
-      branch: staffUser.branch,
       deleted_at: null,
       deleted_by: null,
       email: staffUser.email,
@@ -171,7 +166,6 @@ async function saveStaffUser(admin: ReturnType<typeof createClient>, callerId: s
   return jsonResponse({
     user: {
       id: staffUser.id,
-      branch: staffUser.branch,
       email: staffUser.email,
       display_name: staffUser.displayName,
       role: staffUser.role,
@@ -242,12 +236,6 @@ function normalizeRole(value: unknown): "staff" | "super_admin" {
 function normalizePermissions(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return Array.from(new Set(value.map((item) => String(item || "").trim()).filter((item) => featureKeys.has(item)))).sort();
-}
-
-function normalizeBranch(value: unknown): "ram" | "ekamai" | "" {
-  const branch = String(value || "").trim().toLowerCase();
-  if (branch === "ram" || branch === "ekamai") return branch;
-  return "";
 }
 
 function cleanEmail(value: unknown): string {

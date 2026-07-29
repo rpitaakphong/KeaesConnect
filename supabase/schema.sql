@@ -31,7 +31,6 @@ alter table staff_users
   alter column role set default 'staff',
   add constraint staff_users_role_check check (role in ('staff', 'super_admin'));
 
-alter table staff_users add column if not exists branch text;
 alter table staff_users add column if not exists deleted_at timestamptz;
 alter table staff_users add column if not exists deleted_by uuid references staff_users(id);
 alter table staff_users add column if not exists first_name text;
@@ -39,19 +38,6 @@ alter table staff_users add column if not exists last_name text;
 alter table staff_users add column if not exists date_of_birth date;
 alter table staff_users add column if not exists gender text;
 alter table staff_users add column if not exists tel text;
-
-do $$
-begin
-  if not exists (
-    select 1
-    from pg_constraint
-    where conrelid = 'public.staff_users'::regclass
-      and conname = 'staff_users_branch_check'
-  ) then
-    alter table staff_users
-      add constraint staff_users_branch_check check (branch is null or branch in ('ram', 'ekamai'));
-  end if;
-end $$;
 
 do $$
 begin
@@ -1252,7 +1238,6 @@ as $$
   select jsonb_build_object(
     'id', s.id,
     'email', s.email,
-    'branch', coalesce(s.branch, ''),
     'display_name', s.display_name,
     'firstName', coalesce(s.first_name, ''),
     'lastName', coalesce(s.last_name, ''),
@@ -1318,7 +1303,6 @@ begin
     select jsonb_build_object(
       'id', s.id,
       'email', s.email,
-      'branch', coalesce(s.branch, ''),
       'display_name', s.display_name,
       'firstName', coalesce(s.first_name, ''),
       'lastName', coalesce(s.last_name, ''),
@@ -1356,7 +1340,6 @@ begin
     select jsonb_agg(jsonb_build_object(
       'id', s.id,
       'email', s.email,
-      'branch', coalesce(s.branch, ''),
       'display_name', s.display_name,
       'role', s.role,
       'isSuperAdmin', s.role = 'super_admin',
@@ -1373,14 +1356,15 @@ begin
 end;
 $$;
 
-create or replace function update_staff_access(p_staff_id uuid, p_role text, p_permissions text[], p_branch text)
+drop function if exists update_staff_access(uuid, text, text[], text);
+
+create or replace function update_staff_access(p_staff_id uuid, p_role text, p_permissions text[])
 returns jsonb
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
-  clean_branch text := lower(trim(coalesce(p_branch, '')));
   clean_role text := lower(trim(coalesce(p_role, 'staff')));
   clean_permissions text[];
   super_admin_count int;
@@ -1395,10 +1379,6 @@ begin
 
   if clean_role not in ('staff', 'super_admin') then
     raise exception 'Invalid role';
-  end if;
-
-  if clean_branch not in ('ram', 'ekamai') then
-    raise exception 'Branch is required';
   end if;
 
   if not exists (select 1 from staff_users where id = p_staff_id and deleted_at is null) then
@@ -1431,8 +1411,7 @@ begin
   );
 
   update staff_users
-  set branch = clean_branch,
-      role = clean_role
+  set role = clean_role
   where id = p_staff_id;
 
   delete from staff_permissions
@@ -1451,7 +1430,6 @@ begin
     select jsonb_build_object(
       'id', s.id,
       'email', s.email,
-      'branch', coalesce(s.branch, ''),
       'display_name', s.display_name,
       'role', s.role,
       'isSuperAdmin', s.role = 'super_admin',
@@ -1468,23 +1446,21 @@ begin
 end;
 $$;
 
-create or replace function create_test_assignment(p_test_id text)
+drop function if exists create_test_assignment(text);
+
+create or replace function create_test_assignment(p_test_id text, p_branch text)
 returns table(id uuid, test_id text, assignment_token text, branch text, created_at timestamptz)
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
-  staff_branch text;
+  clean_branch text := lower(trim(coalesce(p_branch, '')));
 begin
   perform require_staff_permission('generate_links');
-  select staff_users.branch into staff_branch
-  from staff_users
-  where staff_users.id = auth.uid()
-    and staff_users.deleted_at is null;
 
-  if staff_branch is null or staff_branch not in ('ram', 'ekamai') then
-    raise exception 'Choose your staff branch before generating test links.';
+  if clean_branch not in ('ram', 'ekamai') then
+    raise exception 'Choose Ram or Ekamai before generating a test link.';
   end if;
 
   if not exists (select 1 from tests where tests.id = p_test_id and tests.status = 'active') then
@@ -1492,7 +1468,7 @@ begin
   end if;
   return query
     insert into test_assignments (test_id, branch, created_by)
-    values (p_test_id, staff_branch, auth.uid())
+    values (p_test_id, clean_branch, auth.uid())
     returning test_assignments.id, test_assignments.test_id, test_assignments.assignment_token, test_assignments.branch, test_assignments.created_at;
 end;
 $$;
@@ -1527,10 +1503,20 @@ declare
 begin
   select * into assignment_row
   from test_assignments
-  where assignment_token = p_assignment_token and status = 'active';
+  where assignment_token = p_assignment_token
+  for update;
 
   if assignment_row.id is null then
     raise exception 'Invalid or inactive assignment';
+  end if;
+
+  if assignment_row.status <> 'active'
+    or exists (select 1 from test_attempts where assignment_id = assignment_row.id) then
+    raise exception 'This test link has already been used.';
+  end if;
+
+  if assignment_row.branch is null or assignment_row.branch not in ('ram', 'ekamai') then
+    raise exception 'This test link does not have a valid branch. Ask staff for a new link.';
   end if;
 
   insert into students (full_name, nickname, date_of_birth)
@@ -1622,6 +1608,10 @@ begin
     where attempt_answers.attempt_id = v_attempt_id
     group by part
   ) grouped;
+
+  update test_assignments
+  set status = 'closed'
+  where id = assignment_row.id;
 
   return jsonb_build_object(
     'attemptId', v_attempt_id,
@@ -1717,12 +1707,31 @@ $$;
 grant usage on schema public to anon, authenticated;
 grant execute on function get_assignment(text) to anon, authenticated;
 grant execute on function submit_attempt(text, jsonb, jsonb) to anon, authenticated;
-grant execute on function create_test_assignment(text) to authenticated;
+grant execute on function create_test_assignment(text, text) to authenticated;
 grant execute on function get_staff_profile() to authenticated;
 grant execute on function update_own_staff_profile(text, text, date, text, text) to authenticated;
 grant execute on function list_staff_users() to authenticated;
-grant execute on function update_staff_access(uuid, text, text[], text) to authenticated;
+grant execute on function update_staff_access(uuid, text, text[]) to authenticated;
 grant execute on function list_admin_results() to authenticated;
 grant execute on function get_admin_result(uuid) to authenticated;
 grant select on tests to authenticated;
 grant select on admin_attempt_results to authenticated;
+
+update test_assignments assignment
+set status = 'closed'
+where assignment.status = 'active'
+  and (
+    assignment.branch is null
+    or assignment.branch not in ('ram', 'ekamai')
+    or exists (
+      select 1
+      from test_attempts attempt
+      where attempt.assignment_id = assignment.id
+    )
+  );
+
+alter table staff_users
+  drop constraint if exists staff_users_branch_check;
+
+alter table staff_users
+  drop column if exists branch;

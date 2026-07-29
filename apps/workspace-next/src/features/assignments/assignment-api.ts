@@ -1,10 +1,11 @@
 "use client";
 
 import { getSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import type { AssignmentBranchValue } from "@/features/assignments/branches";
 
 export type Assignment = {
   assignment_token: string;
-  branch?: "ram" | "ekamai" | "";
+  branch?: AssignmentBranchValue;
   test_id: string;
   title: string;
   subject: string;
