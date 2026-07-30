@@ -1895,6 +1895,17 @@ tr:last-child td { border-bottom: 0; }
   min-width: 84px;
   text-align: center;
 }
+.spip-calculation-row {
+  gap: 12px;
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 850;
+}
+.spip-calculation-row .math-line-input {
+  width: 112px;
+  min-width: 112px;
+  text-align: center;
+}
 .summer-math-expression {
   display: flex;
   align-items: center;
