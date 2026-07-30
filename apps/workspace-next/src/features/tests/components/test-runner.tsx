@@ -31,7 +31,10 @@ export function TestRunner({ test }: { test: TestDefinition }) {
   const questions = useMemo(() => test.sections.flatMap((section) => section.questions), [test.sections]);
   const answeredCount = questions.filter((question) => isAnswered(answers[question.id])).length;
   const active = test.sections.find((section) => section.id === activeSection) || test.sections[0];
-  const activeQuestionItems = useMemo(() => groupScienceQuestions(active?.questions || []), [active]);
+  const activeQuestionItems = useMemo(
+    () => groupScienceQuestions(active?.questions || [], Boolean(active?.groupByQuestionNumber)),
+    [active],
+  );
 
   function updateAnswer(questionId: string, value: TestAnswers[string]) {
     const next = { ...answers, [questionId]: value };
@@ -263,7 +266,7 @@ type ScienceQuestionGroup = {
   visuals?: NonNullable<TestQuestion["visuals"]>;
 };
 
-function groupScienceQuestions(questions: TestQuestion[]): Array<TestQuestion | ScienceQuestionGroup> {
+function groupScienceQuestions(questions: TestQuestion[], groupAllByNumber = false): Array<TestQuestion | ScienceQuestionGroup> {
   const groupedNumbers = new Set([4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16]);
   const groupByNumberOnly = new Set([4, 7, 11]);
   const items: Array<TestQuestion | ScienceQuestionGroup> = [];
@@ -271,22 +274,23 @@ function groupScienceQuestions(questions: TestQuestion[]): Array<TestQuestion | 
 
   while (index < questions.length) {
     const question = questions[index];
-    if (!question.id.startsWith("spip-y7s-") || !groupedNumbers.has(question.number)) {
+    const shouldGroup = groupAllByNumber || (question.id.startsWith("spip-y7s-") && groupedNumbers.has(question.number));
+    if (!shouldGroup) {
       items.push(question);
       index += 1;
       continue;
     }
 
     const firstImage = firstImageSrc(question);
-    const hasSharedVisual = !groupByNumberOnly.has(question.number) && Boolean(firstImage);
+    const hasSharedVisual = !groupAllByNumber && !groupByNumberOnly.has(question.number) && Boolean(firstImage);
     const groupQuestions = [question];
     let nextIndex = index + 1;
     while (nextIndex < questions.length) {
       const next = questions[nextIndex];
       if (
         next.number !== question.number ||
-        !next.id.startsWith("spip-y7s-") ||
-        (!groupByNumberOnly.has(question.number) && firstImageSrc(next) !== firstImage)
+        (!groupAllByNumber && !next.id.startsWith("spip-y7s-")) ||
+        (!groupAllByNumber && !groupByNumberOnly.has(question.number) && firstImageSrc(next) !== firstImage)
       ) break;
       groupQuestions.push(next);
       nextIndex += 1;
@@ -294,7 +298,7 @@ function groupScienceQuestions(questions: TestQuestion[]): Array<TestQuestion | 
 
     if (groupQuestions.length > 1) {
       items.push({
-        id: `spip-y7s-q${question.number}-group`,
+        id: `${groupAllByNumber ? "question" : "spip-y7s"}-q${question.number}-group`,
         number: question.number,
         questions: groupQuestions,
         visuals: hasSharedVisual ? question.visuals : undefined,

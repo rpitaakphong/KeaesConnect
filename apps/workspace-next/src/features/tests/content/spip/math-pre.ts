@@ -521,7 +521,7 @@ export const spipYear7MathPre: TestDefinition = {
         {
           "id": "spip-y7m-q12",
           "number": 12,
-          "prompt": "Fill in the missing numbers.",
+          "prompt": "Write in the missing numbers.",
           "points": 1,
           "note": "",
           "type": "multiText",
@@ -535,6 +535,23 @@ export const spipYear7MathPre: TestDefinition = {
               "id": "b",
               "label": "Second box",
               "placeholder": "answer"
+            }
+          ],
+          "inlineRows": [
+            {
+              "className": "spip-calculation-row",
+              "items": [
+                { "text": "560 +" },
+                { "type": "input", "id": "a" },
+                { "text": "= 830" }
+              ]
+            },
+            {
+              "className": "spip-calculation-row",
+              "items": [
+                { "type": "input", "id": "b" },
+                { "text": "+ 2.3 = 7.8" }
+              ]
             }
           ],
           "grading": {
@@ -665,7 +682,7 @@ export const spipYear7MathPre: TestDefinition = {
         {
           "id": "spip-y7m-q15",
           "number": 15,
-          "prompt": "Write the missing numbers.",
+          "prompt": "Complete the calculations.",
           "points": 2,
           "note": "",
           "type": "multiText",
@@ -681,9 +698,25 @@ export const spipYear7MathPre: TestDefinition = {
               "placeholder": "answer"
             }
           ],
+          "inlineRows": [
+            {
+              "className": "spip-calculation-row",
+              "items": [
+                { "text": "30 × 50 =" },
+                { "type": "input", "id": "a" }
+              ]
+            },
+            {
+              "className": "spip-calculation-row",
+              "items": [
+                { "text": "500 × 40 =" },
+                { "type": "input", "id": "b" }
+              ]
+            }
+          ],
           "grading": {
             "mode": "auto",
-            "display": "1500; 100",
+            "display": "1500; 20 000",
             "parts": [
               {
                 "id": "a",
@@ -696,7 +729,9 @@ export const spipYear7MathPre: TestDefinition = {
               {
                 "id": "b",
                 "accepted": [
-                  "100"
+                  "20000",
+                  "20,000",
+                  "20 000"
                 ],
                 "points": 1
               }

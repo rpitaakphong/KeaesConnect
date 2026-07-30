@@ -30,6 +30,7 @@ export type TestSection = {
   title: string;
   hint?: string;
   questionLayout?: "cards" | "grouped";
+  groupByQuestionNumber?: boolean;
   visuals?: QuestionVisual[];
   wordBank?: string[];
   storyTitle?: string;
@@ -43,7 +44,16 @@ export type TestSection = {
   questions: TestQuestion[];
 };
 
-export type TestQuestion = SingleChoiceQuestion | MultiChoiceQuestion | MultiTextQuestion | TextQuestion;
+export type TestQuestion =
+  | SingleChoiceQuestion
+  | MultiChoiceQuestion
+  | MultiTextQuestion
+  | TextQuestion
+  | RayDiagramQuestion
+  | DiagramAnnotationQuestion
+  | BiologicalDrawingQuestion
+  | PracticalGraphQuestion
+  | VirtualMeasurementQuestion;
 
 export type QuestionBase = {
   id: string;
@@ -84,6 +94,12 @@ export type QuestionGrading =
     display: string;
     parts: AnswerPart[];
     scoreThresholds?: Array<{ minCorrect: number; points: number }>;
+    scoringStrategy?: "standard" | "investigationPlan";
+  }
+  | {
+    mode: "dependent";
+    display: string;
+    rule: DependentScoringRule;
   }
   | {
     mode: "aiSplit";
@@ -95,10 +111,56 @@ export type AnswerPart = {
   id: string;
   accepted: string[];
   points: number;
-  normalizer?: "text" | "time" | "set" | "keywords" | "arrowDown";
+  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown";
   keywords?: string[][];
   reviewRecommended?: boolean;
+  category?: "apparatus" | "method" | "measurements" | "controls" | "processing";
 };
+
+export type DependentScoringRule =
+  | {
+    type: "subtractFrom";
+    sourceQuestionId: string;
+    sourceField?: string;
+    minuend: number;
+    tolerance?: number;
+    accepted?: string[];
+  }
+  | {
+    type: "mean";
+    sourceQuestionId: string;
+    sourceField?: string;
+    fixedValues: number[];
+    decimalPlaces?: number;
+    tolerance?: number;
+    accepted?: string[];
+  }
+  | {
+    type: "product";
+    factors: Array<
+      | { value: number }
+      | { sourceQuestionId: string; sourceField?: string; measurementId?: string; measurementCalibration?: number }
+    >;
+    tolerance?: number;
+    accepted?: string[];
+  }
+  | {
+    type: "scaledSum";
+    sourceQuestionIds: string[];
+    multiplier: number;
+    tolerance?: number;
+    accepted?: string[];
+  }
+  | {
+    type: "density";
+    massQuestionId: string;
+    volumeQuestionId: string;
+    valueField: string;
+    unitField: string;
+    significantFigures: number;
+    unitAccepted: string[];
+    tolerance?: number;
+  };
 
 export type SingleChoiceQuestion = QuestionBase & {
   type: "singleChoice";
@@ -112,7 +174,13 @@ export type SingleChoiceQuestion = QuestionBase & {
 
 export type MultiTextQuestion = QuestionBase & {
   type: "multiText";
-  fields: Array<{ id: string; label: string; placeholder?: string; visualHtml?: string }>;
+  fields: Array<{
+    id: string;
+    label: string;
+    placeholder?: string;
+    visualHtml?: string;
+    options?: Array<{ value: string; label: string }>;
+  }>;
   compact?: boolean;
   inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input"; id?: string }> }>;
   rankRows?: Array<{ label: string; items: Array<{ text: string; id: string }> }>;
@@ -132,6 +200,94 @@ export type TextQuestion = QuestionBase & {
   type: "text";
   inputMode?: "text" | "number" | "textarea";
   placeholder?: string;
+};
+
+export type RayDiagramQuestion = QuestionBase & {
+  type: "rayDiagram";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  geometry: {
+    incidence: { x: number; y: number };
+    incidentSource: { x: number; y: number };
+    eye: { x: number; y: number };
+    normalTolerance: number;
+    labelRegion: { minX: number; maxX: number; minY: number; maxY: number };
+    eyeTolerance: number;
+    angleToleranceDegrees: number;
+  };
+};
+
+export type DiagramAnnotationQuestion = QuestionBase & {
+  type: "diagramAnnotation";
+  variant: "curve" | "arrow" | "point" | "doubleArrow";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  geometry:
+    | {
+      variant: "curve";
+      plot: { minX: number; maxX: number; minY: number; maxY: number };
+      optimum: { minX: number; maxX: number };
+      baselineTolerance: number;
+    }
+    | {
+      variant: "arrow";
+      start: { x: number; y: number };
+      peak: { x: number; y: number };
+      endpointTolerance: number;
+      labelTolerance: number;
+    }
+    | {
+      variant: "point";
+      segment: { start: { x: number; y: number }; end: { x: number; y: number } };
+      tolerance: number;
+    }
+    | {
+      variant: "doubleArrow";
+      start: { x: number; y: number };
+      end: { x: number; y: number };
+      endpointTolerance: number;
+      labelRegion: { minX: number; maxX: number; minY: number; maxY: number };
+      label: string;
+    };
+};
+
+export type BiologicalDrawingQuestion = QuestionBase & {
+  type: "biologicalDrawing";
+  referenceSrc: string;
+  referenceAlt: string;
+  canvasAspectRatio?: number;
+};
+
+export type PracticalGraphQuestion = QuestionBase & {
+  type: "practicalGraph";
+  data: Array<{ label: string; y: number }>;
+  sourceQuestionId: string;
+  sourceFields: { first: string; last: string };
+  fixedXValues: number[];
+  correctAxes: {
+    xQuantity: string;
+    xUnit: string;
+    yQuantity: string;
+    yUnit: string;
+  };
+  scaleOptions: number[];
+  pointTolerance: number;
+};
+
+export type VirtualMeasurementQuestion = QuestionBase & {
+  type: "virtualMeasurement";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  measurements: Array<{
+    id: string;
+    label: string;
+    unit: string;
+    expected: number;
+    tolerance: number;
+    calibration: number;
+    start: { x: number; y: number };
+    end: { x: number; y: number };
+  }>;
 };
 
 export type TestAnswers = Record<string, string | Record<string, string | string[]>>;

@@ -317,7 +317,10 @@ values
   ('summer-english-level-3-pretest', 'Summer English Level 3 Pre-test', 'English', 'Summer English Level 3', 'active', 30, '/tests/summer-english-level-3-pretest/start'),
   ('summer-math-level-1-pretest', 'Summer Math Level 1 Pre-test', 'Math', 'Summer Math Level 1', 'active', 30, '/tests/summer-math-level-1-pretest/start'),
   ('summer-math-level-2-pretest', 'Summer Math Level 2 Pre-test', 'Math', 'Summer Math Level 2', 'active', 30, '/tests/summer-math-level-2-pretest/start'),
-  ('summer-math-level-3-pretest', 'Summer Math Level 3 Pre-test', 'Math', 'Summer Math Level 3', 'active', 30, '/tests/summer-math-level-3-pretest/start')
+  ('summer-math-level-3-pretest', 'Summer Math Level 3 Pre-test', 'Math', 'Summer Math Level 3', 'active', 30, '/tests/summer-math-level-3-pretest/start'),
+  ('cie-igcse-combined-science-paper-1-core', 'CIE IGCSE Combined Science Paper 1 Core', 'Combined Science', 'Core', 'active', 40, '/tests/cie-igcse-combined-science-paper-1-core/start'),
+  ('cie-igcse-combined-science-paper-2-extended', 'CIE IGCSE Combined Science Paper 2 Extended', 'Combined Science', 'Extended', 'active', 40, '/tests/cie-igcse-combined-science-paper-2-extended/start'),
+  ('cie-igcse-combined-science-paper-3-core', 'CIE IGCSE Combined Science Paper 3 Core', 'Combined Science', 'Core', 'active', 80, '/tests/cie-igcse-combined-science-paper-3-core/start')
 on conflict (id) do update set
   title = excluded.title,
   subject = excluded.subject,
@@ -440,10 +443,10 @@ values
   ('spip-y7m-q9', 'spip-year-7-math-pre', 'Questions 7-14', 'Tick the two patterns that can be made with the stamp.', '{"source":"mathMultiPart","display":"A, B","parts":[{"id":"selected","accepted":["a,b"],"points":2}]}', null, 2, 9),
   ('spip-y7m-q10', 'spip-year-7-math-pre', 'Questions 7-14', 'In the number 485 136, what is the value of the 4?', '{"source":"mathMultiPart","display":"400 000","parts":[{"id":"answer","accepted":["400000","400,000","four hundred thousand"],"points":1}]}', null, 1, 10),
   ('spip-y7m-q11', 'spip-year-7-math-pre', 'Questions 7-14', 'A train leaves at 08:00 and the journey takes 7 hours. Write the start and finish times.', '{"source":"mathMultiPart","display":"8 am; 3 pm","parts":[{"id":"start","accepted":["8 am","8am","08:00","8:00"],"points":1},{"id":"finish","accepted":["3 pm","3pm","15:00","3:00 pm"],"points":1}]}', null, 2, 11),
-  ('spip-y7m-q12', 'spip-year-7-math-pre', 'Questions 7-14', 'Fill in the missing numbers.', '{"source":"mathMultiPart","display":"270; 5.5","parts":[{"id":"a","accepted":["270"],"points":0.5},{"id":"b","accepted":["5.5","5 1/2","11/2"],"points":0.5}]}', null, 1, 12),
+  ('spip-y7m-q12', 'spip-year-7-math-pre', 'Questions 7-14', 'Write in the missing numbers: 560 + ___ = 830; ___ + 2.3 = 7.8.', '{"source":"mathMultiPart","display":"270; 5.5","parts":[{"id":"a","accepted":["270"],"points":0.5},{"id":"b","accepted":["5.5","5 1/2","11/2"],"points":0.5}]}', null, 1, 12),
   ('spip-y7m-q13', 'spip-year-7-math-pre', 'Questions 7-14', 'Write the missing digits in the boxes.', '{"source":"mathMultiPart","display":"1; 9; 3; 7","parts":[{"id":"a","accepted":["1"],"points":0.5},{"id":"b","accepted":["9"],"points":0.5},{"id":"c","accepted":["3"],"points":0.5},{"id":"d","accepted":["7"],"points":0.5}]}', null, 2, 13),
   ('spip-y7m-q14', 'spip-year-7-math-pre', 'Questions 7-14', 'Draw a line to match each statement to its likelihood.', '{"source":"mathMultiPart","display":"multiple of 4 -> unlikely; 4 digits -> impossible; odd -> even chance","parts":[{"id":"matches","accepted":["digits4:impossible,odd:even","odd:even,digits4:impossible"],"points":2}]}', null, 2, 14),
-  ('spip-y7m-q15', 'spip-year-7-math-pre', 'Questions 15-21', 'Write the missing numbers.', '{"source":"mathMultiPart","display":"1500; 100","parts":[{"id":"a","accepted":["1500","1,500"],"points":1},{"id":"b","accepted":["100"],"points":1}]}', null, 2, 15),
+  ('spip-y7m-q15', 'spip-year-7-math-pre', 'Questions 15-21', 'Complete the calculations: 30 × 50 = ___; 500 × 40 = ___.', '{"source":"mathMultiPart","display":"1500; 20 000","parts":[{"id":"a","accepted":["1500","1,500"],"points":1},{"id":"b","accepted":["20000","20,000","20 000"],"points":1}]}', null, 2, 15),
   ('spip-y7m-q16', 'spip-year-7-math-pre', 'Questions 15-21', 'What is 25% of 56?', '{"source":"mathMultiPart","display":"14","parts":[{"id":"answer","accepted":["14"],"points":1}]}', null, 1, 16),
   ('spip-y7m-q17', 'spip-year-7-math-pre', 'Questions 15-21', 'The sports club table shows pupils attending activities. Which pupils attended all three activities?', '{"source":"mathMultiPart","display":"Rajiv, Hassan, Youssef","parts":[{"id":"selected","accepted":["hassan,rajiv,youssef","hassan,youssef,rajiv","rajiv,hassan,youssef","rajiv,youssef,hassan","youssef,hassan,rajiv","youssef,rajiv,hassan"],"points":2}]}', null, 2, 17),
   ('spip-y7m-q18', 'spip-year-7-math-pre', 'Questions 15-21', 'Write the time shown on the clock, then write the time 2 hours 15 minutes later.', '{"source":"mathMultiPart","display":"10:47; 13:02","parts":[{"id":"a","accepted":["10:47","10.47"],"points":1},{"id":"b","accepted":["13:02","1:02 pm","1.02 pm"],"points":1}]}', null, 2, 18),
@@ -927,6 +930,70 @@ on conflict (id) do update set
   transcript_ref = excluded.transcript_ref,
   position = excluded.position;
 
+insert into public.test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('cie-igcse-cs-p3-q1a', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a) Complete Table 1.1 for the labelled animal and plant cells.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q1a","points":4,"display":"A: cell membrane; D: site of aerobic respiration; G: support (storage accepted)","status":"official","parts":[{"id":"aName","accepted":["cell membrane","cell surface membrane"],"points":1,"normalizer":"text"},{"id":"dFunction","accepted":[],"keywords":[["aerobic","respiration"],["site","respiration"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"vacuoleLetter","accepted":["G"],"points":1,"normalizer":"text"},{"id":"vacuoleFunction","accepted":[],"keywords":[["support"],["storage"],["stores","cell sap"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 4, 1),
+  ('cie-igcse-cs-p3-q1b', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(b) Complete the order of increasing size between cell and organism using organ, organ system and tissue.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q1b","points":2,"display":"cell → tissue → organ → organ system → organism","status":"official","parts":[{"id":"first","accepted":["tissue"],"points":1,"normalizer":"text"},{"id":"second","accepted":["organ"],"points":1,"normalizer":"text"},{"id":"third","accepted":["organ system"],"points":1,"normalizer":"text"}],"scoreThresholds":[{"minCorrect":2,"points":1},{"minCorrect":3,"points":2}]}'::jsonb, null, 2, 2),
+  ('cie-igcse-cs-p3-q1ci', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(c)(i) State the name of an upper chamber of the heart.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q1ci","points":1,"display":"atrium / atria","status":"official","parts":[{"id":"answer","accepted":["atrium","atria"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 3),
+  ('cie-igcse-cs-p3-q1cii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(c)(ii) State the type of blood vessel that transports blood to the heart.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q1cii","points":1,"display":"vein","status":"official","parts":[{"id":"answer","accepted":["vein","veins"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 4),
+  ('cie-igcse-cs-p3-q1ciii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(c)(iii) State the function of red blood cells.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q1ciii","points":1,"display":"transport oxygen","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["transport","oxygen"],["carry","oxygen"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 5),
+  ('cie-igcse-cs-p3-q1d', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(d) State one other way, apart from white blood cells, that the human body defends itself against pathogens.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q1d","points":1,"display":"skin / hairs in the nose / mucus / stomach acid","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["skin"],["hair","nose"],["mucus"],["stomach","acid"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 6),
+  ('cie-igcse-cs-p3-q2ai', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a)(i) Complete the sentences to explain the iodine-test results. Only plant X contains ___, showing that photosynthesis requires ___.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q2ai","points":2,"display":"starch; carbon dioxide","status":"official","parts":[{"id":"substance","accepted":["starch"],"points":1,"normalizer":"text"},{"id":"requirement","accepted":["carbon dioxide","co2"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 7),
+  ('cie-igcse-cs-p3-q2aii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a)(ii) State the name of the green pigment needed for photosynthesis.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q2aii","points":1,"display":"chlorophyll","status":"official","parts":[{"id":"answer","accepted":["chlorophyll"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 8),
+  ('cie-igcse-cs-p3-q2bi', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(b)(i) Identify the temperature at which the rate of photosynthesis for plant Q is highest.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q2bi","points":1,"display":"28–30 °C","status":"official","parts":[{"id":"answer","accepted":["28","29","30","28 c","29 c","30 c","28 °c","29 °c","30 °c"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 9),
+  ('cie-igcse-cs-p3-q2bii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(b)(ii) Desert temperatures are often higher than 40 °C. Explain why plant S would not survive in a desert. Use the word enzyme.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q2bii","points":2,"display":"Its enzyme stops working above its optimum, so photosynthesis and glucose production stop.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["enzyme","lower","temperature"],["enzyme","stop"],["enzyme","denature"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":[],"keywords":[["no","photosynthesis"],["no","glucose"],["no","sugar"],["no","carbohydrate"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 10),
+  ('cie-igcse-cs-p3-q2ci', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(c)(i) Identify part X on the carpel.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q2ci","points":1,"display":"stigma","status":"official","parts":[{"id":"answer","accepted":["stigma"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 11),
+  ('cie-igcse-cs-p3-q2cii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(c)(ii) Describe fertilisation in an ovule.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q2cii","points":1,"display":"A pollen nucleus fuses with a nucleus in the ovule.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["pollen","nucleus","fuses","nucleus","ovule"],["male","nucleus","fuses","female","nucleus"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 12),
+  ('cie-igcse-cs-p3-q3ai', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a)(i) Identify the producer in the food web.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q3ai","points":1,"display":"phytoplankton","status":"official","parts":[{"id":"answer","accepted":["phytoplankton"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 13),
+  ('cie-igcse-cs-p3-q3aii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a)(ii) Select each term that describes the puffin in the food web.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q3aii","points":2,"display":"carnivore; tertiary consumer","status":"official","parts":[{"id":"selected","accepted":["carnivore"],"points":1,"normalizer":"contains"},{"id":"selected","accepted":["tertiary consumer"],"points":1,"normalizer":"contains"}]}'::jsonb, null, 2, 14),
+  ('cie-igcse-cs-p3-q3aiii', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a)(iii) Pollution can kill squid. Explain how this may reduce the number of foxes.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q3aiii","points":2,"display":"Puffins have less squid to eat, then foxes have fewer puffins to eat.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["less","squid","puffin"],["fewer","squid","puffin"],["puffin","less","food"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":[],"keywords":[["less","puffin","fox"],["fewer","puffin","fox"],["fox","less","food"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 15),
+  ('cie-igcse-cs-p3-q3aiv', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(a)(iv) State two reasons, other than pollution, why squid may become endangered.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q3aiv","points":2,"display":"Any two approved causes, such as climate change and overharvesting.","status":"official","parts":[{"id":"reason1","accepted":[],"keywords":[["climate","change"],["habitat","destruction"],["hunting"],["overharvesting"],["introduced","species"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"reason2","accepted":[],"keywords":[["climate","change"],["habitat","destruction"],["hunting"],["overharvesting"],["introduced","species"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 16),
+  ('cie-igcse-cs-p3-q3b', 'cie-igcse-combined-science-paper-3-core', 'Biology 1–3', '(b) Complete the definition: A decomposer gets its ___ from dead or waste ___ material.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q3b","points":2,"display":"energy; organic","status":"official","parts":[{"id":"first","accepted":["energy"],"points":1,"normalizer":"text"},{"id":"second","accepted":["organic"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 17),
+  ('cie-igcse-cs-p3-q4a', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(a) State the name of the positive electrode in the electrolysis apparatus.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q4a","points":1,"display":"anode","status":"official","parts":[{"id":"answer","accepted":["anode"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 18),
+  ('cie-igcse-cs-p3-q4b', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(b) Identify the gases produced at the positive and negative electrodes.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q4b","points":2,"display":"positive: chlorine; negative: hydrogen","status":"official","parts":[{"id":"positive","accepted":["chlorine","cl2"],"points":1,"normalizer":"text"},{"id":"negative","accepted":["hydrogen","h2"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 19),
+  ('cie-igcse-cs-p3-q4ci', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(c)(i) State what is meant by an alkali.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q4ci","points":1,"display":"a soluble base","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["soluble","base"],["soluble","metal","oxide"],["soluble","metal","hydroxide"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 20),
+  ('cie-igcse-cs-p3-q4cii', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(c)(ii) Methyl orange changes from orange to which colour in an alkali?', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q4cii","points":1,"display":"yellow","status":"official","parts":[{"id":"answer","accepted":["yellow"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 21),
+  ('cie-igcse-cs-p3-q4di', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(d)(i) Complete the word equation: sodium hydroxide + sulfuric acid → ___ + ___.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q4di","points":1,"display":"sodium sulfate + water","status":"official","parts":[{"id":"product1","accepted":["sodium sulfate"],"points":0.5,"normalizer":"text"},{"id":"product2","accepted":["water"],"points":0.5,"normalizer":"text"}],"scoreThresholds":[{"minCorrect":2,"points":1}]}'::jsonb, null, 1, 22),
+  ('cie-igcse-cs-p3-q4dii', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(d)(ii) State what is meant by an exothermic reaction.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q4dii","points":2,"display":"Thermal energy is transferred to the surroundings, increasing their temperature.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["thermal","energy","surroundings"],["heat","surroundings"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":[],"keywords":[["surroundings","temperature","increase"],["surroundings","warmer"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 23),
+  ('cie-igcse-cs-p3-q5a', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(a) State one use of refinery gas and one use of gasoline.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q5a","points":2,"display":"refinery gas: heating/cooking; gasoline: fuel for cars, vans or lorries","status":"official","parts":[{"id":"refineryGas","accepted":[],"keywords":[["heating"],["cooking"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"gasoline","accepted":[],"keywords":[["car"],["van"],["lorry"],["vehicle"],["fuel"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 24),
+  ('cie-igcse-cs-p3-q5bi', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(b)(i) State the molecular formula of hydrocarbon A.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q5bi","points":1,"display":"C3H8","status":"official","parts":[{"id":"answer","accepted":["c3h8","C3H8"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 25),
+  ('cie-igcse-cs-p3-q5bii', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(b)(ii) State which hydrocarbon is saturated and give a reason.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q5bii","points":1,"display":"A, because all carbon–carbon bonds are single.","status":"official","parts":[{"id":"hydrocarbon","accepted":["A"],"points":0.5,"normalizer":"text"},{"id":"reason","accepted":[],"keywords":[["all","carbon","carbon","single"],["all","c c","single"]],"points":0.5,"normalizer":"keywords","reviewRecommended":true}],"scoreThresholds":[{"minCorrect":2,"points":1}]}'::jsonb, null, 1, 26),
+  ('cie-igcse-cs-p3-q5biii', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(b)(iii) State the chemical test used to distinguish A and B, and the observation for each.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q5biii","points":2,"display":"Aqueous bromine remains orange with A and is decolourised by B.","status":"official","parts":[{"id":"test","accepted":[],"keywords":[["aqueous","bromine"],["bromine","water"],["br2"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"aObservation","accepted":[],"keywords":[["stays","orange"],["remains","orange"]],"points":0.5,"normalizer":"keywords","reviewRecommended":true},{"id":"bObservation","accepted":[],"keywords":[["decolour"],["colorless"],["colourless"]],"points":0.5,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 27),
+  ('cie-igcse-cs-p3-q5c', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(c) Complete the balanced equation, including missing state symbols: CH4(g) + ___ O2(___) → CO2(___) + ___ H2O(l).', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q5c","points":2,"display":"CH4(g) + 2O2(g) → CO2(g) + 2H2O(l)","status":"official","parts":[{"id":"coefficients","accepted":["2, 2","2 2","2,2"],"points":1,"normalizer":"text"},{"id":"states","accepted":["g, g","g g","g,g"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 28),
+  ('cie-igcse-cs-p3-q5d', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(d) State one physical property of methane.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q5d","points":1,"display":"low melting point / low boiling point / low electrical conductivity","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["low","melting","point"],["low","boiling","point"],["low","electrical","conductivity"],["poor","electrical","conductor"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 29),
+  ('cie-igcse-cs-p3-q6a', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(a) For an iron atom shown as ⁵⁶₂₆Fe, deduce the number of electrons and neutrons.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q6a","points":2,"display":"26 electrons; 30 neutrons","status":"official","parts":[{"id":"electrons","accepted":["26"],"points":1,"normalizer":"text"},{"id":"neutrons","accepted":["30"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 30),
+  ('cie-igcse-cs-p3-q6bi', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(b)(i) Describe how Fe²⁺ ions are formed from iron atoms.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q6bi","points":1,"display":"An iron atom loses two electrons.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["loses","two","electron"],["lose","2","electron"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 31),
+  ('cie-igcse-cs-p3-q6bii', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(b)(ii) Describe what is observed when aqueous sodium hydroxide is added to aqueous iron(II) ions.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q6bii","points":2,"display":"A green precipitate forms.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["green"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":[],"keywords":[["precipitate"],["ppt"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 32),
+  ('cie-igcse-cs-p3-q6ci', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(c)(i) Explain why iron reacting with dilute hydrochloric acid is a chemical change.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q6ci","points":1,"display":"A new substance is made.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["new","substance"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 33),
+  ('cie-igcse-cs-p3-q6cii', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(c)(ii) State the test for hydrogen and the positive result.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q6cii","points":1,"display":"A lighted splint gives a squeaky pop.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["lighted","splint","squeaky","pop"],["burning","splint","pop"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 34),
+  ('cie-igcse-cs-p3-q6d', 'cie-igcse-combined-science-paper-3-core', 'Chemistry 4–6', '(d) Describe what is meant by a catalyst.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q6d","points":2,"display":"A catalyst increases reaction rate and is unchanged at the end.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["increase","rate"],["speeds","reaction"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":[],"keywords":[["unchanged","end"],["not","used","up"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 35),
+  ('cie-igcse-cs-p3-q7ai', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(i) State the name of component X in the heater circuit.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q7ai","points":1,"display":"electric motor","status":"official","parts":[{"id":"answer","accepted":["electric motor","motor"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 36),
+  ('cie-igcse-cs-p3-q7aii', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(ii) The current in component X is 0.5 A and the current in the heater is 8.3 A. Select the current from the source.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q7aii","points":1,"display":"8.8 A","status":"official","parts":[{"id":"answer","accepted":["8.8 A"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 37),
+  ('cie-igcse-cs-p3-q7aiii', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(iii) A 2.0 kW heater runs for 5.5 hours at $0.15 per kWh. Calculate the cost.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q7aiii","points":2,"display":"$1.65 ($1.70 accepted)","status":"official","parts":[{"id":"working","accepted":[],"keywords":[["0.15","2.0","5.5"],["cost","power","time"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":["1.65","1.70","$1.65","$1.70"],"points":2,"normalizer":"text"}]}'::jsonb, null, 2, 38),
+  ('cie-igcse-cs-p3-q7b', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(b) A wind turbine produces 2200 W. Calculate the energy transferred in 15 seconds.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q7b","points":2,"display":"33 000 J","status":"official","parts":[{"id":"working","accepted":[],"keywords":[["2200","15"],["energy","power","time"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":["33000","33 000","33000 j"],"points":2,"normalizer":"text"}]}'::jsonb, null, 2, 39),
+  ('cie-igcse-cs-p3-q7ci', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(c)(i) State the colour of visible light with the longest wavelength.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q7ci","points":1,"display":"red","status":"official","parts":[{"id":"answer","accepted":["red"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 40),
+  ('cie-igcse-cs-p3-q7cii', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(c)(ii) State one other region, apart from visible light, in which most solar energy is radiated.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q7cii","points":1,"display":"infrared or ultraviolet","status":"official","parts":[{"id":"answer","accepted":["infrared","infra-red","ultraviolet","ultra-violet","uv","ir"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 41),
+  ('cie-igcse-cs-p3-q8ai', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(i) A spacecraft has a mass of 3.1 × 10³ kg. Calculate its weight on Earth. Include the unit.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8ai","points":3,"display":"30 000 N (30.38 kN or 30.4 kN accepted)","status":"official","parts":[{"id":"working","accepted":[],"keywords":[["weight","mass","gravitational"],["w","m","g"],["3.1","10","9.8"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":["30000 n","30 000 n","30 x 10^3 n","30 × 10^3 n","30380 n","30400 n","30.38 kn","30.4 kn"],"points":3,"normalizer":"text"}]}'::jsonb, null, 3, 42),
+  ('cie-igcse-cs-p3-q8aii', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(ii) State what is meant by accelerates.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8aii","points":1,"display":"increases in speed","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["increase","speed"],["gets","faster"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 1, 43),
+  ('cie-igcse-cs-p3-q8aiii', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(iii) Calculate the number of hours in 3.2 days.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8aiii","points":1,"display":"76.8 h","status":"official","parts":[{"id":"answer","accepted":["76.8","76.8 h","76 h 48 min"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 44),
+  ('cie-igcse-cs-p3-q8aiv', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(iv) The Earth–Moon distance is 384 000 km. Calculate the spacecraft''s average speed using your answer to (a)(iii).', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8aiv","points":2,"display":"5000 km/h","status":"official","parts":[{"id":"working","accepted":[],"keywords":[["384000","76.8"],["speed","distance","time"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":["5000","5000 km/h","5000 km h"],"points":2,"normalizer":"text"}]}'::jsonb, null, 2, 45),
+  ('cie-igcse-cs-p3-q8av', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a)(v) State whether radio waves travel faster, slower or at the same speed as visible light, and give a reason.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8av","points":1,"display":"same speed; both are electromagnetic waves, which travel at the same speed","status":"official","parts":[{"id":"speed","accepted":["same","same speed","at the same speed"],"points":0.5,"normalizer":"text"},{"id":"reason","accepted":[],"keywords":[["both","electromagnetic","same","speed"],["all","electromagnetic","same","speed"]],"points":0.5,"normalizer":"keywords","reviewRecommended":true}],"scoreThresholds":[{"minCorrect":2,"points":1}]}'::jsonb, null, 1, 46),
+  ('cie-igcse-cs-p3-q8b', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(b) State the name of the planet that orbits closest to the Sun.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8b","points":1,"display":"Mercury","status":"official","parts":[{"id":"answer","accepted":["Mercury"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 47),
+  ('cie-igcse-cs-p3-q8c', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(c) State the name of the galaxy that contains the Sun.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q8c","points":1,"display":"Milky Way / the Milky Way","status":"official","parts":[{"id":"answer","accepted":["Milky Way","the Milky Way"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 48),
+  ('cie-igcse-cs-p3-q9a', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(a) Use Table 9.1 to state the electrical property of poly(ethene) and give a reason.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q9a","points":1,"display":"insulator, because it is a plastic/polymer and not a metal or carbon","status":"official","parts":[{"id":"property","accepted":["insulator"],"points":0.5,"normalizer":"text"},{"id":"reason","accepted":[],"keywords":[["plastic"],["polymer"],["not","metal"],["not","carbon"]],"points":0.5,"normalizer":"keywords","reviewRecommended":true}],"scoreThresholds":[{"minCorrect":2,"points":1}]}'::jsonb, null, 1, 49),
+  ('cie-igcse-cs-p3-q9b', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(b) Predict what happens to a 0.9 g/cm³ poly(ethene) ball in water and in ethanol. Explain using Table 9.1.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q9b","points":2,"display":"It floats in water and sinks in ethanol because its density lies between theirs.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["water","float"],["floats","water"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":[],"keywords":[["ethanol","sink"],["sinks","ethanol"],["density","between","water","ethanol"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 50),
+  ('cie-igcse-cs-p3-q9c', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(c) Identify which particle diagram shows ethanol and sulfur at 25 °C, and explain in terms of particles.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q9c","points":2,"display":"ethanol Y; sulfur X; a solid is regular/more closely packed and a liquid is irregular/less closely packed","status":"official","parts":[{"id":"ethanol","accepted":["Y"],"points":0.5,"normalizer":"text"},{"id":"sulfur","accepted":["X"],"points":0.5,"normalizer":"text"},{"id":"explanation","accepted":[],"keywords":[["sulfur","solid","ethanol","liquid"],["solid","regular","liquid","irregular"],["solid","closely","packed","liquid","less"]],"points":1,"normalizer":"keywords","reviewRecommended":true}]}'::jsonb, null, 2, 51),
+  ('cie-igcse-cs-p3-q9di', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(d)(i) An aluminium mirror has a mass of 9.0 g and density 2.7 g/cm³. Calculate its volume.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-q9di","points":2,"display":"3.3 cm³","status":"official","parts":[{"id":"working","accepted":[],"keywords":[["9.0","2.7"],["volume","mass","density"]],"points":1,"normalizer":"keywords","reviewRecommended":true},{"id":"answer","accepted":["3.3","3.33","3.333","3.3 cm3","3.33 cm3","3.333 cm3"],"points":2,"normalizer":"text"}]}'::jsonb, null, 2, 52),
+  ('cie-igcse-cs-p3-q9dii', 'cie-igcse-combined-science-paper-3-core', 'Physics 7–9', '(d)(ii) Draw the normal and place i at the angle of incidence. Then draw the reflected ray to show how the eye sees the image.', '{"source":"rayDiagram","id":"cie-igcse-cs-p3-q9dii","points":2,"display":"Normal and angle i; reflected ray to eye","status":"official","geometry":{"incidence":{"x":0.826,"y":0.485},"incidentSource":{"x":0.36,"y":0.1825},"eye":{"x":0.36,"y":0.8175},"normalTolerance":0.045,"labelRegion":{"minX":0.59,"maxX":0.78,"minY":0.34,"maxY":0.49},"eyeTolerance":0.085,"angleToleranceDegrees":10}}'::jsonb, null, 2, 53)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
+  position = excluded.position;
+
 create or replace function normalize_answer(value text)
 returns text
 language sql
@@ -972,7 +1039,7 @@ begin
     raw_text := '';
     raw_norm := '';
 
-    if mode = 'set' then
+    if mode in ('set', 'contains') then
       raw_json := coalesce(p_answers->p_question_id->part_id, '[]'::jsonb);
       if jsonb_typeof(raw_json) <> 'array' then
         raw_json := '[]'::jsonb;
@@ -990,9 +1057,22 @@ begin
       into raw_text
       from jsonb_array_elements_text(raw_json) as response(value);
 
-      is_part_correct := raw_norm <> '' and raw_norm = expected_norm;
+      if mode = 'contains' then
+        is_part_correct := exists (
+          select 1
+          from jsonb_array_elements_text(raw_json) as response(value)
+          cross join jsonb_array_elements_text(coalesce(part_key->'accepted', '[]'::jsonb)) as accepted(value)
+          where normalize_math_answer(response.value, 'text') = normalize_math_answer(accepted.value, 'text')
+        );
+      else
+        is_part_correct := raw_norm <> '' and raw_norm = expected_norm;
+      end if;
     elsif mode = 'keywords' then
-      raw_text := coalesce(p_answers->p_question_id->>part_id, '');
+      raw_text := case
+        when part_id = 'answer' and jsonb_typeof(p_answers->p_question_id) = 'string'
+          then coalesce(p_answers->>p_question_id, '')
+        else coalesce(p_answers->p_question_id->>part_id, '')
+      end;
       raw_norm := normalize_math_answer(raw_text, 'text');
       is_part_correct := raw_norm <> '' and exists (
         select 1
@@ -1008,7 +1088,11 @@ begin
       raw_norm := normalize_math_answer(raw_text, 'text');
       is_part_correct := raw_norm = 'down';
     else
-      raw_text := coalesce(p_answers->p_question_id->>part_id, '');
+      raw_text := case
+        when part_id = 'answer' and jsonb_typeof(p_answers->p_question_id) = 'string'
+          then coalesce(p_answers->>p_question_id, '')
+        else coalesce(p_answers->p_question_id->>part_id, '')
+      end;
       raw_norm := normalize_math_answer(raw_text, mode);
       is_part_correct := raw_norm <> '' and exists (
         select 1
@@ -1032,6 +1116,92 @@ begin
 end;
 $$;
 
+create or replace function ray_coordinate(p_value text, p_axis integer)
+returns numeric
+language plpgsql
+immutable
+as $$
+declare
+  coordinate text;
+begin
+  coordinate := btrim(split_part(coalesce(p_value, ''), ',', p_axis));
+  if coordinate !~ '^-?([0-9]+([.][0-9]*)?|[.][0-9]+)$' then
+    return null;
+  end if;
+  return coordinate::numeric;
+end;
+$$;
+
+create or replace function ray_diagram_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  geometry jsonb := coalesce(p_answer_key->'geometry', '{}'::jsonb);
+  incidence_x numeric := coalesce((geometry->'incidence'->>'x')::numeric, 0);
+  incidence_y numeric := coalesce((geometry->'incidence'->>'y')::numeric, 0);
+  source_x numeric := coalesce((geometry->'incidentSource'->>'x')::numeric, 0);
+  source_y numeric := coalesce((geometry->'incidentSource'->>'y')::numeric, 0);
+  eye_x numeric := coalesce((geometry->'eye'->>'x')::numeric, 0);
+  eye_y numeric := coalesce((geometry->'eye'->>'y')::numeric, 0);
+  normal_tolerance numeric := coalesce((geometry->>'normalTolerance')::numeric, 0.045);
+  eye_tolerance numeric := coalesce((geometry->>'eyeTolerance')::numeric, 0.085);
+  angle_tolerance numeric := radians(coalesce((geometry->>'angleToleranceDegrees')::numeric, 10));
+  normal_x numeric := ray_coordinate(response->>'normalEnd', 1);
+  normal_y numeric := ray_coordinate(response->>'normalEnd', 2);
+  label_x numeric := ray_coordinate(response->>'labelPoint', 1);
+  label_y numeric := ray_coordinate(response->>'labelPoint', 2);
+  reflected_x numeric := ray_coordinate(response->>'reflectedEnd', 1);
+  reflected_y numeric := ray_coordinate(response->>'reflectedEnd', 2);
+  normal_correct boolean;
+  label_correct boolean;
+  reaches_eye boolean;
+  angle_correct boolean;
+  incident_angle double precision;
+  reflection_angle double precision;
+begin
+  normal_correct := normal_x is not null and normal_y is not null
+    and normal_x < incidence_x
+    and abs(normal_y - incidence_y) <= normal_tolerance;
+  label_correct := label_x is not null and label_y is not null
+    and label_x between (geometry->'labelRegion'->>'minX')::numeric and (geometry->'labelRegion'->>'maxX')::numeric
+    and label_y between (geometry->'labelRegion'->>'minY')::numeric and (geometry->'labelRegion'->>'maxY')::numeric;
+  reaches_eye := reflected_x is not null and reflected_y is not null
+    and sqrt(power(reflected_x - eye_x, 2) + power(reflected_y - eye_y, 2)) <= eye_tolerance;
+  incident_angle := atan2(abs(source_y - incidence_y)::double precision, abs(source_x - incidence_x)::double precision);
+  reflection_angle := case
+    when reflected_x is null or reflected_y is null then null
+    else atan2(abs(reflected_y - incidence_y)::double precision, abs(reflected_x - incidence_x)::double precision)
+  end;
+  angle_correct := reflection_angle is not null and abs(reflection_angle - incident_angle) <= angle_tolerance;
+
+  return jsonb_build_object(
+    'parts', jsonb_build_array(
+      jsonb_build_object(
+        'id', 'normal-and-label',
+        'response', concat_ws('; ', response->>'normalEnd', response->>'labelPoint'),
+        'score', case when normal_correct and label_correct then 1 else 0 end,
+        'possible', 1,
+        'correct', normal_correct and label_correct,
+        'normalCorrect', normal_correct,
+        'labelCorrect', label_correct
+      ),
+      jsonb_build_object(
+        'id', 'reflected-ray',
+        'response', coalesce(response->>'reflectedEnd', ''),
+        'score', case when reaches_eye and angle_correct then 1 else 0 end,
+        'possible', 1,
+        'correct', reaches_eye and angle_correct,
+        'reachesEye', reaches_eye,
+        'angleCorrect', angle_correct
+      )
+    )
+  );
+end;
+$$;
+
 create or replace function answer_response(p_answer_key jsonb, p_answers jsonb)
 returns text
 language plpgsql
@@ -1046,7 +1216,7 @@ begin
     return coalesce(p_answers->>(p_answer_key->>'id'), '');
   elsif source_name = 'aiSplitGrade' then
     return coalesce(p_answers->>(p_answer_key->>'id'), '');
-  elsif source_name = 'mathMultiPart' then
+  elsif source_name in ('mathMultiPart', 'rayDiagram') then
     return coalesce((p_answers->(p_answer_key->>'id'))::text, '');
   elsif source_name = 'connections' then
     return coalesce(p_answers->'connections'->>(p_answer_key->>'object'), '');
@@ -1115,6 +1285,12 @@ begin
     into raw_score
     from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);
     return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'rayDiagram' then
+    math_details := ray_diagram_details(p_question_id, p_answer_key, p_answers);
+    select coalesce(sum((value->>'score')::numeric), 0)
+    into raw_score
+    from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);
+    return least(greatest(raw_score, 0), possible);
   elsif source_name = 'connections' then
     return case when p_response = p_answer_key->>'target' then possible else 0 end;
   elsif source_name = 'textAnswers' then
@@ -1160,6 +1336,8 @@ begin
     return coalesce(p_answers->'aiGrades'->p_question_id, '{}'::jsonb);
   elsif p_answer_key->>'source' = 'mathMultiPart' then
     return math_part_scores(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'rayDiagram' then
+    return ray_diagram_details(p_question_id, p_answer_key, p_answers);
   end if;
   return '{}'::jsonb;
 end;
@@ -1186,6 +1364,9 @@ begin
     if response_json = '{}'::jsonb then
       return 'No answer';
     end if;
+    if jsonb_typeof(response_json) = 'string' then
+      return coalesce(response_json #>> '{}', 'No answer');
+    end if;
     for part_key in select value from jsonb_array_elements(coalesce(p_answer_key->'parts', '[]'::jsonb))
     loop
       part_id := part_key->>'id';
@@ -1208,6 +1389,18 @@ begin
     end if;
     return array_to_string(items, '; ');
   end if;
+  if p_answer_key->>'source' = 'rayDiagram' then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then
+      return 'No answer';
+    end if;
+    return concat_ws(
+      '; ',
+      case when coalesce(response_json->>'normalEnd', '') <> '' then 'normal: ' || response_json->>'normalEnd' end,
+      case when coalesce(response_json->>'labelPoint', '') <> '' then 'label i: ' || response_json->>'labelPoint' end,
+      case when coalesce(response_json->>'reflectedEnd', '') <> '' then 'reflected ray: ' || response_json->>'reflectedEnd' end
+    );
+  end if;
   if p_answer_key->>'source' = 'choices' then
     return upper(p_response);
   end if;
@@ -1223,6 +1416,636 @@ begin
       when '#8b5a2b' then 'brown'
       else p_response
     end;
+  end if;
+  return p_response;
+end;
+$$;
+-- CIE IGCSE Combined Science 0653/06 Alternative to Practical specimen paper.
+-- Idempotent: safe to reapply after the base schema and earlier CIE patches.
+
+insert into public.tests (id, title, subject, level, status, total_points, app_path)
+values (
+  'cie-igcse-combined-science-paper-6-alternative-to-practical',
+  'CIE IGCSE Combined Science Paper 6 Alternative to Practical',
+  'Combined Science',
+  'Alternative to Practical',
+  'active',
+  40,
+  '/tests/cie-igcse-combined-science-paper-6-alternative-to-practical/start'
+)
+on conflict (id) do update set
+  title = excluded.title,
+  subject = excluded.subject,
+  level = excluded.level,
+  status = excluded.status,
+  total_points = excluded.total_points,
+  app_path = excluded.app_path;
+
+insert into public.test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('cie-igcse-cs-p6-q1a', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Biology Questions 1-2', '(a) Make a large biological drawing of the cut surface of the apple shown in Fig. 1.1.',
+   '{"source":"biologicalDrawing","id":"cie-igcse-cs-p6-q1a","points":3,"display":"Large smooth outline; five star-like core sections with pip details","status":"official"}'::jsonb, null, 3, 1),
+  ('cie-igcse-cs-p6-q1bi', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Biology Questions 1-2', '(b)(i) Record the volume of apple juice remaining in the syringe in experiment 3.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q1bi","points":1,"display":"1.4 cm3","status":"official","parts":[{"id":"remaining","accepted":["1.4","1.4 cm3"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 2),
+  ('cie-igcse-cs-p6-q1bii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Biology Questions 1-2', '(b)(ii) Calculate the volume of apple juice added to the DCPIP in experiment 3.',
+   '{"source":"dependent","id":"cie-igcse-cs-p6-q1bii","points":1,"display":"8.6 cm3 (ECF from (b)(i))","status":"official","rule":{"type":"subtractFrom","sourceQuestionId":"cie-igcse-cs-p6-q1bi","sourceField":"remaining","minuend":10,"tolerance":0.05}}'::jsonb, null, 1, 3),
+  ('cie-igcse-cs-p6-q1biii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Biology Questions 1-2', '(b)(iii) Calculate the average volume of apple juice added.',
+   '{"source":"dependent","id":"cie-igcse-cs-p6-q1biii","points":1,"display":"8.9 cm3 (ECF from (b)(ii))","status":"official","rule":{"type":"mean","sourceQuestionId":"cie-igcse-cs-p6-q1bii","fixedValues":[8.7,8.5],"decimalPlaces":1,"tolerance":0.05,"accepted":["8.9"]}}'::jsonb, null, 1, 4),
+  ('cie-igcse-cs-p6-q1biv', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Biology Questions 1-2', '(b)(iv) Suggest why the student repeats the experiment.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q1biv","points":1,"display":"Minimise random error by averaging, or identify anomalous results","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["minimise","random","error"],["reduce","random","error"],["identify","anomal"],["spot","anomal"],["average","reliable"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 5),
+  ('cie-igcse-cs-p6-q2', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Biology Questions 1-2', 'Plan an investigation to determine the relationship between light intensity and the volume of oxygen gas produced by an aquatic plant.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q2","points":7,"display":"One valid point from each category, then two additional distinct points","status":"official","scoringStrategy":"investigationPlan","parts":[
+     {"id":"apparatus","accepted":[],"keywords":[["lamp"],["light","source"],["led"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"apparatus"},
+     {"id":"apparatus","accepted":[],"keywords":[["gas","syringe"],["measuring","cylinder"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"apparatus"},
+     {"id":"apparatus","accepted":[],"keywords":[["stopwatch"],["timer"],["ruler"],["light","meter"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"apparatus"},
+     {"id":"method","accepted":[],"keywords":[["plant","light","oxygen"],["place","lamp","plant"],["collect","gas"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"method"},
+     {"id":"method","accepted":[],"keywords":[["water","electric","keep","away"],["water","electric","dry"],["hot","lamp","heat","shield"],["hot","lamp","glove"],["hot","lamp","do not touch"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"method"},
+     {"id":"measurements","accepted":[],"keywords":[["vary","distance"],["change","distance"],["vary","brightness"],["change","brightness"],["number","lamp"],["light","intensity","record"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"measurements"},
+     {"id":"measurements","accepted":[],"keywords":[["volume","gas"],["volume","oxygen"],["water","displacement"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"measurements"},
+     {"id":"controls","accepted":[],"keywords":[["carbon dioxide"],["co2","concentration"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"controls"},
+     {"id":"controls","accepted":[],"keywords":[["temperature","water"],["water","temperature"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"controls"},
+     {"id":"controls","accepted":[],"keywords":[["wavelength"],["colour","light"],["same","plant"],["time","same"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"controls"},
+     {"id":"processing","accepted":[],"keywords":[["volume","time"],["volume","per","second"],["rate","oxygen"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"processing"},
+     {"id":"processing","accepted":[],"keywords":[["repeat","anomal"],["repeat","mean"],["repeat","average"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"processing"},
+     {"id":"processing","accepted":[],"keywords":[["graph","volume","light","intensity"],["plot","volume","intensity"]],"points":1,"normalizer":"keywords","reviewRecommended":false,"category":"processing"}
+   ]}'::jsonb, null, 7, 6),
+
+  ('cie-igcse-cs-p6-q3ai', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(a)(i) Identify the gas that gives a squeaky pop with a lighted splint.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3ai","points":1,"display":"hydrogen","status":"official","parts":[{"id":"answer","accepted":["hydrogen","h2"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 7),
+  ('cie-igcse-cs-p6-q3aii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(a)(ii) Suggest one observation that shows the reaction is faster.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3aii","points":1,"display":"More rapid fizzing, or the solid disappears more quickly","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["fizz","more"],["bubble","faster"],["effervescence","more"],["solid","disappear","faster"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 8),
+  ('cie-igcse-cs-p6-q3aiii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(a)(iii) Suggest both possible identities of the cation produced from metal F.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3aiii","points":1,"display":"zinc ions and calcium ions","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["zinc","calcium"],["zn","ca"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 9),
+  ('cie-igcse-cs-p6-q3bi', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(b)(i) Record the stopwatch readings for 5 cm3 and 25 cm3 of gas.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3bi","points":2,"display":"10 s; 57 s","status":"official","parts":[{"id":"first","accepted":["10","10 s","10 seconds"],"points":1,"normalizer":"text"},{"id":"last","accepted":["57","57 s","57 seconds"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 10),
+  ('cie-igcse-cs-p6-q3bii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(b)(ii) State the independent variable and dependent variable.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3bii","points":1,"display":"volume of gas collected; time taken","status":"official","parts":[{"id":"independent","accepted":[],"keywords":[["volume","gas"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"dependent","accepted":[],"keywords":[["time","taken"],["time"]],"points":1,"normalizer":"keywords","reviewRecommended":false}],"scoreThresholds":[{"minCorrect":2,"points":1}]}'::jsonb, null, 1, 11),
+  ('cie-igcse-cs-p6-q3biiiiv', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(b)(iii)-(iv) Plot volume of gas against time and draw a line of best fit.',
+   '{"source":"practicalGraph","id":"cie-igcse-cs-p6-q3biiiiv","points":4,"display":"Correct axes, scale, five points and best-fit line","status":"official","sourceQuestionId":"cie-igcse-cs-p6-q3bi","sourceFields":{"first":"first","last":"last"},"fixedXValues":[10,22,34,46,57],"yValues":[5,10,15,20,25],"correctAxes":{"xQuantity":"time taken","xUnit":"s","yQuantity":"volume of gas collected","yUnit":"cm3"},"pointTolerance":0.025}'::jsonb, null, 4, 12),
+  ('cie-igcse-cs-p6-q3bv', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(b)(v) Describe the relationship between volume of gas collected and time taken.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3bv","points":1,"display":"As volume increases, time taken increases","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["volume","increase","time","increase"],["more","gas","longer","time"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 13),
+  ('cie-igcse-cs-p6-q3bvi', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(b)(vi) Suggest one source of error in measuring the time.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3bvi","points":1,"display":"Watching volume and stopwatch together, or delay starting the stopwatch","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["look","volume","stopwatch","same","time"],["reaction","start","stopwatch","delay"],["human","reaction","time"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 14),
+  ('cie-igcse-cs-p6-q3bvii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Chemistry Question 3', '(b)(vii) Suggest one way to measure gas volume more accurately.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q3bvii","points":1,"display":"Use a gas syringe, or mix separated reactants inside the stoppered tube","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["gas","syringe"],["reactants","separate","stopper"],["mix","inside","stoppered"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 15),
+
+  ('cie-igcse-cs-p6-q4ai', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(a)(i) Draw a double-headed arrow to show length L and label it L.',
+   '{"source":"diagramAnnotation","id":"cie-igcse-cs-p6-q4ai","variant":"doubleArrow","points":1,"display":"Double-headed length arrow labelled L","status":"official","geometry":{"variant":"doubleArrow","start":{"x":0.11,"y":0.18},"end":{"x":0.94,"y":0.18},"endpointTolerance":0.1,"labelRegion":{"minX":0.42,"maxX":0.64,"minY":0.24,"maxY":0.58},"label":"L"}}'::jsonb, null, 1, 16),
+  ('cie-igcse-cs-p6-q4aii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(a)(ii) Measure width w and thickness t to the nearest 0.1 cm.',
+   '{"source":"virtualMeasurement","id":"cie-igcse-cs-p6-q4aii","points":2,"display":"w = 2.5 cm; t = 0.5 cm","status":"official","measurements":[{"id":"w","expected":2.5,"tolerance":0.15,"calibration":3.5,"unit":"cm"},{"id":"t","expected":0.5,"tolerance":0.1,"calibration":1.1,"unit":"cm"}]}'::jsonb, null, 2, 17),
+  ('cie-igcse-cs-p6-q4aiii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(a)(iii) State why measurements should not be recorded to the nearest 0.01 cm.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q4aiii","points":1,"display":"The ruler has a precision or smallest division of 0.1 cm","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["ruler","precision","0.1"],["smallest","division","0.1"],["millimetre","division"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 18),
+  ('cie-igcse-cs-p6-q4aiv', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(a)(iv) Calculate volume V = L x w x t.',
+   '{"source":"dependent","id":"cie-igcse-cs-p6-q4aiv","points":1,"display":"125 cm3 (ECF)","status":"official","rule":{"type":"product","factors":[{"value":100},{"sourceQuestionId":"cie-igcse-cs-p6-q4aii","measurementId":"w","measurementCalibration":3.5},{"sourceQuestionId":"cie-igcse-cs-p6-q4aii","measurementId":"t","measurementCalibration":1.1}],"tolerance":0.6}}'::jsonb, null, 1, 19),
+  ('cie-igcse-cs-p6-q4bi', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(b)(i) Calculate distance x1.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q4bi","points":1,"display":"7.1 cm","status":"official","parts":[{"id":"answer","accepted":["7.1","7.1 cm"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 20),
+  ('cie-igcse-cs-p6-q4bii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(b)(ii) Calculate distance x2.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q4bii","points":1,"display":"14.2 cm","status":"official","parts":[{"id":"answer","accepted":["14.2","14.2 cm"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 21),
+  ('cie-igcse-cs-p6-q4biii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(b)(iii) Calculate mass M = 5(x1 + x2).',
+   '{"source":"dependent","id":"cie-igcse-cs-p6-q4biii","points":1,"display":"106.5 g (106, 107 and 110 accepted; ECF)","status":"official","rule":{"type":"scaledSum","sourceQuestionIds":["cie-igcse-cs-p6-q4bi","cie-igcse-cs-p6-q4bii"],"multiplier":5,"tolerance":0.6,"accepted":["106","107","110"]}}'::jsonb, null, 1, 22),
+  ('cie-igcse-cs-p6-q4ci', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(c)(i) Name the apparatus shown in Fig. 4.4.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q4ci","points":1,"display":"electronic balance / top-pan balance","status":"official","parts":[{"id":"answer","accepted":["balance","electronic balance","top pan balance","top-pan balance"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 23),
+  ('cie-igcse-cs-p6-q4cii', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(c)(ii) State the type of error shown.',
+   '{"source":"mathMultiPart","id":"cie-igcse-cs-p6-q4cii","points":1,"display":"zero / systematic / calibration error","status":"official","parts":[{"id":"answer","accepted":["zero error","systematic error","calibration error","zero","systematic","calibration"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 24),
+  ('cie-igcse-cs-p6-q4d', 'cie-igcse-combined-science-paper-6-alternative-to-practical', 'Physics Question 4', '(d) Calculate density to two significant figures and give the unit.',
+   '{"source":"dependent","id":"cie-igcse-cs-p6-q4d","points":3,"display":"0.85 g/cm3 (ECF)","status":"official","rule":{"type":"density","massQuestionId":"cie-igcse-cs-p6-q4biii","volumeQuestionId":"cie-igcse-cs-p6-q4aiv","valueField":"value","unitField":"unit","significantFigures":2,"unitAccepted":["g/cm3","g cm-3","g/cm³","g cm⁻³"],"tolerance":0.005}}'::jsonb, null, 3, 25)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
+  position = excluded.position;
+
+delete from public.test_questions
+where test_id = 'cie-igcse-combined-science-paper-6-alternative-to-practical'
+  and id not in (
+    'cie-igcse-cs-p6-q1a', 'cie-igcse-cs-p6-q1bi', 'cie-igcse-cs-p6-q1bii', 'cie-igcse-cs-p6-q1biii', 'cie-igcse-cs-p6-q1biv', 'cie-igcse-cs-p6-q2',
+    'cie-igcse-cs-p6-q3ai', 'cie-igcse-cs-p6-q3aii', 'cie-igcse-cs-p6-q3aiii', 'cie-igcse-cs-p6-q3bi', 'cie-igcse-cs-p6-q3bii', 'cie-igcse-cs-p6-q3biiiiv', 'cie-igcse-cs-p6-q3bv', 'cie-igcse-cs-p6-q3bvi', 'cie-igcse-cs-p6-q3bvii',
+    'cie-igcse-cs-p6-q4ai', 'cie-igcse-cs-p6-q4aii', 'cie-igcse-cs-p6-q4aiii', 'cie-igcse-cs-p6-q4aiv', 'cie-igcse-cs-p6-q4bi', 'cie-igcse-cs-p6-q4bii', 'cie-igcse-cs-p6-q4biii', 'cie-igcse-cs-p6-q4ci', 'cie-igcse-cs-p6-q4cii', 'cie-igcse-cs-p6-q4d'
+  );
+
+create or replace function p6_answer_number(p_answers jsonb, p_question_id text, p_field text default 'answer')
+returns numeric
+language plpgsql
+immutable
+as $$
+declare
+  value_json jsonb := p_answers->p_question_id;
+  value_text text;
+  numeric_text text;
+begin
+  if value_json is null then return null; end if;
+  if jsonb_typeof(value_json) = 'string' then
+    value_text := value_json #>> '{}';
+  else
+    value_text := value_json->>p_field;
+  end if;
+  numeric_text := substring(replace(coalesce(value_text, ''), ',', '') from '-?[0-9]+[.]?[0-9]*');
+  if numeric_text is null or numeric_text = '' then return null; end if;
+  return numeric_text::numeric;
+exception when invalid_text_representation then
+  return null;
+end;
+$$;
+
+create or replace function p6_measurement_value(p_answers jsonb, p_question_id text, p_measurement_id text, p_calibration numeric)
+returns numeric
+language plpgsql
+immutable
+as $$
+declare
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  start_x numeric := ray_coordinate(response->>(p_measurement_id || 'Start'), 1);
+  start_y numeric := ray_coordinate(response->>(p_measurement_id || 'Start'), 2);
+  end_x numeric := ray_coordinate(response->>(p_measurement_id || 'End'), 1);
+  end_y numeric := ray_coordinate(response->>(p_measurement_id || 'End'), 2);
+begin
+  if start_x is null or start_y is null or end_x is null or end_y is null then return null; end if;
+  return sqrt(power(start_x - end_x, 2) + power(start_y - end_y, 2)) * p_calibration;
+end;
+$$;
+
+create or replace function p6_dependent_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  rule jsonb := p_answer_key->'rule';
+  rule_type text := rule->>'type';
+  response jsonb := coalesce(p_answers->p_question_id, '""'::jsonb);
+  response_value numeric := p6_answer_number(p_answers, p_question_id, case when rule_type = 'density' then rule->>'valueField' else 'answer' end);
+  expected numeric;
+  source_value numeric;
+  factor jsonb;
+  source_id_text text;
+  factor_value numeric;
+  possible numeric := question_points(p_answer_key);
+  tolerance numeric := coalesce((rule->>'tolerance')::numeric, 0.05);
+  is_correct boolean := false;
+  sum_value numeric := 0;
+  unit_text text;
+  unit_correct boolean := false;
+  significant_correct boolean := false;
+  calculation_correct boolean := false;
+  rounded_expected numeric;
+  significant_count integer := 0;
+  clean_digits text;
+begin
+  if rule_type = 'subtractFrom' then
+    source_value := p6_answer_number(p_answers, rule->>'sourceQuestionId', coalesce(rule->>'sourceField', 'answer'));
+    if source_value is not null then expected := (rule->>'minuend')::numeric - source_value; end if;
+  elsif rule_type = 'mean' then
+    source_value := p6_answer_number(p_answers, rule->>'sourceQuestionId', coalesce(rule->>'sourceField', 'answer'));
+    if source_value is not null then
+      select (coalesce(sum(value::numeric), 0) + source_value) / (count(*) + 1)
+      into expected
+      from jsonb_array_elements_text(rule->'fixedValues') as fixed(value);
+      if rule ? 'decimalPlaces' then expected := round(expected, (rule->>'decimalPlaces')::integer); end if;
+    end if;
+  elsif rule_type = 'product' then
+    expected := 1;
+    for factor in select value from jsonb_array_elements(rule->'factors')
+    loop
+      if factor ? 'value' then
+        factor_value := (factor->>'value')::numeric;
+      elsif factor ? 'measurementId' then
+        factor_value := p6_measurement_value(
+          p_answers,
+          factor->>'sourceQuestionId',
+          factor->>'measurementId',
+          coalesce((factor->>'measurementCalibration')::numeric, 1)
+        );
+      else
+        factor_value := p6_answer_number(p_answers, factor->>'sourceQuestionId', coalesce(factor->>'sourceField', 'answer'));
+      end if;
+      if factor_value is null then expected := null; exit; end if;
+      expected := expected * factor_value;
+    end loop;
+  elsif rule_type = 'scaledSum' then
+    for source_id_text in select value from jsonb_array_elements_text(rule->'sourceQuestionIds')
+    loop
+      factor_value := p6_answer_number(p_answers, source_id_text, 'answer');
+      if factor_value is null then expected := null; exit; end if;
+      sum_value := sum_value + factor_value;
+      expected := sum_value * (rule->>'multiplier')::numeric;
+    end loop;
+  elsif rule_type = 'density' then
+    source_value := p6_answer_number(p_answers, rule->>'massQuestionId', 'answer');
+    factor_value := p6_answer_number(p_answers, rule->>'volumeQuestionId', 'answer');
+    if source_value is not null and factor_value is not null and factor_value <> 0 then expected := source_value / factor_value; end if;
+    if expected is not null then
+      rounded_expected := round(expected, (rule->>'significantFigures')::integer - ceil(log(10, abs(expected)))::integer);
+    end if;
+    calculation_correct := response_value is not null and expected is not null and (
+      abs(response_value - expected) <= tolerance or abs(response_value - rounded_expected) <= tolerance
+    );
+    clean_digits := regexp_replace(coalesce(response->>(rule->>'valueField'), ''), '[^0-9.]', '', 'g');
+    clean_digits := regexp_replace(clean_digits, '^0*[.]?0*', '');
+    significant_count := length(replace(clean_digits, '.', ''));
+    significant_correct := response_value is not null and rounded_expected is not null and
+      abs(response_value - rounded_expected) <= tolerance and significant_count = (rule->>'significantFigures')::integer;
+    unit_text := coalesce(response->>(rule->>'unitField'), '');
+    unit_correct := exists (
+      select 1 from jsonb_array_elements_text(rule->'unitAccepted') accepted(value)
+      where normalize_math_answer(value, 'text') = normalize_math_answer(unit_text, 'text')
+    );
+    return jsonb_build_object('parts', jsonb_build_array(
+      jsonb_build_object('id', 'calculation', 'score', case when calculation_correct then 1 else 0 end, 'possible', 1, 'correct', calculation_correct, 'expected', expected),
+      jsonb_build_object('id', 'significant-figures', 'score', case when significant_correct then 1 else 0 end, 'possible', 1, 'correct', significant_correct, 'expected', rounded_expected),
+      jsonb_build_object('id', 'unit', 'score', case when unit_correct then 1 else 0 end, 'possible', 1, 'correct', unit_correct, 'response', unit_text)
+    ));
+  end if;
+
+  is_correct := response_value is not null and expected is not null and abs(response_value - expected) <= tolerance;
+  if not is_correct and rule ? 'accepted' then
+    is_correct := exists (
+      select 1 from jsonb_array_elements_text(rule->'accepted') accepted(value)
+      where normalize_math_answer(value, 'text') = normalize_math_answer(
+        case when jsonb_typeof(response) = 'string' then response #>> '{}' else response->>'answer' end,
+        'text'
+      )
+    );
+  end if;
+  return jsonb_build_object('parts', jsonb_build_array(
+    jsonb_build_object('id', 'answer', 'score', case when is_correct then possible else 0 end, 'possible', possible, 'correct', is_correct, 'expected', expected, 'ecf', expected is not null)
+  ));
+end;
+$$;
+
+create or replace function p6_virtual_measurement_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  measurement jsonb;
+  measured numeric;
+  is_correct boolean;
+  items jsonb := '[]'::jsonb;
+begin
+  for measurement in select value from jsonb_array_elements(p_answer_key->'measurements')
+  loop
+    measured := p6_measurement_value(p_answers, p_question_id, measurement->>'id', (measurement->>'calibration')::numeric);
+    is_correct := measured is not null and abs(measured - (measurement->>'expected')::numeric) <= (measurement->>'tolerance')::numeric;
+    items := items || jsonb_build_array(jsonb_build_object(
+      'id', measurement->>'id', 'score', case when is_correct then 1 else 0 end, 'possible', 1,
+      'correct', is_correct, 'measured', measured, 'expected', (measurement->>'expected')::numeric, 'unit', measurement->>'unit'
+    ));
+  end loop;
+  return jsonb_build_object('parts', items);
+end;
+$$;
+
+create or replace function p6_double_arrow_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  geometry jsonb := p_answer_key->'geometry';
+  sx numeric := ray_coordinate(response->>'start', 1);
+  sy numeric := ray_coordinate(response->>'start', 2);
+  ex numeric := ray_coordinate(response->>'end', 1);
+  ey numeric := ray_coordinate(response->>'end', 2);
+  lx numeric := ray_coordinate(response->>'label', 1);
+  ly numeric := ray_coordinate(response->>'label', 2);
+  tolerance numeric := (geometry->>'endpointTolerance')::numeric;
+  endpoints_correct boolean;
+  label_correct boolean;
+  is_correct boolean;
+begin
+  endpoints_correct := sx is not null and sy is not null and ex is not null and ey is not null and (
+    (
+      sqrt(power(sx - (geometry->'start'->>'x')::numeric, 2) + power(sy - (geometry->'start'->>'y')::numeric, 2)) <= tolerance and
+      sqrt(power(ex - (geometry->'end'->>'x')::numeric, 2) + power(ey - (geometry->'end'->>'y')::numeric, 2)) <= tolerance
+    ) or (
+      sqrt(power(sx - (geometry->'end'->>'x')::numeric, 2) + power(sy - (geometry->'end'->>'y')::numeric, 2)) <= tolerance and
+      sqrt(power(ex - (geometry->'start'->>'x')::numeric, 2) + power(ey - (geometry->'start'->>'y')::numeric, 2)) <= tolerance
+    )
+  );
+  label_correct := lx is not null and ly is not null and
+    lx between (geometry->'labelRegion'->>'minX')::numeric and (geometry->'labelRegion'->>'maxX')::numeric and
+    ly between (geometry->'labelRegion'->>'minY')::numeric and (geometry->'labelRegion'->>'maxY')::numeric;
+  is_correct := endpoints_correct and label_correct;
+  return jsonb_build_object('parts', jsonb_build_array(jsonb_build_object(
+    'id', 'doubleArrow', 'score', case when is_correct then 1 else 0 end, 'possible', 1, 'correct', is_correct,
+    'endpointsCorrect', endpoints_correct, 'labelCorrect', label_correct
+  )));
+end;
+$$;
+
+create or replace function p6_practical_graph_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  source_id text := p_answer_key->>'sourceQuestionId';
+  x_max numeric := nullif(response->>'xMax', '')::numeric;
+  y_max numeric := nullif(response->>'yMax', '')::numeric;
+  first_x numeric := p6_answer_number(p_answers, source_id, p_answer_key->'sourceFields'->>'first');
+  last_x numeric := p6_answer_number(p_answers, source_id, p_answer_key->'sourceFields'->>'last');
+  x_values numeric[] := array[]::numeric[];
+  y_values numeric[] := array[]::numeric[];
+  i integer;
+  expected_x numeric;
+  expected_y numeric;
+  entered_x numeric;
+  entered_y numeric;
+  axes_correct boolean;
+  scale_correct boolean;
+  points_correct boolean := true;
+  line_correct boolean := false;
+  line_start_x numeric := ray_coordinate(response->>'lineStart', 1);
+  line_start_y numeric := ray_coordinate(response->>'lineStart', 2);
+  line_end_x numeric := ray_coordinate(response->>'lineEnd', 1);
+  line_end_y numeric := ray_coordinate(response->>'lineEnd', 2);
+  first_expected_x numeric;
+  first_expected_y numeric;
+  last_expected_x numeric;
+  last_expected_y numeric;
+  tolerance numeric := (p_answer_key->>'pointTolerance')::numeric;
+begin
+  select array_agg(value::numeric order by ordinality) into x_values
+  from jsonb_array_elements_text(p_answer_key->'fixedXValues') with ordinality fixed(value, ordinality);
+  select array_agg(value::numeric order by ordinality) into y_values
+  from jsonb_array_elements_text(p_answer_key->'yValues') with ordinality fixed(value, ordinality);
+  if first_x is not null then x_values[1] := first_x; end if;
+  if last_x is not null then x_values[array_length(x_values, 1)] := last_x; end if;
+
+  axes_correct :=
+    normalize_math_answer(response->>'xQuantity', 'text') = normalize_math_answer(p_answer_key->'correctAxes'->>'xQuantity', 'text') and
+    normalize_math_answer(response->>'xUnit', 'text') = normalize_math_answer(p_answer_key->'correctAxes'->>'xUnit', 'text') and
+    normalize_math_answer(response->>'yQuantity', 'text') = normalize_math_answer(p_answer_key->'correctAxes'->>'yQuantity', 'text') and
+    normalize_math_answer(response->>'yUnit', 'text') = normalize_math_answer(p_answer_key->'correctAxes'->>'yUnit', 'text');
+  scale_correct := x_max is not null and y_max is not null and
+    x_max >= (select max(value) from unnest(x_values) values(value)) and
+    y_max >= (select max(value) from unnest(y_values) values(value)) and
+    (select max(value) from unnest(x_values) values(value)) / x_max > 0.5 and
+    (select max(value) from unnest(y_values) values(value)) / y_max > 0.5;
+
+  if not scale_correct then points_correct := false; end if;
+  for i in 1..array_length(x_values, 1)
+  loop
+    expected_x := 0.13 + (x_values[i] / x_max) * (0.95 - 0.13);
+    expected_y := 0.87 - (y_values[i] / y_max) * (0.87 - 0.07);
+    entered_x := ray_coordinate(response->>('p' || (i - 1)), 1);
+    entered_y := ray_coordinate(response->>('p' || (i - 1)), 2);
+    if entered_x is null or entered_y is null or sqrt(power(entered_x - expected_x, 2) + power(entered_y - expected_y, 2)) > tolerance then
+      points_correct := false;
+    end if;
+    if i = 1 then first_expected_x := expected_x; first_expected_y := expected_y; end if;
+    if i = array_length(x_values, 1) then last_expected_x := expected_x; last_expected_y := expected_y; end if;
+  end loop;
+  line_correct := points_correct and line_start_x is not null and line_start_y is not null and line_end_x is not null and line_end_y is not null and
+    line_start_x < line_end_x and line_start_y > line_end_y and
+    annotation_segment_distance(first_expected_x, first_expected_y, line_start_x, line_start_y, line_end_x, line_end_y) <= 0.055 and
+    annotation_segment_distance(last_expected_x, last_expected_y, line_start_x, line_start_y, line_end_x, line_end_y) <= 0.055;
+  return jsonb_build_object('parts', jsonb_build_array(
+    jsonb_build_object('id', 'axes', 'score', case when axes_correct then 1 else 0 end, 'possible', 1, 'correct', axes_correct),
+    jsonb_build_object('id', 'scale', 'score', case when scale_correct then 1 else 0 end, 'possible', 1, 'correct', scale_correct),
+    jsonb_build_object('id', 'plots', 'score', case when points_correct then 1 else 0 end, 'possible', 1, 'correct', points_correct, 'ecfTimes', to_jsonb(x_values)),
+    jsonb_build_object('id', 'best-fit-line', 'score', case when line_correct then 1 else 0 end, 'possible', 1, 'correct', line_correct)
+  ));
+exception when invalid_text_representation or division_by_zero then
+  return jsonb_build_object('parts', jsonb_build_array(
+    jsonb_build_object('id', 'axes', 'score', 0, 'possible', 1, 'correct', false),
+    jsonb_build_object('id', 'scale', 'score', 0, 'possible', 1, 'correct', false),
+    jsonb_build_object('id', 'plots', 'score', 0, 'possible', 1, 'correct', false),
+    jsonb_build_object('id', 'best-fit-line', 'score', 0, 'possible', 1, 'correct', false)
+  ));
+end;
+$$;
+
+create or replace function p6_biological_drawing_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  stroke_text text;
+  mode text;
+  point_text text;
+  point_count integer;
+  total_points integer := 0;
+  outline_count integer := 0;
+  core_count integer := 0;
+  pip_count integer := 0;
+  min_x numeric;
+  max_x numeric;
+  min_y numeric;
+  max_y numeric;
+  area numeric;
+  largest_area numeric := 0;
+  largest_points integer := 0;
+  largest_closed boolean := false;
+  largest_smoothness numeric := 999;
+  cx numeric;
+  cy numeric;
+  radius numeric;
+  path_length numeric;
+  sector integer;
+  core_sectors integer[] := array[]::integer[];
+  size_correct boolean;
+  quality_correct boolean;
+  detail_correct boolean;
+begin
+  for stroke_text in select value from jsonb_array_elements_text(coalesce(response->'strokes', '[]'::jsonb)) strokes(value)
+  loop
+    mode := split_part(stroke_text, ':', 1);
+    select count(*), min(ray_coordinate(value, 1)), max(ray_coordinate(value, 1)), min(ray_coordinate(value, 2)), max(ray_coordinate(value, 2)),
+           avg(ray_coordinate(value, 1)), avg(ray_coordinate(value, 2))
+    into point_count, min_x, max_x, min_y, max_y, cx, cy
+    from string_to_table(split_part(stroke_text, ':', 2), ';') points(value)
+    where ray_coordinate(value, 1) is not null and ray_coordinate(value, 2) is not null;
+    total_points := total_points + point_count;
+    if mode = 'outline' then
+      outline_count := outline_count + 1;
+      area := coalesce((max_x - min_x) * (max_y - min_y), 0);
+      if area > largest_area then
+        largest_area := area;
+        largest_points := point_count;
+        largest_closed := sqrt(
+          power(ray_coordinate(split_part(split_part(stroke_text, ':', 2), ';', 1), 1) - ray_coordinate(reverse(split_part(reverse(split_part(stroke_text, ':', 2)), ';', 1)), 1), 2) +
+          power(ray_coordinate(split_part(split_part(stroke_text, ':', 2), ';', 1), 2) - ray_coordinate(reverse(split_part(reverse(split_part(stroke_text, ':', 2)), ';', 1)), 2), 2)
+        ) <= 0.09;
+        select coalesce(sum(sqrt(power(x - prior_x, 2) + power(y - prior_y, 2))), 0), avg(sqrt(power(x - cx, 2) + power(y - cy, 2)))
+        into path_length, radius
+        from (
+          select ray_coordinate(value, 1) x, ray_coordinate(value, 2) y,
+                 lag(ray_coordinate(value, 1)) over (order by ordinality) prior_x,
+                 lag(ray_coordinate(value, 2)) over (order by ordinality) prior_y
+          from string_to_table(split_part(stroke_text, ':', 2), ';') with ordinality points(value, ordinality)
+        ) path;
+        largest_smoothness := case when radius > 0 then path_length / (2 * pi() * radius) else 999 end;
+      end if;
+    elsif mode = 'core' then
+      core_count := core_count + 1;
+      sector := mod(floor(((atan2((cy - 0.5)::double precision, (cx - 0.5)::double precision) + pi()) / (2 * pi())) * 5)::integer, 5);
+      if not sector = any(core_sectors) then core_sectors := array_append(core_sectors, sector); end if;
+    elsif mode = 'pip' then
+      pip_count := pip_count + 1;
+    end if;
+  end loop;
+  size_correct := largest_area > 0.5;
+  quality_correct := largest_points >= 18 and largest_closed and largest_smoothness <= 2.7 and outline_count <= 3 and total_points <= 900;
+  detail_correct := core_count >= 5 and pip_count >= 2 and coalesce(array_length(core_sectors, 1), 0) >= 4;
+  return jsonb_build_object('parts', jsonb_build_array(
+    jsonb_build_object('id', 'size', 'score', case when size_correct then 1 else 0 end, 'possible', 1, 'correct', size_correct, 'occupiesMoreThanHalf', size_correct),
+    jsonb_build_object('id', 'quality', 'score', case when quality_correct then 1 else 0 end, 'possible', 1, 'correct', quality_correct, 'outlineClosed', largest_closed, 'outlineSmooth', largest_smoothness <= 2.7, 'noDenseShading', outline_count <= 3 and total_points <= 900),
+    jsonb_build_object('id', 'detail', 'score', case when detail_correct then 1 else 0 end, 'possible', 1, 'correct', detail_correct, 'coreSections', core_count, 'pipDetails', pip_count)
+  ));
+end;
+$$;
+
+create or replace function answer_response(p_answer_key jsonb, p_answers jsonb)
+returns text
+language plpgsql
+stable
+as $$
+declare
+  source_name text := p_answer_key->>'source';
+begin
+  if source_name = 'questionMap' then return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name in ('aiGrade', 'aiSplitGrade') then return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name in ('mathMultiPart', 'rayDiagram', 'diagramAnnotation', 'biologicalDrawing', 'practicalGraph', 'virtualMeasurement', 'dependent') then
+    return coalesce((p_answers->(p_answer_key->>'id'))::text, '');
+  elsif source_name = 'connections' then return coalesce(p_answers->'connections'->>(p_answer_key->>'object'), '');
+  elsif source_name = 'textAnswers' then return coalesce(p_answers->'textAnswers'->>(p_answer_key->>'id'), '');
+  elsif source_name = 'choices' then return coalesce(p_answers->'choices'->>(p_answer_key->>'id'), '');
+  elsif source_name = 'colours' then return coalesce(p_answers->'colours'->>(p_answer_key->>'region'), '');
+  elsif source_name = 'rwAnswers' then return coalesce(p_answers->'rwAnswers'->>(p_answer_key->>'id'), '');
+  end if;
+  return '';
+end;
+$$;
+
+create or replace function answer_score(p_question_id text, p_answer_key jsonb, p_response text, p_answers jsonb default '{}'::jsonb)
+returns numeric
+language plpgsql
+stable
+as $$
+declare
+  source_name text := p_answer_key->>'source';
+  possible numeric := question_points(p_answer_key);
+  raw_score numeric := 0;
+  details jsonb;
+  correct_count integer := 0;
+  category_count integer := 0;
+begin
+  if source_name = 'questionMap' then
+    return case when normalize_answer(p_response) in (select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') accepted(value)) then possible else 0 end;
+  elsif source_name in ('aiGrade', 'aiSplitGrade') then
+    return least(greatest(coalesce((p_answers->'aiGrades'->p_question_id->>'score')::numeric, 0), 0), possible);
+  elsif source_name = 'mathMultiPart' then
+    details := math_part_scores(p_question_id, p_answer_key, p_answers);
+    if p_answer_key->>'scoringStrategy' = 'investigationPlan' then
+      select count(distinct key_part.value->>'category'), count(*)
+      into category_count, correct_count
+      from jsonb_array_elements(p_answer_key->'parts') with ordinality key_part(value, ordinality)
+      join jsonb_array_elements(details->'parts') with ordinality scored(value, ordinality) using (ordinality)
+      where coalesce((scored.value->>'correct')::boolean, false);
+      raw_score := case when category_count < 5 then category_count else 5 + least(2, greatest(0, correct_count - 5)) end;
+      return least(raw_score, possible);
+    elsif p_answer_key ? 'scoreThresholds' then
+      select count(*) into correct_count from jsonb_array_elements(details->'parts') parts(value) where coalesce((value->>'correct')::boolean, false);
+      select coalesce(max((value->>'points')::numeric), 0) into raw_score
+      from jsonb_array_elements(p_answer_key->'scoreThresholds') thresholds(value)
+      where correct_count >= coalesce((value->>'minCorrect')::integer, 0);
+      return least(raw_score, possible);
+    end if;
+  elsif source_name = 'rayDiagram' then details := ray_diagram_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'diagramAnnotation' then
+    details := case when p_answer_key->>'variant' = 'doubleArrow'
+      then p6_double_arrow_details(p_question_id, p_answer_key, p_answers)
+      else diagram_annotation_details(p_question_id, p_answer_key, p_answers) end;
+  elsif source_name = 'biologicalDrawing' then details := p6_biological_drawing_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'practicalGraph' then details := p6_practical_graph_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'virtualMeasurement' then details := p6_virtual_measurement_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'dependent' then details := p6_dependent_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'connections' then return case when p_response = p_answer_key->>'target' then possible else 0 end;
+  elsif source_name in ('textAnswers', 'rwAnswers') then
+    return case when normalize_answer(p_response) in (select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') accepted(value)) then possible else 0 end;
+  elsif source_name = 'choices' then return case when p_response = p_answer_key->>'correct' then possible else 0 end;
+  elsif source_name = 'colours' then return case when lower(p_response) = lower(p_answer_key->>'colour') then possible else 0 end;
+  else return 0;
+  end if;
+  select coalesce(sum((value->>'score')::numeric), 0) into raw_score from jsonb_array_elements(coalesce(details->'parts', '[]'::jsonb)) parts(value);
+  return least(greatest(raw_score, 0), possible);
+end;
+$$;
+
+create or replace function grading_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+begin
+  if p_answer_key->>'source' in ('aiGrade', 'aiSplitGrade') then return coalesce(p_answers->'aiGrades'->p_question_id, '{}'::jsonb);
+  elsif p_answer_key->>'source' = 'mathMultiPart' then return math_part_scores(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'rayDiagram' then return ray_diagram_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'diagramAnnotation' then
+    return case when p_answer_key->>'variant' = 'doubleArrow'
+      then p6_double_arrow_details(p_question_id, p_answer_key, p_answers)
+      else diagram_annotation_details(p_question_id, p_answer_key, p_answers) end;
+  elsif p_answer_key->>'source' = 'biologicalDrawing' then return p6_biological_drawing_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'practicalGraph' then return p6_practical_graph_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'virtualMeasurement' then return p6_virtual_measurement_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'dependent' then return p6_dependent_details(p_question_id, p_answer_key, p_answers);
+  end if;
+  return '{}'::jsonb;
+end;
+$$;
+
+create or replace function response_display(p_question_id text, p_answer_key jsonb, p_response text)
+returns text
+language plpgsql
+stable
+as $$
+declare
+  response_json jsonb;
+  part_key jsonb;
+  part_id text;
+  raw_json jsonb;
+  raw_text text;
+  items text[] := array[]::text[];
+begin
+  if p_response is null or p_response = '' then return 'No answer'; end if;
+  if p_answer_key->>'source' in ('mathMultiPart', 'dependent') then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No answer'; end if;
+    if jsonb_typeof(response_json) = 'string' then return coalesce(response_json #>> '{}', 'No answer'); end if;
+    for part_key in select value from jsonb_array_elements(coalesce(p_answer_key->'parts', '[]'::jsonb))
+    loop
+      part_id := part_key->>'id';
+      raw_json := response_json->part_id;
+      if raw_json is null then raw_text := '';
+      elsif jsonb_typeof(raw_json) = 'array' then select coalesce(string_agg(value, ', '), '') into raw_text from jsonb_array_elements_text(raw_json) response(value);
+      else raw_text := response_json->>part_id;
+      end if;
+      if coalesce(raw_text, '') <> '' then items := array_append(items, part_id || ': ' || raw_text); end if;
+    end loop;
+    if array_length(items, 1) is null then
+      select coalesce(string_agg(key || ': ' || value #>> '{}', '; '), 'No answer') into raw_text from jsonb_each(response_json);
+      return raw_text;
+    end if;
+    return array_to_string(items, '; ');
+  elsif p_answer_key->>'source' in ('rayDiagram', 'diagramAnnotation', 'biologicalDrawing', 'practicalGraph', 'virtualMeasurement') then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No answer'; end if;
+    return case p_answer_key->>'source'
+      when 'biologicalDrawing' then 'Biological drawing recorded'
+      when 'practicalGraph' then 'Graph response recorded'
+      when 'virtualMeasurement' then 'Virtual measurements recorded'
+      else initcap(coalesce(p_answer_key->>'variant', 'diagram')) || ' annotation recorded'
+    end;
+  elsif p_answer_key->>'source' = 'choices' then return upper(p_response);
   end if;
   return p_response;
 end;
@@ -1735,3 +2558,526 @@ alter table staff_users
 
 alter table staff_users
   drop column if exists branch;
+
+-- CIE IGCSE Combined Science Paper 4 Extended
+insert into public.tests (id, title, subject, level, status, total_points, app_path)
+values ('cie-igcse-combined-science-paper-4-extended', 'CIE IGCSE Combined Science Paper 4 Extended', 'Combined Science', 'Extended', 'active', 80, '/tests/cie-igcse-combined-science-paper-4-extended/start')
+on conflict (id) do update set
+  title = excluded.title,
+  subject = excluded.subject,
+  level = excluded.level,
+  status = excluded.status,
+  total_points = excluded.total_points,
+  app_path = excluded.app_path;
+
+insert into public.test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position)
+values
+  ('cie-igcse-cs-p4-q1a', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(a) Explain why washing hands before handling food is important for controlling the spread of disease.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q1a","points":2,"display":"Pathogens spread disease; washing removes them and prevents their spread to food.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["pathogen","disease"],["microorganism","disease"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["remove","pathogen"],["stop","spread"],["prevent","food","pathogen"],["hygiene"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 1),
+  ('cie-igcse-cs-p4-q1bi', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(b)(i) Describe two differences between the antibody response after the initial vaccination and after the booster vaccination.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q1bi","points":2,"display":"The initial response is slower and produces fewer antibodies; antibody levels also fall faster and lower.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["initial","fewer","antibod"],["booster","more","antibod"],["initial","lower","peak"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["initial","slower"],["booster","faster"],["initial","decrease","faster"],["initial","lower","after"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 2),
+  ('cie-igcse-cs-p4-q1bii', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(b)(ii) Select the term that describes the response shown.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q1bii","points":1,"display":"active immunity","status":"official","parts":[{"id":"answer","accepted":["active immunity"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 3),
+  ('cie-igcse-cs-p4-q1c', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(c) Explain how platelets in the blood help defend the body against disease.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q1c","points":2,"display":"Platelets form a clot that seals the wound and prevents pathogen entry.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["platelet","clot"],["form","clot"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["clot","seal"],["prevent","pathogen","entry"],["stop","pathogen","enter"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 4),
+  ('cie-igcse-cs-p4-q1di', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(d)(i) State the name of the arteries in the heart that may become blocked in heart disease.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q1di","points":1,"display":"coronary / coronary artery / coronary arteries","status":"official","parts":[{"id":"answer","accepted":["coronary","coronary artery","coronary arteries"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 5),
+  ('cie-igcse-cs-p4-q1dii', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(d)(ii) State the name of the blood component that transports oxygen.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q1dii","points":1,"display":"red blood cells","status":"official","parts":[{"id":"answer","accepted":["red blood cell","red blood cells","erythrocyte","erythrocytes"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 6),
+  ('cie-igcse-cs-p4-q2ai', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(a)(i) Select the two substances transported by cells Q.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q2ai","points":1,"display":"amino acids; sucrose","status":"official","parts":[{"id":"selected","accepted":["amino acids","sucrose"],"points":1,"normalizer":"set"}]}'::jsonb, null, 1, 7),
+  ('cie-igcse-cs-p4-q2aii', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(a)(ii) State one function of xylem other than transport.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q2aii","points":1,"display":"support","status":"official","parts":[{"id":"answer","accepted":["support","supporting the plant","structural support"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 8),
+  ('cie-igcse-cs-p4-q2b', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(b) State the balanced symbol equation for photosynthesis.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q2b","points":2,"display":"6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["6co2","6h2o"],["6 co2","6 h2o"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["c6h12o6","6o2"],["c6h12o6","6 o2"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 9),
+  ('cie-igcse-cs-p4-q2c', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(c) Explain the results for test-tube A and test-tube C. Use the words respiration and photosynthesis.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q2c","points":4,"display":"A: respiration releases CO₂ and darkness prevents photosynthesis. C: photosynthesis uses CO₂ faster than respiration releases it.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["a","carbon dioxide","respiration"],["dark","carbon dioxide","respiration"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["a","no","photosynthesis"],["dark","no","photosynthesis"],["photosynthesis","light"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["c","carbon dioxide","photosynthesis"],["purple","carbon dioxide","photosynthesis"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["photosynthesis","higher","respiration"],["photosynthesis","greater","respiration"],["photosynthesis","faster","respiration"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 4, 10),
+  ('cie-igcse-cs-p4-q2d', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(d) Explain the effect of deforestation on biodiversity.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q2d","points":2,"display":"It removes habitats and food, so some species may become extinct.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["less","food"],["fewer","food"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["species","extinct"],["remove","habitat"],["loss","habitat"],["remove","shelter"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 11),
+  ('cie-igcse-cs-p4-q3ai', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(a)(i) State the function of part X in the digestive system.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q3ai","points":1,"display":"egestion","status":"official","parts":[{"id":"answer","accepted":["egestion","egest faeces","egest feces"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 12),
+  ('cie-igcse-cs-p4-q3aii', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(a)(ii) Complete the sentences about part Y and digestion of fats and oils.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q3aii","points":3,"display":"pancreas; lipase; fatty acids and glycerol","status":"official","parts":[{"id":"organ","accepted":["pancreas"],"points":1,"normalizer":"text"},{"id":"enzyme","accepted":["lipase"],"points":1,"normalizer":"text"},{"id":"products","accepted":["fatty acids and glycerol","glycerol and fatty acids","fatty acid and glycerol"],"points":1,"normalizer":"text"}]}'::jsonb, null, 3, 13),
+  ('cie-igcse-cs-p4-q3bi', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(b)(i) The enzyme shown is active in the mouth. Explain why its activity changes when it reaches the stomach.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q3bi","points":3,"display":"The stomach''s lower pH changes the active-site shape, so the substrate no longer fits.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["stomach","acid"],["stomach","lower","ph"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["active site","change","shape"],["enzyme","denature"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["substrate","no longer","fit"],["not","complementary"],["enzyme substrate","no longer","form"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 3, 14),
+  ('cie-igcse-cs-p4-q3bii', 'cie-igcse-combined-science-paper-4-extended', 'Biology 1–3', '(b)(ii) Draw a curve on Fig. 3.2 to show the activity of a protease enzyme found in the stomach.', '{"source":"diagramAnnotation","id":"cie-igcse-cs-p4-q3bii","points":1,"display":"(b)(ii) Draw a curve on Fig. 3.2 to show the activity of a protease enzyme found in the stomach.","status":"official","variant":"curve","geometry":{"variant":"curve","plot":{"minX":0.16,"maxX":0.92,"minY":0.06,"maxY":0.87},"optimum":{"minX":0.235,"maxX":0.39},"baselineTolerance":0.18}}'::jsonb, null, 1, 15),
+  ('cie-igcse-cs-p4-q4ai', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(a)(i) Define activation energy.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q4ai","points":1,"display":"the minimum energy that colliding particles must have to react","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["minimum","energy","colliding","particles","react"],["minimum","energy","collision","reaction"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 16),
+  ('cie-igcse-cs-p4-q4aii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(a)(ii) Draw and label an arrow to show the activation energy for reaction 2.', '{"source":"diagramAnnotation","id":"cie-igcse-cs-p4-q4aii","points":1,"display":"(a)(ii) Draw and label an arrow to show the activation energy for reaction 2.","status":"official","variant":"arrow","geometry":{"variant":"arrow","start":{"x":0.775,"y":0.54},"peak":{"x":0.775,"y":0.06},"endpointTolerance":0.1,"labelTolerance":0.15}}'::jsonb, null, 1, 17),
+  ('cie-igcse-cs-p4-q4b', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(b) State how the temperature changes during reaction 2 and give a reason.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q4b","points":1,"display":"The temperature decreases because the reaction is endothermic and takes in thermal energy.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["temperature","decrease","endothermic"],["temperature","decrease","takes in","thermal"],["temperature","decrease","products","more","energy"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 18),
+  ('cie-igcse-cs-p4-q4ci', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(c)(i) Calcium carbonate reacts with dilute hydrochloric acid to produce calcium chloride. Select the other two products.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q4ci","points":2,"display":"carbon dioxide and water","status":"official","parts":[{"id":"selected","accepted":["carbon dioxide","water"],"points":2,"normalizer":"set"}]}'::jsonb, null, 2, 19),
+  ('cie-igcse-cs-p4-q4cii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(c)(ii) Explain, using particle collisions and energy, why increasing the temperature increases the rate of reaction.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q4cii","points":2,"display":"Collisions occur more frequently and more particles have energy above the activation energy.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["collision","more","frequent"],["collision","frequency","increase"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["more","particles","activation","energy"],["more","successful","collision"],["more","energetic","collision"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 20),
+  ('cie-igcse-cs-p4-q5ai', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(a)(i) Use Table 5.1 to state why aluminium and copper are used in electrical cables.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5ai","points":1,"display":"high electrical conductivity","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["high","electrical","conductivity"],["good","conductor"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 21),
+  ('cie-igcse-cs-p4-q5aii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(a)(ii) Use Table 5.1 to state why aluminium is used in overhead electrical cables.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5aii","points":1,"display":"Aluminium has a low density and is lightweight.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["aluminium","lower","density"],["aluminium","light"],["low","density"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 22),
+  ('cie-igcse-cs-p4-q5aiii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(a)(iii) Use Table 5.1 to state why copper is not used to make food containers.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5aiii","points":1,"display":"Some copper compounds are toxic.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["copper","compound","toxic"],["aluminium","not","corrode"],["aluminium","protective","oxide"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 23),
+  ('cie-igcse-cs-p4-q5bi', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(b)(i) State what is meant by an alloy.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5bi","points":1,"display":"a mixture of a metal with one or more other elements","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["mixture","metal","element"],["metal","mixed","other","element"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 24),
+  ('cie-igcse-cs-p4-q5bii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(b)(ii) Explain why steel is stronger than pure iron.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5bii","points":2,"display":"Different-sized particles prevent the layers from sliding over each other.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["different","size","particles"],["different","size","atoms"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["stop","layers","sliding"],["prevent","layers","slide"],["difficult","layers","slide"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 25),
+  ('cie-igcse-cs-p4-q5biii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(b)(iii) Stainless steel is used to make cutlery because it is strong. State one other reason why it is used for cutlery.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5biii","points":1,"display":"hard / resistant to rusting / does not corrode","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["hard"],["resistant","rust"],["does not","corrode"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 26),
+  ('cie-igcse-cs-p4-q5c', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(c) Select the principal method used to extract each metal from its ore.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q5c","points":2,"display":"aluminium: electrolysis; copper and iron: heating with carbon","status":"official","parts":[{"id":"aluminium","accepted":["electrolysis"],"points":1,"normalizer":"text"},{"id":"copper","accepted":["carbon"],"points":1,"normalizer":"text"},{"id":"iron","accepted":["carbon"],"points":1,"normalizer":"text"}],"scoreThresholds":[{"minCorrect":2,"points":1},{"minCorrect":3,"points":2}]}'::jsonb, null, 2, 27),
+  ('cie-igcse-cs-p4-q6a', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(a) Exhaust emissions contain carbon dioxide, carbon monoxide and carbon particulates. Describe how each of these three substances forms in a car engine.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q6a","points":2,"display":"Carbon monoxide and carbon particulates form by incomplete combustion; carbon dioxide forms by complete combustion.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["carbon monoxide","carbon particulate","incomplete combustion"],["carbon monoxide","soot","incomplete combustion"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["carbon dioxide","complete combustion"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 28),
+  ('cie-igcse-cs-p4-q6b', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(b) Complete the state symbols in the combustion equations: CO₂(__), CO(__), C(__), C₈H₁₈(__).', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q6b","points":2,"display":"CO₂(g), CO(g), C(s), C₈H₁₈(l)","status":"official","parts":[{"id":"gases","accepted":["g, g","g g","g,g"],"points":1,"normalizer":"text"},{"id":"solidLiquid","accepted":["s, l","s l","s,l"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 29),
+  ('cie-igcse-cs-p4-q6ci', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(c)(i) Carbon dioxide contains two double bonds. Explain why carbon dioxide is not an unsaturated molecule.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q6ci","points":1,"display":"The double bonds are not between two carbon atoms.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["double","bond","not","two","carbon"],["double","bond","between","carbon","oxygen"],["only","one","carbon"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 30),
+  ('cie-igcse-cs-p4-q6cii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(c)(ii) Suggest two actions that reduce the effect of carbon dioxide emissions on the environment.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q6cii","points":2,"display":"Reduce deforestation and fossil-fuel use; increase renewable energy.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["reduce","deforestation"],["plant","trees"],["reduce","livestock"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["reduce","fossil","fuel"],["renewable"],["wind"],["solar"],["hydrogen"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 31),
+  ('cie-igcse-cs-p4-q6di', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(d)(i) Complete and balance the equation: CO + NO → CO₂ + N₂.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q6di","points":1,"display":"2CO + 2NO → 2CO₂ + N₂","status":"official","parts":[{"id":"answer","accepted":["2co + 2no -> 2co2 + n2","2co+2no->2co2+n2","2CO + 2NO → 2CO2 + N2"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 32),
+  ('cie-igcse-cs-p4-q6dii', 'cie-igcse-combined-science-paper-4-extended', 'Chemistry 4–6', '(d)(ii) Explain how removing oxides of nitrogen from exhaust gases reduces harm to the environment.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q6dii","points":2,"display":"Removing oxides of nitrogen reduces acid rain.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["acid","rain"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["nitrogen","oxide","remove"],["no","removed"],["less","nitrogen","oxide"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 33),
+  ('cie-igcse-cs-p4-q7ai', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(i) Determine the time taken by the student to reach maximum speed.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q7ai","points":1,"display":"40 s","status":"official","parts":[{"id":"answer","accepted":["40","40 s","40 seconds"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 34),
+  ('cie-igcse-cs-p4-q7aii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(ii) Place X at a point on the graph when the student is decelerating.', '{"source":"diagramAnnotation","id":"cie-igcse-cs-p4-q7aii","points":1,"display":"(a)(ii) Place X at a point on the graph when the student is decelerating.","status":"official","variant":"point","geometry":{"variant":"point","segment":{"start":{"x":0.84,"y":0.11},"end":{"x":0.98,"y":0.77}},"tolerance":0.045}}'::jsonb, null, 1, 35),
+  ('cie-igcse-cs-p4-q7aiii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(iii) Determine the distance the student walks at constant speed.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q7aiii","points":3,"display":"1.5 × 60 = 90 m","status":"official","parts":[{"id":"data","accepted":[],"keywords":[["1.5","60"],["40","100"],["constant","1.5"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"working","accepted":[],"keywords":[["distance","speed","time"],["1.5","60"],["area"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":["90","90 m"],"points":3,"normalizer":"text"}]}'::jsonb, null, 3, 36),
+  ('cie-igcse-cs-p4-q7b', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(b) A student of mass 55 kg climbs 0.15 m. Calculate the increase in gravitational potential energy.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q7b","points":3,"display":"55 × 9.8 × 0.15 = 81 J","status":"official","parts":[{"id":"formula","accepted":[],"keywords":[["mgh"],["55","9.8","0.15"],["mass","gravity","height"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":["81","80.9","80.85"],"points":2,"normalizer":"text"},{"id":"unit","accepted":["j","joule","joules"],"points":1,"normalizer":"text"}]}'::jsonb, null, 3, 37),
+  ('cie-igcse-cs-p4-q8ai', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(i) State the region of the electromagnetic spectrum with the main effect that warms the Earth.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8ai","points":1,"display":"infrared","status":"official","parts":[{"id":"answer","accepted":["infrared","infra-red","ir"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 38),
+  ('cie-igcse-cs-p4-q8aii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(ii) Complete the explanation of global warming by selecting the correct term for each blank.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8aii","points":1,"display":"absorbed; greater than; emitted","status":"official","parts":[{"id":"first","accepted":["absorbed"],"points":1,"normalizer":"text"},{"id":"second","accepted":["greater than"],"points":1,"normalizer":"text"},{"id":"third","accepted":["emitted"],"points":1,"normalizer":"text"}],"scoreThresholds":[{"minCorrect":3,"points":1}]}'::jsonb, null, 1, 39),
+  ('cie-igcse-cs-p4-q8bi', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(b)(i) State the type of wave that requires a medium to travel.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8bi","points":1,"display":"sound","status":"official","parts":[{"id":"answer","accepted":["sound","sound wave","sound waves"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 40),
+  ('cie-igcse-cs-p4-q8bii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(b)(ii) Describe the difference between transverse and longitudinal waves in terms of the direction of vibrations.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8bii","points":2,"display":"Transverse vibrations are perpendicular to propagation; longitudinal vibrations are parallel.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["transverse","perpendicular"],["transverse","right angle"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":[],"keywords":[["longitudinal","parallel"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 2, 41),
+  ('cie-igcse-cs-p4-q8c', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(c) The Earth orbits the Sun at radius 1.51 × 10⁸ km in 365.25 days. Calculate its average speed in km/h.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8c","points":3,"display":"1.08 × 10⁵ km/h","status":"official","parts":[{"id":"time","accepted":[],"keywords":[["365.25","24"],["8766"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"formula","accepted":[],"keywords":[["2","pi","radius","time"],["circumference","time"],["2πr","t"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":["108000","1.08 x 10^5","1.08 × 10^5","1.08e5"],"points":3,"normalizer":"text"}]}'::jsonb, null, 3, 42),
+  ('cie-igcse-cs-p4-q8di', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(d)(i) State the stage after the main-sequence stage in the life cycle of the Sun.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8di","points":1,"display":"red giant","status":"official","parts":[{"id":"answer","accepted":["red giant"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 43),
+  ('cie-igcse-cs-p4-q8dii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(d)(ii) Explain why the Sun will not become a black hole.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q8dii","points":1,"display":"The Sun does not have enough mass; only very massive stars become black holes.","status":"official","parts":[{"id":"answer","accepted":[],"keywords":[["not","massive","enough"],["small","mass"],["insufficient","mass"],["only","massive","star","black hole"]],"points":1,"normalizer":"keywords","reviewRecommended":false}]}'::jsonb, null, 1, 44),
+  ('cie-igcse-cs-p4-q9ai', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(i) Components T and U have resistances 5.4 Ω and 3.5 Ω. Calculate their combined resistance.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q9ai","points":1,"display":"8.9 Ω","status":"official","parts":[{"id":"answer","accepted":["8.9","8.9 ohm","8.9 Ω"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 45),
+  ('cie-igcse-cs-p4-q9aii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(ii) The current in R is 2.7 A and in T is 2.5 A. Determine the current in S and U.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q9aii","points":2,"display":"S = 0.2 A; U = 2.5 A","status":"official","parts":[{"id":"s","accepted":["0.2","0.2 a"],"points":1,"normalizer":"text"},{"id":"u","accepted":["2.5","2.5 a"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 46),
+  ('cie-igcse-cs-p4-q9aiii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(a)(iii) State the name of component S.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q9aiii","points":1,"display":"light-emitting diode (LED)","status":"official","parts":[{"id":"answer","accepted":["light emitting diode","light-emitting diode","led"],"points":1,"normalizer":"text"}]}'::jsonb, null, 1, 47),
+  ('cie-igcse-cs-p4-q9bi', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(b)(i) Complete the energy-transfer diagram for the toy car: ___ energy in the battery → ___ energy of the car.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q9bi","points":2,"display":"chemical energy → kinetic energy","status":"official","parts":[{"id":"input","accepted":["chemical","chemical energy"],"points":1,"normalizer":"text"},{"id":"output","accepted":["kinetic","kinetic energy"],"points":1,"normalizer":"text"}]}'::jsonb, null, 2, 48),
+  ('cie-igcse-cs-p4-q9bii', 'cie-igcse-combined-science-paper-4-extended', 'Physics 7–9', '(b)(ii) The car transfers 32 J of useful energy in 10 s and the battery power is 3.6 W. Calculate the efficiency.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p4-q9bii","points":3,"display":"3.2 ÷ 3.6 × 100 = 88.9%","status":"official","parts":[{"id":"power","accepted":[],"keywords":[["32","10"],["3.2"],["power","energy","time"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"formula","accepted":[],"keywords":[["3.2","3.6","100"],["useful","power","input","power"]],"points":1,"normalizer":"keywords","reviewRecommended":false},{"id":"answer","accepted":["88.9","88.9%","88.89","88.888"],"points":3,"normalizer":"text"}]}'::jsonb, null, 3, 49)
+on conflict (id) do update set
+  test_id = excluded.test_id,
+  part = excluded.part,
+  prompt = excluded.prompt,
+  answer_key = excluded.answer_key,
+  transcript_ref = excluded.transcript_ref,
+  points = excluded.points,
+  position = excluded.position;
+
+delete from public.test_questions
+where test_id = 'cie-igcse-combined-science-paper-4-extended'
+  and id not in ('cie-igcse-cs-p4-q1a', 'cie-igcse-cs-p4-q1bi', 'cie-igcse-cs-p4-q1bii', 'cie-igcse-cs-p4-q1c', 'cie-igcse-cs-p4-q1di', 'cie-igcse-cs-p4-q1dii', 'cie-igcse-cs-p4-q2ai', 'cie-igcse-cs-p4-q2aii', 'cie-igcse-cs-p4-q2b', 'cie-igcse-cs-p4-q2c', 'cie-igcse-cs-p4-q2d', 'cie-igcse-cs-p4-q3ai', 'cie-igcse-cs-p4-q3aii', 'cie-igcse-cs-p4-q3bi', 'cie-igcse-cs-p4-q3bii', 'cie-igcse-cs-p4-q4ai', 'cie-igcse-cs-p4-q4aii', 'cie-igcse-cs-p4-q4b', 'cie-igcse-cs-p4-q4ci', 'cie-igcse-cs-p4-q4cii', 'cie-igcse-cs-p4-q5ai', 'cie-igcse-cs-p4-q5aii', 'cie-igcse-cs-p4-q5aiii', 'cie-igcse-cs-p4-q5bi', 'cie-igcse-cs-p4-q5bii', 'cie-igcse-cs-p4-q5biii', 'cie-igcse-cs-p4-q5c', 'cie-igcse-cs-p4-q6a', 'cie-igcse-cs-p4-q6b', 'cie-igcse-cs-p4-q6ci', 'cie-igcse-cs-p4-q6cii', 'cie-igcse-cs-p4-q6di', 'cie-igcse-cs-p4-q6dii', 'cie-igcse-cs-p4-q7ai', 'cie-igcse-cs-p4-q7aii', 'cie-igcse-cs-p4-q7aiii', 'cie-igcse-cs-p4-q7b', 'cie-igcse-cs-p4-q8ai', 'cie-igcse-cs-p4-q8aii', 'cie-igcse-cs-p4-q8bi', 'cie-igcse-cs-p4-q8bii', 'cie-igcse-cs-p4-q8c', 'cie-igcse-cs-p4-q8di', 'cie-igcse-cs-p4-q8dii', 'cie-igcse-cs-p4-q9ai', 'cie-igcse-cs-p4-q9aii', 'cie-igcse-cs-p4-q9aiii', 'cie-igcse-cs-p4-q9bi', 'cie-igcse-cs-p4-q9bii');
+
+create or replace function annotation_segment_distance(
+  p_x numeric,
+  p_y numeric,
+  p_start_x numeric,
+  p_start_y numeric,
+  p_end_x numeric,
+  p_end_y numeric
+)
+returns numeric
+language plpgsql
+immutable
+as $$
+declare
+  dx numeric := p_end_x - p_start_x;
+  dy numeric := p_end_y - p_start_y;
+  length_squared numeric := dx * dx + dy * dy;
+  projection numeric;
+  nearest_x numeric;
+  nearest_y numeric;
+begin
+  if length_squared = 0 then
+    return sqrt(power(p_x - p_start_x, 2) + power(p_y - p_start_y, 2));
+  end if;
+  projection := greatest(0, least(1, ((p_x - p_start_x) * dx + (p_y - p_start_y) * dy) / length_squared));
+  nearest_x := p_start_x + projection * dx;
+  nearest_y := p_start_y + projection * dy;
+  return sqrt(power(p_x - nearest_x, 2) + power(p_y - nearest_y, 2));
+end;
+$$;
+
+create or replace function diagram_annotation_details(
+  p_question_id text,
+  p_answer_key jsonb,
+  p_answers jsonb default '{}'::jsonb
+)
+returns jsonb
+language plpgsql
+stable
+as $$
+declare
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  geometry jsonb := coalesce(p_answer_key->'geometry', '{}'::jsonb);
+  variant text := coalesce(p_answer_key->>'variant', geometry->>'variant');
+  possible numeric := question_points(p_answer_key);
+  is_correct boolean := false;
+  details jsonb := '{}'::jsonb;
+  point_text text;
+  x numeric;
+  y numeric;
+  start_x numeric;
+  start_y numeric;
+  end_x numeric;
+  end_y numeric;
+  label_x numeric;
+  label_y numeric;
+  point_count integer := 0;
+  first_y numeric;
+  last_y numeric;
+  apex_x numeric;
+  apex_y numeric;
+  start_correct boolean := false;
+  peak_correct boolean := false;
+  label_correct boolean := false;
+begin
+  if variant = 'point' then
+    x := ray_coordinate(response->>'point', 1);
+    y := ray_coordinate(response->>'point', 2);
+    is_correct := x is not null and y is not null and annotation_segment_distance(
+      x,
+      y,
+      (geometry->'segment'->'start'->>'x')::numeric,
+      (geometry->'segment'->'start'->>'y')::numeric,
+      (geometry->'segment'->'end'->>'x')::numeric,
+      (geometry->'segment'->'end'->>'y')::numeric
+    ) <= (geometry->>'tolerance')::numeric;
+    details := jsonb_build_object('onDeceleratingSegment', is_correct);
+  elsif variant = 'arrow' then
+    start_x := ray_coordinate(response->>'start', 1);
+    start_y := ray_coordinate(response->>'start', 2);
+    end_x := ray_coordinate(response->>'end', 1);
+    end_y := ray_coordinate(response->>'end', 2);
+    label_x := ray_coordinate(response->>'label', 1);
+    label_y := ray_coordinate(response->>'label', 2);
+
+    start_correct := start_x is not null and start_y is not null and
+      sqrt(power(start_x - (geometry->'start'->>'x')::numeric, 2) + power(start_y - (geometry->'start'->>'y')::numeric, 2))
+      <= (geometry->>'endpointTolerance')::numeric;
+    peak_correct := end_x is not null and end_y is not null and
+      sqrt(power(end_x - (geometry->'peak'->>'x')::numeric, 2) + power(end_y - (geometry->'peak'->>'y')::numeric, 2))
+      <= (geometry->>'endpointTolerance')::numeric;
+    label_correct := label_x is not null and label_y is not null and end_y is not null and
+      sqrt(
+        power(label_x - (coalesce(start_x, (geometry->'start'->>'x')::numeric) - 0.025), 2) +
+        power(label_y - ((coalesce(start_y, (geometry->'start'->>'y')::numeric) + end_y) / 2), 2)
+      ) <= (geometry->>'labelTolerance')::numeric;
+    is_correct := start_correct and peak_correct and label_correct;
+    details := jsonb_build_object(
+      'startCorrect', start_correct,
+      'peakCorrect', peak_correct,
+      'labelCorrect', label_correct
+    );
+  elsif variant = 'curve' then
+    for point_text in
+      select value from jsonb_array_elements_text(coalesce(response->'points', '[]'::jsonb)) as points(value)
+    loop
+      x := ray_coordinate(point_text, 1);
+      y := ray_coordinate(point_text, 2);
+      if x is not null and y is not null and
+        x between (geometry->'plot'->>'minX')::numeric and (geometry->'plot'->>'maxX')::numeric and
+        y between (geometry->'plot'->>'minY')::numeric and (geometry->'plot'->>'maxY')::numeric
+      then
+        point_count := point_count + 1;
+        if first_y is null then first_y := y; end if;
+        last_y := y;
+        if apex_y is null or y < apex_y then
+          apex_y := y;
+          apex_x := x;
+        end if;
+      end if;
+    end loop;
+    is_correct := point_count >= 8 and
+      apex_x between (geometry->'optimum'->>'minX')::numeric and (geometry->'optimum'->>'maxX')::numeric and
+      first_y - apex_y >= (geometry->>'baselineTolerance')::numeric and
+      last_y - apex_y >= (geometry->>'baselineTolerance')::numeric;
+    details := jsonb_build_object(
+      'enoughPoints', point_count >= 8,
+      'optimumCorrect', coalesce(apex_x between (geometry->'optimum'->>'minX')::numeric and (geometry->'optimum'->>'maxX')::numeric, false),
+      'bellShape', coalesce(
+        first_y - apex_y >= (geometry->>'baselineTolerance')::numeric and
+        last_y - apex_y >= (geometry->>'baselineTolerance')::numeric,
+        false
+      )
+    );
+  end if;
+
+  return jsonb_build_object(
+    'parts',
+    jsonb_build_array(
+      jsonb_build_object(
+        'id', variant,
+        'response', response,
+        'score', case when is_correct then possible else 0 end,
+        'possible', possible,
+        'correct', is_correct
+      ) || details
+    )
+  );
+end;
+$$;
+
+create or replace function answer_score(p_question_id text, p_answer_key jsonb, p_response text, p_answers jsonb default '{}'::jsonb)
+returns numeric
+language plpgsql
+stable
+as $$
+declare
+  source_name text := p_answer_key->>'source';
+  possible numeric := question_points(p_answer_key);
+  raw_score numeric := 0;
+  math_details jsonb;
+  correct_count integer := 0;
+begin
+  if source_name = 'questionMap' then
+    if normalize_answer(p_response) in (
+      select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
+    ) then
+      return possible;
+    end if;
+    return 0;
+  elsif source_name in ('aiGrade', 'aiSplitGrade') then
+    raw_score := coalesce((p_answers->'aiGrades'->p_question_id->>'score')::numeric, 0);
+    return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'mathMultiPart' then
+    math_details := math_part_scores(p_question_id, p_answer_key, p_answers);
+    if p_answer_key ? 'scoreThresholds' then
+      select count(*) into correct_count
+      from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value)
+      where coalesce((value->>'correct')::boolean, false);
+
+      select coalesce(max((value->>'points')::numeric), 0) into raw_score
+      from jsonb_array_elements(coalesce(p_answer_key->'scoreThresholds', '[]'::jsonb)) as thresholds(value)
+      where correct_count >= coalesce((value->>'minCorrect')::integer, 0);
+      return least(greatest(raw_score, 0), possible);
+    end if;
+    select coalesce(sum((value->>'score')::numeric), 0) into raw_score
+    from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);
+    return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'rayDiagram' then
+    math_details := ray_diagram_details(p_question_id, p_answer_key, p_answers);
+    select coalesce(sum((value->>'score')::numeric), 0) into raw_score
+    from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);
+    return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'diagramAnnotation' then
+    math_details := diagram_annotation_details(p_question_id, p_answer_key, p_answers);
+    select coalesce(sum((value->>'score')::numeric), 0) into raw_score
+    from jsonb_array_elements(coalesce(math_details->'parts', '[]'::jsonb)) as parts(value);
+    return least(greatest(raw_score, 0), possible);
+  elsif source_name = 'connections' then
+    return case when p_response = p_answer_key->>'target' then possible else 0 end;
+  elsif source_name in ('textAnswers', 'rwAnswers') then
+    if normalize_answer(p_response) in (
+      select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') as accepted(value)
+    ) then
+      return possible;
+    end if;
+    return 0;
+  elsif source_name = 'choices' then
+    return case when p_response = p_answer_key->>'correct' then possible else 0 end;
+  elsif source_name = 'colours' then
+    return case when lower(p_response) = lower(p_answer_key->>'colour') then possible else 0 end;
+  end if;
+  return 0;
+end;
+$$;
+
+create or replace function grading_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+begin
+  if p_answer_key->>'source' in ('aiGrade', 'aiSplitGrade') then
+    return coalesce(p_answers->'aiGrades'->p_question_id, '{}'::jsonb);
+  elsif p_answer_key->>'source' = 'mathMultiPart' then
+    return math_part_scores(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'rayDiagram' then
+    return ray_diagram_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'diagramAnnotation' then
+    return diagram_annotation_details(p_question_id, p_answer_key, p_answers);
+  end if;
+  return '{}'::jsonb;
+end;
+$$;
+
+create or replace function response_display(p_question_id text, p_answer_key jsonb, p_response text)
+returns text
+language plpgsql
+stable
+as $$
+declare
+  response_json jsonb;
+  part_key jsonb;
+  part_id text;
+  raw_json jsonb;
+  raw_text text;
+  items text[] := array[]::text[];
+begin
+  if p_response is null or p_response = '' then return 'No answer'; end if;
+  if p_answer_key->>'source' = 'mathMultiPart' then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No answer'; end if;
+    if jsonb_typeof(response_json) = 'string' then return coalesce(response_json #>> '{}', 'No answer'); end if;
+    for part_key in select value from jsonb_array_elements(coalesce(p_answer_key->'parts', '[]'::jsonb))
+    loop
+      part_id := part_key->>'id';
+      raw_json := response_json->part_id;
+      if raw_json is null then
+        raw_text := '';
+      elsif jsonb_typeof(raw_json) = 'array' then
+        select coalesce(string_agg(value, ', ' order by value), '') into raw_text
+        from jsonb_array_elements_text(raw_json) as response(value);
+      else
+        raw_text := response_json->>part_id;
+      end if;
+      if coalesce(raw_text, '') <> '' then items := array_append(items, part_id || ': ' || raw_text); end if;
+    end loop;
+    if array_length(items, 1) is null then return 'No answer'; end if;
+    return array_to_string(items, '; ');
+  elsif p_answer_key->>'source' = 'rayDiagram' then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No answer'; end if;
+    return concat_ws(
+      '; ',
+      case when coalesce(response_json->>'normalEnd', '') <> '' then 'normal: ' || response_json->>'normalEnd' end,
+      case when coalesce(response_json->>'labelPoint', '') <> '' then 'label i: ' || response_json->>'labelPoint' end,
+      case when coalesce(response_json->>'reflectedEnd', '') <> '' then 'reflected ray: ' || response_json->>'reflectedEnd' end
+    );
+  elsif p_answer_key->>'source' = 'diagramAnnotation' then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No annotation'; end if;
+    return initcap(coalesce(p_answer_key->>'variant', 'diagram')) || ' annotation recorded';
+  elsif p_answer_key->>'source' = 'choices' then
+    return upper(p_response);
+  elsif p_answer_key->>'source' = 'colours' then
+    return case lower(p_response)
+      when '#ef4444' then 'red'
+      when '#f97316' then 'orange'
+      when '#facc15' then 'yellow'
+      when '#22c55e' then 'green'
+      when '#38bdf8' then 'blue'
+      when '#a855f7' then 'purple'
+      when '#f472b6' then 'pink'
+      when '#8b5a2b' then 'brown'
+      else p_response
+    end;
+  end if;
+  return p_response;
+end;
+$$;
+
+-- Paper 6 final scoring overrides are appended below.
+create or replace function answer_response(p_answer_key jsonb, p_answers jsonb)
+returns text
+language plpgsql
+stable
+as $$
+declare
+  source_name text := p_answer_key->>'source';
+begin
+  if source_name = 'questionMap' then return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name in ('aiGrade', 'aiSplitGrade') then return coalesce(p_answers->>(p_answer_key->>'id'), '');
+  elsif source_name in ('mathMultiPart', 'rayDiagram', 'diagramAnnotation', 'biologicalDrawing', 'practicalGraph', 'virtualMeasurement', 'dependent') then
+    return coalesce((p_answers->(p_answer_key->>'id'))::text, '');
+  elsif source_name = 'connections' then return coalesce(p_answers->'connections'->>(p_answer_key->>'object'), '');
+  elsif source_name = 'textAnswers' then return coalesce(p_answers->'textAnswers'->>(p_answer_key->>'id'), '');
+  elsif source_name = 'choices' then return coalesce(p_answers->'choices'->>(p_answer_key->>'id'), '');
+  elsif source_name = 'colours' then return coalesce(p_answers->'colours'->>(p_answer_key->>'region'), '');
+  elsif source_name = 'rwAnswers' then return coalesce(p_answers->'rwAnswers'->>(p_answer_key->>'id'), '');
+  end if;
+  return '';
+end;
+$$;
+
+create or replace function answer_score(p_question_id text, p_answer_key jsonb, p_response text, p_answers jsonb default '{}'::jsonb)
+returns numeric
+language plpgsql
+stable
+as $$
+declare
+  source_name text := p_answer_key->>'source';
+  possible numeric := question_points(p_answer_key);
+  raw_score numeric := 0;
+  details jsonb;
+  correct_count integer := 0;
+  category_count integer := 0;
+begin
+  if source_name = 'questionMap' then
+    return case when normalize_answer(p_response) in (select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') accepted(value)) then possible else 0 end;
+  elsif source_name in ('aiGrade', 'aiSplitGrade') then
+    return least(greatest(coalesce((p_answers->'aiGrades'->p_question_id->>'score')::numeric, 0), 0), possible);
+  elsif source_name = 'mathMultiPart' then
+    details := math_part_scores(p_question_id, p_answer_key, p_answers);
+    if p_answer_key->>'scoringStrategy' = 'investigationPlan' then
+      select count(distinct key_part.value->>'category'), count(*)
+      into category_count, correct_count
+      from jsonb_array_elements(p_answer_key->'parts') with ordinality key_part(value, ordinality)
+      join jsonb_array_elements(details->'parts') with ordinality scored(value, ordinality) using (ordinality)
+      where coalesce((scored.value->>'correct')::boolean, false);
+      raw_score := case when category_count < 5 then category_count else 5 + least(2, greatest(0, correct_count - 5)) end;
+      return least(raw_score, possible);
+    elsif p_answer_key ? 'scoreThresholds' then
+      select count(*) into correct_count from jsonb_array_elements(details->'parts') parts(value) where coalesce((value->>'correct')::boolean, false);
+      select coalesce(max((value->>'points')::numeric), 0) into raw_score
+      from jsonb_array_elements(p_answer_key->'scoreThresholds') thresholds(value)
+      where correct_count >= coalesce((value->>'minCorrect')::integer, 0);
+      return least(raw_score, possible);
+    end if;
+  elsif source_name = 'rayDiagram' then details := ray_diagram_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'diagramAnnotation' then
+    details := case when p_answer_key->>'variant' = 'doubleArrow'
+      then p6_double_arrow_details(p_question_id, p_answer_key, p_answers)
+      else diagram_annotation_details(p_question_id, p_answer_key, p_answers) end;
+  elsif source_name = 'biologicalDrawing' then details := p6_biological_drawing_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'practicalGraph' then details := p6_practical_graph_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'virtualMeasurement' then details := p6_virtual_measurement_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'dependent' then details := p6_dependent_details(p_question_id, p_answer_key, p_answers);
+  elsif source_name = 'connections' then return case when p_response = p_answer_key->>'target' then possible else 0 end;
+  elsif source_name in ('textAnswers', 'rwAnswers') then
+    return case when normalize_answer(p_response) in (select normalize_answer(value) from jsonb_array_elements_text(p_answer_key->'accepted') accepted(value)) then possible else 0 end;
+  elsif source_name = 'choices' then return case when p_response = p_answer_key->>'correct' then possible else 0 end;
+  elsif source_name = 'colours' then return case when lower(p_response) = lower(p_answer_key->>'colour') then possible else 0 end;
+  else return 0;
+  end if;
+  select coalesce(sum((value->>'score')::numeric), 0) into raw_score from jsonb_array_elements(coalesce(details->'parts', '[]'::jsonb)) parts(value);
+  return least(greatest(raw_score, 0), possible);
+end;
+$$;
+
+create or replace function grading_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
+returns jsonb
+language plpgsql
+stable
+as $$
+begin
+  if p_answer_key->>'source' in ('aiGrade', 'aiSplitGrade') then return coalesce(p_answers->'aiGrades'->p_question_id, '{}'::jsonb);
+  elsif p_answer_key->>'source' = 'mathMultiPart' then return math_part_scores(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'rayDiagram' then return ray_diagram_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'diagramAnnotation' then
+    return case when p_answer_key->>'variant' = 'doubleArrow'
+      then p6_double_arrow_details(p_question_id, p_answer_key, p_answers)
+      else diagram_annotation_details(p_question_id, p_answer_key, p_answers) end;
+  elsif p_answer_key->>'source' = 'biologicalDrawing' then return p6_biological_drawing_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'practicalGraph' then return p6_practical_graph_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'virtualMeasurement' then return p6_virtual_measurement_details(p_question_id, p_answer_key, p_answers);
+  elsif p_answer_key->>'source' = 'dependent' then return p6_dependent_details(p_question_id, p_answer_key, p_answers);
+  end if;
+  return '{}'::jsonb;
+end;
+$$;
+
+create or replace function response_display(p_question_id text, p_answer_key jsonb, p_response text)
+returns text
+language plpgsql
+stable
+as $$
+declare
+  response_json jsonb;
+  part_key jsonb;
+  part_id text;
+  raw_json jsonb;
+  raw_text text;
+  items text[] := array[]::text[];
+begin
+  if p_response is null or p_response = '' then return 'No answer'; end if;
+  if p_answer_key->>'source' in ('mathMultiPart', 'dependent') then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No answer'; end if;
+    if jsonb_typeof(response_json) = 'string' then return coalesce(response_json #>> '{}', 'No answer'); end if;
+    for part_key in select value from jsonb_array_elements(coalesce(p_answer_key->'parts', '[]'::jsonb))
+    loop
+      part_id := part_key->>'id';
+      raw_json := response_json->part_id;
+      if raw_json is null then raw_text := '';
+      elsif jsonb_typeof(raw_json) = 'array' then select coalesce(string_agg(value, ', '), '') into raw_text from jsonb_array_elements_text(raw_json) response(value);
+      else raw_text := response_json->>part_id;
+      end if;
+      if coalesce(raw_text, '') <> '' then items := array_append(items, part_id || ': ' || raw_text); end if;
+    end loop;
+    if array_length(items, 1) is null then
+      select coalesce(string_agg(key || ': ' || value #>> '{}', '; '), 'No answer') into raw_text from jsonb_each(response_json);
+      return raw_text;
+    end if;
+    return array_to_string(items, '; ');
+  elsif p_answer_key->>'source' in ('rayDiagram', 'diagramAnnotation', 'biologicalDrawing', 'practicalGraph', 'virtualMeasurement') then
+    response_json := p_response::jsonb;
+    if response_json = '{}'::jsonb then return 'No answer'; end if;
+    return case p_answer_key->>'source'
+      when 'biologicalDrawing' then 'Biological drawing recorded'
+      when 'practicalGraph' then 'Graph response recorded'
+      when 'virtualMeasurement' then 'Virtual measurements recorded'
+      else initcap(coalesce(p_answer_key->>'variant', 'diagram')) || ' annotation recorded'
+    end;
+  elsif p_answer_key->>'source' = 'choices' then return upper(p_response);
+  end if;
+  return p_response;
+end;
+$$;

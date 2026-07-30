@@ -4,6 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
+import {
+  BiologicalDrawingEditor,
+  PracticalGraphEditor,
+  VirtualMeasurementEditor,
+} from "@/features/tests/components/science-practical-editors";
 
 export function QuestionRenderer({
   answer,
@@ -102,6 +107,16 @@ export function QuestionRenderer({
             />
           )}
         </label>
+      ) : question.type === "rayDiagram" ? (
+        <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "diagramAnnotation" ? (
+        <DiagramAnnotationEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "biologicalDrawing" ? (
+        <BiologicalDrawingEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "practicalGraph" ? (
+        <PracticalGraphEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "virtualMeasurement" ? (
+        <VirtualMeasurementEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
@@ -193,6 +208,228 @@ export function QuestionRenderer({
       </div>
       {responseContent}
     </article>
+  );
+}
+
+type RayTool = "normalEnd" | "labelPoint" | "reflectedEnd";
+
+function RayDiagramEditor({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "rayDiagram" }>;
+}) {
+  const [tool, setTool] = useState<RayTool>("normalEnd");
+  const [dragging, setDragging] = useState<RayTool | null>(null);
+  const boardRef = useRef<HTMLDivElement>(null);
+  const incidence = question.geometry.incidence;
+  const normalEnd = readRayPoint(answer.normalEnd);
+  const labelPoint = readRayPoint(answer.labelPoint);
+  const reflectedEnd = readRayPoint(answer.reflectedEnd);
+
+  function updatePoint(event: ReactPointerEvent<HTMLDivElement>, activeTool: RayTool) {
+    const board = boardRef.current;
+    if (!board) return;
+    const rect = board.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+    onChange({ ...answer, [activeTool]: `${x.toFixed(4)},${y.toFixed(4)}` });
+  }
+
+  function beginDrawing(event: ReactPointerEvent<HTMLDivElement>) {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setDragging(tool);
+    updatePoint(event, tool);
+  }
+
+  function moveDrawing(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!dragging) return;
+    updatePoint(event, dragging);
+  }
+
+  return (
+    <div className="ray-diagram-editor">
+      <div className="ray-tool-picker" aria-label="Ray diagram drawing tool">
+        <button className={tool === "normalEnd" ? "is-active" : ""} onClick={() => setTool("normalEnd")} type="button">Normal</button>
+        <button className={tool === "labelPoint" ? "is-active" : ""} onClick={() => setTool("labelPoint")} type="button">Label i</button>
+        <button className={tool === "reflectedEnd" ? "is-active" : ""} onClick={() => setTool("reflectedEnd")} type="button">Reflected ray</button>
+      </div>
+      <p className="ray-tool-status">
+        {tool === "normalEnd"
+          ? "Draw the normal from the point where the ray meets the mirror."
+          : tool === "labelPoint"
+            ? "Place i inside the angle of incidence."
+            : "Draw the reflected ray from the mirror to the eye."}
+      </p>
+      <div
+        className="ray-diagram-board"
+        onPointerDown={beginDrawing}
+        onPointerMove={moveDrawing}
+        onPointerUp={() => setDragging(null)}
+        onPointerCancel={() => setDragging(null)}
+        ref={boardRef}
+        role="application"
+        aria-label="Interactive reflection ray diagram"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt={question.backgroundAlt} draggable={false} src={question.backgroundSrc} />
+        <svg aria-hidden="true" viewBox="0 0 1000 400" preserveAspectRatio="none">
+          {normalEnd ? (
+            <>
+              <line className="ray-answer-line" x1={incidence.x * 1000} y1={incidence.y * 400} x2={normalEnd.x * 1000} y2={normalEnd.y * 400} />
+              <circle className="ray-answer-handle" cx={normalEnd.x * 1000} cy={normalEnd.y * 400} r="8" />
+            </>
+          ) : null}
+          {reflectedEnd ? (
+            <>
+              <line className="ray-answer-line reflected" x1={incidence.x * 1000} y1={incidence.y * 400} x2={reflectedEnd.x * 1000} y2={reflectedEnd.y * 400} />
+              <circle className="ray-answer-handle" cx={reflectedEnd.x * 1000} cy={reflectedEnd.y * 400} r="8" />
+            </>
+          ) : null}
+          {labelPoint ? <text className="ray-answer-label" x={labelPoint.x * 1000} y={labelPoint.y * 400}>i</text> : null}
+        </svg>
+      </div>
+      <button className="ray-clear-button" onClick={() => onChange({})} type="button">Clear drawing</button>
+    </div>
+  );
+}
+
+function readRayPoint(value: string | string[] | undefined) {
+  if (typeof value !== "string") return null;
+  const [x, y] = value.split(",").map(Number);
+  return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+}
+
+function DiagramAnnotationEditor({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "diagramAnnotation" }>;
+}) {
+  const boardRef = useRef<HTMLDivElement>(null);
+  const curvePointBuffer = useRef<string[]>(Array.isArray(answer.points) ? answer.points : []);
+  const [dragging, setDragging] = useState<"start" | "end" | "label" | "point" | "curve" | null>(null);
+  const curvePoints = Array.isArray(answer.points) ? answer.points.map(readRayPoint).filter(Boolean) as Array<{ x: number; y: number }> : [];
+  const start = readRayPoint(answer.start);
+  const end = readRayPoint(answer.end);
+  const label = readRayPoint(answer.label);
+  const point = readRayPoint(answer.point);
+  const annotationLabel = question.geometry.variant === "doubleArrow" ? question.geometry.label : "Ea";
+
+  useEffect(() => {
+    if (!dragging) curvePointBuffer.current = Array.isArray(answer.points) ? answer.points : [];
+  }, [answer.points, dragging]);
+
+  function eventPoint(event: ReactPointerEvent<HTMLDivElement>) {
+    const rect = boardRef.current?.getBoundingClientRect();
+    if (!rect) return null;
+    return {
+      x: Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height)),
+    };
+  }
+
+  function writePoint(key: string, value: { x: number; y: number }) {
+    onChange({ ...answer, [key]: `${value.x.toFixed(4)},${value.y.toFixed(4)}` });
+  }
+
+  function begin(event: ReactPointerEvent<HTMLDivElement>) {
+    const value = eventPoint(event);
+    if (!value) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    if (question.variant === "curve") {
+      setDragging("curve");
+      curvePointBuffer.current = [`${value.x.toFixed(4)},${value.y.toFixed(4)}`];
+      onChange({ ...answer, points: curvePointBuffer.current });
+      return;
+    }
+    if (question.variant === "point") {
+      setDragging("point");
+      writePoint("point", value);
+      return;
+    }
+    if (!start || (start && end && label)) {
+      setDragging("start");
+      onChange({ start: `${value.x.toFixed(4)},${value.y.toFixed(4)}` });
+    } else if (!end) {
+      setDragging("end");
+      writePoint("end", value);
+    } else {
+      setDragging("label");
+      writePoint("label", value);
+    }
+  }
+
+  function move(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!dragging) return;
+    const value = eventPoint(event);
+    if (!value) return;
+    if (dragging === "curve") {
+      curvePointBuffer.current = [...curvePointBuffer.current, `${value.x.toFixed(4)},${value.y.toFixed(4)}`].slice(-180);
+      onChange({ ...answer, points: curvePointBuffer.current });
+    } else {
+      writePoint(dragging, value);
+    }
+  }
+
+  const instruction = question.variant === "curve"
+    ? "Draw the protease activity curve directly on the graph."
+    : question.variant === "arrow"
+      ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
+      : question.variant === "doubleArrow"
+        ? !start ? "Select the first end of the length arrow." : !end ? "Select the other end of the length arrow." : "Place the L label beside the arrow."
+      : "Place X on the part of the graph where the student is decelerating.";
+
+  return (
+    <div className="diagram-annotation-editor">
+      <p className="ray-tool-status">{instruction}</p>
+      <div
+        aria-label={question.backgroundAlt}
+        className="diagram-annotation-board"
+        onPointerCancel={() => setDragging(null)}
+        onPointerDown={begin}
+        onPointerMove={move}
+        onPointerUp={() => setDragging(null)}
+        ref={boardRef}
+        role="application"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt={question.backgroundAlt} draggable={false} src={question.backgroundSrc} />
+        <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1000 600">
+          {curvePoints.length > 1 ? (
+            <polyline className="diagram-answer-curve" points={curvePoints.map((value) => `${value.x * 1000},${value.y * 600}`).join(" ")} />
+          ) : null}
+          {start && end ? (
+            <line
+              className="diagram-answer-arrow"
+              markerEnd="url(#annotation-arrowhead)"
+              markerStart={question.variant === "doubleArrow" ? "url(#annotation-arrowhead-start)" : undefined}
+              x1={start.x * 1000}
+              x2={end.x * 1000}
+              y1={start.y * 600}
+              y2={end.y * 600}
+            />
+          ) : null}
+          <defs>
+            <marker id="annotation-arrowhead" markerHeight="7" markerWidth="7" orient="auto" refX="6" refY="3.5">
+              <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
+            </marker>
+            <marker id="annotation-arrowhead-start" markerHeight="7" markerWidth="7" orient="auto-start-reverse" refX="6" refY="3.5">
+              <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
+            </marker>
+          </defs>
+          {label ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>{annotationLabel}</text> : null}
+          {point ? <text className="diagram-answer-point" x={point.x * 1000} y={point.y * 600}>X</text> : null}
+        </svg>
+      </div>
+      <button className="ray-clear-button" onClick={() => onChange({})} type="button">Clear annotation</button>
+    </div>
   );
 }
 
@@ -1439,9 +1676,36 @@ function MathField({
   onChange,
 }: {
   answer: Record<string, string | string[]>;
-  field: { id: string; label: string; placeholder?: string; visualHtml?: string };
+  field: {
+    id: string;
+    label: string;
+    placeholder?: string;
+    visualHtml?: string;
+    options?: Array<{ value: string; label: string }>;
+  };
   onChange: (value: Record<string, string | string[]>) => void;
 }) {
+  if (field.options?.length) {
+    return (
+      <fieldset className="inline-option-field">
+        <legend>{field.label}</legend>
+        <div>
+          {field.options.map((option) => (
+            <label key={option.value}>
+              <input
+                checked={answer[field.id] === option.value}
+                name={`${field.id}-${option.value}`}
+                onChange={() => onChange({ ...answer, [field.id]: option.value })}
+                type="radio"
+                value={option.value}
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    );
+  }
   return (
     <label className={field.visualHtml ? "has-field-visual" : ""}>
       {field.visualHtml ? <span className="math-field-visual" dangerouslySetInnerHTML={{ __html: field.visualHtml }} /> : null}
