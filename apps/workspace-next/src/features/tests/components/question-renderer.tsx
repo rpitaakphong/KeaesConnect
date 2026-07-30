@@ -104,6 +104,8 @@ export function QuestionRenderer({
         </label>
       ) : question.type === "rayDiagram" ? (
         <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "diagramAnnotation" ? (
+        <DiagramAnnotationEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
@@ -288,6 +290,122 @@ function readRayPoint(value: string | string[] | undefined) {
   if (typeof value !== "string") return null;
   const [x, y] = value.split(",").map(Number);
   return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+}
+
+function DiagramAnnotationEditor({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "diagramAnnotation" }>;
+}) {
+  const boardRef = useRef<HTMLDivElement>(null);
+  const curvePointBuffer = useRef<string[]>(Array.isArray(answer.points) ? answer.points : []);
+  const [dragging, setDragging] = useState<"start" | "end" | "label" | "point" | "curve" | null>(null);
+  const curvePoints = Array.isArray(answer.points) ? answer.points.map(readRayPoint).filter(Boolean) as Array<{ x: number; y: number }> : [];
+  const start = readRayPoint(answer.start);
+  const end = readRayPoint(answer.end);
+  const label = readRayPoint(answer.label);
+  const point = readRayPoint(answer.point);
+
+  useEffect(() => {
+    if (!dragging) curvePointBuffer.current = Array.isArray(answer.points) ? answer.points : [];
+  }, [answer.points, dragging]);
+
+  function eventPoint(event: ReactPointerEvent<HTMLDivElement>) {
+    const rect = boardRef.current?.getBoundingClientRect();
+    if (!rect) return null;
+    return {
+      x: Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height)),
+    };
+  }
+
+  function writePoint(key: string, value: { x: number; y: number }) {
+    onChange({ ...answer, [key]: `${value.x.toFixed(4)},${value.y.toFixed(4)}` });
+  }
+
+  function begin(event: ReactPointerEvent<HTMLDivElement>) {
+    const value = eventPoint(event);
+    if (!value) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    if (question.variant === "curve") {
+      setDragging("curve");
+      curvePointBuffer.current = [`${value.x.toFixed(4)},${value.y.toFixed(4)}`];
+      onChange({ ...answer, points: curvePointBuffer.current });
+      return;
+    }
+    if (question.variant === "point") {
+      setDragging("point");
+      writePoint("point", value);
+      return;
+    }
+    if (!start || (start && end && label)) {
+      setDragging("start");
+      onChange({ start: `${value.x.toFixed(4)},${value.y.toFixed(4)}` });
+    } else if (!end) {
+      setDragging("end");
+      writePoint("end", value);
+    } else {
+      setDragging("label");
+      writePoint("label", value);
+    }
+  }
+
+  function move(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!dragging) return;
+    const value = eventPoint(event);
+    if (!value) return;
+    if (dragging === "curve") {
+      curvePointBuffer.current = [...curvePointBuffer.current, `${value.x.toFixed(4)},${value.y.toFixed(4)}`].slice(-180);
+      onChange({ ...answer, points: curvePointBuffer.current });
+    } else {
+      writePoint(dragging, value);
+    }
+  }
+
+  const instruction = question.variant === "curve"
+    ? "Draw the protease activity curve directly on the graph."
+    : question.variant === "arrow"
+      ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
+      : "Place X on the part of the graph where the student is decelerating.";
+
+  return (
+    <div className="diagram-annotation-editor">
+      <p className="ray-tool-status">{instruction}</p>
+      <div
+        aria-label={question.backgroundAlt}
+        className="diagram-annotation-board"
+        onPointerCancel={() => setDragging(null)}
+        onPointerDown={begin}
+        onPointerMove={move}
+        onPointerUp={() => setDragging(null)}
+        ref={boardRef}
+        role="application"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt={question.backgroundAlt} draggable={false} src={question.backgroundSrc} />
+        <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1000 600">
+          {curvePoints.length > 1 ? (
+            <polyline className="diagram-answer-curve" points={curvePoints.map((value) => `${value.x * 1000},${value.y * 600}`).join(" ")} />
+          ) : null}
+          {start && end ? (
+            <line className="diagram-answer-arrow" markerEnd="url(#annotation-arrowhead)" x1={start.x * 1000} x2={end.x * 1000} y1={start.y * 600} y2={end.y * 600} />
+          ) : null}
+          <defs>
+            <marker id="annotation-arrowhead" markerHeight="7" markerWidth="7" orient="auto" refX="6" refY="3.5">
+              <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
+            </marker>
+          </defs>
+          {label ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>Ea</text> : null}
+          {point ? <text className="diagram-answer-point" x={point.x * 1000} y={point.y * 600}>X</text> : null}
+        </svg>
+      </div>
+      <button className="ray-clear-button" onClick={() => onChange({})} type="button">Clear annotation</button>
+    </div>
+  );
 }
 
 function QuestionPrompt({ question }: { question: TestQuestion }) {
@@ -1533,9 +1651,36 @@ function MathField({
   onChange,
 }: {
   answer: Record<string, string | string[]>;
-  field: { id: string; label: string; placeholder?: string; visualHtml?: string };
+  field: {
+    id: string;
+    label: string;
+    placeholder?: string;
+    visualHtml?: string;
+    options?: Array<{ value: string; label: string }>;
+  };
   onChange: (value: Record<string, string | string[]>) => void;
 }) {
+  if (field.options?.length) {
+    return (
+      <fieldset className="inline-option-field">
+        <legend>{field.label}</legend>
+        <div>
+          {field.options.map((option) => (
+            <label key={option.value}>
+              <input
+                checked={answer[field.id] === option.value}
+                name={`${field.id}-${option.value}`}
+                onChange={() => onChange({ ...answer, [field.id]: option.value })}
+                type="radio"
+                value={option.value}
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    );
+  }
   return (
     <label className={field.visualHtml ? "has-field-visual" : ""}>
       {field.visualHtml ? <span className="math-field-visual" dangerouslySetInnerHTML={{ __html: field.visualHtml }} /> : null}

@@ -44,7 +44,13 @@ export type TestSection = {
   questions: TestQuestion[];
 };
 
-export type TestQuestion = SingleChoiceQuestion | MultiChoiceQuestion | MultiTextQuestion | TextQuestion | RayDiagramQuestion;
+export type TestQuestion =
+  | SingleChoiceQuestion
+  | MultiChoiceQuestion
+  | MultiTextQuestion
+  | TextQuestion
+  | RayDiagramQuestion
+  | DiagramAnnotationQuestion;
 
 export type QuestionBase = {
   id: string;
@@ -113,7 +119,13 @@ export type SingleChoiceQuestion = QuestionBase & {
 
 export type MultiTextQuestion = QuestionBase & {
   type: "multiText";
-  fields: Array<{ id: string; label: string; placeholder?: string; visualHtml?: string }>;
+  fields: Array<{
+    id: string;
+    label: string;
+    placeholder?: string;
+    visualHtml?: string;
+    options?: Array<{ value: string; label: string }>;
+  }>;
   compact?: boolean;
   inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input"; id?: string }> }>;
   rankRows?: Array<{ label: string; items: Array<{ text: string; id: string }> }>;
@@ -148,6 +160,32 @@ export type RayDiagramQuestion = QuestionBase & {
     eyeTolerance: number;
     angleToleranceDegrees: number;
   };
+};
+
+export type DiagramAnnotationQuestion = QuestionBase & {
+  type: "diagramAnnotation";
+  variant: "curve" | "arrow" | "point";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  geometry:
+    | {
+      variant: "curve";
+      plot: { minX: number; maxX: number; minY: number; maxY: number };
+      optimum: { minX: number; maxX: number };
+      baselineTolerance: number;
+    }
+    | {
+      variant: "arrow";
+      start: { x: number; y: number };
+      peak: { x: number; y: number };
+      endpointTolerance: number;
+      labelTolerance: number;
+    }
+    | {
+      variant: "point";
+      segment: { start: { x: number; y: number }; end: { x: number; y: number } };
+      tolerance: number;
+    };
 };
 
 export type TestAnswers = Record<string, string | Record<string, string | string[]>>;

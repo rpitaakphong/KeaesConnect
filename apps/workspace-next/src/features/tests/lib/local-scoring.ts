@@ -31,6 +31,7 @@ export function scoreTestLocally(test: TestDefinition, answers: TestAnswers): Su
 
 function scoreQuestion(question: TestQuestion, answer: unknown) {
   if (question.type === "rayDiagram") return scoreRayDiagram(question, answer);
+  if (question.type === "diagramAnnotation") return scoreDiagramAnnotation(question, answer);
   if (!question.grading) return { score: 0, possible: question.points, details: { parts: [] } };
   if (question.grading.mode === "aiSplit") {
     const raw = typeof answer === "string" ? answer : "";
@@ -68,7 +69,7 @@ function scoreQuestion(question: TestQuestion, answer: unknown) {
       possible: part.points,
       correct,
       normalizer: part.normalizer || "text",
-      reviewRecommended: Boolean(part.reviewRecommended || part.normalizer === "keywords" || part.normalizer === "arrowDown"),
+      reviewRecommended: part.reviewRecommended ?? (part.normalizer === "keywords" || part.normalizer === "arrowDown"),
     };
   });
   const thresholdScore = question.grading.scoreThresholds?.length
@@ -79,6 +80,70 @@ function scoreQuestion(question: TestQuestion, answer: unknown) {
     score: Math.min(rawScore, question.points),
     possible: question.points,
     details: { parts },
+  };
+}
+
+function scoreDiagramAnnotation(question: Extract<TestQuestion, { type: "diagramAnnotation" }>, answer: unknown) {
+  const values = answer && typeof answer === "object" ? answer as Record<string, string | string[]> : {};
+  const geometry = question.geometry;
+  let correct = false;
+  const components: Record<string, boolean> = {};
+
+  if (geometry.variant === "point") {
+    const point = parsePoint(values.point);
+    const { start, end } = geometry.segment;
+    const segmentDistance = point ? distanceToSegment(point, start, end) : Number.POSITIVE_INFINITY;
+    correct = segmentDistance <= geometry.tolerance;
+    components.onDeceleratingSegment = correct;
+  } else if (geometry.variant === "arrow") {
+    const start = parsePoint(values.start);
+    const end = parsePoint(values.end);
+    const label = parsePoint(values.label);
+    const startCorrect = Boolean(start && distance(start, geometry.start) <= geometry.endpointTolerance);
+    const endCorrect = Boolean(end && distance(end, geometry.peak) <= geometry.endpointTolerance);
+    const labelCorrect = Boolean(label && end && distance(label, {
+      x: (start?.x ?? geometry.start.x) - 0.025,
+      y: ((start?.y ?? geometry.start.y) + end.y) / 2,
+    }) <= geometry.labelTolerance);
+    components.startCorrect = startCorrect;
+    components.peakCorrect = endCorrect;
+    components.labelCorrect = labelCorrect;
+    correct = startCorrect && endCorrect && labelCorrect;
+  } else {
+    const points = Array.isArray(values.points) ? values.points.map(parsePoint).filter(Boolean) as Array<{ x: number; y: number }> : [];
+    const withinPlot = points.filter((point) => (
+      point.x >= geometry.plot.minX && point.x <= geometry.plot.maxX &&
+      point.y >= geometry.plot.minY && point.y <= geometry.plot.maxY
+    ));
+    const apex = withinPlot.reduce<{ x: number; y: number } | null>((best, point) => !best || point.y < best.y ? point : best, null);
+    const first = withinPlot[0];
+    const last = withinPlot.at(-1);
+    const optimumCorrect = Boolean(apex && apex.x >= geometry.optimum.minX && apex.x <= geometry.optimum.maxX);
+    const baselineCorrect = Boolean(
+      apex && first && last &&
+      first.y - apex.y >= geometry.baselineTolerance &&
+      last.y - apex.y >= geometry.baselineTolerance,
+    );
+    const enoughPoints = withinPlot.length >= 8;
+    components.enoughPoints = enoughPoints;
+    components.optimumCorrect = optimumCorrect;
+    components.bellShape = baselineCorrect;
+    correct = enoughPoints && optimumCorrect && baselineCorrect;
+  }
+
+  return {
+    score: correct ? question.points : 0,
+    possible: question.points,
+    details: {
+      parts: [{
+        id: question.variant,
+        response: formatResponse(values),
+        score: correct ? question.points : 0,
+        possible: question.points,
+        correct,
+        ...components,
+      }],
+    },
   };
 }
 
@@ -143,6 +208,15 @@ function parsePoint(value: string | string[] | undefined) {
 
 function distance(left: { x: number; y: number }, right: { x: number; y: number }) {
   return Math.hypot(left.x - right.x, left.y - right.y);
+}
+
+function distanceToSegment(point: { x: number; y: number }, start: { x: number; y: number }, end: { x: number; y: number }) {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const lengthSquared = dx * dx + dy * dy;
+  if (!lengthSquared) return distance(point, start);
+  const t = Math.max(0, Math.min(1, ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared));
+  return distance(point, { x: start.x + t * dx, y: start.y + t * dy });
 }
 
 function isCorrectPart(raw: string | string[], part: NonNullable<Extract<TestQuestion["grading"], { mode: "auto" }>["parts"]>[number]) {

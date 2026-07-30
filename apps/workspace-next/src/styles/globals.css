@@ -2396,6 +2396,76 @@ tr:last-child td { border-bottom: 0; }
   color: var(--ink);
   font-weight: 800;
 }
+.diagram-annotation-editor {
+  display: grid;
+  gap: 10px;
+}
+.diagram-annotation-board {
+  position: relative;
+  width: min(100%, 660px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+.diagram-annotation-board img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.diagram-annotation-board svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.diagram-answer-curve,
+.diagram-answer-arrow {
+  fill: none;
+  stroke: #159aa0;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.diagram-answer-arrowhead,
+.diagram-answer-point {
+  fill: #159aa0;
+}
+.diagram-answer-label,
+.diagram-answer-point {
+  font-size: 42px;
+  font-weight: 900;
+}
+.diagram-answer-label {
+  fill: #159aa0;
+  font-style: italic;
+}
+.inline-option-field {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px 12px;
+}
+.inline-option-field legend {
+  padding: 0 5px;
+  color: var(--muted);
+  font-weight: 800;
+}
+.inline-option-field > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.inline-option-field label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
 @media (max-width: 620px) {
   .ray-tool-picker {
     grid-template-columns: 1fr;
