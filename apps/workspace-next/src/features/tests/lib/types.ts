@@ -30,6 +30,7 @@ export type TestSection = {
   title: string;
   hint?: string;
   questionLayout?: "cards" | "grouped";
+  groupByQuestionNumber?: boolean;
   visuals?: QuestionVisual[];
   wordBank?: string[];
   storyTitle?: string;
@@ -43,7 +44,7 @@ export type TestSection = {
   questions: TestQuestion[];
 };
 
-export type TestQuestion = SingleChoiceQuestion | MultiChoiceQuestion | MultiTextQuestion | TextQuestion;
+export type TestQuestion = SingleChoiceQuestion | MultiChoiceQuestion | MultiTextQuestion | TextQuestion | RayDiagramQuestion;
 
 export type QuestionBase = {
   id: string;
@@ -95,7 +96,7 @@ export type AnswerPart = {
   id: string;
   accepted: string[];
   points: number;
-  normalizer?: "text" | "time" | "set" | "keywords" | "arrowDown";
+  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown";
   keywords?: string[][];
   reviewRecommended?: boolean;
 };
@@ -132,6 +133,21 @@ export type TextQuestion = QuestionBase & {
   type: "text";
   inputMode?: "text" | "number" | "textarea";
   placeholder?: string;
+};
+
+export type RayDiagramQuestion = QuestionBase & {
+  type: "rayDiagram";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  geometry: {
+    incidence: { x: number; y: number };
+    incidentSource: { x: number; y: number };
+    eye: { x: number; y: number };
+    normalTolerance: number;
+    labelRegion: { minX: number; maxX: number; minY: number; maxY: number };
+    eyeTolerance: number;
+    angleToleranceDegrees: number;
+  };
 };
 
 export type TestAnswers = Record<string, string | Record<string, string | string[]>>;

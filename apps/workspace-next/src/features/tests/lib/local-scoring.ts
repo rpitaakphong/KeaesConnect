@@ -30,6 +30,7 @@ export function scoreTestLocally(test: TestDefinition, answers: TestAnswers): Su
 }
 
 function scoreQuestion(question: TestQuestion, answer: unknown) {
+  if (question.type === "rayDiagram") return scoreRayDiagram(question, answer);
   if (!question.grading) return { score: 0, possible: question.points, details: { parts: [] } };
   if (question.grading.mode === "aiSplit") {
     const raw = typeof answer === "string" ? answer : "";
@@ -66,20 +67,89 @@ function scoreQuestion(question: TestQuestion, answer: unknown) {
       score: correct ? part.points : 0,
       possible: part.points,
       correct,
+      normalizer: part.normalizer || "text",
+      reviewRecommended: Boolean(part.reviewRecommended || part.normalizer === "keywords" || part.normalizer === "arrowDown"),
     };
   });
   const thresholdScore = question.grading.scoreThresholds?.length
     ? scoreByThreshold(parts.filter((part) => part.correct).length, question.grading.scoreThresholds)
     : null;
+  const rawScore = thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
   return {
-    score: thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0),
-    possible: parts.reduce((sum, part) => sum + part.possible, 0),
+    score: Math.min(rawScore, question.points),
+    possible: question.points,
     details: { parts },
   };
 }
 
+function scoreRayDiagram(question: Extract<TestQuestion, { type: "rayDiagram" }>, answer: unknown) {
+  const values = answer && typeof answer === "object" ? answer as Record<string, string | string[]> : {};
+  const normalEnd = parsePoint(values.normalEnd);
+  const labelPoint = parsePoint(values.labelPoint);
+  const reflectedEnd = parsePoint(values.reflectedEnd);
+  const { incidence, incidentSource, eye, normalTolerance, labelRegion, eyeTolerance, angleToleranceDegrees } = question.geometry;
+
+  const normalCorrect = Boolean(
+    normalEnd &&
+    normalEnd.x < incidence.x &&
+    Math.abs(normalEnd.y - incidence.y) <= normalTolerance,
+  );
+  const labelCorrect = Boolean(
+    labelPoint &&
+    labelPoint.x >= labelRegion.minX &&
+    labelPoint.x <= labelRegion.maxX &&
+    labelPoint.y >= labelRegion.minY &&
+    labelPoint.y <= labelRegion.maxY,
+  );
+  const reachesEye = Boolean(reflectedEnd && distance(reflectedEnd, eye) <= eyeTolerance);
+  const incidentAngle = Math.atan2(Math.abs(incidentSource.y - incidence.y), Math.abs(incidentSource.x - incidence.x));
+  const reflectionAngle = reflectedEnd
+    ? Math.atan2(Math.abs(reflectedEnd.y - incidence.y), Math.abs(reflectedEnd.x - incidence.x))
+    : Number.POSITIVE_INFINITY;
+  const angleCorrect = Math.abs(reflectionAngle - incidentAngle) * 180 / Math.PI <= angleToleranceDegrees;
+  const parts = [
+    {
+      id: "normal-and-label",
+      response: `${values.normalEnd || ""}; ${values.labelPoint || ""}`,
+      score: normalCorrect && labelCorrect ? 1 : 0,
+      possible: 1,
+      correct: normalCorrect && labelCorrect,
+      normalCorrect,
+      labelCorrect,
+    },
+    {
+      id: "reflected-ray",
+      response: String(values.reflectedEnd || ""),
+      score: reachesEye && angleCorrect ? 1 : 0,
+      possible: 1,
+      correct: reachesEye && angleCorrect,
+      reachesEye,
+      angleCorrect,
+    },
+  ];
+  return {
+    score: parts.reduce((sum, part) => sum + part.score, 0),
+    possible: question.points,
+    details: { parts },
+  };
+}
+
+function parsePoint(value: string | string[] | undefined) {
+  if (typeof value !== "string") return null;
+  const [x, y] = value.split(",").map(Number);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  return { x, y };
+}
+
+function distance(left: { x: number; y: number }, right: { x: number; y: number }) {
+  return Math.hypot(left.x - right.x, left.y - right.y);
+}
+
 function isCorrectPart(raw: string | string[], part: NonNullable<Extract<TestQuestion["grading"], { mode: "auto" }>["parts"]>[number]) {
   if (part.normalizer === "set") return sameSet(Array.isArray(raw) ? raw : [], part.accepted);
+  if (part.normalizer === "contains") {
+    return Array.isArray(raw) && part.accepted.some((accepted) => raw.some((item) => normalize(item) === normalize(accepted)));
+  }
   if (part.normalizer === "keywords") return matchesKeywords(String(raw), part.keywords || []);
   if (part.normalizer === "arrowDown") return normalize(String(raw)) === "down";
   return part.accepted.some((accepted) => normalize(String(raw), part.normalizer) === normalize(accepted, part.normalizer));
@@ -94,7 +164,7 @@ function matchesKeywords(value: string, keywordGroups: string[][]) {
   return Boolean(raw) && keywordGroups.some((group) => group.every((word) => raw.includes(normalize(word))));
 }
 
-function normalize(value: string, mode: "text" | "time" | "set" | "keywords" | "arrowDown" = "text") {
+function normalize(value: string, mode: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" = "text") {
   const clean = String(value || "")
     .toLowerCase()
     .replace(/[,$]/g, "")

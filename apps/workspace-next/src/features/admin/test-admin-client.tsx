@@ -489,12 +489,14 @@ function uniqueSorted(values: string[]) {
 function renderGradingDetails(details: Record<string, unknown> | null | undefined) {
   const parts = Array.isArray(details?.parts) ? details.parts : [];
   if (parts.length) {
+    const reviewRecommended = parts.some((part) => Boolean((part as { reviewRecommended?: unknown }).reviewRecommended));
     return (
       <span>
         Parts: {parts.map((part) => {
           const item = part as { id?: unknown; score?: unknown; possible?: unknown };
           return `${String(item.id || "")} ${formatScore(Number(item.score || 0))}/${formatScore(Number(item.possible || 0))}`;
         }).join(" · ")}
+        {reviewRecommended ? " · Review recommended" : ""}
       </span>
     );
   }

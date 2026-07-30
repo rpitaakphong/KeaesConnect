@@ -102,6 +102,8 @@ export function QuestionRenderer({
             />
           )}
         </label>
+      ) : question.type === "rayDiagram" ? (
+        <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
@@ -194,6 +196,98 @@ export function QuestionRenderer({
       {responseContent}
     </article>
   );
+}
+
+type RayTool = "normalEnd" | "labelPoint" | "reflectedEnd";
+
+function RayDiagramEditor({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "rayDiagram" }>;
+}) {
+  const [tool, setTool] = useState<RayTool>("normalEnd");
+  const [dragging, setDragging] = useState<RayTool | null>(null);
+  const boardRef = useRef<HTMLDivElement>(null);
+  const incidence = question.geometry.incidence;
+  const normalEnd = readRayPoint(answer.normalEnd);
+  const labelPoint = readRayPoint(answer.labelPoint);
+  const reflectedEnd = readRayPoint(answer.reflectedEnd);
+
+  function updatePoint(event: ReactPointerEvent<HTMLDivElement>, activeTool: RayTool) {
+    const board = boardRef.current;
+    if (!board) return;
+    const rect = board.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+    onChange({ ...answer, [activeTool]: `${x.toFixed(4)},${y.toFixed(4)}` });
+  }
+
+  function beginDrawing(event: ReactPointerEvent<HTMLDivElement>) {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setDragging(tool);
+    updatePoint(event, tool);
+  }
+
+  function moveDrawing(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!dragging) return;
+    updatePoint(event, dragging);
+  }
+
+  return (
+    <div className="ray-diagram-editor">
+      <div className="ray-tool-picker" aria-label="Ray diagram drawing tool">
+        <button className={tool === "normalEnd" ? "is-active" : ""} onClick={() => setTool("normalEnd")} type="button">Normal</button>
+        <button className={tool === "labelPoint" ? "is-active" : ""} onClick={() => setTool("labelPoint")} type="button">Label i</button>
+        <button className={tool === "reflectedEnd" ? "is-active" : ""} onClick={() => setTool("reflectedEnd")} type="button">Reflected ray</button>
+      </div>
+      <p className="ray-tool-status">
+        {tool === "normalEnd"
+          ? "Draw the normal from the point where the ray meets the mirror."
+          : tool === "labelPoint"
+            ? "Place i inside the angle of incidence."
+            : "Draw the reflected ray from the mirror to the eye."}
+      </p>
+      <div
+        className="ray-diagram-board"
+        onPointerDown={beginDrawing}
+        onPointerMove={moveDrawing}
+        onPointerUp={() => setDragging(null)}
+        onPointerCancel={() => setDragging(null)}
+        ref={boardRef}
+        role="application"
+        aria-label="Interactive reflection ray diagram"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt={question.backgroundAlt} draggable={false} src={question.backgroundSrc} />
+        <svg aria-hidden="true" viewBox="0 0 1000 400" preserveAspectRatio="none">
+          {normalEnd ? (
+            <>
+              <line className="ray-answer-line" x1={incidence.x * 1000} y1={incidence.y * 400} x2={normalEnd.x * 1000} y2={normalEnd.y * 400} />
+              <circle className="ray-answer-handle" cx={normalEnd.x * 1000} cy={normalEnd.y * 400} r="8" />
+            </>
+          ) : null}
+          {reflectedEnd ? (
+            <>
+              <line className="ray-answer-line reflected" x1={incidence.x * 1000} y1={incidence.y * 400} x2={reflectedEnd.x * 1000} y2={reflectedEnd.y * 400} />
+              <circle className="ray-answer-handle" cx={reflectedEnd.x * 1000} cy={reflectedEnd.y * 400} r="8" />
+            </>
+          ) : null}
+          {labelPoint ? <text className="ray-answer-label" x={labelPoint.x * 1000} y={labelPoint.y * 400}>i</text> : null}
+        </svg>
+      </div>
+      <button className="ray-clear-button" onClick={() => onChange({})} type="button">Clear drawing</button>
+    </div>
+  );
+}
+
+function readRayPoint(value: string | string[] | undefined) {
+  if (typeof value !== "string") return null;
+  const [x, y] = value.split(",").map(Number);
+  return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
 }
 
 function QuestionPrompt({ question }: { question: TestQuestion }) {
