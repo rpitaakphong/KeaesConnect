@@ -9,6 +9,7 @@ import {
 } from "@/features/tests/content/igcse-combined-science/combined-science";
 import { cieIgcseCombinedSciencePaper3Core } from "@/features/tests/content/igcse-combined-science/paper-3-core";
 import { cieIgcseCombinedSciencePaper4Extended } from "@/features/tests/content/igcse-combined-science/paper-4-extended";
+import { cieIgcseCombinedSciencePaper6AlternativeToPractical } from "@/features/tests/content/igcse-combined-science/paper-6-alternative-to-practical";
 import { mathOlympiad1 } from "@/features/tests/content/math-olympiad/level-1";
 import { mathOlympiad2 } from "@/features/tests/content/math-olympiad/level-2";
 import { mathOlympiad3 } from "@/features/tests/content/math-olympiad/level-3";
@@ -38,6 +39,7 @@ const tests: Record<string, TestDefinition> = {
   [cieIgcseCombinedSciencePaper2Extended.id]: cieIgcseCombinedSciencePaper2Extended,
   [cieIgcseCombinedSciencePaper3Core.id]: cieIgcseCombinedSciencePaper3Core,
   [cieIgcseCombinedSciencePaper4Extended.id]: cieIgcseCombinedSciencePaper4Extended,
+  [cieIgcseCombinedSciencePaper6AlternativeToPractical.id]: cieIgcseCombinedSciencePaper6AlternativeToPractical,
   [mathOlympiad1.id]: mathOlympiad1,
   [mathOlympiad2.id]: mathOlympiad2,
   [mathOlympiad3.id]: mathOlympiad3,

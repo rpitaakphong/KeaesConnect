@@ -2444,6 +2444,257 @@ tr:last-child td { border-bottom: 0; }
   fill: #159aa0;
   font-style: italic;
 }
+.practical-editor {
+  display: grid;
+  gap: 12px;
+}
+.practical-tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+.practical-tool-row button {
+  min-height: 40px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  padding: 7px 12px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+}
+.practical-tool-row button:last-child {
+  border-right: 0;
+}
+.practical-tool-row button.is-active {
+  background: #dcf7f3;
+  box-shadow: inset 0 -3px 0 #159aa0;
+}
+.biological-drawing-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(320px, 1.4fr);
+  gap: 18px;
+  align-items: start;
+}
+.biological-reference {
+  margin: 0;
+}
+.biological-reference img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.biological-reference figcaption {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: center;
+}
+.biological-drawing-board {
+  position: relative;
+  width: min(100%, 720px);
+  margin-top: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: #fff;
+  background-image:
+    linear-gradient(#edf1f2 1px, transparent 1px),
+    linear-gradient(90deg, #edf1f2 1px, transparent 1px);
+  background-size: 24px 24px;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+.biological-drawing-board svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.biological-stroke {
+  fill: none;
+  stroke: #24333a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.biological-stroke-core {
+  stroke: #159aa0;
+}
+.biological-stroke-pip {
+  stroke: #d9584d;
+}
+.practical-icon-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.practical-icon-actions button {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+}
+.practical-icon-actions button:disabled {
+  opacity: 0.4;
+}
+.graph-axis-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.graph-axis-controls label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.graph-axis-controls select {
+  width: 100%;
+}
+.practical-graph-tools {
+  width: 100%;
+}
+.practical-graph-tools button {
+  flex: 1 1 100px;
+}
+.practical-graph-board {
+  position: relative;
+  width: min(100%, 760px);
+  aspect-ratio: 10 / 7;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+.practical-graph-board svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.graph-grid-minor {
+  stroke: #d9e0e2;
+  stroke-width: 1;
+}
+.graph-grid-major {
+  stroke: #9eabad;
+  stroke-width: 1.6;
+}
+.graph-axis {
+  stroke: #24333a;
+  stroke-width: 3;
+}
+.graph-axis-label {
+  fill: #24333a;
+  font-size: 22px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+.graph-scale-label {
+  fill: #56666b;
+  font-size: 18px;
+}
+.graph-point-mark {
+  stroke: #159aa0;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.graph-best-fit-line {
+  stroke: #d9584d;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.graph-drag-handle {
+  fill: #fff;
+  stroke: #d9584d;
+  stroke-width: 4;
+}
+.virtual-measurement-board {
+  position: relative;
+  width: min(100%, 660px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+.virtual-measurement-board img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.virtual-measurement-board svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.measurement-line {
+  stroke: #159aa0;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.measurement-handle {
+  fill: #fff;
+  stroke: #159aa0;
+  stroke-width: 5;
+}
+.measurement-readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.measurement-readouts > div {
+  display: grid;
+  min-width: 150px;
+  gap: 2px;
+  border-left: 3px solid #159aa0;
+  padding: 7px 10px;
+}
+.measurement-readouts span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+@media (max-width: 720px) {
+  .biological-drawing-layout {
+    grid-template-columns: 1fr;
+  }
+  .biological-reference {
+    width: min(100%, 320px);
+  }
+  .graph-axis-controls {
+    grid-template-columns: 1fr 1fr;
+  }
+  .practical-tool-row {
+    width: 100%;
+  }
+  .practical-tool-row button {
+    flex: 1 1 120px;
+    border-bottom: 1px solid var(--line);
+  }
+}
 .inline-option-field {
   min-width: 0;
   margin: 0;

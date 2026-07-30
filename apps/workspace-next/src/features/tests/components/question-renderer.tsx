@@ -4,6 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
+import {
+  BiologicalDrawingEditor,
+  PracticalGraphEditor,
+  VirtualMeasurementEditor,
+} from "@/features/tests/components/science-practical-editors";
 
 export function QuestionRenderer({
   answer,
@@ -106,6 +111,12 @@ export function QuestionRenderer({
         <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "diagramAnnotation" ? (
         <DiagramAnnotationEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "biologicalDrawing" ? (
+        <BiologicalDrawingEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "practicalGraph" ? (
+        <PracticalGraphEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "virtualMeasurement" ? (
+        <VirtualMeasurementEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
@@ -309,6 +320,7 @@ function DiagramAnnotationEditor({
   const end = readRayPoint(answer.end);
   const label = readRayPoint(answer.label);
   const point = readRayPoint(answer.point);
+  const annotationLabel = question.geometry.variant === "doubleArrow" ? question.geometry.label : "Ea";
 
   useEffect(() => {
     if (!dragging) curvePointBuffer.current = Array.isArray(answer.points) ? answer.points : [];
@@ -370,6 +382,8 @@ function DiagramAnnotationEditor({
     ? "Draw the protease activity curve directly on the graph."
     : question.variant === "arrow"
       ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
+      : question.variant === "doubleArrow"
+        ? !start ? "Select the first end of the length arrow." : !end ? "Select the other end of the length arrow." : "Place the L label beside the arrow."
       : "Place X on the part of the graph where the student is decelerating.";
 
   return (
@@ -392,14 +406,25 @@ function DiagramAnnotationEditor({
             <polyline className="diagram-answer-curve" points={curvePoints.map((value) => `${value.x * 1000},${value.y * 600}`).join(" ")} />
           ) : null}
           {start && end ? (
-            <line className="diagram-answer-arrow" markerEnd="url(#annotation-arrowhead)" x1={start.x * 1000} x2={end.x * 1000} y1={start.y * 600} y2={end.y * 600} />
+            <line
+              className="diagram-answer-arrow"
+              markerEnd="url(#annotation-arrowhead)"
+              markerStart={question.variant === "doubleArrow" ? "url(#annotation-arrowhead-start)" : undefined}
+              x1={start.x * 1000}
+              x2={end.x * 1000}
+              y1={start.y * 600}
+              y2={end.y * 600}
+            />
           ) : null}
           <defs>
             <marker id="annotation-arrowhead" markerHeight="7" markerWidth="7" orient="auto" refX="6" refY="3.5">
               <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
             </marker>
+            <marker id="annotation-arrowhead-start" markerHeight="7" markerWidth="7" orient="auto-start-reverse" refX="6" refY="3.5">
+              <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
+            </marker>
           </defs>
-          {label ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>Ea</text> : null}
+          {label ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>{annotationLabel}</text> : null}
           {point ? <text className="diagram-answer-point" x={point.x * 1000} y={point.y * 600}>X</text> : null}
         </svg>
       </div>
