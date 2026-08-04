@@ -51,40 +51,55 @@ export const spipYear7SciencePre: TestDefinition = {
           "compact": true,
           "grading": {
             "mode": "auto",
-            "display": "copper: conductor; graphite: conductor; plastic, rubber, wood: insulator",
+            "display": "copper: electrical conductor; graphite: electrical conductor; plastic, rubber, wood: electrical insulator",
             "parts": [
               {
                 "id": "copper",
                 "accepted": [
-                  "conductor"
+                  "conductor",
+                  "electrical conductor",
+                  "a conductor",
+                  "an electrical conductor"
                 ],
                 "points": 0.6
               },
               {
                 "id": "graphite",
                 "accepted": [
-                  "conductor"
+                  "conductor",
+                  "electrical conductor",
+                  "a conductor",
+                  "an electrical conductor"
                 ],
                 "points": 0.6
               },
               {
                 "id": "plastic",
                 "accepted": [
-                  "insulator"
+                  "insulator",
+                  "electrical insulator",
+                  "an insulator",
+                  "an electrical insulator"
                 ],
                 "points": 0.6
               },
               {
                 "id": "rubber",
                 "accepted": [
-                  "insulator"
+                  "insulator",
+                  "electrical insulator",
+                  "an insulator",
+                  "an electrical insulator"
                 ],
                 "points": 0.6
               },
               {
                 "id": "wood",
                 "accepted": [
-                  "insulator"
+                  "insulator",
+                  "electrical insulator",
+                  "an insulator",
+                  "an electrical insulator"
                 ],
                 "points": 0.6
               }
