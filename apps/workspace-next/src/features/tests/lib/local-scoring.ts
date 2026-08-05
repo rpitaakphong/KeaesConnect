@@ -37,7 +37,7 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
   if (question.type === "virtualMeasurement") return scoreVirtualMeasurement(question, answer);
   if (!question.grading) return { score: 0, possible: question.points, details: { parts: [] } };
   if (question.grading.mode === "aiSplit") {
-    const raw = typeof answer === "string" ? answer : "";
+    const raw = responseText(answer);
     const contentCorrect = question.grading.contentTerms.some((term) => normalize(raw).includes(normalize(term)));
     const writingCorrect = normalize(raw).split(/\s+/).filter(Boolean).length >= 2;
     const contentScore = contentCorrect ? 0.5 : 0;
@@ -88,6 +88,15 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
     possible: question.points,
     details: { parts },
   };
+}
+
+function responseText(answer: unknown) {
+  if (typeof answer === "string") return answer;
+  if (answer && typeof answer === "object") {
+    const value = (answer as Record<string, unknown>).answer;
+    return typeof value === "string" ? value : "";
+  }
+  return "";
 }
 
 function scoreDiagramAnnotation(question: Extract<TestQuestion, { type: "diagramAnnotation" }>, answer: unknown) {

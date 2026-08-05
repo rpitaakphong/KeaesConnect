@@ -49,6 +49,8 @@ export type TestQuestion =
   | MultiChoiceQuestion
   | MultiTextQuestion
   | TextQuestion
+  | InlineClozeQuestion
+  | WritingChoiceQuestion
   | RayDiagramQuestion
   | DiagramAnnotationQuestion
   | BiologicalDrawingQuestion
@@ -182,6 +184,7 @@ export type MultiTextQuestion = QuestionBase & {
     options?: Array<{ value: string; label: string }>;
   }>;
   compact?: boolean;
+  uniqueOptions?: boolean;
   inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input"; id?: string }> }>;
   rankRows?: Array<{ label: string; items: Array<{ text: string; id: string }> }>;
   answerTable?: {
@@ -200,6 +203,28 @@ export type TextQuestion = QuestionBase & {
   type: "text";
   inputMode?: "text" | "number" | "textarea";
   placeholder?: string;
+  wordRange?: { min: number; max: number };
+};
+
+export type InlineClozeQuestion = QuestionBase & {
+  type: "inlineCloze";
+  title?: string;
+  paragraphs: Array<Array<
+    | { type: "text"; text: string }
+    | { type: "gap"; id: string; number: number; options: Array<{ value: string; label: string }> }
+  >>;
+};
+
+export type WritingChoiceQuestion = QuestionBase & {
+  type: "writingChoice";
+  options: Array<{
+    value: string;
+    label: string;
+    title: string;
+    prompt: string[];
+  }>;
+  placeholder?: string;
+  wordRange: { min: number; max: number };
 };
 
 export type RayDiagramQuestion = QuestionBase & {

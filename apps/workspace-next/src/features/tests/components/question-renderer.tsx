@@ -90,13 +90,16 @@ export function QuestionRenderer({
         <label>
           <span className="visually-hidden">{question.prompt}</span>
           {question.inputMode === "textarea" ? (
-            <textarea
-              autoComplete="off"
-              onChange={(event) => onChange(event.target.value)}
-              placeholder={question.placeholder || "answer"}
-              rows={3}
-              value={typeof answer === "string" ? answer : ""}
-            />
+            <>
+              <textarea
+                autoComplete="off"
+                onChange={(event) => onChange(event.target.value)}
+                placeholder={question.placeholder || "answer"}
+                rows={10}
+                value={typeof answer === "string" ? answer : ""}
+              />
+              {question.wordRange ? <WordCountStatus range={question.wordRange} value={typeof answer === "string" ? answer : ""} /> : null}
+            </>
           ) : (
             <input
               autoComplete="off"
@@ -107,6 +110,10 @@ export function QuestionRenderer({
             />
           )}
         </label>
+      ) : question.type === "inlineCloze" ? (
+        <InlineCloze answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "writingChoice" ? (
+        <WritingChoice answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "rayDiagram" ? (
         <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "diagramAnnotation" ? (
@@ -117,6 +124,8 @@ export function QuestionRenderer({
         <PracticalGraphEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "virtualMeasurement" ? (
         <VirtualMeasurementEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.uniqueOptions ? (
+        <UniqueOptionMatching answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
@@ -209,6 +218,137 @@ export function QuestionRenderer({
       {responseContent}
     </article>
   );
+}
+
+function InlineCloze({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "inlineCloze" }>;
+}) {
+  return (
+    <article className="inline-cloze" aria-label={question.title || question.prompt}>
+      {question.title ? <h4>{question.title}</h4> : null}
+      {question.paragraphs.map((paragraph, paragraphIndex) => (
+        <p key={paragraphIndex}>
+          {paragraph.map((segment, segmentIndex) => segment.type === "text" ? (
+            <span key={segmentIndex}>{segment.text}</span>
+          ) : (
+            <label className="inline-cloze-gap" key={segment.id}>
+              <span className="visually-hidden">Gap {segment.number}</span>
+              <strong aria-hidden="true">({segment.number})</strong>
+              <select
+                aria-label={`Gap ${segment.number}`}
+                onChange={(event) => onChange({ ...answer, [segment.id]: event.target.value })}
+                value={answerText(answer, segment.id)}
+              >
+                <option value="">Select</option>
+                {segment.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
+          ))}
+        </p>
+      ))}
+    </article>
+  );
+}
+
+function WritingChoice({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "writingChoice" }>;
+}) {
+  const promptId = answerText(answer, "promptId");
+  const response = answerText(answer, "answer");
+  const selected = question.options.find((option) => option.value === promptId);
+  return (
+    <div className="writing-choice">
+      <fieldset>
+        <legend>Choose one writing task</legend>
+        <div className="writing-choice-options">
+          {question.options.map((option) => (
+            <label className="choice-card" key={option.value}>
+              <input
+                checked={promptId === option.value}
+                name={`${question.id}-prompt`}
+                onChange={() => onChange({ ...answer, promptId: option.value })}
+                type="radio"
+                value={option.value}
+              />
+              <span><strong>{option.label}</strong> {option.title}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {selected ? (
+        <article className="writing-selected-prompt">
+          <h4>{selected.label}: {selected.title}</h4>
+          {selected.prompt.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </article>
+      ) : null}
+      <label>
+        <span>Your response</span>
+        <textarea
+          autoComplete="off"
+          disabled={!selected}
+          onChange={(event) => onChange({ ...answer, answer: event.target.value })}
+          placeholder={selected ? question.placeholder || "Write your response." : "Choose a task first."}
+          rows={12}
+          value={response}
+        />
+      </label>
+      <WordCountStatus range={question.wordRange} value={response} />
+    </div>
+  );
+}
+
+function UniqueOptionMatching({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "multiText" }>;
+}) {
+  const selectedValues = new Set(question.fields.map((field) => answerText(answer, field.id)).filter(Boolean));
+  return (
+    <div className="unique-option-matching">
+      {question.fields.map((field) => {
+        const currentValue = answerText(answer, field.id);
+        return (
+          <label key={field.id}>
+            <span>{field.label}</span>
+            <select
+              onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
+              value={currentValue}
+            >
+              <option value="">Select</option>
+              {(field.options || []).map((option) => (
+                <option disabled={selectedValues.has(option.value) && currentValue !== option.value} key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        );
+      })}
+    </div>
+  );
+}
+
+function WordCountStatus({ range, value }: { range: { min: number; max: number }; value: string }) {
+  const count = value.trim() ? value.trim().split(/\s+/).length : 0;
+  const state = count < range.min ? "below" : count > range.max ? "above" : "within";
+  const message = state === "below" ? `Write at least ${range.min} words.` : state === "above" ? `Reduce to ${range.max} words or fewer.` : "Within the required range.";
+  return <p className={`word-count-status is-${state}`}><strong>{count} words</strong><span>{message}</span></p>;
 }
 
 type RayTool = "normalEnd" | "labelPoint" | "reflectedEnd";

@@ -1,0 +1,361 @@
+import type { AnswerPart, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
+
+function exactText(id: string, number: number, prompt: string, accepted: string[], display: string, placeholder = "Type your answer"):
+  Extract<TestQuestion, { type: "text" }> {
+  return {
+    id,
+    number,
+    prompt,
+    points: 1,
+    type: "text",
+    placeholder,
+    grading: {
+      mode: "auto",
+      display,
+      parts: [{ id: "answer", accepted, points: 1 }],
+    },
+  };
+}
+
+function listeningText(
+  id: string,
+  number: number,
+  prompt: string,
+  accepted: string[],
+  display: string,
+): Extract<TestQuestion, { type: "text" }> {
+  return {
+    id,
+    number,
+    prompt,
+    points: 1,
+    type: "text",
+    placeholder: "Word or short phrase",
+    grading: {
+      mode: "auto",
+      display,
+      parts: [{ id: "answer", accepted, points: 1 }],
+    },
+  };
+}
+
+function singleChoice(
+  id: string,
+  number: number,
+  prompt: string,
+  choices: string[],
+  accepted: string[],
+  display: string,
+  note?: string,
+): Extract<TestQuestion, { type: "singleChoice" }> {
+  return {
+    id,
+    number,
+    prompt,
+    points: 1,
+    note,
+    type: "singleChoice",
+    choices: choices.map((label, index) => ({ value: String.fromCharCode(97 + index), label: `${String.fromCharCode(65 + index)}. ${label}` })),
+    grading: {
+      mode: "auto",
+      display,
+      parts: [{ id: "answer", accepted, points: 1 }],
+    },
+  };
+}
+
+const readingPart1Parts: AnswerPart[] = [
+  { id: "gap1", accepted: ["b"], points: 1 },
+  { id: "gap2", accepted: ["c"], points: 1 },
+  { id: "gap3", accepted: ["b"], points: 1 },
+  { id: "gap4", accepted: ["d"], points: 1 },
+  { id: "gap5", accepted: ["c"], points: 1 },
+  { id: "gap6", accepted: ["a"], points: 1 },
+  { id: "gap7", accepted: ["d"], points: 1 },
+  { id: "gap8", accepted: ["b"], points: 1 },
+];
+
+const matchingOptions = [
+  ["a", "A. the efficiency of the public transport system"],
+  ["b", "B. the natural beauty of the scenery"],
+  ["c", "C. the variety of goods in the markets"],
+  ["d", "D. the style of the architecture"],
+  ["e", "E. the well-designed plan of the city"],
+  ["f", "F. the helpfulness of the people"],
+  ["g", "G. the range of leisure opportunities"],
+  ["h", "H. the standard of the accommodation"],
+].map(([value, label]) => ({ value, label }));
+
+export const spipYear8EnglishPre: TestDefinition = {
+  id: "spip-year-8-english-pre",
+  title: "SPIP Year 8 English Pre-test",
+  subject: "English",
+  level: "SPIP Year 8",
+  totalPoints: 99,
+  status: "draft",
+  durationMinutes: 90,
+  audioSrc: "/test-assets/spip/year-8-english-pre/audio/spip-y8-english-listening.mp3",
+  audioMode: "lockedOnceStarted",
+  answerPayload: "rwAnswers",
+  aiShortAnswerRubrics: {
+    "spip-y8e-w1": "20 marks using four criteria worth 0-5 each: Content, Communicative Achievement, Organisation, and Language. The response must answer the environmental essay question, discuss transport, rivers and seas, include the student's own idea, explain whether pollution and environmental damage can be solved, give reasons, use an appropriate essay style, and reasonably follow the 140-190 word instruction.",
+    "spip-y8e-w2": "20 marks using four criteria worth 0-5 each: Content, Communicative Achievement, Organisation, and Language. Grade against the selected book review, article, or email task shown in the prompt. The response must address every requested content point, use the selected genre and an appropriate audience-aware style, and reasonably follow the 140-190 word instruction.",
+  },
+  sections: [
+    {
+      id: "reading-part-1",
+      label: "Reading Part 1",
+      title: "Multiple-choice cloze",
+      hint: "Choose the word that best fits each gap. The example (0) is already completed.",
+      questions: [
+        {
+          id: "spip-y8e-r1-8",
+          number: 1,
+          prompt: "Complete gaps 1-8 in What is genealogy?",
+          hidePrompt: true,
+          points: 8,
+          type: "inlineCloze",
+          title: "What is genealogy?",
+          paragraphs: [
+            [
+              { type: "text", text: "Genealogy is a (0) branch of history. It concerns family history, " },
+              { type: "gap", id: "gap1", number: 1, options: [["a", "A - instead"], ["b", "B - rather"], ["c", "C - except"], ["d", "D - sooner"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " than the national or world history studied at school. It doesn't merely involve drawing a family tree, however - tracing your family history can also " },
+              { type: "gap", id: "gap2", number: 2, options: [["a", "A - cause"], ["b", "B - mean"], ["c", "C - result"], ["d", "D - lead"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " in learning about your roots and your identity. The internet enables millions of people worldwide to " },
+              { type: "gap", id: "gap3", number: 3, options: [["a", "A - accomplish"], ["b", "B - access"], ["c", "C - approach"], ["d", "D - admit"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " information about their family history, without great " },
+              { type: "gap", id: "gap4", number: 4, options: [["a", "A - fee"], ["b", "B - price"], ["c", "C - charge"], ["d", "D - expense"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: "." },
+            ],
+            [
+              { type: "text", text: "People who research their family history often " },
+              { type: "gap", id: "gap5", number: 5, options: [["a", "A - describe"], ["b", "B - define"], ["c", "C - remark"], ["d", "D - regard"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " that it's a fascinating hobby which " },
+              { type: "gap", id: "gap6", number: 6, options: [["a", "A - reveals"], ["b", "B - opens"], ["c", "C - begins"], ["d", "D - arises"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " a lot about where they come from and whether they have famous ancestors. According to a survey involving 900 people who had researched their family history, the chances of discovering a celebrity in your past are one in ten. The survey also concluded that the " },
+              { type: "gap", id: "gap7", number: 7, options: [["a", "A - older"], ["b", "B - greater"], ["c", "C - higher"], ["d", "D - further"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " back you follow your family line, the more likely you are to find a relation who was much wealthier than you are. However, the vast majority of people who " },
+              { type: "gap", id: "gap8", number: 8, options: [["a", "A - attended"], ["b", "B - participated"], ["c", "C - included"], ["d", "D - associated"]].map(([value, label]) => ({ value, label })) },
+              { type: "text", text: " in the survey discovered they were better off than their ancestors." },
+            ],
+          ],
+          grading: { mode: "auto", display: "1 B; 2 C; 3 B; 4 D; 5 C; 6 A; 7 D; 8 B", parts: readingPart1Parts },
+        },
+      ],
+    },
+    {
+      id: "reading-part-2",
+      label: "Reading Part 2",
+      title: "Motorbike stunt rider",
+      hint: "Use only one word in each gap.",
+      storyTitle: "Motorbike stunt rider",
+      story: [
+        "I work (0) as a motorbike stunt rider - that is, I do tricks on my motorbike at shows. The Le Mans race track in France was (9) _____ I first saw some guys doing motorbike stunts. I'd never seen anyone riding a motorbike using just the back wheel before and I was (10) _____ impressed I went straight home and taught (11) _____ to do the same. It wasn't very long before I began to earn my living at shows performing my own motorbike stunts.",
+        "I have a degree (12) _____ mechanical engineering; this helps me to look at the physics (13) _____ lies behind each stunt. In addition to being responsible for design changes to the motorbike, I have to work (14) _____ every stunt I do. People often think that my work is very dangerous, but, apart (15) _____ some minor mechanical problem happening occasionally during a stunt, nothing ever goes wrong. I never feel in (16) _____ kind of danger because I'm very experienced.",
+      ],
+      questions: [
+        exactText("spip-y8e-r9", 9, "The Le Mans race track in France was (9) _____ I first saw some guys doing motorbike stunts.", ["where"], "where"),
+        exactText("spip-y8e-r10", 10, "I was (10) _____ impressed I went straight home.", ["so"], "so"),
+        exactText("spip-y8e-r11", 11, "I taught (11) _____ to do the same.", ["myself", "my self", "myslef"], "myself"),
+        exactText("spip-y8e-r12", 12, "I have a degree (12) _____ mechanical engineering.", ["in"], "in"),
+        exactText("spip-y8e-r13", 13, "I look at the physics (13) _____ lies behind each stunt.", ["which", "that", "whcih"], "which / that"),
+        exactText("spip-y8e-r14", 14, "I have to work (14) _____ every stunt I do.", ["out", "on", "at"], "out / on / at"),
+        exactText("spip-y8e-r15", 15, "Apart (15) _____ some minor mechanical problem, nothing ever goes wrong.", ["from", "form"], "from"),
+        exactText("spip-y8e-r16", 16, "I never feel in (16) _____ kind of danger.", ["any"], "any"),
+      ],
+    },
+    {
+      id: "reading-part-3",
+      label: "Reading Part 3",
+      title: "An incredible vegetable",
+      hint: "Use the capitalised word to form a word that fits the gap.",
+      storyTitle: "An incredible vegetable",
+      story: [
+        "Garlic, a member of the Liliacaea family which also includes onions, is (0) commonly used in cooking all around the world. China is currently the largest (17) _____ [PRODUCT] of garlic, which is particularly associated with the dishes of northern Africa and southern Europe. It is native to central Asia and has long had a history as a health-giving food, used both to prevent and cure (18) _____ [ILL].",
+        "The forefather of antibiotic medicine, Louis Pasteur, claimed garlic was as (19) _____ [EFFECT] as penicillin in treating infections. Modern-day (20) _____ [SCIENCE] have proved that garlic can indeed kill bacteria and even some viruses. In (21) _____ [ADD], some doctors believe that garlic can reduce blood (22) _____ [PRESS].",
+        "The only (23) _____ [ADVANTAGE] to this truly amazing food is that the strong and rather (24) _____ [SPICE] smell of garlic is not the most pleasant!",
+      ],
+      questions: [
+        exactText("spip-y8e-r17", 17, "PRODUCT", ["producer", "produser"], "producer"),
+        exactText("spip-y8e-r18", 18, "ILL", ["illness", "illnesses", "illnes", "illneses"], "illness / illnesses"),
+        exactText("spip-y8e-r19", 19, "EFFECT", ["effective", "efective", "effectve"], "effective"),
+        exactText("spip-y8e-r20", 20, "SCIENCE", ["scientists", "scientsts", "scientits"], "scientists"),
+        exactText("spip-y8e-r21", 21, "ADD", ["addition", "adition"], "addition"),
+        exactText("spip-y8e-r22", 22, "PRESS", ["pressure", "presure"], "pressure"),
+        exactText("spip-y8e-r23", 23, "ADVANTAGE", ["disadvantage", "disadvantge"], "disadvantage"),
+        exactText("spip-y8e-r24", 24, "SPICE", ["spicy", "spicey"], "spicy"),
+      ],
+    },
+    {
+      id: "reading-part-4",
+      label: "Reading Part 4",
+      title: "Key word transformations",
+      hint: "Complete the second sentence with 2-5 words, including the given word. Do not change the given word.",
+      questions: [
+        exactText("spip-y8e-r25", 25, "Joan was in favour of visiting the museum. Joan thought it would be _____ to the museum.", ["a good idea to go"], "a good idea to go", "2-5 words including IDEA"),
+        exactText("spip-y8e-r26", 26, "Arthur has the talent to become a concert pianist. Arthur is so _____ could become a concert pianist.", ["talented that he", "talanted that he"], "talented that he", "2-5 words including THAT"),
+        exactText("spip-y8e-r27", 27, "'Do you know when the match starts, Sally?' asked Mary. Mary asked Sally _____ time the match started.", ["if she knew what", "if she knew the", "if she new what", "if she new the"], "if she knew what / if she knew the", "2-5 words including IF"),
+        exactText("spip-y8e-r28", 28, "I knocked for ages at Ruth's door but I got no reply. I _____ knocking at Ruth's door but I got no reply.", ["spent a long time", "took a long time", "was a long time", "spnet a long time"], "spent / took / was a long time", "2-5 words including LONG"),
+        exactText("spip-y8e-r29", 29, "Everyone says that the band is planning a world tour next year. The band _____ planning a world tour next year.", ["is said to be", "are said to be", "is siad to be", "are siad to be"], "is / are said to be", "2-5 words including SAID"),
+        exactText("spip-y8e-r30", 30, "I'd prefer not to cancel the meeting. I'd rather _____ the meeting.", ["not call off", "not call of", "you didn't call off", "you did not call off", "we didn't call off", "we did not call off"], "not call off / you or we didn't call off", "2-5 words including CALL"),
+      ],
+    },
+    {
+      id: "reading-part-5",
+      label: "Reading Part 5",
+      title: "Caitlin's island",
+      hint: "Choose the answer that fits best according to the extract.",
+      storyTitle: "Life on the island of Hale",
+      story: [
+        "We live on the island of Hale. It's about four kilometres long and two kilometres wide at its broadest point, and it's joined to the mainland by a causeway called the Stand - a narrow road built across the mouth of the river which separates us from the rest of the country. Most of the time you wouldn't know we're on an island because the river mouth between us and the mainland is just a vast stretch of tall grasses and brown mud. But when there's a high tide and the water rises a half a metre or so above the road and nothing can pass until the tide goes out again a few hours later, then you know it's an island.",
+        "We were on our way back from the mainland. My older brother, Dominic, had just finished his first year at university in a town 150 km away. Dominic's train was due in at five and he'd asked for a lift back from the station. Now, Dad normally hates being disturbed when he's writing (which is just about all the time), and he also hates having to go anywhere, but despite the typical sighs and moans - why can't he get a taxi? what's wrong with the bus? - I could tell by the sparkle in his eyes that he was really looking forward to seeing Dominic.",
+        "So, anyway, Dad and I had driven to the mainland and picked up Dominic from the station. He had been talking non-stop from the moment he'd slung his rucksack in the boot and got in the car. University this, university that, writers, books, parties, people, money, gigs.... And when I say talking, I don't mean talking as in having a conversation, I mean talking as in jabbering like a mad thing. I didn't like it ... the way he spoke and waved his hands around as if he was some kind of intellectual or something. It was embarrassing. It made me feel uncomfortable - that kind of discomfort you feel when someone you like, someone close to you, suddenly starts acting like a complete idiot. And I didn't like the way he was ignoring me, either. For all the attention I was getting I might as well not have been there. I felt a stranger in my own car.",
+        "As we approached the island on that Friday afternoon, the tide was low and the Stand welcomed us home, stretched out before us, clear and dry, beautifully hazy in the heat - a raised strip of grey concrete bound by white railings and a low footpath on either side, with rough cobbled banks leading down to the water. Beyond the railings, the water was glinting with that wonderful silver light we sometimes get here in the late afternoon which lazes through to the early evening.",
+        "We were about halfway across when I saw the boy. My first thought was how odd it was to see someone walking on the Stand. You don't often see people walking around here. Between Hale and Moulton (the nearest town about thirty kilometres away on the mainland), there's nothing but small cottages, farmland, heathland and a couple of hills. So islanders don't walk because of that. If they're going to Moulton they tend to take the bus. So the only pedestrians you're likely to see around here are walkers or bird-watchers. But even from a distance I could tell that the figure ahead didn't fit into either of these categories. I wasn't sure how I knew, I just did.",
+        "As we drew closer, he became clearer. He was actually a young man rather than a boy. Although he was on the small side, he wasn't as slight as I'd first thought. He wasn't exactly muscular, but he wasn't weedy-looking either. It's hard to explain. There was a sense of strength about him, a graceful strength that showed in his balance, the way he held himself, the way he walked....",
+      ],
+      questions: [
+        singleChoice("spip-y8e-r31", 31, "In the first paragraph, what is Caitlin's main point about the island?", ["It can be dangerous to try to cross from the mainland.", "It is much smaller than it looks from the mainland.", "It is only completely cut off at certain times.", "It can be a difficult place for people to live in."], ["c"], "C"),
+        singleChoice("spip-y8e-r32", 32, "What does Caitlin suggest about her father?", ["His writing prevents him from doing things he wants to with his family.", "His initial reaction to his son's request is different from usual.", "His true feelings are easily hidden from his daughter.", "His son's arrival is one event he will take time off for."], ["d"], "D"),
+        singleChoice("spip-y8e-r33", 33, "Caitlin emphasises her feelings of discomfort because she", ["is embarrassed that she doesn't understand what her brother is talking about.", "feels confused about why she can't relate to her brother any more.", "is upset by the unexpected change in her brother's behaviour.", "feels foolish that her brother's attention is so important to her."], ["c"], "C"),
+        singleChoice("spip-y8e-r34", 34, "In the fourth paragraph, what is Caitlin's purpose in describing the island?", ["to express her positive feelings about it", "to explain how the road was built", "to illustrate what kind of weather was usual", "to describe her journey home"], ["a"], "A"),
+        singleChoice("spip-y8e-r35", 35, "In 'because of that', 'that' refers to the fact that", ["locals think it is odd to walk anywhere.", "it is easier for people to take the bus than walk.", "people have everything they need on the island.", "there is nowhere in particular to walk to from the island."], ["d"], "D"),
+        singleChoice("spip-y8e-r36", 36, "What do we learn about Caitlin's reactions to the boy?", ["She felt his air of confidence contrasted with his physical appearance.", "She was able to come up with a reason for him being there.", "She realised her first impression of him was inaccurate.", "She thought she had seen him somewhere before."], ["c"], "C"),
+      ],
+    },
+    {
+      id: "writing-part-1",
+      label: "Writing Part 1",
+      title: "Mandatory essay",
+      hint: "Write 140-190 words in an appropriate style. You must answer this question.",
+      storyTitle: "Essay question",
+      story: [
+        "In your English class you have been talking about the environment. Now your English teacher has asked you to write an essay.",
+        "Every country in the world has problems with pollution and damage to the environment. Do you think these problems can be solved?",
+        "Write about: 1. transport; 2. rivers and seas; 3. your own idea. Use all the notes and give reasons for your point of view.",
+      ],
+      questions: [
+        {
+          id: "spip-y8e-w1",
+          number: 1,
+          prompt: "Write your essay.",
+          points: 20,
+          note: "AI rubric scoring is configured for assigned submissions. The test remains inactive until the official materials are installed.",
+          type: "text",
+          inputMode: "textarea",
+          placeholder: "Write 140-190 words.",
+          wordRange: { min: 140, max: 190 },
+          grading: { mode: "aiSplit", display: "20-mark B2 writing rubric", contentTerms: ["transport", "river", "sea", "environment", "pollution"] },
+        },
+      ],
+    },
+    {
+      id: "writing-part-2",
+      label: "Writing Part 2",
+      title: "Choose one task",
+      hint: "Choose one of Questions 2-4 and write 140-190 words in an appropriate style.",
+      questions: [
+        {
+          id: "spip-y8e-w2",
+          number: 2,
+          prompt: "Choose and complete one writing task.",
+          points: 20,
+          note: "AI scoring uses the selected task and the four-category B2 writing rubric.",
+          type: "writingChoice",
+          placeholder: "Write 140-190 words.",
+          wordRange: { min: 140, max: 190 },
+          options: [
+            {
+              value: "2",
+              label: "Question 2",
+              title: "Book review",
+              prompt: [
+                "Have you read a book in which the main character behaved in a surprising way?",
+                "Write a review explaining what the main character did and why it was surprising. Say whether or not you would recommend the book to other people.",
+              ],
+            },
+            {
+              value: "3",
+              label: "Question 3",
+              title: "Article - The most useful thing I have ever learned",
+              prompt: [
+                "What is the most useful thing you have learned? Who did you learn it from? Why is it useful?",
+                "Write an article answering these questions for an English-language website.",
+              ],
+            },
+            {
+              value: "4",
+              label: "Question 4",
+              title: "Email to David",
+              prompt: [
+                "David's college friends are visiting your area for a week's touring holiday. They want to travel around and learn about the local area and its history.",
+                "Tell David about places they could visit and the best way to travel around - car, bike or coach. Write your email.",
+              ],
+            },
+          ],
+          grading: { mode: "aiSplit", display: "20-mark B2 writing rubric", contentTerms: ["recommend", "useful", "visit", "travel"] },
+        },
+      ],
+    },
+    {
+      id: "listening-part-1",
+      label: "Listening Part 1",
+      title: "Eight situations",
+      hint: "You will hear people talking in eight different situations. Choose the best answer (A, B or C).",
+      questions: [
+        singleChoice("spip-y8e-l1", 1, "You hear a message on a telephone answering machine. Why is the speaker calling?", ["to confirm some arrangements", "to issue an invitation", "to persuade someone to do something"], ["b"], "B"),
+        singleChoice("spip-y8e-l2", 2, "You hear two people talking about a water-sports centre. The man says the centre should", ["pay more attention to safety.", "offer activities for small children.", "provide all the equipment needed."], ["b"], "B"),
+        singleChoice("spip-y8e-l3", 3, "You hear a professional tennis player talking about her career. What annoys her most about interviewers?", ["their belief that she leads a glamorous life", "their assumption that she's motivated by money", "their tendency to disturb her while she's travelling"], ["a"], "A"),
+        singleChoice("spip-y8e-l4", 4, "You hear a poet talking about his work. What is he doing?", ["giving his reasons for starting to visit schools", "justifying the childlike nature of some of his recent poems", "explaining that his poems appeal to people of different ages"], ["c"], "C"),
+        singleChoice("spip-y8e-l5", 5, "You hear two people talking about a programme they saw on TV. The woman thinks the programme was", ["irritating.", "sad.", "uninformative."], ["c"], "C"),
+        singleChoice("spip-y8e-l6", 6, "You hear two people talking about an ice-hockey game they've just seen. How does the girl feel about it?", ["pleased to have had the experience", "relieved that she'd dressed appropriately", "impressed by the performance of the team"], ["a"], "A"),
+        singleChoice("spip-y8e-l7", 7, "You overhear two friends talking about a restaurant. What do they both like about it?", ["the presentation of the food", "the atmosphere of the place", "the originality of the cooking"], ["a"], "A"),
+        singleChoice("spip-y8e-l8", 8, "You hear a man talking on the radio. What type of information is he giving?", ["a travel announcement", "a weather forecast", "an accident report"], ["a"], "A"),
+      ],
+    },
+    {
+      id: "listening-part-2",
+      label: "Listening Part 2",
+      title: "Spectacled Bears",
+      hint: "Complete each sentence with a word or short phrase.",
+      storyTitle: "Spectacled Bears",
+      story: ["Angela Thomas, who works for a wildlife organisation, talks about the spectacled bear."],
+      storyImage: { src: "/test-assets/spip/year-8-english-pre/spectacled-bear.png", alt: "Spectacled bear", maxWidth: 108 },
+      questions: [
+        listeningText("spip-y8e-l9", 9, "Angela says that it was the _____ of the spectacled bear that first interested her.", ["name", "great name"], "(great) name"),
+        listeningText("spip-y8e-l10", 10, "The bear's markings can be found on its _____ as well as its eyes and cheeks.", ["chest", "chset"], "chest"),
+        listeningText("spip-y8e-l11", 11, "Spectacled bears have been seen in _____ areas of Argentina.", ["northern", "northen", "nothern"], "northern"),
+        listeningText("spip-y8e-l12", 12, "The bears usually live in _____, though they can also be found in other places.", ["forests", "forrests"], "forests"),
+        listeningText("spip-y8e-l13", 13, "Spectacled bears behave differently from other types of bear during _____, which Angela finds surprising.", ["winter", "the winter", "wintre"], "(the) winter"),
+        listeningText("spip-y8e-l14", 14, "Angela is upset that _____ are the biggest danger to spectacled bears.", ["human", "humans", "the human", "the humans", "some human", "some humans", "humens"], "(the / some) human(s)"),
+        listeningText("spip-y8e-l15", 15, "Spectacled bears usually eat _____ and tree bark.", ["berries", "beries", "berrys"], "berries"),
+        listeningText("spip-y8e-l16", 16, "Bears climb trees and make a _____, which fascinated Angela.", ["platform", "a platform", "platfrom"], "(a) platform"),
+        listeningText("spip-y8e-l17", 17, "When bears eat meat, they much prefer _____, although they do eat other creatures.", ["mice", "small mice", "little mice"], "(small / little) mice"),
+        listeningText("spip-y8e-l18", 18, "One man has produced an amusing _____ about the time he spent studying the bears.", ["diary", "funny diary", "dairy"], "(funny) diary"),
+      ],
+    },
+    {
+      id: "listening-part-3",
+      label: "Listening Part 3",
+      title: "City visits",
+      hint: "Choose what each speaker liked most. Use each letter only once; three letters are not needed.",
+      questions: [
+        {
+          id: "spip-y8e-l19-23",
+          number: 19,
+          prompt: "Match Speakers 1-5 to options A-H.",
+          points: 5,
+          type: "multiText",
+          uniqueOptions: true,
+          fields: [1, 2, 3, 4, 5].map((speaker, index) => ({ id: `speaker${index + 1}`, label: `Speaker ${speaker} - Question ${19 + index}`, options: matchingOptions })),
+          grading: {
+            mode: "auto",
+            display: "19 G; 20 B; 21 A; 22 H; 23 F",
+            parts: ["g", "b", "a", "h", "f"].map((answer, index) => ({ id: `speaker${index + 1}`, accepted: [answer], points: 1 })),
+          },
+        },
+      ],
+    },
+  ],
+};

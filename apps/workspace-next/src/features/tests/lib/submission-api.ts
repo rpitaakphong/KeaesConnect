@@ -37,11 +37,21 @@ export async function submitAttempt(profile: StudentProfile, answers: TestAnswer
 
 function shapeAnswersForDatabase(answers: TestAnswers, test?: TestDefinition): TestAnswers {
   if (test?.answerPayload !== "rwAnswers") return answers;
+  const writingChoices = new Map(test.sections.flatMap((section) => section.questions)
+    .filter((question) => question.type === "writingChoice")
+    .map((question) => [question.id, question]));
+  const databaseAnswers = Object.fromEntries(Object.entries(answers).map(([questionId, value]) => {
+    const question = writingChoices.get(questionId);
+    if (!question || !value || typeof value !== "object") return [questionId, value];
+    const option = question.options.find((item) => item.value === value.promptId);
+    const prefix = option ? `${option.label}: ${option.title}\n` : "";
+    return [questionId, `${prefix}${typeof value.answer === "string" ? value.answer : ""}`.trim()];
+  })) as TestAnswers;
   const rwAnswers = Object.fromEntries(
-    Object.entries(answers).filter(([, value]) => typeof value === "string"),
+    Object.entries(databaseAnswers).filter(([, value]) => typeof value === "string"),
   ) as Record<string, string>;
   return {
-    ...answers,
+    ...databaseAnswers,
     rwAnswers,
   };
 }
@@ -50,10 +60,17 @@ async function gradeShortAnswers(assignmentToken: string, answers: TestAnswers, 
   const rubricEntries = Object.entries(test.aiShortAnswerRubrics || {});
   const payload = rubricEntries.map(([questionId, rubric]) => {
     const question = test.sections.flatMap((section) => section.questions).find((item) => item.id === questionId);
+    const rawAnswer = answers[questionId];
+    const writingAnswer = rawAnswer && typeof rawAnswer === "object" ? rawAnswer : null;
+    const selectedPrompt = question?.type === "writingChoice"
+      ? question.options.find((option) => option.value === writingAnswer?.promptId)
+      : null;
     return {
       questionId,
-      prompt: question?.prompt || questionId,
-      answer: String(answers[questionId] || ""),
+      prompt: selectedPrompt
+        ? `${question?.prompt || questionId}\nSelected task: ${selectedPrompt.label}: ${selectedPrompt.title}\n${selectedPrompt.prompt.join("\n")}`
+        : question?.prompt || questionId,
+      answer: typeof rawAnswer === "string" ? rawAnswer : String(writingAnswer?.answer || ""),
       rubric,
     };
   });
