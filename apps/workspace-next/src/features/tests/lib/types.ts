@@ -169,6 +169,7 @@ export type DependentScoringRule =
     sourceField: string;
     targetField: string;
     multiplier: number;
+    sourceAccepted?: string[];
     fullCreditAccepted: string[];
     tolerance?: number;
   };

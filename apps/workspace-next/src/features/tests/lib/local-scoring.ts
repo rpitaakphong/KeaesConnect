@@ -387,10 +387,11 @@ function scoreDependentQuestion(question: TestQuestion, answer: unknown, answers
   } else if (rule.type === "fieldConversion") {
     const source = numericValue(response[rule.sourceField]);
     const target = numericValue(response[rule.targetField]);
+    const sourceCorrect = (rule.sourceAccepted || []).some((accepted) => Math.abs((source ?? Number.NaN) - Number(accepted)) <= (rule.tolerance ?? 0.001));
     const fullCredit = rule.fullCreditAccepted.some((accepted) => Math.abs((target ?? Number.NaN) - Number(accepted)) <= (rule.tolerance ?? 0.001));
     const conversionCorrect = source !== null && target !== null && Math.abs(target - source * rule.multiplier) <= (rule.tolerance ?? 0.001);
     const parts = [
-      componentPart("conversion", conversionCorrect || fullCredit, 1, { source, target, multiplier: rule.multiplier }),
+      componentPart("conversion", sourceCorrect || conversionCorrect || fullCredit, 1, { source, target, multiplier: rule.multiplier }),
       componentPart("final-answer", fullCredit, 1, { accepted: rule.fullCreditAccepted }),
     ];
     return { score: parts.reduce((sum, part) => sum + part.score, 0), possible: question.points, details: { parts } };

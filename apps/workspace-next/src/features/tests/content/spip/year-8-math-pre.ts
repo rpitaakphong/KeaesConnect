@@ -77,7 +77,7 @@ export const spipYear8MathPre: TestDefinition = {
           id: "spip-y8m-q6", number: 6, prompt: "The scale shows measurements in kilograms. Write the measurement in grams.", points: 2, type: "multiText", compact: true,
           visuals: [{ type: "image", src: `${assets}/q6-scale.png`, alt: "Kilogram scale with pointer at 0.65 kilograms", maxWidth: 560 }],
           fields: [{ id: "reading", label: "Scale reading (kg)", placeholder: "kg" }, { id: "grams", label: "Measurement (g)", placeholder: "grams" }],
-          grading: { mode: "dependent", display: "0.65 kg = 650 g", rule: { type: "fieldConversion", sourceField: "reading", targetField: "grams", multiplier: 1000, fullCreditAccepted: ["650"], tolerance: 0.01 } },
+          grading: { mode: "dependent", display: "0.65 kg = 650 g", rule: { type: "fieldConversion", sourceField: "reading", targetField: "grams", multiplier: 1000, sourceAccepted: ["0.65", ".65"], fullCreditAccepted: ["650"], tolerance: 0.01 } },
         },
         {
           id: "spip-y8m-q7", number: 7, prompt: "Name the solid with 5 faces, 9 edges and 6 vertices.", points: 1, type: "text",
@@ -200,7 +200,7 @@ export const spipYear8MathPre: TestDefinition = {
           visuals: [{ type: "image", src: `${assets}/q25-remaining-area.png`, alt: "Square ABCD with a rectangle removed from corner C", maxWidth: 390 }],
           fields: [{ id: "conversion", label: "Converted dimensions or one area" }, { id: "method", label: "Area method" }, { id: "answer", label: "Remaining area", placeholder: "m²" }],
           grading: { mode: "auto", display: "3.94 m²", scoringStrategy: "highestCorrect", parts: [
-            { id: "conversion", accepted: [], normalizer: "keywords", keywords: [["0.3", "0.2"], ["30000"], ["2000"]], points: 1, reviewRecommended: false },
+            { id: "conversion", accepted: [], normalizer: "keywords", keywords: [["0.3", "0.2"], ["2", "4"], ["0.06"], ["40000"], ["600"]], points: 1, reviewRecommended: false },
             { id: "method", accepted: [], normalizer: "keywords", keywords: [["2", "2", "0.3", "0.2"], ["40000", "600"], ["39400"]], points: 2, reviewRecommended: false },
             { id: "answer", accepted: ["3.94", "3.94 m2", "3.94 m²"], points: 3 },
           ] },
@@ -209,7 +209,7 @@ export const spipYear8MathPre: TestDefinition = {
           id: "spip-y8m-q26", number: 26, prompt: "Use the two given 6 cm sides and 108° angle to complete the regular pentagon.", points: 2, type: "geometryConstruction", maxSegments: 3,
           backgroundSrc: `${assets}/q26-pentagon.png`, backgroundAlt: "Two sides of a regular pentagon, each 6 centimetres, meeting at 108 degrees",
           snapPoints: [{ x: 0.256, y: 0.064 }, { x: 0.686, y: 0.064 }, { x: 0.819, y: 0.562 }],
-          geometry: { variant: "regularPentagon", givenVertices: [{ x: 0.256, y: 0.064 }, { x: 0.686, y: 0.064 }, { x: 0.819, y: 0.562 }], aspectRatio: 0.818, sideTolerance: 0.012, angleToleranceDegrees: 1.5, closeTolerance: 0.025 },
+          geometry: { variant: "regularPentagon", givenVertices: [{ x: 0.256, y: 0.064 }, { x: 0.686, y: 0.064 }, { x: 0.819, y: 0.562 }], aspectRatio: 0.818, sideTolerance: 0.008, angleToleranceDegrees: 1, closeTolerance: 0.025 },
           grading: { mode: "auto", display: "Regular pentagon with 6 cm sides and 108° internal angles", parts: [] },
         },
         {
