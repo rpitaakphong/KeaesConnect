@@ -35,6 +35,9 @@ export function TestRunner({ test }: { test: TestDefinition }) {
     () => groupScienceQuestions(active?.questions || [], Boolean(active?.groupByQuestionNumber)),
     [active],
   );
+  const activeQuestionCount = active?.groupByQuestionNumber
+    ? new Set(active.questions.map((question) => question.number)).size
+    : active?.questions.length || 0;
 
   function updateAnswer(questionId: string, value: TestAnswers[string]) {
     const next = { ...answers, [questionId]: value };
@@ -108,7 +111,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
               <>
                 <div className="section-head">
                   <div>
-                    <p className="eyebrow">{active.label} - {active.questions.length} questions</p>
+                    <p className="eyebrow">{active.label} - {activeQuestionCount} questions</p>
                     <h2>{active.title}</h2>
                     {active.hint ? <p>{active.hint}</p> : null}
                   </div>

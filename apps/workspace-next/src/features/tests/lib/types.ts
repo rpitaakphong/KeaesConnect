@@ -53,6 +53,7 @@ export type TestQuestion =
   | WritingChoiceQuestion
   | RayDiagramQuestion
   | DiagramAnnotationQuestion
+  | GeometryConstructionQuestion
   | BiologicalDrawingQuestion
   | PracticalGraphQuestion
   | VirtualMeasurementQuestion;
@@ -96,7 +97,7 @@ export type QuestionGrading =
     display: string;
     parts: AnswerPart[];
     scoreThresholds?: Array<{ minCorrect: number; points: number }>;
-    scoringStrategy?: "standard" | "investigationPlan";
+    scoringStrategy?: "standard" | "investigationPlan" | "highestCorrect";
   }
   | {
     mode: "dependent";
@@ -113,7 +114,7 @@ export type AnswerPart = {
   id: string;
   accepted: string[];
   points: number;
-  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown";
+  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
   keywords?: string[][];
   reviewRecommended?: boolean;
   category?: "apparatus" | "method" | "measurements" | "controls" | "processing";
@@ -161,6 +162,14 @@ export type DependentScoringRule =
     unitField: string;
     significantFigures: number;
     unitAccepted: string[];
+    tolerance?: number;
+  }
+  | {
+    type: "fieldConversion";
+    sourceField: string;
+    targetField: string;
+    multiplier: number;
+    fullCreditAccepted: string[];
     tolerance?: number;
   };
 
@@ -273,6 +282,38 @@ export type DiagramAnnotationQuestion = QuestionBase & {
       endpointTolerance: number;
       labelRegion: { minX: number; maxX: number; minY: number; maxY: number };
       label: string;
+    };
+};
+
+export type GeometryPoint = { x: number; y: number };
+
+export type GeometryConstructionQuestion = QuestionBase & {
+  type: "geometryConstruction";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  maxSegments: number;
+  snapPoints?: GeometryPoint[];
+  geometry:
+    | {
+      variant: "trianglePartition";
+      triangle: [GeometryPoint, GeometryPoint, GeometryPoint];
+      partition: "trapeziumTriangle" | "rhombusTwoTriangles";
+      subdivisions: number;
+      endpointTolerance: number;
+    }
+    | {
+      variant: "coordinateLine";
+      start: GeometryPoint;
+      end: GeometryPoint;
+      endpointTolerance: number;
+    }
+    | {
+      variant: "regularPentagon";
+      givenVertices: [GeometryPoint, GeometryPoint, GeometryPoint];
+      aspectRatio: number;
+      sideTolerance: number;
+      angleToleranceDegrees: number;
+      closeTolerance: number;
     };
 };
 

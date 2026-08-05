@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
+import { MathGeometryEditor } from "@/features/tests/components/math-geometry-editor";
 import {
   BiologicalDrawingEditor,
   PracticalGraphEditor,
@@ -118,6 +119,8 @@ export function QuestionRenderer({
         <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "diagramAnnotation" ? (
         <DiagramAnnotationEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "geometryConstruction" ? (
+        <MathGeometryEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "biologicalDrawing" ? (
         <BiologicalDrawingEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "practicalGraph" ? (

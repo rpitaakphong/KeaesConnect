@@ -2516,6 +2516,123 @@ tr:last-child td { border-bottom: 0; }
 .diagram-answer-point {
   fill: #159aa0;
 }
+
+.math-geometry-editor {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  width: 100%;
+}
+
+.math-geometry-board {
+  position: relative;
+  width: min(100%, 680px);
+  touch-action: none;
+  user-select: none;
+}
+
+.math-geometry-board img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.math-geometry-board svg {
+  inset: 0;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.math-construction-line {
+  stroke: #0f766e;
+  stroke-linecap: round;
+  stroke-width: 7;
+  vector-effect: non-scaling-stroke;
+}
+
+.math-construction-pending {
+  fill: #0f766e;
+  stroke: #fff;
+  stroke-width: 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.math-construction-handle {
+  background: #fff;
+  border: 3px solid #0f766e;
+  border-radius: 50%;
+  height: 24px;
+  padding: 0;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  z-index: 2;
+}
+
+.math-construction-handle:focus-visible {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.math-geometry-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  min-height: 42px;
+}
+
+.math-geometry-toolbar .icon-button {
+  align-items: center;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  width: 40px;
+}
+
+.math-geometry-measurements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.math-geometry-measurements span {
+  background: #ecfeff;
+  border: 1px solid #99f6e4;
+  color: #155e75;
+  font-variant-numeric: tabular-nums;
+  padding: 0.35rem 0.55rem;
+}
+
+.column-calculation-row {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  justify-content: center;
+}
+
+.column-result-row {
+  border-top: 2px solid currentColor;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 520px) {
+  .math-geometry-board {
+    width: 100%;
+  }
+
+  .math-construction-handle {
+    height: 28px;
+    width: 28px;
+  }
+
+  .math-geometry-measurements {
+    font-size: 0.8rem;
+    justify-content: center;
+  }
+}
 .diagram-answer-label,
 .diagram-answer-point {
   font-size: 42px;
