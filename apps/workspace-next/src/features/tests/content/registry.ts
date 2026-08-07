@@ -21,6 +21,7 @@ import { spipYear7MathPre } from "@/features/tests/content/spip/math-pre";
 import { spipYear7SciencePre } from "@/features/tests/content/spip/science-pre";
 import { spipYear8EnglishPre } from "@/features/tests/content/spip/year-8-english-pre";
 import { spipYear8MathPre } from "@/features/tests/content/spip/year-8-math-pre";
+import { spipYear8SciencePre } from "@/features/tests/content/spip/year-8-science-pre";
 import { starterProgressListening } from "@/features/tests/content/starter/listening";
 import { starterProgressReadingWriting } from "@/features/tests/content/starter/reading-writing";
 import { summerEnglishLevel1Pretest } from "@/features/tests/content/summer-english/level-1-pretest";
@@ -53,6 +54,7 @@ const tests: Record<string, TestDefinition> = {
   [spipYear7SciencePre.id]: spipYear7SciencePre,
   [spipYear8EnglishPre.id]: spipYear8EnglishPre,
   [spipYear8MathPre.id]: spipYear8MathPre,
+  [spipYear8SciencePre.id]: spipYear8SciencePre,
   [starterProgressListening.id]: starterProgressListening,
   [starterProgressReadingWriting.id]: starterProgressReadingWriting,
   [summerEnglishLevel1Pretest.id]: summerEnglishLevel1Pretest,

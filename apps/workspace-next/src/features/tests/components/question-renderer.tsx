@@ -5,6 +5,7 @@ import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
 import { MathGeometryEditor } from "@/features/tests/components/math-geometry-editor";
+import { HistogramEditor, TallyTableEditor } from "@/features/tests/components/science-data-editors";
 import {
   BiologicalDrawingEditor,
   PracticalGraphEditor,
@@ -127,6 +128,10 @@ export function QuestionRenderer({
         <PracticalGraphEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "virtualMeasurement" ? (
         <VirtualMeasurementEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "tallyTable" ? (
+        <TallyTableEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "histogram" ? (
+        <HistogramEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.uniqueOptions ? (
         <UniqueOptionMatching answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
@@ -209,7 +214,7 @@ export function QuestionRenderer({
   }
 
   return (
-    <article className="question-card">
+    <article className={`question-card question-${question.id}`}>
       <div className="question-head">
         <div>
           <p className="eyebrow">Question {question.number}</p>
@@ -497,7 +502,7 @@ function DiagramAnnotationEditor({
       writePoint("point", value);
       return;
     }
-    if (!start || (start && end && label)) {
+    if (!start || (start && end && (question.variant === "directionArrow" || label))) {
       setDragging("start");
       onChange({ start: `${value.x.toFixed(4)},${value.y.toFixed(4)}` });
     } else if (!end) {
@@ -527,6 +532,8 @@ function DiagramAnnotationEditor({
       ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
       : question.variant === "doubleArrow"
         ? !start ? "Select the first end of the length arrow." : !end ? "Select the other end of the length arrow." : "Place the L label beside the arrow."
+      : question.variant === "directionArrow"
+        ? !start ? "Select where the force arrow begins." : !end ? "Select where the arrow points." : "Drag again to replace the arrow."
       : "Place X on the part of the graph where the student is decelerating.";
 
   return (
@@ -567,7 +574,7 @@ function DiagramAnnotationEditor({
               <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
             </marker>
           </defs>
-          {label ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>{annotationLabel}</text> : null}
+          {label && question.variant !== "directionArrow" ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>{annotationLabel}</text> : null}
           {point ? <text className="diagram-answer-point" x={point.x * 1000} y={point.y * 600}>X</text> : null}
         </svg>
       </div>

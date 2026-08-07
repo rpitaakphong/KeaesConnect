@@ -19,6 +19,12 @@ export type TestDefinition = {
   durationMinutes?: number;
   audioSrc?: string;
   audioMode?: "standard" | "lockedOnceStarted";
+  audioStartConfirmation?: {
+    title: string;
+    message: string;
+    confirmLabel?: string;
+    cancelLabel?: string;
+  };
   answerPayload?: "default" | "rwAnswers";
   aiShortAnswerRubrics?: Record<string, string>;
   sections: TestSection[];
@@ -41,6 +47,16 @@ export type TestSection = {
     maxWidth?: number;
   };
   storyLayout?: "default" | "heroImage" | "imageFirst";
+  transformationExample?: {
+    number: string;
+    source: string;
+    keyword: string;
+    sentencePrefix: string;
+    sentenceSuffix: string;
+    answer: string;
+    explanation: string;
+    footer: string;
+  };
   questions: TestQuestion[];
 };
 
@@ -56,7 +72,9 @@ export type TestQuestion =
   | GeometryConstructionQuestion
   | BiologicalDrawingQuestion
   | PracticalGraphQuestion
-  | VirtualMeasurementQuestion;
+  | VirtualMeasurementQuestion
+  | TallyTableQuestion
+  | HistogramQuestion;
 
 export type QuestionBase = {
   id: string;
@@ -97,12 +115,25 @@ export type QuestionGrading =
     display: string;
     parts: AnswerPart[];
     scoreThresholds?: Array<{ minCorrect: number; points: number }>;
+    markGroups?: Array<{ id: string; partIds: string[]; minCorrect: number; points: number }>;
     scoringStrategy?: "standard" | "investigationPlan" | "highestCorrect";
   }
   | {
     mode: "dependent";
     display: string;
     rule: DependentScoringRule;
+  }
+  | {
+    mode: "conceptGroups";
+    display: string;
+    fields: string[];
+    concepts: Array<{
+      id: string;
+      keywords: string[][];
+      excludedTerms?: string[];
+      points: number;
+    }>;
+    dependency?: { questionId: string; accepted: string[] };
   }
   | {
     mode: "aiSplit";
@@ -254,7 +285,7 @@ export type RayDiagramQuestion = QuestionBase & {
 
 export type DiagramAnnotationQuestion = QuestionBase & {
   type: "diagramAnnotation";
-  variant: "curve" | "arrow" | "point" | "doubleArrow";
+  variant: "curve" | "arrow" | "point" | "doubleArrow" | "directionArrow";
   backgroundSrc: string;
   backgroundAlt: string;
   geometry:
@@ -283,6 +314,13 @@ export type DiagramAnnotationQuestion = QuestionBase & {
       endpointTolerance: number;
       labelRegion: { minX: number; maxX: number; minY: number; maxY: number };
       label: string;
+    }
+    | {
+      variant: "directionArrow";
+      region: { minX: number; maxX: number; minY: number; maxY: number };
+      direction: "down";
+      angleToleranceDegrees: number;
+      minLength: number;
     };
 };
 
@@ -355,6 +393,34 @@ export type VirtualMeasurementQuestion = QuestionBase & {
     start: { x: number; y: number };
     end: { x: number; y: number };
   }>;
+  scoringStrategy?: "sum" | "allCorrect";
+};
+
+export type TallyTableQuestion = QuestionBase & {
+  type: "tallyTable";
+  sourceQuestionId: string;
+  bins: Array<{
+    id: string;
+    label: string;
+    min: number;
+    max: number;
+    baseCount: number;
+    editable: boolean;
+  }>;
+  measurementIds: string[];
+  measurementCalibrations: Record<string, number>;
+};
+
+export type HistogramQuestion = QuestionBase & {
+  type: "histogram";
+  sourceQuestionId: string;
+  categories: Array<{
+    id: string;
+    label: string;
+    fixedValue?: number;
+  }>;
+  yMaxOptions: number[];
+  axisKeywords: string[][];
 };
 
 export type TestAnswers = Record<string, string | Record<string, string | string[]>>;

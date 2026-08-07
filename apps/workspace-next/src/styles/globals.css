@@ -816,6 +816,25 @@ tr:last-child td { border-bottom: 0; }
   color: var(--ink);
 }
 
+.audio-confirmation-dialog {
+  width: min(520px, 100%);
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.audio-confirmation-dialog p:not(.eyebrow) {
+  margin-bottom: 0;
+  color: var(--ink);
+}
+
+.audio-confirmation-actions {
+  justify-content: flex-end;
+}
+
 .legacy-notice,
 .legacy-note-card {
   border: 1px solid var(--line);
@@ -1647,8 +1666,9 @@ tr:last-child td { border-bottom: 0; }
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
   gap: 20px;
+  min-width: 0;
 }
-.part-nav { display: grid; align-content: start; gap: 10px; }
+.part-nav { min-width: 0; display: grid; align-content: start; gap: 10px; }
 .part-tab {
   justify-content: flex-start;
   width: 100%;
@@ -1672,7 +1692,7 @@ tr:last-child td { border-bottom: 0; }
   color: #0c566c;
   box-shadow: inset 4px 0 0 #1788a8;
 }
-.test-panel { display: grid; gap: 16px; }
+.test-panel { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .question-card {
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -1760,6 +1780,77 @@ tr:last-child td { border-bottom: 0; }
 .story-panel p {
   max-width: 84ch;
   color: #34474c;
+}
+
+.test-story-spip-year-8-english-pre-reading-part-2 p,
+.test-story-spip-year-8-english-pre-reading-part-3 p,
+.test-story-spip-year-8-english-pre-reading-part-5 p {
+  font-size: calc(var(--font-base) + 2px);
+}
+
+.question-spip-y8e-l19-23 .unique-option-matching {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 640px;
+}
+
+.transformation-example {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-block: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.transformation-example p {
+  max-width: 82ch;
+  margin: 0;
+  color: var(--ink);
+}
+
+.transformation-example-source,
+.transformation-example-answer {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.transformation-example-keyword {
+  padding-left: 56px;
+}
+
+.transformation-example-sentence {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-left: 56px;
+}
+
+.transformation-example-gap {
+  width: min(420px, 50vw);
+  border-bottom: 2px dotted var(--ink);
+}
+
+.transformation-example-answer strong,
+.transformation-example-answer span {
+  border: 1px solid var(--ink);
+  padding: 10px 12px;
+}
+
+.transformation-example-answer strong {
+  text-align: center;
+}
+
+.transformation-example-answer span {
+  width: fit-content;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.transformation-example-footer {
+  font-weight: 800;
 }
 .story-with-image {
   display: grid;
@@ -2875,6 +2966,126 @@ tr:last-child td { border-bottom: 0; }
   font-size: 0.78rem;
   font-weight: 800;
 }
+
+.science-table-wrap,
+.science-histogram-editor {
+  display: grid;
+  gap: 12px;
+}
+.science-table-wrap {
+  overflow-x: auto;
+}
+.science-tally-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  background: #fff;
+}
+.science-tally-table th,
+.science-tally-table td {
+  border: 1px solid #627176;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+.science-tally-table th {
+  background: #f2f7f7;
+  font-size: 0.84rem;
+}
+.science-tally-table input {
+  width: 72px;
+  min-height: 38px;
+  padding: 6px;
+  text-align: center;
+}
+.science-fixed-value {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.tally-stepper {
+  display: grid;
+  grid-template-columns: 32px minmax(42px, 1fr) 32px;
+  align-items: center;
+  gap: 5px;
+}
+.tally-stepper button,
+.science-reset-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+}
+.tally-stepper output {
+  min-width: 42px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.science-reset-button {
+  justify-self: start;
+  gap: 7px;
+  padding: 7px 11px;
+  font-weight: 800;
+}
+.science-histogram-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.science-histogram-controls label {
+  display: grid;
+  min-width: min(100%, 240px);
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+.science-histogram-controls input,
+.science-histogram-controls select {
+  min-height: 42px;
+}
+.science-histogram-board {
+  width: min(100%, 760px);
+  overflow: visible;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  touch-action: none;
+  user-select: none;
+}
+.histogram-grid-line {
+  stroke: #c7d2d4;
+  stroke-width: 1;
+}
+.histogram-axis {
+  stroke: #243238;
+  stroke-width: 2;
+}
+.histogram-axis-text,
+.histogram-category,
+.histogram-axis-title,
+.histogram-value {
+  fill: #243238;
+  font-size: 13px;
+}
+.histogram-axis-title,
+.histogram-value {
+  font-weight: 800;
+}
+.histogram-bar {
+  fill: #9aa8ab;
+  stroke: #243238;
+  stroke-width: 1.5;
+}
+.histogram-bar.is-editable {
+  fill: #45b8b4;
+  cursor: ns-resize;
+}
 @media (max-width: 720px) {
   .biological-drawing-layout {
     grid-template-columns: 1fr;
@@ -2891,6 +3102,12 @@ tr:last-child td { border-bottom: 0; }
   .practical-tool-row button {
     flex: 1 1 120px;
     border-bottom: 1px solid var(--line);
+  }
+  .histogram-axis-text,
+  .histogram-category,
+  .histogram-axis-title,
+  .histogram-value {
+    font-size: 11px;
   }
 }
 .inline-option-field {

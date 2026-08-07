@@ -36,6 +36,8 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
   if (question.type === "biologicalDrawing") return scoreBiologicalDrawing(question, answer);
   if (question.type === "practicalGraph") return scorePracticalGraph(question, answer, answers);
   if (question.type === "virtualMeasurement") return scoreVirtualMeasurement(question, answer);
+  if (question.type === "tallyTable") return scoreTallyTable(question, answer, answers);
+  if (question.type === "histogram") return scoreHistogram(question, answer, answers);
   if (!question.grading) return { score: 0, possible: question.points, details: { parts: [] } };
   if (question.grading.mode === "aiSplit") {
     const raw = responseText(answer);
@@ -57,6 +59,7 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
     };
   }
   if (question.grading.mode === "dependent") return scoreDependentQuestion(question, answer, answers);
+  if (question.grading.mode === "conceptGroups") return scoreConceptGroups(question, answer, answers);
   const answerMap = question.type === "singleChoice"
     ? question.responseShape === "object" && typeof answer === "object" && answer
       ? answer as Record<string, string | string[]>
@@ -80,13 +83,19 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
   const thresholdScore = question.grading.scoreThresholds?.length
     ? scoreByThreshold(parts.filter((part) => part.correct).length, question.grading.scoreThresholds)
     : null;
+  const markGroupScore = question.grading.markGroups?.length
+    ? question.grading.markGroups.reduce((sum, group) => {
+      const correct = parts.filter((part) => group.partIds.includes(part.id) && part.correct).length;
+      return sum + (correct >= group.minCorrect ? group.points : 0);
+    }, 0)
+    : null;
   const investigationScore = question.grading.scoringStrategy === "investigationPlan"
     ? scoreInvestigationPlan(parts, question.grading.parts)
     : null;
   const highestCorrectScore = question.grading.scoringStrategy === "highestCorrect"
     ? parts.reduce((best, part) => part.correct ? Math.max(best, part.possible) : best, 0)
     : null;
-  const rawScore = investigationScore ?? highestCorrectScore ?? thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
+  const rawScore = investigationScore ?? highestCorrectScore ?? markGroupScore ?? thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
   return {
     score: Math.min(rawScore, question.points),
     possible: question.points,
@@ -109,7 +118,23 @@ function scoreDiagramAnnotation(question: Extract<TestQuestion, { type: "diagram
   let correct = false;
   const components: Record<string, boolean> = {};
 
-  if (geometry.variant === "point") {
+  if (geometry.variant === "directionArrow") {
+    const start = parsePoint(values.start);
+    const end = parsePoint(values.end);
+    const midpoint = start && end ? { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 } : null;
+    const regionCorrect = Boolean(
+      midpoint && midpoint.x >= geometry.region.minX && midpoint.x <= geometry.region.maxX &&
+      midpoint.y >= geometry.region.minY && midpoint.y <= geometry.region.maxY,
+    );
+    const length = start && end ? distance(start, end) : 0;
+    const angle = start && end ? Math.atan2(end.y - start.y, end.x - start.x) * 180 / Math.PI : 0;
+    const directionCorrect = Math.abs(angle - 90) <= geometry.angleToleranceDegrees;
+    const lengthCorrect = length >= geometry.minLength;
+    components.regionCorrect = regionCorrect;
+    components.directionCorrect = directionCorrect;
+    components.lengthCorrect = lengthCorrect;
+    correct = regionCorrect && directionCorrect && lengthCorrect;
+  } else if (geometry.variant === "point") {
     const point = parsePoint(values.point);
     const { start, end } = geometry.segment;
     const segmentDistance = point ? distanceToSegment(point, start, end) : Number.POSITIVE_INFINITY;
@@ -327,7 +352,89 @@ function scoreVirtualMeasurement(
       unit: measurement.unit,
     });
   });
-  return { score: parts.reduce((sum, part) => sum + part.score, 0), possible: question.points, details: { parts } };
+  const score = question.scoringStrategy === "allCorrect"
+    ? parts.every((part) => part.correct) ? question.points : 0
+    : Math.min(question.points, parts.reduce((sum, part) => sum + part.score, 0));
+  return { score, possible: question.points, details: { parts } };
+}
+
+function scoreConceptGroups(question: TestQuestion, answer: unknown, answers: TestAnswers) {
+  if (!question.grading || question.grading.mode !== "conceptGroups") {
+    return { score: 0, possible: question.points, details: { parts: [] } };
+  }
+  const values = answerMap(answer);
+  const response = question.grading.fields.map((field) => String(values[field] || "")).join(" ");
+  const dependency = question.grading.dependency;
+  const dependencyMet = !dependency || dependency.accepted.some((accepted) => (
+    normalize(responseText(answers[dependency.questionId])) === normalize(accepted) ||
+    normalize(String(answerMap(answers[dependency.questionId]).answer || "")) === normalize(accepted)
+  ));
+  const parts = question.grading.concepts.map((concept) => {
+    const excluded = (concept.excludedTerms || []).some((term) => normalize(response).includes(normalize(term)));
+    const correct = dependencyMet && !excluded && matchesKeywords(response, concept.keywords);
+    return componentPart(concept.id, correct, concept.points, { dependencyMet, excluded });
+  });
+  return {
+    score: Math.min(question.points, parts.reduce((sum, part) => sum + part.score, 0)),
+    possible: question.points,
+    details: { parts },
+  };
+}
+
+function scoreTallyTable(
+  question: Extract<TestQuestion, { type: "tallyTable" }>,
+  answer: unknown,
+  answers: TestAnswers,
+) {
+  const values = answerMap(answer);
+  const source = answerMap(answers[question.sourceQuestionId]);
+  const measured = question.measurementIds.map((id) => {
+    const calibration = question.measurementCalibrations[id] ?? 1;
+    return measurementValueById(source, id, calibration);
+  });
+  const parts = question.bins.filter((bin) => bin.editable).map((bin) => {
+    const extra = measured.filter((value) => value !== null && roundedMeasurementInBin(value, bin.min, bin.max)).length;
+    const total = bin.baseCount + extra;
+    const enteredExtra = numericValue(values[`${bin.id}Tally`]);
+    const enteredTotal = numericValue(values[`${bin.id}Total`]);
+    const correct = enteredExtra === extra && enteredTotal === total;
+    return componentPart(bin.id, correct, 1, { expectedExtra: extra, expectedTotal: total, ecfMeasurements: measured });
+  });
+  return { score: Math.min(question.points, parts.reduce((sum, part) => sum + part.score, 0)), possible: question.points, details: { parts } };
+}
+
+function roundedMeasurementInBin(value: number, min: number, max: number) {
+  const rounded = Math.round(value);
+  return rounded >= min && rounded <= max;
+}
+
+function scoreHistogram(
+  question: Extract<TestQuestion, { type: "histogram" }>,
+  answer: unknown,
+  answers: TestAnswers,
+) {
+  const values = answerMap(answer);
+  const source = answerMap(answers[question.sourceQuestionId]);
+  const expected = question.categories.map((category) => {
+    const sourceValue = numericValue(source[`${category.id}Total`]);
+    return category.fixedValue ?? sourceValue;
+  });
+  const yMax = numericValue(values.yMax);
+  const largest = Math.max(...expected.filter((value): value is number => value !== null));
+  const axisLabelCorrect = matchesKeywords(String(values.yLabel || ""), question.axisKeywords);
+  const scaleCorrect = yMax !== null && yMax >= largest && largest / yMax > 0.5;
+  const axisCorrect = axisLabelCorrect && scaleCorrect;
+  const editable = question.categories.map((category, index) => ({ category, expected: expected[index] })).filter(({ category }) => category.fixedValue === undefined);
+  const correctBars = editable.filter(({ category, expected: barExpected }) => {
+    const entered = numericValue(values[`bar-${category.id}`]);
+    return entered !== null && barExpected !== null && Math.abs(entered - barExpected) < 0.01;
+  }).length;
+  const barScore = correctBars === editable.length ? 2 : correctBars >= 1 ? 1 : 0;
+  const parts = [
+    componentPart("y-axis", axisCorrect, 1, { axisLabelCorrect, scaleCorrect, yMax }),
+    { id: "bars", score: barScore, possible: 2, correct: barScore === 2, correctBars, expected },
+  ];
+  return { score: Math.min(question.points, (axisCorrect ? 1 : 0) + barScore), possible: question.points, details: { parts } };
 }
 
 function scoreDependentQuestion(question: TestQuestion, answer: unknown, answers: TestAnswers) {

@@ -71,7 +71,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
           <p className="eyebrow">{test.level}</p>
           <h1>{test.title}</h1>
           <p>{profile.fullName} · {profile.nickname}{test.durationMinutes ? ` · ${test.durationMinutes} minutes` : ""}</p>
-          <TestAudio mode={test.audioMode} src={test.audioSrc} />
+          <TestAudio confirmation={test.audioStartConfirmation} mode={test.audioMode} src={test.audioSrc} />
         </div>
         <div className="header-actions">
           <span className="badge">{answeredCount}/{questions.length} answered</span>
@@ -121,6 +121,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                     {active.wordBank.map((word) => <span key={word}>{word}</span>)}
                   </div>
                 ) : null}
+                {active.transformationExample ? <TransformationExample example={active.transformationExample} /> : null}
                 {active.story?.length ? (
                   <article className={`story-panel test-story-${test.id}-${active.id} ${storyPanelLayoutClass(active.storyLayout)}`}>
                     {active.storyTitle ? <h3>{active.storyTitle}</h3> : null}
@@ -167,11 +168,20 @@ export function TestRunner({ test }: { test: TestDefinition }) {
   );
 }
 
-function TestAudio({ mode = "standard", src }: { mode?: TestDefinition["audioMode"]; src?: string }) {
+function TestAudio({
+  confirmation,
+  mode = "standard",
+  src,
+}: {
+  confirmation?: TestDefinition["audioStartConfirmation"];
+  mode?: TestDefinition["audioMode"];
+  src?: string;
+}) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
   const [ended, setEnded] = useState(false);
   const [pending, setPending] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("Start when the teacher tells you to begin.");
   const [time, setTime] = useState("00:00 / --:--");
 
@@ -234,18 +244,81 @@ function TestAudio({ mode = "standard", src }: { mode?: TestDefinition["audioMod
   }
 
   return (
-    <div className="locked-audio">
-      <audio ref={audioRef} preload="auto" src={src}>
-        Your browser does not support audio playback.
-      </audio>
-      <button className="primary-button locked-audio-button" disabled={pending || started} onClick={startAudio} type="button">
-        {started ? "Audio locked" : pending ? "Starting..." : "Start listening"}
-      </button>
-      <div>
-        <strong>{time}</strong>
-        <span>{status}</span>
+    <>
+      <div className="locked-audio">
+        <audio ref={audioRef} preload="auto" src={src}>
+          Your browser does not support audio playback.
+        </audio>
+        <button
+          className="primary-button locked-audio-button"
+          disabled={pending || started}
+          onClick={() => confirmation ? setConfirmOpen(true) : void startAudio()}
+          type="button"
+        >
+          {started ? "Audio locked" : pending ? "Starting..." : "Start listening"}
+        </button>
+        <div>
+          <strong>{time}</strong>
+          <span>{status}</span>
+        </div>
       </div>
-    </div>
+      {confirmation && confirmOpen ? (
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => setConfirmOpen(false)}>
+          <section
+            aria-labelledby="audioStartConfirmationTitle"
+            aria-modal="true"
+            className="audio-confirmation-dialog"
+            role="alertdialog"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div>
+              <p className="eyebrow">Listening section</p>
+              <h2 id="audioStartConfirmationTitle">{confirmation.title}</h2>
+              <p>{confirmation.message}</p>
+            </div>
+            <div className="button-row audio-confirmation-actions">
+              <button className="ghost-button" onClick={() => setConfirmOpen(false)} type="button">
+                {confirmation.cancelLabel || "Cancel"}
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => {
+                  setConfirmOpen(false);
+                  void startAudio();
+                }}
+                type="button"
+              >
+                {confirmation.confirmLabel || "Start listening"}
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function TransformationExample({ example }: { example: NonNullable<TestDefinition["sections"][number]["transformationExample"]> }) {
+  return (
+    <section aria-label="Worked example" className="transformation-example">
+      <h3>Example</h3>
+      <div className="transformation-example-source">
+        <strong>{example.number}</strong>
+        <span>{example.source}</span>
+      </div>
+      <strong className="transformation-example-keyword">{example.keyword}</strong>
+      <p className="transformation-example-sentence">
+        <span>{example.sentencePrefix}</span>
+        <span aria-label="missing words" className="transformation-example-gap" />
+        <span>{example.sentenceSuffix}</span>
+      </p>
+      <p>{example.explanation}</p>
+      <div className="transformation-example-answer">
+        <strong>{example.number}</strong>
+        <span>{example.answer}</span>
+      </div>
+      <p className="transformation-example-footer">{example.footer}</p>
+    </section>
   );
 }
 
