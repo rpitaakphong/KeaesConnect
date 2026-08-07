@@ -81,6 +81,15 @@ export type QuestionBase = {
   number: number;
   prompt: string;
   hidePrompt?: boolean;
+  groupIntro?: {
+    lead?: string;
+    items?: string[];
+    instruction?: string;
+    table?: {
+      headers: string[];
+      rows: string[][];
+    };
+  };
   promptParts?: Array<{ text: string; underline?: boolean }>;
   points: number;
   note?: string;
@@ -223,10 +232,11 @@ export type MultiTextQuestion = QuestionBase & {
     placeholder?: string;
     visualHtml?: string;
     options?: Array<{ value: string; label: string }>;
+    control?: "radio" | "select";
   }>;
   compact?: boolean;
   uniqueOptions?: boolean;
-  inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input"; id?: string }> }>;
+  inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input" | "select"; id?: string; prefix?: string }> }>;
   rankRows?: Array<{ label: string; items: Array<{ text: string; id: string }> }>;
   answerTable?: {
     headers: string[];
@@ -330,6 +340,8 @@ export type GeometryConstructionQuestion = QuestionBase & {
   type: "geometryConstruction";
   backgroundSrc: string;
   backgroundAlt: string;
+  boardMaxWidth?: number;
+  hideUndo?: boolean;
   maxSegments: number;
   snapPoints?: GeometryPoint[];
   geometry:

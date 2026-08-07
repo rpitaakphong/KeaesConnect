@@ -138,9 +138,18 @@ export function QuestionRenderer({
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
             <div className={`math-inline-row ${row.className || ""}`} key={rowIndex}>
-              {row.items.map((item, itemIndex) => item.type === "input" && item.id
-                ? <MathInput answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
-                : <span key={itemIndex}>{item.text}</span>)}
+              {row.items.map((item, itemIndex) => item.type === "select" && item.id
+                ? <MathInlineSelect answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
+                : item.type === "input" && item.id
+                  ? item.prefix
+                    ? (
+                      <label className="math-inline-input-group" key={item.id}>
+                        <span>{item.prefix}</span>
+                        <MathInput answer={objectAnswer} field={findField(question, item.id)} onChange={onChange} />
+                      </label>
+                    )
+                    : <MathInput answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
+                  : <span key={itemIndex}>{item.text}</span>)}
             </div>
           ))}
         </div>
@@ -202,7 +211,7 @@ export function QuestionRenderer({
 
   if (variant === "subquestion") {
     return (
-      <section className="science-subquestion">
+      <section className={`science-subquestion question-${question.id}`}>
         <div className="science-subquestion-head">
           <h4><QuestionPrompt question={question} /></h4>
           <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
@@ -1832,10 +1841,22 @@ function MathField({
     placeholder?: string;
     visualHtml?: string;
     options?: Array<{ value: string; label: string }>;
+    control?: "radio" | "select";
   };
   onChange: (value: Record<string, string | string[]>) => void;
 }) {
   if (field.options?.length) {
+    if (field.control === "select") {
+      return (
+        <label>
+          <span>{field.label}</span>
+          <select onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })} value={answerText(answer, field.id)}>
+            <option value="">Select</option>
+            {field.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
+      );
+    }
     return (
       <fieldset className="inline-option-field">
         <legend>{field.label}</legend>
@@ -1877,12 +1898,35 @@ function MathInput({
   const value = answer[field.id];
   return (
     <input
+      aria-label={field.label}
       autoComplete="off"
       className="math-line-input"
       onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
       placeholder={field.placeholder || "answer"}
       value={typeof value === "string" ? value : ""}
     />
+  );
+}
+
+function MathInlineSelect({
+  answer,
+  field,
+  onChange,
+}: {
+  answer: Record<string, string | string[]>;
+  field: { id: string; label: string; options?: Array<{ value: string; label: string }> };
+  onChange: (value: Record<string, string | string[]>) => void;
+}) {
+  return (
+    <select
+      aria-label={field.label}
+      className="math-inline-select"
+      onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
+      value={answerText(answer, field.id)}
+    >
+      <option value="">Select</option>
+      {field.options?.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+    </select>
   );
 }
 

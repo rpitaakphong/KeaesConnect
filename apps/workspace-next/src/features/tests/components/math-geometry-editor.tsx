@@ -37,7 +37,12 @@ export function MathGeometryEditor({
   }
 
   function addPoint(point: GeometryPoint) {
-    if (segments.length >= question.maxSegments) return;
+    if (segments.length >= question.maxSegments) {
+      if (sequential) return;
+      update([]);
+      setPending(point);
+      return;
+    }
     if (question.geometry.variant === "regularPentagon") {
       const start = segments.at(-1)?.end || question.geometry.givenVertices[2];
       update([...segments, { start, end: point }]);
@@ -89,6 +94,7 @@ export function MathGeometryEditor({
         }}
         onPointerUp={() => setDragging(null)}
         ref={boardRef}
+        style={question.boardMaxWidth ? { maxWidth: `${question.boardMaxWidth}px` } : undefined}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img alt={question.backgroundAlt} draggable={false} src={question.backgroundSrc} />
@@ -126,14 +132,16 @@ export function MathGeometryEditor({
         }))}
       </div>
       <div className="math-geometry-toolbar">
-        <button
-          aria-label="Undo last line"
-          className="icon-button"
-          disabled={!segments.length && !pending}
-          onClick={() => pending ? setPending(null) : update(segments.slice(0, -1))}
-          title="Undo last line"
-          type="button"
-        ><Undo2 aria-hidden="true" size={18} /></button>
+        {!question.hideUndo ? (
+          <button
+            aria-label="Undo last line"
+            className="icon-button"
+            disabled={!segments.length && !pending}
+            onClick={() => pending ? setPending(null) : update(segments.slice(0, -1))}
+            title="Undo last line"
+            type="button"
+          ><Undo2 aria-hidden="true" size={18} /></button>
+        ) : null}
         <button
           aria-label="Clear construction"
           className="icon-button"

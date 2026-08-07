@@ -337,6 +337,7 @@ function formatAudioTime(seconds: number) {
 
 type ScienceQuestionGroup = {
   id: string;
+  intro?: NonNullable<TestQuestion["groupIntro"]>;
   number: number;
   questions: TestQuestion[];
   visuals?: NonNullable<TestQuestion["visuals"]>;
@@ -358,7 +359,7 @@ function groupScienceQuestions(questions: TestQuestion[], groupAllByNumber = fal
     }
 
     const firstImage = firstImageSrc(question);
-    const hasSharedVisual = !groupAllByNumber && !groupByNumberOnly.has(question.number) && Boolean(firstImage);
+    const hasSharedVisual = Boolean(firstImage) && (groupAllByNumber || !groupByNumberOnly.has(question.number));
     const groupQuestions = [question];
     let nextIndex = index + 1;
     while (nextIndex < questions.length) {
@@ -375,6 +376,7 @@ function groupScienceQuestions(questions: TestQuestion[], groupAllByNumber = fal
     if (groupQuestions.length > 1) {
       items.push({
         id: `${groupAllByNumber ? "question" : "spip-y7s"}-q${question.number}-group`,
+        intro: question.groupIntro,
         number: question.number,
         questions: groupQuestions,
         visuals: hasSharedVisual ? question.visuals : undefined,
@@ -452,10 +454,10 @@ function ScienceQuestionGroupRenderer({
       <div className="question-head">
         <div>
           <p className="eyebrow">Question {group.number}</p>
-          <h3>Question {group.number}</h3>
         </div>
         <span className="badge">{points} {points === 1 ? "mark" : "marks"}</span>
       </div>
+      {group.intro ? <QuestionGroupIntro intro={group.intro} /> : null}
       {group.visuals?.length ? <QuestionVisuals visuals={group.visuals} /> : null}
       <div className="science-subquestion-list">
         {group.questions.map((question) => (
@@ -470,6 +472,34 @@ function ScienceQuestionGroupRenderer({
         ))}
       </div>
     </article>
+  );
+}
+
+function QuestionGroupIntro({ intro }: { intro: NonNullable<TestQuestion["groupIntro"]> }) {
+  return (
+    <div className="question-group-intro">
+      {intro.lead ? <p>{intro.lead}</p> : null}
+      {intro.items?.length ? (
+        <div aria-label="Given values" className="question-group-values">
+          {intro.items.map((item) => <span key={item}>{item}</span>)}
+        </div>
+      ) : null}
+      {intro.table ? (
+        <div className="question-group-table-wrap">
+          <table className="cambridge-data-table">
+            <thead>
+              <tr>{intro.table.headers.map((header) => <th key={header}>{header}</th>)}</tr>
+            </thead>
+            <tbody>
+              {intro.table.rows.map((row, rowIndex) => (
+                <tr key={rowIndex}>{row.map((cell, cellIndex) => <td key={cellIndex}>{cell}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+      {intro.instruction ? <p>{intro.instruction}</p> : null}
+    </div>
   );
 }
 

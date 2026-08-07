@@ -2450,6 +2450,43 @@ tr:last-child td { border-bottom: 0; }
   display: grid;
   gap: 16px;
 }
+.question-group-intro {
+  display: grid;
+  gap: 12px;
+  padding: 14px 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+.question-group-intro p {
+  margin: 0;
+  color: var(--ink);
+}
+.question-group-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, 4vw, 34px);
+  align-items: center;
+  padding: 12px 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.question-group-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.question-group-table-wrap .cambridge-data-table {
+  min-width: min(100%, 420px);
+  margin: 0;
+}
+.question-spip-y8m-q1a input,
+.question-spip-y8m-q1b input,
+.question-spip-y8m-q1c input {
+  width: min(180px, 100%);
+}
+.question-spip-y8m-q5a .math-geometry-editor,
+.question-spip-y8m-q5b .math-geometry-editor {
+  justify-items: stretch;
+  width: min(100%, 340px);
+}
 .science-subquestion {
   display: grid;
   gap: 12px;
@@ -2459,6 +2496,9 @@ tr:last-child td { border-bottom: 0; }
 .science-subquestion:first-child {
   border-top: 0;
   padding-top: 0;
+}
+.science-subquestion.question-spip-y8m-q1a {
+  padding-top: 20px;
 }
 .science-subquestion-head {
   display: flex;
@@ -2654,12 +2694,19 @@ tr:last-child td { border-bottom: 0; }
   background: #fff;
   border: 3px solid #0f766e;
   border-radius: 50%;
+  box-sizing: border-box;
   height: 24px;
+  min-height: 24px;
   padding: 0;
   position: absolute;
   transform: translate(-50%, -50%);
+  transition: none;
   width: 24px;
   z-index: 2;
+}
+
+.math-construction-handle:hover:not(:disabled) {
+  transform: translate(-50%, -50%);
 }
 
 .math-construction-handle:focus-visible {
@@ -2699,14 +2746,137 @@ tr:last-child td { border-bottom: 0; }
   padding: 0.35rem 0.55rem;
 }
 
-.column-calculation-row {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  justify-content: center;
+.question-spip-y8m-q9 .math-inline-rows {
+  gap: 12px;
+  justify-items: start;
+  padding: 12px 0;
 }
 
-.column-result-row {
+.spip-y8m-q9-row {
+  display: grid;
+  grid-template-columns: 24px repeat(5, clamp(40px, 11vw, 52px));
+  gap: clamp(4px, 1.2vw, 8px);
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.spip-y8m-q9-row > span {
+  display: grid;
+  place-items: center;
+}
+
+.spip-y8m-q9-row .math-line-input {
+  box-sizing: border-box;
+  width: clamp(40px, 11vw, 52px);
+  min-width: 0;
+  height: clamp(40px, 11vw, 52px);
+  min-height: 0;
+  border-radius: 4px;
+  padding: 0;
+  text-align: center;
+}
+
+.spip-y8m-q9-result {
+  position: relative;
+  margin-top: 4px;
+  padding-top: 14px;
+}
+
+.spip-y8m-q9-result::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: calc(24px + clamp(4px, 1.2vw, 8px));
   border-top: 2px solid currentColor;
-  padding-top: 0.5rem;
+}
+
+.question-spip-y8m-q10 .question-visuals,
+.spip-y8m-q10-order-row {
+  width: min(100%, 700px);
+}
+
+.spip-y8m-q10-order-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 8px;
+}
+
+.spip-y8m-q10-order-row > span,
+.spip-y8m-q10-order-row .math-inline-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  font-weight: 800;
+}
+
+.spip-y8m-q10-order-row .math-line-input {
+  width: 58px;
+  min-width: 0;
+  padding: 8px;
+  text-align: center;
+}
+
+.spip-y8m-q17-coordinate-row {
+  flex-wrap: nowrap;
+  gap: 5px;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.spip-y8m-q17-coordinate-row .math-line-input {
+  width: 64px;
+  min-width: 64px;
+  padding: 8px;
+  text-align: center;
+}
+
+.spip-y8m-q21-intro {
+  display: grid;
+  gap: 14px;
+}
+
+.spip-y8m-q21-intro p {
+  margin: 0;
+  color: var(--ink);
+}
+
+.question-spip-y8m-q21 .math-inline-rows {
+  gap: 18px;
+}
+
+.spip-y8m-q21-sentence {
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.spip-y8m-q21-sentence .math-inline-select {
+  width: 120px;
+  min-width: 120px;
+  padding: 8px 34px 8px 12px;
+}
+
+.spip-y8m-q27-prompt {
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+.spip-y8m-q27-prompt .frac {
+  margin: 0 4px;
+  min-width: 30px;
+  vertical-align: middle;
 }
 
 @media (max-width: 520px) {
@@ -2716,6 +2886,7 @@ tr:last-child td { border-bottom: 0; }
 
   .math-construction-handle {
     height: 28px;
+    min-height: 28px;
     width: 28px;
   }
 
@@ -3131,6 +3302,39 @@ tr:last-child td { border-bottom: 0; }
   display: inline-flex;
   align-items: center;
   gap: 7px;
+}
+.inline-option-field input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid #8b9a9e;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: none;
+  flex: 0 0 24px;
+}
+.inline-option-field input[type="radio"]:checked {
+  border-color: #58b6d6;
+  background-image: radial-gradient(circle, #58b6d6 0 6px, transparent 6.5px);
+}
+@media (max-width: 520px) {
+  .spip-y8m-q10-order-row .math-inline-input-group {
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.8rem;
+  }
+  .spip-y8m-q10-order-row > span {
+    font-size: 0.8rem;
+  }
+  .spip-y8m-q10-order-row .math-line-input {
+    width: 48px;
+  }
 }
 @media (max-width: 620px) {
   .ray-tool-picker {
