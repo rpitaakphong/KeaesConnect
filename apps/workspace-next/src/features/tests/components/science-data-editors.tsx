@@ -37,9 +37,13 @@ export function TallyTableEditor({
         </thead>
         <tbody>
           <tr>
-            <th>Additional tally marks</th>
+            <th>Given number of seeds</th>
+            {question.bins.map((bin) => <td key={bin.id}><strong>{bin.baseCount}</strong></td>)}
+          </tr>
+          <tr>
+            <th>Add the measured seeds</th>
             {question.bins.map((bin) => {
-              if (!bin.editable) return <td key={bin.id}><span className="science-fixed-value">Given</span></td>;
+              if (!bin.editable) return <td key={bin.id}><span className="science-fixed-value">Not required</span></td>;
               const count = Number(answer[`${bin.id}Tally`] || 0);
               return (
                 <td key={bin.id}>

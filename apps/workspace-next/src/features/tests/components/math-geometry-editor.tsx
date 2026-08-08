@@ -21,6 +21,7 @@ export function MathGeometryEditor({
   const [dragging, setDragging] = useState<{ index: number; endpoint: "start" | "end" } | null>(null);
   const segments = useMemo(() => decodeSegments(answer.segments), [answer.segments]);
   const sequential = question.geometry.variant === "regularPentagon";
+  const snapPoints = useMemo(() => buildSnapPoints(question), [question]);
 
   function update(next: Segment[]) {
     onChange({ ...answer, segments: next.map(encodeSegment) });
@@ -33,7 +34,7 @@ export function MathGeometryEditor({
       x: clamp((event.clientX - rect.left) / rect.width),
       y: clamp((event.clientY - rect.top) / rect.height),
     };
-    return snapPoint(raw, question.snapPoints || [], sequential ? 0.035 : 0.075);
+    return snapPoint(raw, snapPoints, question.showSnapDots ? 0.04 : sequential ? 0.035 : 0.075);
   }
 
   function addPoint(point: GeometryPoint) {
@@ -45,6 +46,7 @@ export function MathGeometryEditor({
     }
     if (question.geometry.variant === "regularPentagon") {
       const start = segments.at(-1)?.end || question.geometry.givenVertices[2];
+      if (Math.hypot(start.x - point.x, start.y - point.y) <= 0.015) return;
       update([...segments, { start, end: point }]);
       return;
     }
@@ -99,6 +101,9 @@ export function MathGeometryEditor({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img alt={question.backgroundAlt} draggable={false} src={question.backgroundSrc} />
         <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1000 1000">
+          {question.showSnapDots ? snapPoints.map((point, index) => (
+            <circle className="math-construction-snap-dot" cx={point.x * 1000} cy={point.y * 1000} key={index} r="4" />
+          )) : null}
           {segments.map((segment, index) => (
             <line
               className="math-construction-line"
@@ -185,6 +190,14 @@ function snapPoint(point: GeometryPoint, candidates: GeometryPoint[], tolerance:
     return !best || candidateDistance < best.distance ? { point: candidate, distance: candidateDistance } : best;
   }, null);
   return nearest && nearest.distance <= tolerance ? nearest.point : point;
+}
+
+function buildSnapPoints(question: GeometryConstructionQuestion) {
+  const fixed = question.snapPoints || [];
+  if (!question.showSnapDots) return fixed;
+  const columns = [0.02, 0.1, 0.176, 0.26, 0.34, 0.428, 0.51, 0.59, 0.679, 0.755, 0.835];
+  const rows = [0.07, 0.149, 0.228, 0.307, 0.385, 0.464, 0.543, 0.622, 0.708, 0.793, 0.879, 0.964];
+  return rows.flatMap((y) => columns.map((x) => ({ x, y })));
 }
 
 function pentagonMeasurements(question: GeometryConstructionQuestion, segments: Segment[]) {

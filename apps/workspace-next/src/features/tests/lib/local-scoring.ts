@@ -89,13 +89,27 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
       return sum + (correct >= group.minCorrect ? group.points : 0);
     }, 0)
     : null;
+  const sequenceGroupScore = question.grading.sequenceGroups?.length
+    ? question.grading.sequenceGroups.reduce((sum, group) => {
+      const responses = group.partIds.map((id) => normalize(String(answerMap[id] || "")));
+      const expected = group.acceptedSequence.map((value) => normalize(value));
+      const correct = responses.some((_, start) => (
+        start + expected.length <= responses.length &&
+        expected.every((value, offset) => responses[start + offset] === value)
+      ));
+      return sum + (correct ? group.points : 0);
+    }, 0)
+    : null;
   const investigationScore = question.grading.scoringStrategy === "investigationPlan"
     ? scoreInvestigationPlan(parts, question.grading.parts)
     : null;
   const highestCorrectScore = question.grading.scoringStrategy === "highestCorrect"
     ? parts.reduce((best, part) => part.correct ? Math.max(best, part.possible) : best, 0)
     : null;
-  const rawScore = investigationScore ?? highestCorrectScore ?? markGroupScore ?? thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
+  const groupedScore = markGroupScore !== null || sequenceGroupScore !== null
+    ? (markGroupScore ?? 0) + (sequenceGroupScore ?? 0)
+    : null;
+  const rawScore = investigationScore ?? highestCorrectScore ?? groupedScore ?? thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
   return {
     score: Math.min(rawScore, question.points),
     possible: question.points,
@@ -250,11 +264,15 @@ function scoreGeometryConstruction(question: Extract<TestQuestion, { type: "geom
   });
   const closesShape = Boolean(segments.at(-1) && pointDistance(segments.at(-1)!.end, a) <= geometry.closeTolerance);
   const fullCorrect = partialCorrect && connected && allSidesCorrect && internalAnglesCorrect && closesShape;
-  const parts = [
-    componentPart("one-side-and-angle", partialCorrect, 1, { firstSideCorrect, firstAngleCorrect }),
-    componentPart("complete-pentagon", fullCorrect, 1, { connected, allSidesCorrect, internalAnglesCorrect, closesShape }),
-  ];
-  return { score: parts.reduce((sum, part) => sum + part.score, 0), possible: question.points, details: { parts } };
+  const parts = [componentPart("complete-pentagon", fullCorrect, question.points, {
+    firstSideCorrect,
+    firstAngleCorrect,
+    connected,
+    allSidesCorrect,
+    internalAnglesCorrect,
+    closesShape,
+  })];
+  return { score: fullCorrect ? question.points : 0, possible: question.points, details: { parts } };
 }
 
 function scoreBiologicalDrawing(

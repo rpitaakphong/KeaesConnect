@@ -1769,6 +1769,18 @@ tr:last-child td { border-bottom: 0; }
   gap: 10px;
 }
 .unique-option-matching select { border-radius: 8px; }
+.question-spip-y8s-q11 .unique-option-matching {
+  grid-template-columns: minmax(0, 700px);
+  max-width: 700px;
+}
+.question-spip-y8s-q11 .unique-option-matching label {
+  grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+.question-spip-y8s-q11 .unique-option-matching select {
+  width: 100%;
+}
 .story-panel {
   display: grid;
   gap: 12px;
@@ -1950,6 +1962,28 @@ tr:last-child td { border-bottom: 0; }
 .generated-visual svg, .generated-visual img, .math-choice-visual svg {
   max-width: 100%;
   height: auto;
+}
+.science-information-block {
+  display: grid;
+  gap: 10px;
+  max-width: 900px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+.science-information-block p {
+  margin: 0;
+}
+.science-information-block ul {
+  display: grid;
+  gap: 8px;
+  margin: 2px 0 0;
+  padding-left: 24px;
+}
+.question-spip-y8s-q6 .math-line-input {
+  flex: 0 1 220px;
+  width: min(220px, 100%);
 }
 .cambridge-table-visual {
   display: grid;
@@ -2500,6 +2534,9 @@ tr:last-child td { border-bottom: 0; }
 .science-subquestion.question-spip-y8m-q1a {
   padding-top: 20px;
 }
+.science-subquestion.question-spip-y8s-q9a {
+  padding-top: 15px;
+}
 .science-subquestion-head {
   display: flex;
   align-items: flex-start;
@@ -2681,6 +2718,11 @@ tr:last-child td { border-bottom: 0; }
   stroke-linecap: round;
   stroke-width: 7;
   vector-effect: non-scaling-stroke;
+}
+
+.math-construction-snap-dot {
+  fill: #718189;
+  opacity: 0.72;
 }
 
 .math-construction-pending {
@@ -3174,6 +3216,9 @@ tr:last-child td { border-bottom: 0; }
   font-size: 0.78rem;
   font-weight: 700;
 }
+[data-test-id="spip-year-8-science-pre"] p {
+  font-size: 16px;
+}
 .tally-stepper {
   display: grid;
   grid-template-columns: 32px minmax(42px, 1fr) 32px;
@@ -3487,6 +3532,10 @@ tr:last-child td { border-bottom: 0; }
   }
   .writing-choice-options,
   .unique-option-matching { grid-template-columns: 1fr; }
+  .question-spip-y8s-q11 .unique-option-matching label {
+    grid-template-columns: minmax(105px, 125px) minmax(0, 1fr);
+    gap: 10px;
+  }
   .inline-cloze { padding: 14px; }
   .inline-cloze p { line-height: 2.65; }
   .inline-cloze-gap select {

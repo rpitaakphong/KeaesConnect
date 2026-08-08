@@ -207,21 +207,16 @@ export const spipYear8MathPre: TestDefinition = {
           grading: { mode: "auto", display: "Women 71.42…%; men 73.33…%", parts: [{ id: "women", accepted: ["71", "71%", "71.4", "71.42", "71.43", "0.71", "0.714", "0.7142"], points: 1 }, { id: "men", accepted: ["73", "73%", "73.3", "73.33", "0.73", "0.733", "0.7333"], points: 1 }] },
         },
         {
-          id: "spip-y8m-q25", number: 25, prompt: "A 30 cm by 20 cm rectangle is removed from a square of side 2 m. Find the remaining area in square metres.", points: 3, type: "multiText", compact: true,
+          id: "spip-y8m-q25", number: 25, prompt: "A 30 cm by 20 cm rectangle is removed from a square of side 2 m. Find the remaining area in square metres.", points: 3, type: "text", placeholder: "m²",
           visuals: [{ type: "image", src: `${assets}/q25-remaining-area.png`, alt: "Square ABCD with a rectangle removed from corner C", maxWidth: 390 }],
-          fields: [{ id: "conversion", label: "Converted dimensions or one area" }, { id: "method", label: "Area method" }, { id: "answer", label: "Remaining area", placeholder: "m²" }],
-          grading: { mode: "auto", display: "3.94 m²", scoringStrategy: "highestCorrect", parts: [
-            { id: "conversion", accepted: [], normalizer: "keywords", keywords: [["0.3", "0.2"], ["2", "4"], ["0.06"], ["40000"], ["600"]], points: 1, reviewRecommended: false },
-            { id: "method", accepted: [], normalizer: "keywords", keywords: [["2", "2", "0.3", "0.2"], ["40000", "600"], ["39400"]], points: 2, reviewRecommended: false },
-            { id: "answer", accepted: ["3.94", "3.94 m2", "3.94 m²"], points: 3 },
-          ] },
+          grading: { mode: "auto", display: "3.94 m²", parts: [{ id: "answer", accepted: ["3.94", "3.94 m2", "3.94 m²"], points: 3 }] },
         },
         {
-          id: "spip-y8m-q26", number: 26, prompt: "Use the two given 6 cm sides and 108° angle to complete the regular pentagon.", points: 2, type: "geometryConstruction", maxSegments: 3,
+          id: "spip-y8m-q26", number: 26, prompt: "The diagram shows two sides of a regular pentagon. Draw three more straight lines to complete the pentagon.", points: 2, type: "geometryConstruction", maxSegments: 3, boardMaxWidth: 476, showSnapDots: true,
           backgroundSrc: `${assets}/q26-pentagon.png`, backgroundAlt: "Two sides of a regular pentagon, each 6 centimetres, meeting at 108 degrees",
-          snapPoints: [{ x: 0.176, y: 0.07 }, { x: 0.679, y: 0.07 }, { x: 0.835, y: 0.622 }],
+          snapPoints: [{ x: 0.176, y: 0.07 }, { x: 0.679, y: 0.07 }, { x: 0.835, y: 0.622 }, { x: 0.428, y: 0.964 }, { x: 0.02, y: 0.622 }],
           geometry: { variant: "regularPentagon", givenVertices: [{ x: 0.176, y: 0.07 }, { x: 0.679, y: 0.07 }, { x: 0.835, y: 0.622 }], aspectRatio: 0.867, sideTolerance: 0.008, angleToleranceDegrees: 1, closeTolerance: 0.025 },
-          grading: { mode: "auto", display: "Regular pentagon with 6 cm sides and 108° internal angles", parts: [] },
+          grading: { mode: "auto", display: "Complete regular pentagon with 6 cm sides and 108° internal angles (2 marks or 0)", parts: [] },
         },
         {
           id: "spip-y8m-q27", number: 27, prompt: "Find the difference between 7/10 and 5/8. Write the answer as a decimal.", points: 1, type: "text", hidePrompt: true,

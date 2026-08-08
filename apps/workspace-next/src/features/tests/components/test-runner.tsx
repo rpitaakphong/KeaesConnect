@@ -78,7 +78,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
         </div>
       </header>
 
-      <main id="test" className="test-shell">
+      <main id="test" className="test-shell" data-test-id={test.id}>
         <div className="test-workspace">
           <aside className="part-nav" aria-label="Test sections">
             {test.sections.map((section) => (

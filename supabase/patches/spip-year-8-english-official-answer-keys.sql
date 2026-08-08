@@ -1,7 +1,7 @@
 begin;
 
 update tests
-set status = 'inactive', total_points = 99
+set status = 'active', total_points = 99
 where id = 'spip-year-8-english-pre';
 
 update test_questions
@@ -12,11 +12,11 @@ with official_keys(id, accepted, display) as (
   values
     ('spip-y8e-r9', '["where"]'::jsonb, 'where'),
     ('spip-y8e-r10', '["so"]'::jsonb, 'so'),
-    ('spip-y8e-r11', '["myself","my self","myslef"]'::jsonb, 'myself'),
+    ('spip-y8e-r11', '["myself"]'::jsonb, 'myself'),
     ('spip-y8e-r12', '["in"]'::jsonb, 'in'),
-    ('spip-y8e-r13', '["which","that","whcih"]'::jsonb, 'which / that'),
+    ('spip-y8e-r13', '["which","that"]'::jsonb, 'which / that'),
     ('spip-y8e-r14', '["out","on","at"]'::jsonb, 'out / on / at'),
-    ('spip-y8e-r15', '["from","form"]'::jsonb, 'from'),
+    ('spip-y8e-r15', '["from"]'::jsonb, 'from'),
     ('spip-y8e-r16', '["any"]'::jsonb, 'any'),
     ('spip-y8e-r17', '["producer","produser"]'::jsonb, 'producer'),
     ('spip-y8e-r18', '["illness","illnesses","illnes","illneses"]'::jsonb, 'illness / illnesses'),
@@ -30,7 +30,7 @@ with official_keys(id, accepted, display) as (
     ('spip-y8e-r26', '["talented that he","talanted that he"]'::jsonb, 'talented that he'),
     ('spip-y8e-r27', '["if she knew what","if she knew the","if she new what","if she new the"]'::jsonb, 'if she knew what / if she knew the'),
     ('spip-y8e-r28', '["spent a long time","took a long time","was a long time","spnet a long time"]'::jsonb, 'spent / took / was a long time'),
-    ('spip-y8e-r29', '["is said to be","are said to be","is siad to be","are siad to be"]'::jsonb, 'is / are said to be'),
+    ('spip-y8e-r29', '["is said to be","are said to be"]'::jsonb, 'is / are said to be'),
     ('spip-y8e-r30', '["not call off","not call of","you didn''t call off","you did not call off","we didn''t call off","we did not call off"]'::jsonb, 'not call off / you or we didn''t call off'),
     ('spip-y8e-r31', '["c"]'::jsonb, 'C'),
     ('spip-y8e-r32', '["d"]'::jsonb, 'D'),

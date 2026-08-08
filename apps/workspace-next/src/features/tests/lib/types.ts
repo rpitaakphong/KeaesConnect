@@ -125,6 +125,7 @@ export type QuestionGrading =
     parts: AnswerPart[];
     scoreThresholds?: Array<{ minCorrect: number; points: number }>;
     markGroups?: Array<{ id: string; partIds: string[]; minCorrect: number; points: number }>;
+    sequenceGroups?: Array<{ id: string; partIds: string[]; acceptedSequence: string[]; points: number }>;
     scoringStrategy?: "standard" | "investigationPlan" | "highestCorrect";
   }
   | {
@@ -342,6 +343,7 @@ export type GeometryConstructionQuestion = QuestionBase & {
   backgroundAlt: string;
   boardMaxWidth?: number;
   hideUndo?: boolean;
+  showSnapDots?: boolean;
   maxSegments: number;
   snapPoints?: GeometryPoint[];
   geometry:
