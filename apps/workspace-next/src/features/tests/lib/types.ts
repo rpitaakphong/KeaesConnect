@@ -19,6 +19,12 @@ export type TestDefinition = {
   durationMinutes?: number;
   audioSrc?: string;
   audioMode?: "standard" | "lockedOnceStarted";
+  audioStartConfirmation?: {
+    title: string;
+    message: string;
+    confirmLabel?: string;
+    cancelLabel?: string;
+  };
   answerPayload?: "default" | "rwAnswers";
   aiShortAnswerRubrics?: Record<string, string>;
   sections: TestSection[];
@@ -41,6 +47,16 @@ export type TestSection = {
     maxWidth?: number;
   };
   storyLayout?: "default" | "heroImage" | "imageFirst";
+  transformationExample?: {
+    number: string;
+    source: string;
+    keyword: string;
+    sentencePrefix: string;
+    sentenceSuffix: string;
+    answer: string;
+    explanation: string;
+    footer: string;
+  };
   questions: TestQuestion[];
 };
 
@@ -49,17 +65,31 @@ export type TestQuestion =
   | MultiChoiceQuestion
   | MultiTextQuestion
   | TextQuestion
+  | InlineClozeQuestion
+  | WritingChoiceQuestion
   | RayDiagramQuestion
   | DiagramAnnotationQuestion
+  | GeometryConstructionQuestion
   | BiologicalDrawingQuestion
   | PracticalGraphQuestion
-  | VirtualMeasurementQuestion;
+  | VirtualMeasurementQuestion
+  | TallyTableQuestion
+  | HistogramQuestion;
 
 export type QuestionBase = {
   id: string;
   number: number;
   prompt: string;
   hidePrompt?: boolean;
+  groupIntro?: {
+    lead?: string;
+    items?: string[];
+    instruction?: string;
+    table?: {
+      headers: string[];
+      rows: string[][];
+    };
+  };
   promptParts?: Array<{ text: string; underline?: boolean }>;
   points: number;
   note?: string;
@@ -94,12 +124,26 @@ export type QuestionGrading =
     display: string;
     parts: AnswerPart[];
     scoreThresholds?: Array<{ minCorrect: number; points: number }>;
-    scoringStrategy?: "standard" | "investigationPlan";
+    markGroups?: Array<{ id: string; partIds: string[]; minCorrect: number; points: number }>;
+    sequenceGroups?: Array<{ id: string; partIds: string[]; acceptedSequence: string[]; points: number }>;
+    scoringStrategy?: "standard" | "investigationPlan" | "highestCorrect";
   }
   | {
     mode: "dependent";
     display: string;
     rule: DependentScoringRule;
+  }
+  | {
+    mode: "conceptGroups";
+    display: string;
+    fields: string[];
+    concepts: Array<{
+      id: string;
+      keywords: string[][];
+      excludedTerms?: string[];
+      points: number;
+    }>;
+    dependency?: { questionId: string; accepted: string[] };
   }
   | {
     mode: "aiSplit";
@@ -111,7 +155,7 @@ export type AnswerPart = {
   id: string;
   accepted: string[];
   points: number;
-  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown";
+  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
   keywords?: string[][];
   reviewRecommended?: boolean;
   category?: "apparatus" | "method" | "measurements" | "controls" | "processing";
@@ -160,6 +204,15 @@ export type DependentScoringRule =
     significantFigures: number;
     unitAccepted: string[];
     tolerance?: number;
+  }
+  | {
+    type: "fieldConversion";
+    sourceField: string;
+    targetField: string;
+    multiplier: number;
+    sourceAccepted?: string[];
+    fullCreditAccepted: string[];
+    tolerance?: number;
   };
 
 export type SingleChoiceQuestion = QuestionBase & {
@@ -180,9 +233,11 @@ export type MultiTextQuestion = QuestionBase & {
     placeholder?: string;
     visualHtml?: string;
     options?: Array<{ value: string; label: string }>;
+    control?: "radio" | "select";
   }>;
   compact?: boolean;
-  inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input"; id?: string }> }>;
+  uniqueOptions?: boolean;
+  inlineRows?: Array<{ className?: string; items: Array<{ text?: string; type?: "input" | "select"; id?: string; prefix?: string }> }>;
   rankRows?: Array<{ label: string; items: Array<{ text: string; id: string }> }>;
   answerTable?: {
     headers: string[];
@@ -200,6 +255,28 @@ export type TextQuestion = QuestionBase & {
   type: "text";
   inputMode?: "text" | "number" | "textarea";
   placeholder?: string;
+  wordRange?: { min: number; max: number };
+};
+
+export type InlineClozeQuestion = QuestionBase & {
+  type: "inlineCloze";
+  title?: string;
+  paragraphs: Array<Array<
+    | { type: "text"; text: string }
+    | { type: "gap"; id: string; number: number; options: Array<{ value: string; label: string }> }
+  >>;
+};
+
+export type WritingChoiceQuestion = QuestionBase & {
+  type: "writingChoice";
+  options: Array<{
+    value: string;
+    label: string;
+    title: string;
+    prompt: string[];
+  }>;
+  placeholder?: string;
+  wordRange: { min: number; max: number };
 };
 
 export type RayDiagramQuestion = QuestionBase & {
@@ -219,7 +296,7 @@ export type RayDiagramQuestion = QuestionBase & {
 
 export type DiagramAnnotationQuestion = QuestionBase & {
   type: "diagramAnnotation";
-  variant: "curve" | "arrow" | "point" | "doubleArrow";
+  variant: "curve" | "arrow" | "point" | "doubleArrow" | "directionArrow";
   backgroundSrc: string;
   backgroundAlt: string;
   geometry:
@@ -248,6 +325,48 @@ export type DiagramAnnotationQuestion = QuestionBase & {
       endpointTolerance: number;
       labelRegion: { minX: number; maxX: number; minY: number; maxY: number };
       label: string;
+    }
+    | {
+      variant: "directionArrow";
+      region: { minX: number; maxX: number; minY: number; maxY: number };
+      direction: "down";
+      angleToleranceDegrees: number;
+      minLength: number;
+    };
+};
+
+export type GeometryPoint = { x: number; y: number };
+
+export type GeometryConstructionQuestion = QuestionBase & {
+  type: "geometryConstruction";
+  backgroundSrc: string;
+  backgroundAlt: string;
+  boardMaxWidth?: number;
+  hideUndo?: boolean;
+  showSnapDots?: boolean;
+  maxSegments: number;
+  snapPoints?: GeometryPoint[];
+  geometry:
+    | {
+      variant: "trianglePartition";
+      triangle: [GeometryPoint, GeometryPoint, GeometryPoint];
+      partition: "trapeziumTriangle" | "rhombusTwoTriangles";
+      subdivisions: number;
+      endpointTolerance: number;
+    }
+    | {
+      variant: "coordinateLine";
+      start: GeometryPoint;
+      end: GeometryPoint;
+      endpointTolerance: number;
+    }
+    | {
+      variant: "regularPentagon";
+      givenVertices: [GeometryPoint, GeometryPoint, GeometryPoint];
+      aspectRatio: number;
+      sideTolerance: number;
+      angleToleranceDegrees: number;
+      closeTolerance: number;
     };
 };
 
@@ -288,6 +407,34 @@ export type VirtualMeasurementQuestion = QuestionBase & {
     start: { x: number; y: number };
     end: { x: number; y: number };
   }>;
+  scoringStrategy?: "sum" | "allCorrect";
+};
+
+export type TallyTableQuestion = QuestionBase & {
+  type: "tallyTable";
+  sourceQuestionId: string;
+  bins: Array<{
+    id: string;
+    label: string;
+    min: number;
+    max: number;
+    baseCount: number;
+    editable: boolean;
+  }>;
+  measurementIds: string[];
+  measurementCalibrations: Record<string, number>;
+};
+
+export type HistogramQuestion = QuestionBase & {
+  type: "histogram";
+  sourceQuestionId: string;
+  categories: Array<{
+    id: string;
+    label: string;
+    fixedValue?: number;
+  }>;
+  yMaxOptions: number[];
+  axisKeywords: string[][];
 };
 
 export type TestAnswers = Record<string, string | Record<string, string | string[]>>;

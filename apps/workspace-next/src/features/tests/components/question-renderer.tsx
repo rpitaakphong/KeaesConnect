@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
+import { MathGeometryEditor } from "@/features/tests/components/math-geometry-editor";
+import { HistogramEditor, TallyTableEditor } from "@/features/tests/components/science-data-editors";
 import {
   BiologicalDrawingEditor,
   PracticalGraphEditor,
@@ -90,13 +92,16 @@ export function QuestionRenderer({
         <label>
           <span className="visually-hidden">{question.prompt}</span>
           {question.inputMode === "textarea" ? (
-            <textarea
-              autoComplete="off"
-              onChange={(event) => onChange(event.target.value)}
-              placeholder={question.placeholder || "answer"}
-              rows={3}
-              value={typeof answer === "string" ? answer : ""}
-            />
+            <>
+              <textarea
+                autoComplete="off"
+                onChange={(event) => onChange(event.target.value)}
+                placeholder={question.placeholder || "answer"}
+                rows={10}
+                value={typeof answer === "string" ? answer : ""}
+              />
+              {question.wordRange ? <WordCountStatus range={question.wordRange} value={typeof answer === "string" ? answer : ""} /> : null}
+            </>
           ) : (
             <input
               autoComplete="off"
@@ -107,23 +112,44 @@ export function QuestionRenderer({
             />
           )}
         </label>
+      ) : question.type === "inlineCloze" ? (
+        <InlineCloze answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "writingChoice" ? (
+        <WritingChoice answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "rayDiagram" ? (
         <RayDiagramEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "diagramAnnotation" ? (
         <DiagramAnnotationEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "geometryConstruction" ? (
+        <MathGeometryEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "biologicalDrawing" ? (
         <BiologicalDrawingEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "practicalGraph" ? (
         <PracticalGraphEditor answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "virtualMeasurement" ? (
         <VirtualMeasurementEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "tallyTable" ? (
+        <TallyTableEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.type === "histogram" ? (
+        <HistogramEditor answer={objectAnswer} onChange={onChange} question={question} />
+      ) : question.uniqueOptions ? (
+        <UniqueOptionMatching answer={objectAnswer} onChange={onChange} question={question} />
       ) : question.inlineRows?.length ? (
         <div className="math-inline-rows">
           {question.inlineRows.map((row, rowIndex) => (
             <div className={`math-inline-row ${row.className || ""}`} key={rowIndex}>
-              {row.items.map((item, itemIndex) => item.type === "input" && item.id
-                ? <MathInput answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
-                : <span key={itemIndex}>{item.text}</span>)}
+              {row.items.map((item, itemIndex) => item.type === "select" && item.id
+                ? <MathInlineSelect answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
+                : item.type === "input" && item.id
+                  ? item.prefix
+                    ? (
+                      <label className="math-inline-input-group" key={item.id}>
+                        <span>{item.prefix}</span>
+                        <MathInput answer={objectAnswer} field={findField(question, item.id)} onChange={onChange} />
+                      </label>
+                    )
+                    : <MathInput answer={objectAnswer} field={findField(question, item.id)} key={item.id} onChange={onChange} />
+                  : <span key={itemIndex}>{item.text}</span>)}
             </div>
           ))}
         </div>
@@ -185,7 +211,7 @@ export function QuestionRenderer({
 
   if (variant === "subquestion") {
     return (
-      <section className="science-subquestion">
+      <section className={`science-subquestion question-${question.id}`}>
         <div className="science-subquestion-head">
           <h4><QuestionPrompt question={question} /></h4>
           <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
@@ -197,7 +223,7 @@ export function QuestionRenderer({
   }
 
   return (
-    <article className="question-card">
+    <article className={`question-card question-${question.id}`}>
       <div className="question-head">
         <div>
           <p className="eyebrow">Question {question.number}</p>
@@ -209,6 +235,137 @@ export function QuestionRenderer({
       {responseContent}
     </article>
   );
+}
+
+function InlineCloze({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "inlineCloze" }>;
+}) {
+  return (
+    <article className="inline-cloze" aria-label={question.title || question.prompt}>
+      {question.title ? <h4>{question.title}</h4> : null}
+      {question.paragraphs.map((paragraph, paragraphIndex) => (
+        <p key={paragraphIndex}>
+          {paragraph.map((segment, segmentIndex) => segment.type === "text" ? (
+            <span key={segmentIndex}>{segment.text}</span>
+          ) : (
+            <label className="inline-cloze-gap" key={segment.id}>
+              <span className="visually-hidden">Gap {segment.number}</span>
+              <strong aria-hidden="true">({segment.number})</strong>
+              <select
+                aria-label={`Gap ${segment.number}`}
+                onChange={(event) => onChange({ ...answer, [segment.id]: event.target.value })}
+                value={answerText(answer, segment.id)}
+              >
+                <option value="">Select</option>
+                {segment.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
+          ))}
+        </p>
+      ))}
+    </article>
+  );
+}
+
+function WritingChoice({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "writingChoice" }>;
+}) {
+  const promptId = answerText(answer, "promptId");
+  const response = answerText(answer, "answer");
+  const selected = question.options.find((option) => option.value === promptId);
+  return (
+    <div className="writing-choice">
+      <fieldset>
+        <legend>Choose one writing task</legend>
+        <div className="writing-choice-options">
+          {question.options.map((option) => (
+            <label className="choice-card" key={option.value}>
+              <input
+                checked={promptId === option.value}
+                name={`${question.id}-prompt`}
+                onChange={() => onChange({ ...answer, promptId: option.value })}
+                type="radio"
+                value={option.value}
+              />
+              <span><strong>{option.label}</strong> {option.title}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {selected ? (
+        <article className="writing-selected-prompt">
+          <h4>{selected.label}: {selected.title}</h4>
+          {selected.prompt.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </article>
+      ) : null}
+      <label>
+        <span>Your response</span>
+        <textarea
+          autoComplete="off"
+          disabled={!selected}
+          onChange={(event) => onChange({ ...answer, answer: event.target.value })}
+          placeholder={selected ? question.placeholder || "Write your response." : "Choose a task first."}
+          rows={12}
+          value={response}
+        />
+      </label>
+      <WordCountStatus range={question.wordRange} value={response} />
+    </div>
+  );
+}
+
+function UniqueOptionMatching({
+  answer,
+  onChange,
+  question,
+}: {
+  answer: Record<string, string | string[]>;
+  onChange: (value: Record<string, string | string[]>) => void;
+  question: Extract<TestQuestion, { type: "multiText" }>;
+}) {
+  const selectedValues = new Set(question.fields.map((field) => answerText(answer, field.id)).filter(Boolean));
+  return (
+    <div className="unique-option-matching">
+      {question.fields.map((field) => {
+        const currentValue = answerText(answer, field.id);
+        return (
+          <label key={field.id}>
+            <span>{field.label}</span>
+            <select
+              onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
+              value={currentValue}
+            >
+              <option value="">Select</option>
+              {(field.options || []).map((option) => (
+                <option disabled={selectedValues.has(option.value) && currentValue !== option.value} key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        );
+      })}
+    </div>
+  );
+}
+
+function WordCountStatus({ range, value }: { range: { min: number; max: number }; value: string }) {
+  const count = value.trim() ? value.trim().split(/\s+/).length : 0;
+  const state = count < range.min ? "below" : count > range.max ? "above" : "within";
+  const message = state === "below" ? `Write at least ${range.min} words.` : state === "above" ? `Reduce to ${range.max} words or fewer.` : "Within the required range.";
+  return <p className={`word-count-status is-${state}`}><strong>{count} words</strong><span>{message}</span></p>;
 }
 
 type RayTool = "normalEnd" | "labelPoint" | "reflectedEnd";
@@ -354,7 +511,7 @@ function DiagramAnnotationEditor({
       writePoint("point", value);
       return;
     }
-    if (!start || (start && end && label)) {
+    if (!start || (start && end && (question.variant === "directionArrow" || label))) {
       setDragging("start");
       onChange({ start: `${value.x.toFixed(4)},${value.y.toFixed(4)}` });
     } else if (!end) {
@@ -384,6 +541,8 @@ function DiagramAnnotationEditor({
       ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
       : question.variant === "doubleArrow"
         ? !start ? "Select the first end of the length arrow." : !end ? "Select the other end of the length arrow." : "Place the L label beside the arrow."
+      : question.variant === "directionArrow"
+        ? !start ? "Select where the force arrow begins." : !end ? "Select where the arrow points." : "Drag again to replace the arrow."
       : "Place X on the part of the graph where the student is decelerating.";
 
   return (
@@ -424,7 +583,7 @@ function DiagramAnnotationEditor({
               <polygon className="diagram-answer-arrowhead" points="0 0, 7 3.5, 0 7" />
             </marker>
           </defs>
-          {label ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>{annotationLabel}</text> : null}
+          {label && question.variant !== "directionArrow" ? <text className="diagram-answer-label" x={label.x * 1000} y={label.y * 600}>{annotationLabel}</text> : null}
           {point ? <text className="diagram-answer-point" x={point.x * 1000} y={point.y * 600}>X</text> : null}
         </svg>
       </div>
@@ -1682,10 +1841,22 @@ function MathField({
     placeholder?: string;
     visualHtml?: string;
     options?: Array<{ value: string; label: string }>;
+    control?: "radio" | "select";
   };
   onChange: (value: Record<string, string | string[]>) => void;
 }) {
   if (field.options?.length) {
+    if (field.control === "select") {
+      return (
+        <label>
+          <span>{field.label}</span>
+          <select onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })} value={answerText(answer, field.id)}>
+            <option value="">Select</option>
+            {field.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
+      );
+    }
     return (
       <fieldset className="inline-option-field">
         <legend>{field.label}</legend>
@@ -1727,12 +1898,35 @@ function MathInput({
   const value = answer[field.id];
   return (
     <input
+      aria-label={field.label}
       autoComplete="off"
       className="math-line-input"
       onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
       placeholder={field.placeholder || "answer"}
       value={typeof value === "string" ? value : ""}
     />
+  );
+}
+
+function MathInlineSelect({
+  answer,
+  field,
+  onChange,
+}: {
+  answer: Record<string, string | string[]>;
+  field: { id: string; label: string; options?: Array<{ value: string; label: string }> };
+  onChange: (value: Record<string, string | string[]>) => void;
+}) {
+  return (
+    <select
+      aria-label={field.label}
+      className="math-inline-select"
+      onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
+      value={answerText(answer, field.id)}
+    >
+      <option value="">Select</option>
+      {field.options?.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+    </select>
   );
 }
 

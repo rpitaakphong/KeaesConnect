@@ -474,6 +474,7 @@ function courseFamily(test: CatalogTest) {
   const source = `${test.id} ${test.title} ${test.level}`.toLowerCase();
   if (source.includes("english-literacy")) return "English Literacy";
   if (source.includes("math-olympiad")) return "Math Olympiad";
+  if (source.includes("spip") && source.includes("year 8")) return "SPIP Year 8";
   if (source.includes("spip")) return "SPIP Year 7";
   if (source.includes("starter-progress") || source.includes("starter")) return "Starter Progress";
   if (source.includes("summer-english")) return "Summer English";
@@ -501,6 +502,23 @@ function renderGradingDetails(details: Record<string, unknown> | null | undefine
     );
   }
   if (!details || typeof details !== "object" || !("contentScore" in details)) return null;
+  if ("communicativeAchievementScore" in details) {
+    return (
+      <span>
+        Content: {formatScore(Number(details.contentScore || 0))}/5 · Communicative achievement: {formatScore(Number(details.communicativeAchievementScore || 0))}/5 · Organisation: {formatScore(Number(details.organisationScore || 0))}/5 · Language: {formatScore(Number(details.languageScore || 0))}/5
+        {details.wordCount !== undefined ? ` · ${String(details.wordCount)} words` : ""}
+        {details.feedback ? ` · ${String(details.feedback)}` : ""}
+      </span>
+    );
+  }
+  if ("languageScore" in details) {
+    return (
+      <span>
+        Content: {formatScore(Number(details.contentScore || 0))}/3 · Language: {formatScore(Number(details.languageScore || 0))}/2
+        {details.feedback ? ` · ${String(details.feedback)}` : ""}
+      </span>
+    );
+  }
   return (
     <span>
       Content: {formatScore(Number(details.contentScore || 0))}/0.5 · Writing: {formatScore(Number(details.writingScore || 0))}/0.5

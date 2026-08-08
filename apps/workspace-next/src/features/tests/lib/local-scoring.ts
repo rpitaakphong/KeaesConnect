@@ -32,12 +32,15 @@ export function scoreTestLocally(test: TestDefinition, answers: TestAnswers): Su
 function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAnswers) {
   if (question.type === "rayDiagram") return scoreRayDiagram(question, answer);
   if (question.type === "diagramAnnotation") return scoreDiagramAnnotation(question, answer);
+  if (question.type === "geometryConstruction") return scoreGeometryConstruction(question, answer);
   if (question.type === "biologicalDrawing") return scoreBiologicalDrawing(question, answer);
   if (question.type === "practicalGraph") return scorePracticalGraph(question, answer, answers);
   if (question.type === "virtualMeasurement") return scoreVirtualMeasurement(question, answer);
+  if (question.type === "tallyTable") return scoreTallyTable(question, answer, answers);
+  if (question.type === "histogram") return scoreHistogram(question, answer, answers);
   if (!question.grading) return { score: 0, possible: question.points, details: { parts: [] } };
   if (question.grading.mode === "aiSplit") {
-    const raw = typeof answer === "string" ? answer : "";
+    const raw = responseText(answer);
     const contentCorrect = question.grading.contentTerms.some((term) => normalize(raw).includes(normalize(term)));
     const writingCorrect = normalize(raw).split(/\s+/).filter(Boolean).length >= 2;
     const contentScore = contentCorrect ? 0.5 : 0;
@@ -56,6 +59,7 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
     };
   }
   if (question.grading.mode === "dependent") return scoreDependentQuestion(question, answer, answers);
+  if (question.grading.mode === "conceptGroups") return scoreConceptGroups(question, answer, answers);
   const answerMap = question.type === "singleChoice"
     ? question.responseShape === "object" && typeof answer === "object" && answer
       ? answer as Record<string, string | string[]>
@@ -79,15 +83,47 @@ function scoreQuestion(question: TestQuestion, answer: unknown, answers: TestAns
   const thresholdScore = question.grading.scoreThresholds?.length
     ? scoreByThreshold(parts.filter((part) => part.correct).length, question.grading.scoreThresholds)
     : null;
+  const markGroupScore = question.grading.markGroups?.length
+    ? question.grading.markGroups.reduce((sum, group) => {
+      const correct = parts.filter((part) => group.partIds.includes(part.id) && part.correct).length;
+      return sum + (correct >= group.minCorrect ? group.points : 0);
+    }, 0)
+    : null;
+  const sequenceGroupScore = question.grading.sequenceGroups?.length
+    ? question.grading.sequenceGroups.reduce((sum, group) => {
+      const responses = group.partIds.map((id) => normalize(String(answerMap[id] || "")));
+      const expected = group.acceptedSequence.map((value) => normalize(value));
+      const correct = responses.some((_, start) => (
+        start + expected.length <= responses.length &&
+        expected.every((value, offset) => responses[start + offset] === value)
+      ));
+      return sum + (correct ? group.points : 0);
+    }, 0)
+    : null;
   const investigationScore = question.grading.scoringStrategy === "investigationPlan"
     ? scoreInvestigationPlan(parts, question.grading.parts)
     : null;
-  const rawScore = investigationScore ?? thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
+  const highestCorrectScore = question.grading.scoringStrategy === "highestCorrect"
+    ? parts.reduce((best, part) => part.correct ? Math.max(best, part.possible) : best, 0)
+    : null;
+  const groupedScore = markGroupScore !== null || sequenceGroupScore !== null
+    ? (markGroupScore ?? 0) + (sequenceGroupScore ?? 0)
+    : null;
+  const rawScore = investigationScore ?? highestCorrectScore ?? groupedScore ?? thresholdScore ?? parts.reduce((sum, part) => sum + part.score, 0);
   return {
     score: Math.min(rawScore, question.points),
     possible: question.points,
     details: { parts },
   };
+}
+
+function responseText(answer: unknown) {
+  if (typeof answer === "string") return answer;
+  if (answer && typeof answer === "object") {
+    const value = (answer as Record<string, unknown>).answer;
+    return typeof value === "string" ? value : "";
+  }
+  return "";
 }
 
 function scoreDiagramAnnotation(question: Extract<TestQuestion, { type: "diagramAnnotation" }>, answer: unknown) {
@@ -96,7 +132,23 @@ function scoreDiagramAnnotation(question: Extract<TestQuestion, { type: "diagram
   let correct = false;
   const components: Record<string, boolean> = {};
 
-  if (geometry.variant === "point") {
+  if (geometry.variant === "directionArrow") {
+    const start = parsePoint(values.start);
+    const end = parsePoint(values.end);
+    const midpoint = start && end ? { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 } : null;
+    const regionCorrect = Boolean(
+      midpoint && midpoint.x >= geometry.region.minX && midpoint.x <= geometry.region.maxX &&
+      midpoint.y >= geometry.region.minY && midpoint.y <= geometry.region.maxY,
+    );
+    const length = start && end ? distance(start, end) : 0;
+    const angle = start && end ? Math.atan2(end.y - start.y, end.x - start.x) * 180 / Math.PI : 0;
+    const directionCorrect = Math.abs(angle - 90) <= geometry.angleToleranceDegrees;
+    const lengthCorrect = length >= geometry.minLength;
+    components.regionCorrect = regionCorrect;
+    components.directionCorrect = directionCorrect;
+    components.lengthCorrect = lengthCorrect;
+    correct = regionCorrect && directionCorrect && lengthCorrect;
+  } else if (geometry.variant === "point") {
     const point = parsePoint(values.point);
     const { start, end } = geometry.segment;
     const segmentDistance = point ? distanceToSegment(point, start, end) : Number.POSITIVE_INFINITY;
@@ -176,6 +228,51 @@ function scoreDiagramAnnotation(question: Extract<TestQuestion, { type: "diagram
       }],
     },
   };
+}
+
+function scoreGeometryConstruction(question: Extract<TestQuestion, { type: "geometryConstruction" }>, answer: unknown) {
+  const values = answerMap(answer);
+  const segments = decodeGeometrySegments(values.segments);
+  const geometry = question.geometry;
+
+  if (geometry.variant === "trianglePartition") {
+    const correct = geometry.partition === "trapeziumTriangle"
+      ? validTriangleMidline(segments, geometry.triangle, geometry.subdivisions, geometry.endpointTolerance)
+      : validRhombusPartition(segments, geometry.triangle, geometry.endpointTolerance);
+    const parts = [componentPart(geometry.partition, correct, question.points, { segmentCount: segments.length })];
+    return { score: correct ? question.points : 0, possible: question.points, details: { parts } };
+  }
+
+  if (geometry.variant === "coordinateLine") {
+    const correct = segments.length === 1 && sameUnorderedSegment(segments[0], { start: geometry.start, end: geometry.end }, geometry.endpointTolerance);
+    const parts = [componentPart("line", correct, question.points, { fullGridCoverage: correct, xPositionCorrect: correct })];
+    return { score: correct ? question.points : 0, possible: question.points, details: { parts } };
+  }
+
+  const [a, b, c] = geometry.givenVertices;
+  const first = segments[0];
+  const baseLength = scaledDistance(a, b, geometry.aspectRatio);
+  const firstSideCorrect = Boolean(first && scaledDistance(first.start, first.end, geometry.aspectRatio) >= baseLength - geometry.sideTolerance && scaledDistance(first.start, first.end, geometry.aspectRatio) <= baseLength + geometry.sideTolerance);
+  const firstAngle = first ? geometryAngle(b, c, first.end, geometry.aspectRatio) : 0;
+  const firstAngleCorrect = Math.abs(firstAngle - 108) <= geometry.angleToleranceDegrees;
+  const partialCorrect = firstSideCorrect && firstAngleCorrect && Boolean(first && pointDistance(first.start, c) <= geometry.closeTolerance);
+  const connected = segments.every((segment, index) => index === 0 || pointDistance(segment.start, segments[index - 1].end) <= geometry.closeTolerance);
+  const allSidesCorrect = segments.length === 3 && segments.every((segment) => Math.abs(scaledDistance(segment.start, segment.end, geometry.aspectRatio) - baseLength) <= geometry.sideTolerance);
+  const internalAnglesCorrect = segments.slice(1).every((segment, index) => {
+    const previous = segments[index];
+    return Math.abs(geometryAngle(previous.start, previous.end, segment.end, geometry.aspectRatio) - 108) <= geometry.angleToleranceDegrees;
+  });
+  const closesShape = Boolean(segments.at(-1) && pointDistance(segments.at(-1)!.end, a) <= geometry.closeTolerance);
+  const fullCorrect = partialCorrect && connected && allSidesCorrect && internalAnglesCorrect && closesShape;
+  const parts = [componentPart("complete-pentagon", fullCorrect, question.points, {
+    firstSideCorrect,
+    firstAngleCorrect,
+    connected,
+    allSidesCorrect,
+    internalAnglesCorrect,
+    closesShape,
+  })];
+  return { score: fullCorrect ? question.points : 0, possible: question.points, details: { parts } };
 }
 
 function scoreBiologicalDrawing(
@@ -273,7 +370,89 @@ function scoreVirtualMeasurement(
       unit: measurement.unit,
     });
   });
-  return { score: parts.reduce((sum, part) => sum + part.score, 0), possible: question.points, details: { parts } };
+  const score = question.scoringStrategy === "allCorrect"
+    ? parts.every((part) => part.correct) ? question.points : 0
+    : Math.min(question.points, parts.reduce((sum, part) => sum + part.score, 0));
+  return { score, possible: question.points, details: { parts } };
+}
+
+function scoreConceptGroups(question: TestQuestion, answer: unknown, answers: TestAnswers) {
+  if (!question.grading || question.grading.mode !== "conceptGroups") {
+    return { score: 0, possible: question.points, details: { parts: [] } };
+  }
+  const values = answerMap(answer);
+  const response = question.grading.fields.map((field) => String(values[field] || "")).join(" ");
+  const dependency = question.grading.dependency;
+  const dependencyMet = !dependency || dependency.accepted.some((accepted) => (
+    normalize(responseText(answers[dependency.questionId])) === normalize(accepted) ||
+    normalize(String(answerMap(answers[dependency.questionId]).answer || "")) === normalize(accepted)
+  ));
+  const parts = question.grading.concepts.map((concept) => {
+    const excluded = (concept.excludedTerms || []).some((term) => normalize(response).includes(normalize(term)));
+    const correct = dependencyMet && !excluded && matchesKeywords(response, concept.keywords);
+    return componentPart(concept.id, correct, concept.points, { dependencyMet, excluded });
+  });
+  return {
+    score: Math.min(question.points, parts.reduce((sum, part) => sum + part.score, 0)),
+    possible: question.points,
+    details: { parts },
+  };
+}
+
+function scoreTallyTable(
+  question: Extract<TestQuestion, { type: "tallyTable" }>,
+  answer: unknown,
+  answers: TestAnswers,
+) {
+  const values = answerMap(answer);
+  const source = answerMap(answers[question.sourceQuestionId]);
+  const measured = question.measurementIds.map((id) => {
+    const calibration = question.measurementCalibrations[id] ?? 1;
+    return measurementValueById(source, id, calibration);
+  });
+  const parts = question.bins.filter((bin) => bin.editable).map((bin) => {
+    const extra = measured.filter((value) => value !== null && roundedMeasurementInBin(value, bin.min, bin.max)).length;
+    const total = bin.baseCount + extra;
+    const enteredExtra = numericValue(values[`${bin.id}Tally`]);
+    const enteredTotal = numericValue(values[`${bin.id}Total`]);
+    const correct = enteredExtra === extra && enteredTotal === total;
+    return componentPart(bin.id, correct, 1, { expectedExtra: extra, expectedTotal: total, ecfMeasurements: measured });
+  });
+  return { score: Math.min(question.points, parts.reduce((sum, part) => sum + part.score, 0)), possible: question.points, details: { parts } };
+}
+
+function roundedMeasurementInBin(value: number, min: number, max: number) {
+  const rounded = Math.round(value);
+  return rounded >= min && rounded <= max;
+}
+
+function scoreHistogram(
+  question: Extract<TestQuestion, { type: "histogram" }>,
+  answer: unknown,
+  answers: TestAnswers,
+) {
+  const values = answerMap(answer);
+  const source = answerMap(answers[question.sourceQuestionId]);
+  const expected = question.categories.map((category) => {
+    const sourceValue = numericValue(source[`${category.id}Total`]);
+    return category.fixedValue ?? sourceValue;
+  });
+  const yMax = numericValue(values.yMax);
+  const largest = Math.max(...expected.filter((value): value is number => value !== null));
+  const axisLabelCorrect = matchesKeywords(String(values.yLabel || ""), question.axisKeywords);
+  const scaleCorrect = yMax !== null && yMax >= largest && largest / yMax > 0.5;
+  const axisCorrect = axisLabelCorrect && scaleCorrect;
+  const editable = question.categories.map((category, index) => ({ category, expected: expected[index] })).filter(({ category }) => category.fixedValue === undefined);
+  const correctBars = editable.filter(({ category, expected: barExpected }) => {
+    const entered = numericValue(values[`bar-${category.id}`]);
+    return entered !== null && barExpected !== null && Math.abs(entered - barExpected) < 0.01;
+  }).length;
+  const barScore = correctBars === editable.length ? 2 : correctBars >= 1 ? 1 : 0;
+  const parts = [
+    componentPart("y-axis", axisCorrect, 1, { axisLabelCorrect, scaleCorrect, yMax }),
+    { id: "bars", score: barScore, possible: 2, correct: barScore === 2, correctBars, expected },
+  ];
+  return { score: Math.min(question.points, (axisCorrect ? 1 : 0) + barScore), possible: question.points, details: { parts } };
 }
 
 function scoreDependentQuestion(question: TestQuestion, answer: unknown, answers: TestAnswers) {
@@ -328,6 +507,17 @@ function scoreDependentQuestion(question: TestQuestion, answer: unknown, answers
       componentPart("calculation", calculationCorrect, 1, { expected }),
       componentPart("significant-figures", significantFiguresCorrect, 1, { expected: roundedExpected }),
       componentPart("unit", unitCorrect, 1, { accepted: rule.unitAccepted }),
+    ];
+    return { score: parts.reduce((sum, part) => sum + part.score, 0), possible: question.points, details: { parts } };
+  } else if (rule.type === "fieldConversion") {
+    const source = numericValue(response[rule.sourceField]);
+    const target = numericValue(response[rule.targetField]);
+    const sourceCorrect = (rule.sourceAccepted || []).some((accepted) => Math.abs((source ?? Number.NaN) - Number(accepted)) <= (rule.tolerance ?? 0.001));
+    const fullCredit = rule.fullCreditAccepted.some((accepted) => Math.abs((target ?? Number.NaN) - Number(accepted)) <= (rule.tolerance ?? 0.001));
+    const conversionCorrect = source !== null && target !== null && Math.abs(target - source * rule.multiplier) <= (rule.tolerance ?? 0.001);
+    const parts = [
+      componentPart("conversion", sourceCorrect || conversionCorrect || fullCredit, 1, { source, target, multiplier: rule.multiplier }),
+      componentPart("final-answer", fullCredit, 1, { accepted: rule.fullCreditAccepted }),
     ];
     return { score: parts.reduce((sum, part) => sum + part.score, 0), possible: question.points, details: { parts } };
   }
@@ -523,6 +713,10 @@ function isCorrectPart(raw: string | string[], part: NonNullable<Extract<TestQue
   }
   if (part.normalizer === "keywords") return matchesKeywords(String(raw), part.keywords || []);
   if (part.normalizer === "arrowDown") return normalize(String(raw)) === "down";
+  if (part.normalizer === "linearExpression") {
+    const response = linearSignature(String(raw));
+    return Boolean(response && part.accepted.some((accepted) => sameLinearSignature(response, linearSignature(accepted))));
+  }
   return part.accepted.some((accepted) => normalize(String(raw), part.normalizer) === normalize(accepted, part.normalizer));
 }
 
@@ -535,7 +729,7 @@ function matchesKeywords(value: string, keywordGroups: string[][]) {
   return Boolean(raw) && keywordGroups.some((group) => group.every((word) => raw.includes(normalize(word))));
 }
 
-function normalize(value: string, mode: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" = "text") {
+function normalize(value: string, mode: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression" = "text") {
   const clean = String(value || "")
     .toLowerCase()
     .replace(/[,$]/g, "")
@@ -550,6 +744,129 @@ function normalize(value: string, mode: "text" | "time" | "set" | "contains" | "
       .replace(":00p.m.", "pm");
   }
   return clean.replace(/[^\w./: ]/g, "");
+}
+
+type GeometrySegment = { start: { x: number; y: number }; end: { x: number; y: number } };
+
+function decodeGeometrySegments(value: string | string[] | undefined): GeometrySegment[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((encoded) => {
+    const [rawStart, rawEnd] = encoded.split(";");
+    const start = parsePoint(rawStart);
+    const end = parsePoint(rawEnd);
+    return start && end ? [{ start, end }] : [];
+  });
+}
+
+function validTriangleMidline(segments: GeometrySegment[], triangle: [{ x: number; y: number }, { x: number; y: number }, { x: number; y: number }], subdivisions: number, tolerance: number) {
+  if (segments.length !== 1) return false;
+  const [a, b, c] = triangle;
+  return [a, b, c].some((vertex, vertexIndex) => {
+    const others = [a, b, c].filter((_, index) => index !== vertexIndex);
+    return Array.from({ length: subdivisions - 1 }, (_, index) => (index + 1) / subdivisions).some((ratio) => {
+      const target = { start: interpolate(vertex, others[0], ratio), end: interpolate(vertex, others[1], ratio) };
+      return sameUnorderedSegment(segments[0], target, tolerance);
+    });
+  });
+}
+
+function validRhombusPartition(segments: GeometrySegment[], triangle: [{ x: number; y: number }, { x: number; y: number }, { x: number; y: number }], tolerance: number) {
+  if (segments.length !== 2) return false;
+  const [a, b, c] = triangle;
+  const midpoints = [interpolate(a, b, 0.5), interpolate(a, c, 0.5), interpolate(b, c, 0.5)];
+  const medial = [
+    { start: midpoints[0], end: midpoints[1] },
+    { start: midpoints[0], end: midpoints[2] },
+    { start: midpoints[1], end: midpoints[2] },
+  ];
+  return medial.some((omitted, omittedIndex) => {
+    const targets = medial.filter((_, index) => index !== omittedIndex);
+    return targets.every((target) => segments.some((segment) => sameUnorderedSegment(segment, target, tolerance))) && !segments.some((segment) => sameUnorderedSegment(segment, omitted, tolerance));
+  });
+}
+
+function sameUnorderedSegment(left: GeometrySegment, right: GeometrySegment, tolerance: number) {
+  return (
+    pointDistance(left.start, right.start) <= tolerance && pointDistance(left.end, right.end) <= tolerance
+  ) || (
+    pointDistance(left.start, right.end) <= tolerance && pointDistance(left.end, right.start) <= tolerance
+  );
+}
+
+function interpolate(start: { x: number; y: number }, end: { x: number; y: number }, ratio: number) {
+  return { x: start.x + (end.x - start.x) * ratio, y: start.y + (end.y - start.y) * ratio };
+}
+
+function pointDistance(left: { x: number; y: number }, right: { x: number; y: number }) {
+  return Math.hypot(left.x - right.x, left.y - right.y);
+}
+
+function scaledDistance(left: { x: number; y: number }, right: { x: number; y: number }, scaleY: number) {
+  return Math.hypot(left.x - right.x, (left.y - right.y) * scaleY);
+}
+
+function geometryAngle(previous: { x: number; y: number }, vertex: { x: number; y: number }, next: { x: number; y: number }, scaleY: number) {
+  const left = { x: previous.x - vertex.x, y: (previous.y - vertex.y) * scaleY };
+  const right = { x: next.x - vertex.x, y: (next.y - vertex.y) * scaleY };
+  const denominator = Math.hypot(left.x, left.y) * Math.hypot(right.x, right.y);
+  if (!denominator) return 0;
+  return Math.acos(Math.max(-1, Math.min(1, (left.x * right.x + left.y * right.y) / denominator))) * 180 / Math.PI;
+}
+
+type LinearSignature = { constant: number; p: number; q: number };
+
+function linearSignature(value: string): LinearSignature | null {
+  const tokens = value.toLowerCase().replace(/[×·]/g, "*").match(/\d+(?:\.\d+)?|[pq]|[()+\-*]/g) || [];
+  if (!tokens.length || tokens.join("") !== value.toLowerCase().replace(/\s+/g, "").replace(/[×·]/g, "*")) return null;
+  let index = 0;
+  const add = (left: LinearSignature, right: LinearSignature, factor = 1): LinearSignature => ({ constant: left.constant + factor * right.constant, p: left.p + factor * right.p, q: left.q + factor * right.q });
+  const multiply = (left: LinearSignature, right: LinearSignature): LinearSignature | null => {
+    const leftVariable = left.p || left.q;
+    const rightVariable = right.p || right.q;
+    if (leftVariable && rightVariable) return null;
+    if (!leftVariable) return { constant: left.constant * right.constant, p: left.constant * right.p, q: left.constant * right.q };
+    return { constant: right.constant * left.constant, p: right.constant * left.p, q: right.constant * left.q };
+  };
+  const primary = (): LinearSignature | null => {
+    const token = tokens[index++];
+    if (!token) return null;
+    if (token === "(") {
+      const result = expression();
+      if (tokens[index++] !== ")") return null;
+      return result;
+    }
+    if (token === "-") {
+      const result = primary();
+      return result ? { constant: -result.constant, p: -result.p, q: -result.q } : null;
+    }
+    if (token === "p" || token === "q") return { constant: 0, p: token === "p" ? 1 : 0, q: token === "q" ? 1 : 0 };
+    const number = Number(token);
+    return Number.isFinite(number) ? { constant: number, p: 0, q: 0 } : null;
+  };
+  const product = (): LinearSignature | null => {
+    let result = primary();
+    while (result && index < tokens.length && (tokens[index] === "*" || /^[pq(\d]/.test(tokens[index]))) {
+      if (tokens[index] === "*") index += 1;
+      const right = primary();
+      result = right ? multiply(result, right) : null;
+    }
+    return result;
+  };
+  const expression = (): LinearSignature | null => {
+    let result = product();
+    while (result && (tokens[index] === "+" || tokens[index] === "-")) {
+      const operation = tokens[index++];
+      const right = product();
+      result = right ? add(result, right, operation === "+" ? 1 : -1) : null;
+    }
+    return result;
+  };
+  const result = expression();
+  return result && index === tokens.length ? result : null;
+}
+
+function sameLinearSignature(left: LinearSignature, right: LinearSignature | null) {
+  return Boolean(right && Math.abs(left.constant - right.constant) < 1e-9 && Math.abs(left.p - right.p) < 1e-9 && Math.abs(left.q - right.q) < 1e-9);
 }
 
 function sameSet(response: string[], accepted: string[]) {
