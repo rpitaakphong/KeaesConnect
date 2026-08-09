@@ -3723,9 +3723,33 @@ $$;
 create or replace function public.spip_science_virtual_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
 returns jsonb language plpgsql stable as $$
 declare
-  base_details jsonb := p6_virtual_measurement_details(p_question_id, p_answer_key, p_answers);
+  response jsonb := coalesce(p_answers->p_question_id, '{}'::jsonb);
+  measurement jsonb;
+  measured numeric;
+  measurement_correct boolean;
+  measurement_items jsonb := '[]'::jsonb;
+  base_details jsonb;
   all_correct boolean;
 begin
+  for measurement in select value from jsonb_array_elements(coalesce(p_answer_key->'measurements', '[]'::jsonb))
+  loop
+    measured := spip_math_distance(
+      response->>((measurement->>'id') || 'Start'),
+      response->>((measurement->>'id') || 'End')
+    ) * coalesce((measurement->>'calibration')::numeric, 1);
+    measurement_correct := measured is not null
+      and abs(measured - (measurement->>'expected')::numeric) <= (measurement->>'tolerance')::numeric;
+    measurement_items := measurement_items || jsonb_build_array(jsonb_build_object(
+      'id', measurement->>'id',
+      'score', case when measurement_correct then 1 else 0 end,
+      'possible', 1,
+      'correct', measurement_correct,
+      'measured', measured,
+      'expected', (measurement->>'expected')::numeric,
+      'unit', measurement->>'unit'
+    ));
+  end loop;
+  base_details := jsonb_build_object('parts', measurement_items);
   if p_answer_key->>'scoringStrategy' <> 'allCorrect' then return base_details; end if;
   select coalesce(bool_and(coalesce((value->>'correct')::boolean, false)), false)
   into all_correct
@@ -3909,10 +3933,20 @@ begin
     end if;
   elsif source_name='conceptGroups' then details := spip_science_concept_details(p_question_id,p_answer_key,p_answers);
   elsif source_name='geometryConstruction' then details := spip_y8_math_geometry_details(p_question_id,p_answer_key,p_answers);
-  elsif source_name='rayDiagram' then details := ray_diagram_details(p_question_id,p_answer_key,p_answers);
-  elsif source_name='diagramAnnotation' then details := case when p_answer_key->>'variant'='doubleArrow' then p6_double_arrow_details(p_question_id,p_answer_key,p_answers) when p_answer_key->>'variant'='directionArrow' then spip_science_direction_arrow_details(p_question_id,p_answer_key,p_answers) else diagram_annotation_details(p_question_id,p_answer_key,p_answers) end;
-  elsif source_name='biologicalDrawing' then details := p6_biological_drawing_details(p_question_id,p_answer_key,p_answers);
-  elsif source_name='practicalGraph' then details := p6_practical_graph_details(p_question_id,p_answer_key,p_answers);
+  elsif source_name='rayDiagram' then
+    execute 'select public.ray_diagram_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+  elsif source_name='diagramAnnotation' then
+    if p_answer_key->>'variant'='directionArrow' then
+      details := spip_science_direction_arrow_details(p_question_id,p_answer_key,p_answers);
+    elsif p_answer_key->>'variant'='doubleArrow' then
+      execute 'select public.p6_double_arrow_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    else
+      execute 'select public.diagram_annotation_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    end if;
+  elsif source_name='biologicalDrawing' then
+    execute 'select public.p6_biological_drawing_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+  elsif source_name='practicalGraph' then
+    execute 'select public.p6_practical_graph_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
   elsif source_name='virtualMeasurement' then details := spip_science_virtual_details(p_question_id,p_answer_key,p_answers);
   elsif source_name='tallyTable' then details := spip_science_tally_details(p_question_id,p_answer_key,p_answers);
   elsif source_name='histogram' then details := spip_science_histogram_details(p_question_id,p_answer_key,p_answers);
@@ -3929,15 +3963,30 @@ $$;
 
 create or replace function public.grading_details(p_question_id text, p_answer_key jsonb, p_answers jsonb default '{}'::jsonb)
 returns jsonb language plpgsql stable as $$
+declare details jsonb;
 begin
   if p_answer_key->>'source' in ('aiGrade','aiSplitGrade') then return coalesce(p_answers->'aiGrades'->p_question_id,'{}'::jsonb);
   elsif p_answer_key->>'source'='mathMultiPart' then return math_part_scores(p_question_id,p_answer_key,p_answers);
   elsif p_answer_key->>'source'='conceptGroups' then return spip_science_concept_details(p_question_id,p_answer_key,p_answers);
   elsif p_answer_key->>'source'='geometryConstruction' then return spip_y8_math_geometry_details(p_question_id,p_answer_key,p_answers);
-  elsif p_answer_key->>'source'='rayDiagram' then return ray_diagram_details(p_question_id,p_answer_key,p_answers);
-  elsif p_answer_key->>'source'='diagramAnnotation' then return case when p_answer_key->>'variant'='doubleArrow' then p6_double_arrow_details(p_question_id,p_answer_key,p_answers) when p_answer_key->>'variant'='directionArrow' then spip_science_direction_arrow_details(p_question_id,p_answer_key,p_answers) else diagram_annotation_details(p_question_id,p_answer_key,p_answers) end;
-  elsif p_answer_key->>'source'='biologicalDrawing' then return p6_biological_drawing_details(p_question_id,p_answer_key,p_answers);
-  elsif p_answer_key->>'source'='practicalGraph' then return p6_practical_graph_details(p_question_id,p_answer_key,p_answers);
+  elsif p_answer_key->>'source'='rayDiagram' then
+    execute 'select public.ray_diagram_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    return details;
+  elsif p_answer_key->>'source'='diagramAnnotation' then
+    if p_answer_key->>'variant'='directionArrow' then
+      return spip_science_direction_arrow_details(p_question_id,p_answer_key,p_answers);
+    elsif p_answer_key->>'variant'='doubleArrow' then
+      execute 'select public.p6_double_arrow_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    else
+      execute 'select public.diagram_annotation_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    end if;
+    return details;
+  elsif p_answer_key->>'source'='biologicalDrawing' then
+    execute 'select public.p6_biological_drawing_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    return details;
+  elsif p_answer_key->>'source'='practicalGraph' then
+    execute 'select public.p6_practical_graph_details($1,$2,$3)' into details using p_question_id,p_answer_key,p_answers;
+    return details;
   elsif p_answer_key->>'source'='virtualMeasurement' then return spip_science_virtual_details(p_question_id,p_answer_key,p_answers);
   elsif p_answer_key->>'source'='tallyTable' then return spip_science_tally_details(p_question_id,p_answer_key,p_answers);
   elsif p_answer_key->>'source'='histogram' then return spip_science_histogram_details(p_question_id,p_answer_key,p_answers);
