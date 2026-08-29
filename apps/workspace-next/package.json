@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "smoke:active-tests": "node scripts/smoke-active-tests.mjs"
+    "smoke:active-tests": "node scripts/smoke-active-tests.mjs",
+    "smoke:english-grader": "node scripts/smoke-english-grader.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

@@ -283,7 +283,7 @@ values (
   'English',
   'SPIP Year 8',
   'active',
-  99,
+  79,
   '/tests/spip-year-8-english-pre/start'
 )
 on conflict (id) do update set
@@ -327,8 +327,8 @@ values
   ('spip-y8e-r34', 'spip-year-8-english-pre', 'Reading Part 5', 'What is Caitlin''s purpose in describing the island?', '{"source":"rwAnswers","id":"spip-y8e-r34","accepted":["a"],"display":"A","status":"official"}', null, 1, 27),
   ('spip-y8e-r35', 'spip-year-8-english-pre', 'Reading Part 5', 'What does because of that refer to?', '{"source":"rwAnswers","id":"spip-y8e-r35","accepted":["d"],"display":"D","status":"official"}', null, 1, 28),
   ('spip-y8e-r36', 'spip-year-8-english-pre', 'Reading Part 5', 'What do we learn about Caitlin''s reactions to the boy?', '{"source":"rwAnswers","id":"spip-y8e-r36","accepted":["c"],"display":"C","status":"official"}', null, 1, 29),
-  ('spip-y8e-w1', 'spip-year-8-english-pre', 'Writing Part 1', 'Write the mandatory environmental essay in 140-190 words.', '{"source":"aiGrade","id":"spip-y8e-w1","points":20,"display":"20-mark B2 writing rubric","status":"writing_rubric"}', null, 20, 30),
-  ('spip-y8e-w2', 'spip-year-8-english-pre', 'Writing Part 2', 'Choose and complete one 140-190 word writing task.', '{"source":"aiGrade","id":"spip-y8e-w2","points":20,"display":"20-mark B2 writing rubric","status":"writing_rubric"}', null, 20, 31),
+  ('spip-y8e-w1', 'spip-year-8-english-pre', 'Writing Part 1', 'Write the mandatory environmental essay in 140-190 words.', '{"source":"aiGrade","id":"spip-y8e-w1","points":10,"display":"10-mark scaled B2 writing rubric","status":"writing_rubric"}', null, 10, 30),
+  ('spip-y8e-w2', 'spip-year-8-english-pre', 'Writing Part 2', 'Choose and complete one 140-190 word writing task.', '{"source":"aiGrade","id":"spip-y8e-w2","points":10,"display":"10-mark scaled B2 writing rubric","status":"writing_rubric"}', null, 10, 31),
   ('spip-y8e-l1', 'spip-year-8-english-pre', 'Listening Part 1', 'Why is the speaker calling?', '{"source":"rwAnswers","id":"spip-y8e-l1","accepted":["b"],"display":"B","status":"official"}', null, 1, 32),
   ('spip-y8e-l2', 'spip-year-8-english-pre', 'Listening Part 1', 'What should the water-sports centre do?', '{"source":"rwAnswers","id":"spip-y8e-l2","accepted":["b"],"display":"B","status":"official"}', null, 1, 33),
   ('spip-y8e-l3', 'spip-year-8-english-pre', 'Listening Part 1', 'What annoys the tennis player most about interviewers?', '{"source":"rwAnswers","id":"spip-y8e-l3","accepted":["a"],"display":"A","status":"official"}', null, 1, 34),
@@ -2110,7 +2110,7 @@ begin
       if coalesce(raw_text, '') <> '' then items := array_append(items, part_id || ': ' || raw_text); end if;
     end loop;
     if array_length(items, 1) is null then
-      select coalesce(string_agg(key || ': ' || value #>> '{}', '; '), 'No answer') into raw_text from jsonb_each(response_json);
+      select coalesce(string_agg(key || ': ' || (value #>> '{}'), '; '), 'No answer') into raw_text from jsonb_each(response_json);
       return raw_text;
     end if;
     return array_to_string(items, '; ');
@@ -2507,7 +2507,7 @@ begin
       if raw_json is null then raw_text := ''; elsif jsonb_typeof(raw_json)='array' then select coalesce(string_agg(value,', '),'') into raw_text from jsonb_array_elements_text(raw_json) response(value); else raw_text := response_json->>part_id; end if;
       if coalesce(raw_text,'')<>'' then items := array_append(items,part_id||': '||raw_text); end if;
     end loop;
-    if array_length(items,1) is null then select coalesce(string_agg(key||': '||value #>> '{}','; '),'No answer') into raw_text from jsonb_each(response_json); return raw_text; end if;
+    if array_length(items,1) is null then select coalesce(string_agg(key||': '||(value #>> '{}'),'; '),'No answer') into raw_text from jsonb_each(response_json); return raw_text; end if;
     return array_to_string(items,'; ');
   elsif p_answer_key->>'source' in ('rayDiagram','diagramAnnotation','geometryConstruction','biologicalDrawing','practicalGraph','virtualMeasurement') then
     response_json := p_response::jsonb; if response_json='{}'::jsonb then return 'No answer'; end if;
@@ -3529,7 +3529,7 @@ begin
       if coalesce(raw_text, '') <> '' then items := array_append(items, part_id || ': ' || raw_text); end if;
     end loop;
     if array_length(items, 1) is null then
-      select coalesce(string_agg(key || ': ' || value #>> '{}', '; '), 'No answer') into raw_text from jsonb_each(response_json);
+      select coalesce(string_agg(key || ': ' || (value #>> '{}'), '; '), 'No answer') into raw_text from jsonb_each(response_json);
       return raw_text;
     end if;
     return array_to_string(items, '; ');
@@ -4010,7 +4010,7 @@ begin
       if raw_json is null then raw_text := ''; elsif jsonb_typeof(raw_json)='array' then select coalesce(string_agg(value,', '),'') into raw_text from jsonb_array_elements_text(raw_json) response(value); else raw_text := response_json->>part_id; end if;
       if coalesce(raw_text,'')<>'' then items := array_append(items,part_id||': '||raw_text); end if;
     end loop;
-    if array_length(items,1) is null then select coalesce(string_agg(key||': '||value #>> '{}','; '),'No answer') into raw_text from jsonb_each(response_json); return raw_text; end if;
+    if array_length(items,1) is null then select coalesce(string_agg(key||': '||(value #>> '{}'),'; '),'No answer') into raw_text from jsonb_each(response_json); return raw_text; end if;
     return array_to_string(items,'; ');
   elsif p_answer_key->>'source' in ('rayDiagram','diagramAnnotation','geometryConstruction','biologicalDrawing','practicalGraph','virtualMeasurement','tallyTable','histogram') then
     response_json := p_response::jsonb;

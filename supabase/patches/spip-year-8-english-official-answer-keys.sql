@@ -1,7 +1,7 @@
 begin;
 
 update tests
-set status = 'active', total_points = 99
+set status = 'active', total_points = 79
 where id = 'spip-year-8-english-pre';
 
 update test_questions

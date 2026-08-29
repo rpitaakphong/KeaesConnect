@@ -340,7 +340,7 @@ begin
       if raw_json is null then raw_text := ''; elsif jsonb_typeof(raw_json)='array' then select coalesce(string_agg(value,', '),'') into raw_text from jsonb_array_elements_text(raw_json) response(value); else raw_text := response_json->>part_id; end if;
       if coalesce(raw_text,'')<>'' then items := array_append(items,part_id||': '||raw_text); end if;
     end loop;
-    if array_length(items,1) is null then select coalesce(string_agg(key||': '||value #>> '{}','; '),'No answer') into raw_text from jsonb_each(response_json); return raw_text; end if;
+    if array_length(items,1) is null then select coalesce(string_agg(key||': '||(value #>> '{}'),'; '),'No answer') into raw_text from jsonb_each(response_json); return raw_text; end if;
     return array_to_string(items,'; ');
   elsif p_answer_key->>'source' in ('rayDiagram','diagramAnnotation','geometryConstruction','biologicalDrawing','practicalGraph','virtualMeasurement') then
     response_json := p_response::jsonb; if response_json='{}'::jsonb then return 'No answer'; end if;

@@ -4,6 +4,8 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const graderContractVersion = 3;
+
 type ShortAnswer = {
   questionId: string;
   prompt: string;
@@ -26,6 +28,7 @@ type Grade = {
   communicativeAchievementScore?: number;
   organisationScore?: number;
   wordCount?: number;
+  rawScore?: number;
 };
 
 const allowedByTest: Record<string, Set<string>> = {
@@ -91,6 +94,7 @@ Deno.serve(async (request) => {
       : {};
 
     return jsonResponse({
+      graderContractVersion,
       grades: {
         ...Object.fromEntries(blankGrades),
         ...aiGrades,
@@ -119,13 +123,7 @@ function normalizeAnswers(testId: string, value: unknown): ShortAnswer[] {
 
 async function gradeSpipWritingWithOpenAI(apiKey: string, testId: string, answers: ShortAnswer[]): Promise<Record<string, Grade>> {
   const model = Deno.env.get("OPENAI_GRADING_MODEL") || "gpt-4.1-mini";
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const response = await requestOpenAI(apiKey, {
       model,
       input: [
         {
@@ -189,7 +187,6 @@ async function gradeSpipWritingWithOpenAI(apiKey: string, testId: string, answer
           },
         },
       },
-    }),
   });
 
   if (!response.ok) {
@@ -209,27 +206,21 @@ async function gradeSpipWritingWithOpenAI(apiKey: string, testId: string, answer
 
 async function gradeSpipYear8WritingWithOpenAI(apiKey: string, testId: string, answers: ShortAnswer[]): Promise<Record<string, Grade>> {
   const model = Deno.env.get("OPENAI_GRADING_MODEL") || "gpt-4.1-mini";
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const response = await requestOpenAI(apiKey, {
       model,
       input: [
         {
           role: "system",
           content: [
             "You grade two SPIP Year 8 English writing responses using a B2 First-style analytic rubric.",
-            "Each response is worth 20 marks: Content 0-5, Communicative Achievement 0-5, Organisation 0-5, and Language 0-5.",
+            "Assess each response using four raw criteria: Content 0-5, Communicative Achievement 0-5, Organisation 0-5, and Language 0-5.",
             "Content measures how fully and accurately the response addresses every task point in its supplied prompt.",
             "Communicative Achievement measures genre, register, tone, and effect on the target reader.",
             "Organisation measures coherence, paragraphing, linking, and progression.",
             "Language measures range and control of vocabulary and grammar; errors may occur if meaning remains clear.",
             "The selected Part 2 task is included in that answer's prompt. Grade only against the selected task.",
             "Both responses should contain 140-190 words. Treat the word range as part of task fulfilment, but do not automatically give zero outside it.",
-            "Blank, copied-prompt-only, random, or unrelated responses receive zero. The final score must equal the four criterion scores and remain between 0 and 20.",
+            "Blank, copied-prompt-only, random, or unrelated responses receive zero. rawScore must equal the four criterion scores and remain between 0 and 20. The awarded score must equal rawScore divided by 2 and remain between 0 and 10; half points are allowed.",
           ].join(" "),
         },
         { role: "user", content: JSON.stringify({ testId, answers }) },
@@ -258,6 +249,7 @@ async function gradeSpipYear8WritingWithOpenAI(apiKey: string, testId: string, a
                     "organisationScore",
                     "languageScore",
                     "wordCount",
+                    "rawScore",
                     "score",
                     "feedback",
                   ],
@@ -268,7 +260,8 @@ async function gradeSpipYear8WritingWithOpenAI(apiKey: string, testId: string, a
                     organisationScore: { type: "number", enum: [0, 1, 2, 3, 4, 5] },
                     languageScore: { type: "number", enum: [0, 1, 2, 3, 4, 5] },
                     wordCount: { type: "number" },
-                    score: { type: "number", enum: Array.from({ length: 21 }, (_, index) => index) },
+                    rawScore: { type: "number", enum: Array.from({ length: 21 }, (_, index) => index) },
+                    score: { type: "number", enum: Array.from({ length: 21 }, (_, index) => index / 2) },
                     feedback: { type: "string", maxLength: 420 },
                   },
                 },
@@ -277,7 +270,6 @@ async function gradeSpipYear8WritingWithOpenAI(apiKey: string, testId: string, a
           },
         },
       },
-    }),
   });
 
   if (!response.ok) {
@@ -342,13 +334,7 @@ function spipYear8BlankGrade(questionId: string): Grade {
 
 async function gradeWithOpenAI(apiKey: string, testId: string, answers: ShortAnswer[]): Promise<Record<string, Grade>> {
   const model = Deno.env.get("OPENAI_GRADING_MODEL") || "gpt-4.1-mini";
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const response = await requestOpenAI(apiKey, {
       model,
       input: [
         {
@@ -411,7 +397,6 @@ async function gradeWithOpenAI(apiKey: string, testId: string, answers: ShortAns
           },
         },
       },
-    }),
   });
 
   if (!response.ok) {
@@ -469,7 +454,8 @@ function normalizeSpipYear8WritingGrade(grade: Grade): Grade {
   const communicativeAchievementScore = clampCriterion(grade.communicativeAchievementScore);
   const organisationScore = clampCriterion(grade.organisationScore);
   const languageScore = clampCriterion(grade.languageScore);
-  const score = Math.min(contentScore + communicativeAchievementScore + organisationScore + languageScore, 20);
+  const rawScore = Math.min(contentScore + communicativeAchievementScore + organisationScore + languageScore, 20);
+  const score = rawScore / 2;
   return {
     questionId: String(grade.questionId || ""),
     contentCorrect: contentScore >= 3,
@@ -480,6 +466,7 @@ function normalizeSpipYear8WritingGrade(grade: Grade): Grade {
     organisationScore,
     languageScore,
     wordCount: Math.max(0, Number(grade.wordCount || 0)),
+    rawScore,
     score,
     feedback: String(grade.feedback || ""),
   };
@@ -492,6 +479,29 @@ function clampCriterion(value: unknown) {
 function extractOutputText(data: unknown): string {
   const response = data as { output?: Array<{ content?: Array<{ text?: string }> }> };
   return response.output?.flatMap((item) => item.content || []).map((item) => item.text || "").join("") || "";
+}
+
+async function requestOpenAI(apiKey: string, payload: unknown): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 45000);
+  try {
+    return await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("OpenAI grading request timed out");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function jsonResponse(body: unknown, status = 200): Response {

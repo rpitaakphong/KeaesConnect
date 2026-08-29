@@ -22,6 +22,15 @@ supabase functions deploy manage-staff-user
 supabase secrets set SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY
 ```
 
+After deploying `grade-english-literacy`, verify its supported-test contract from the Next.js app directory:
+
+```sh
+npm run smoke:english-grader
+npm run smoke:english-grader -- --test-id spip-year-8-english-pre --nonblank
+```
+
+The default check uses blank responses and does not call OpenAI. The explicit `--nonblank` check makes one live grading request and should be used before activating a new AI-graded test.
+
 6. Set these environment variables in `apps/workspace-next/.env.local` and Netlify:
 
 ```sh

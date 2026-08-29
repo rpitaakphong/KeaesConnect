@@ -7,7 +7,7 @@ values (
   'English',
   'SPIP Year 8',
   'inactive',
-  99,
+  79,
   '/tests/spip-year-8-english-pre/start'
 )
 on conflict (id) do update set
@@ -51,8 +51,8 @@ values
   ('spip-y8e-r34', 'spip-year-8-english-pre', 'Reading Part 5', 'What is Caitlin''s purpose in describing the island?', '{"source":"rwAnswers","id":"spip-y8e-r34","accepted":["a"],"display":"A","status":"draft_inferred"}', null, 1, 27),
   ('spip-y8e-r35', 'spip-year-8-english-pre', 'Reading Part 5', 'What does because of that refer to?', '{"source":"rwAnswers","id":"spip-y8e-r35","accepted":["d"],"display":"D","status":"draft_inferred"}', null, 1, 28),
   ('spip-y8e-r36', 'spip-year-8-english-pre', 'Reading Part 5', 'What do we learn about Caitlin''s reactions to the boy?', '{"source":"rwAnswers","id":"spip-y8e-r36","accepted":["c"],"display":"C","status":"draft_inferred"}', null, 1, 29),
-  ('spip-y8e-w1', 'spip-year-8-english-pre', 'Writing Part 1', 'Write the mandatory environmental essay in 140-190 words.', '{"source":"aiGrade","id":"spip-y8e-w1","points":20,"display":"20-mark B2 writing rubric","status":"writing_rubric"}', null, 20, 30),
-  ('spip-y8e-w2', 'spip-year-8-english-pre', 'Writing Part 2', 'Choose and complete one 140-190 word writing task.', '{"source":"aiGrade","id":"spip-y8e-w2","points":20,"display":"20-mark B2 writing rubric","status":"writing_rubric"}', null, 20, 31),
+  ('spip-y8e-w1', 'spip-year-8-english-pre', 'Writing Part 1', 'Write the mandatory environmental essay in 140-190 words.', '{"source":"aiGrade","id":"spip-y8e-w1","points":10,"display":"10-mark scaled B2 writing rubric","status":"writing_rubric"}', null, 10, 30),
+  ('spip-y8e-w2', 'spip-year-8-english-pre', 'Writing Part 2', 'Choose and complete one 140-190 word writing task.', '{"source":"aiGrade","id":"spip-y8e-w2","points":10,"display":"10-mark scaled B2 writing rubric","status":"writing_rubric"}', null, 10, 31),
   ('spip-y8e-l1', 'spip-year-8-english-pre', 'Listening Part 1', 'Why is the speaker calling?', '{"source":"rwAnswers","id":"spip-y8e-l1","accepted":[],"display":"Pending official listening key","status":"pending_official_key"}', null, 1, 32),
   ('spip-y8e-l2', 'spip-year-8-english-pre', 'Listening Part 1', 'What should the water-sports centre do?', '{"source":"rwAnswers","id":"spip-y8e-l2","accepted":[],"display":"Pending official listening key","status":"pending_official_key"}', null, 1, 33),
   ('spip-y8e-l3', 'spip-year-8-english-pre', 'Listening Part 1', 'What annoys the tennis player most about interviewers?', '{"source":"rwAnswers","id":"spip-y8e-l3","accepted":[],"display":"Pending official listening key","status":"pending_official_key"}', null, 1, 34),
