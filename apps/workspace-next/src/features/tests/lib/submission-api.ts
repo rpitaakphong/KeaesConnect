@@ -1,9 +1,14 @@
 "use client";
 
+import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { isDemoAssignment } from "@/features/assignments/assignment-api";
 import { scoreTestLocally } from "@/features/tests/lib/local-scoring";
 import type { StudentProfile, SubmitResult, TestAnswers, TestDefinition } from "@/features/tests/lib/types";
+
+type EnglishGraderResponse = {
+  grades?: Record<string, { score?: number }>;
+};
 
 export async function submitAttempt(profile: StudentProfile, answers: TestAnswers, test?: TestDefinition): Promise<SubmitResult> {
   if (isDemoAssignment(profile.assignmentToken)) {
@@ -74,16 +79,71 @@ async function gradeShortAnswers(assignmentToken: string, answers: TestAnswers, 
       rubric,
     };
   });
-  const { data, error } = await getSupabaseBrowserClient().functions.invoke("grade-english-literacy", {
-    body: {
-      testId: test.id,
-      assignmentToken,
-      answers: payload,
-    },
-  });
-  if (error) throw error;
+  const functionBody = {
+    testId: test.id,
+    assignmentToken,
+    answers: payload,
+  };
+  let data: EnglishGraderResponse | null = null;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const result = await getSupabaseBrowserClient().functions.invoke<EnglishGraderResponse>("grade-english-literacy", {
+      body: functionBody,
+      timeout: 60000,
+    });
+    if (!result.error) {
+      data = result.data;
+      break;
+    }
+    if (attempt === 0 && isRetryableEnglishGraderError(result.error)) {
+      await new Promise((resolve) => window.setTimeout(resolve, 800));
+      continue;
+    }
+    throw await englishGraderError(result.error);
+  }
   const grades = data?.grades || {};
   const missingGrade = rubricEntries.find(([questionId]) => !grades[questionId] || typeof grades[questionId].score !== "number");
   if (missingGrade) throw new Error("AI grading did not return a complete score. Please try submitting again.");
   return grades;
+}
+
+function isRetryableEnglishGraderError(error: unknown) {
+  if (error instanceof FunctionsFetchError || error instanceof FunctionsRelayError) return true;
+  if (!(error instanceof FunctionsHttpError)) return false;
+  const response = error.context instanceof Response ? error.context : null;
+  return response ? response.status === 429 || response.status >= 500 : false;
+}
+
+async function englishGraderError(error: unknown) {
+  if (error instanceof FunctionsHttpError) {
+    const response = error.context instanceof Response ? error.context : null;
+    const status = response?.status || 0;
+    let detail = "";
+    if (response) {
+      try {
+        const body = await response.clone().json() as { error?: unknown };
+        detail = typeof body.error === "string" ? body.error : "";
+      } catch {
+        detail = "";
+      }
+    }
+
+    if (/unsupported test|expected \d+ short answers|unsupported question/i.test(detail)) {
+      return new Error("This test's writing grader is not configured correctly. Ask staff to update the grading service.");
+    }
+    if (status === 401 || status === 403) {
+      return new Error("Your test session could not access the writing grader. Reload the assignment link and try again.");
+    }
+    if (status === 429) {
+      return new Error("The writing grader is busy. Wait a moment, then submit the test again.");
+    }
+    if (status >= 500) {
+      return new Error("The writing grader is temporarily unavailable. Your answers are still on this page; please submit again shortly.");
+    }
+  }
+
+  if (error instanceof FunctionsFetchError || error instanceof FunctionsRelayError) {
+    return new Error("The writing grader could not be reached. Check the connection, then submit the test again.");
+  }
+
+  return new Error("The writing answers could not be graded. Please submit the test again.");
 }

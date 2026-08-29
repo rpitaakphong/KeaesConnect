@@ -2751,6 +2751,11 @@ tr:last-child td { border-bottom: 0; }
   transform: translate(-50%, -50%);
 }
 
+.math-construction-handle.is-selected {
+  background: #ccfbf1;
+  box-shadow: 0 0 0 3px rgb(20 184 166 / 20%);
+}
+
 .math-construction-handle:focus-visible {
   outline: 3px solid #38bdf8;
   outline-offset: 2px;

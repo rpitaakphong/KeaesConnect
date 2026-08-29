@@ -2,7 +2,7 @@ begin;
 
 -- Audited against Cambridge's official B2 First sample answer keys.
 update tests
-set status = 'active', total_points = 99
+set status = 'active', total_points = 79
 where id = 'spip-year-8-english-pre';
 
 -- Keep every grammatically valid official answer and reject spelling mistakes.

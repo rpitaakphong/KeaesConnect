@@ -17,6 +17,9 @@ export function MathGeometryEditor({
   question: GeometryConstructionQuestion;
 }) {
   const boardRef = useRef<HTMLDivElement>(null);
+  const dragOriginRef = useRef<{ x: number; y: number } | null>(null);
+  const dragMovedRef = useRef(false);
+  const pressedHandleRef = useRef<string | null>(null);
   const [pending, setPending] = useState<GeometryPoint | null>(null);
   const [dragging, setDragging] = useState<{ index: number; endpoint: "start" | "end" } | null>(null);
   const segments = useMemo(() => decodeSegments(answer.segments), [answer.segments]);
@@ -59,9 +62,20 @@ export function MathGeometryEditor({
 
   function moveEndpoint(index: number, endpoint: "start" | "end", point: GeometryPoint) {
     const next = segments.map((segment) => ({ ...segment }));
+    const previousPoint = next[index][endpoint];
     next[index] = { ...next[index], [endpoint]: point };
     if (sequential && endpoint === "end" && next[index + 1]) next[index + 1].start = point;
     if (sequential && endpoint === "start" && next[index - 1]) next[index - 1].end = point;
+    if (question.geometry.variant === "trianglePartition") {
+      next.forEach((segment, segmentIndex) => {
+        (["start", "end"] as const).forEach((linkedEndpoint) => {
+          if (segmentIndex === index && linkedEndpoint === endpoint) return;
+          if (Math.hypot(segment[linkedEndpoint].x - previousPoint.x, segment[linkedEndpoint].y - previousPoint.y) <= 0.001) {
+            next[segmentIndex] = { ...next[segmentIndex], [linkedEndpoint]: point };
+          }
+        });
+      });
+    }
     update(next);
   }
 
@@ -91,10 +105,15 @@ export function MathGeometryEditor({
         }}
         onPointerMove={(event) => {
           if (!dragging || !(event.buttons & 1)) return;
+          const origin = dragOriginRef.current;
+          if (origin && Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > 4) dragMovedRef.current = true;
           const point = pointFromEvent(event);
           if (point) moveEndpoint(dragging.index, dragging.endpoint, point);
         }}
-        onPointerUp={() => setDragging(null)}
+        onPointerUp={() => {
+          dragOriginRef.current = null;
+          setDragging(null);
+        }}
         ref={boardRef}
         style={question.boardMaxWidth ? { maxWidth: `${question.boardMaxWidth}px` } : undefined}
       >
@@ -119,15 +138,25 @@ export function MathGeometryEditor({
         {segments.flatMap((segment, index) => (["start", "end"] as const).map((endpoint) => {
           if (sequential && index > 0 && endpoint === "start") return null;
           const point = segment[endpoint];
+          const handleId = `${index}-${endpoint}`;
           return (
             <button
               aria-label={`Move line ${index + 1} ${endpoint}`}
-              className="math-construction-handle"
-              key={`${index}-${endpoint}`}
+              className={`math-construction-handle${pending && Math.hypot(pending.x - point.x, pending.y - point.y) <= 0.001 ? " is-selected" : ""}`}
+              key={handleId}
+              onClick={(event) => {
+                event.stopPropagation();
+                const deliberatelyPressed = pressedHandleRef.current === handleId;
+                pressedHandleRef.current = null;
+                if (!sequential && deliberatelyPressed && !dragMovedRef.current && segments.length < question.maxSegments) addPoint(point);
+              }}
               onKeyDown={(event) => handleKey(event, index, endpoint)}
               onPointerDown={(event) => {
                 event.stopPropagation();
                 event.currentTarget.setPointerCapture(event.pointerId);
+                dragMovedRef.current = false;
+                dragOriginRef.current = { x: event.clientX, y: event.clientY };
+                pressedHandleRef.current = handleId;
                 setDragging({ index, endpoint });
               }}
               style={{ left: `${point.x * 100}%`, top: `${point.y * 100}%` }}
