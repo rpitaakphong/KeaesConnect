@@ -463,7 +463,7 @@ function ScienceQuestionGroupRenderer({
         {group.questions.map((question) => (
           <QuestionRenderer
             answer={answers[question.id]}
-            hideVisuals={Boolean(group.visuals?.length)}
+            hideImageVisuals={Boolean(group.visuals?.length)}
             key={question.id}
             onChange={(value) => onChange(question.id, value)}
             question={question}

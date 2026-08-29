@@ -14,13 +14,13 @@ import {
 
 export function QuestionRenderer({
   answer,
-  hideVisuals = false,
+  hideImageVisuals = false,
   onChange,
   question,
   variant = "card",
 }: {
   answer: string | Record<string, string | string[]> | undefined;
-  hideVisuals?: boolean;
+  hideImageVisuals?: boolean;
   onChange: (value: string | Record<string, string | string[]>) => void;
   question: TestQuestion;
   variant?: "card" | "subquestion";
@@ -40,8 +40,8 @@ export function QuestionRenderer({
     : null;
   const responseContent = spipMathInteraction || spipScienceInteraction || starterListeningInteraction || mathOlympiadInteraction || (
     <>
-      {!hideVisuals && question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
-      {!hideVisuals && question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
+      {!hideImageVisuals && question.visuals?.length ? <QuestionVisuals visuals={question.visuals} /> : null}
+      {question.visualHtml ? <RawMathVisual html={question.visualHtml} /> : null}
       {question.type === "singleChoice" && question.choiceTable ? (
         <CambridgeChoiceTable answer={answer} objectAnswer={objectAnswer} onChange={onChange} question={question} />
       ) : question.type === "singleChoice" ? (
