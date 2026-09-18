@@ -1,5 +1,15 @@
 import { aiText, single, text } from "@/features/tests/content/english-literacy/helpers";
-import type { TestDefinition } from "@/features/tests/lib/types";
+import type { TestDefinition, TestQuestion } from "@/features/tests/lib/types";
+
+const underlinedSingle = (
+  number: number,
+  promptParts: NonNullable<TestQuestion["promptParts"]>,
+  choices: string[],
+  accepted: string,
+): TestQuestion => ({
+  ...single("el3", number, promptParts.map((part) => part.text).join(""), choices, accepted),
+  promptParts,
+});
 
 const story = [
   "In May, 1886, Coca Cola was invented by Doctor John Pemberton, a pharmacist from Atlanta, Georgia. John Pemberton concocted the Coca Cola formula in a three-legged brass kettle in his backyard. The name was a suggestion given by John Pemberton's bookkeeper Frank Robinson. Being a bookkeeper, Frank Robinson also had excellent penmanship. It was he who first scripted \"Coca Cola\" into the flowing letters which has become the famous logo of today.",
@@ -27,11 +37,11 @@ export const englishLiteracy3: TestDefinition = {
       title: "Choose the word with a similar meaning.",
       hint: "Choose one answer for the underlined word in each sentence.",
       questions: [
-        single("el3", 1, "I like this song. It makes me at ease.", ["courageous", "comfortable", "capable"], "comfortable"),
-        single("el3", 2, "The ground is moist this morning.", ["wet", "warm", "weird"], "wet"),
-        single("el3", 3, "The bullies at school irritate me.", ["envy", "agree", "annoy"], "annoy"),
-        single("el3", 4, "The school is close to our house.", ["few", "gone", "near"], "near"),
-        single("el3", 5, "We can predict the weather.", ["forget", "forecast", "form"], "forecast"),
+        underlinedSingle(1, [{ text: "I like this song. It makes me " }, { text: "at ease", underline: true }, { text: "." }], ["courageous", "comfortable", "capable"], "comfortable"),
+        underlinedSingle(2, [{ text: "The ground is " }, { text: "moist", underline: true }, { text: " this morning." }], ["wet", "warm", "weird"], "wet"),
+        underlinedSingle(3, [{ text: "The bullies at school " }, { text: "irritate", underline: true }, { text: " me." }], ["envy", "agree", "annoy"], "annoy"),
+        underlinedSingle(4, [{ text: "The school is " }, { text: "close", underline: true }, { text: " to our house." }], ["few", "gone", "near"], "near"),
+        underlinedSingle(5, [{ text: "We can " }, { text: "predict", underline: true }, { text: " the weather." }], ["forget", "forecast", "form"], "forecast"),
       ],
     },
     {
@@ -40,11 +50,11 @@ export const englishLiteracy3: TestDefinition = {
       title: "Identify the underlined word.",
       hint: "Choose adjective or adverb.",
       questions: [
-        single("el3", 6, "Charlotte made a delicious salad.", ["adjective", "adverb"], "adjective"),
-        single("el3", 7, "Amy speaks softly.", ["adjective", "adverb"], "adverb"),
-        single("el3", 8, "The grumpy lady never smiles.", ["adjective", "adverb"], "adjective"),
-        single("el3", 9, "Jessie narrated a funny story.", ["adjective", "adverb"], "adjective"),
-        single("el3", 10, "Joe left the party happily.", ["adjective", "adverb"], "adverb"),
+        underlinedSingle(6, [{ text: "Charlotte made a " }, { text: "delicious", underline: true }, { text: " salad." }], ["adjective", "adverb"], "adjective"),
+        underlinedSingle(7, [{ text: "Amy speaks " }, { text: "softly", underline: true }, { text: "." }], ["adjective", "adverb"], "adverb"),
+        underlinedSingle(8, [{ text: "The " }, { text: "grumpy", underline: true }, { text: " lady never smiles." }], ["adjective", "adverb"], "adjective"),
+        underlinedSingle(9, [{ text: "Jessie narrated a " }, { text: "funny", underline: true }, { text: " story." }], ["adjective", "adverb"], "adjective"),
+        underlinedSingle(10, [{ text: "Joe left the party " }, { text: "happily", underline: true }, { text: "." }], ["adjective", "adverb"], "adverb"),
       ],
     },
     {
