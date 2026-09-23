@@ -2941,6 +2941,7 @@ select
   ) as part_scores,
   (
     select jsonb_agg(jsonb_build_object(
+      'questionId', question_id,
       'part', part,
       'prompt', prompt,
       'response', response,

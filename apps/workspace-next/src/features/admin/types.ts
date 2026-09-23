@@ -55,6 +55,7 @@ export type AdminPartScore = {
 };
 
 export type AdminAnswer = {
+  questionId: string;
   part: string;
   prompt: string;
   response: string;

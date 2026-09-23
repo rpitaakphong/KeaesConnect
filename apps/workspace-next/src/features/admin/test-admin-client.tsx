@@ -3,6 +3,7 @@
 import { Copy, ExternalLink, Link as LinkIcon, RefreshCcw, Search, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { buildAssignmentUrl, createAssignment, getResult, listResults, listTests } from "@/features/admin/admin-api";
+import { AnswerReviewList } from "@/features/admin/answer-review";
 import type { AdminResult, CatalogTest } from "@/features/admin/types";
 import {
   assignmentBranchOptions,
@@ -444,15 +445,7 @@ function ResultDetail({ onClose, result }: { onClose: () => void; result: AdminR
 
         <section>
           <h3>Corrections</h3>
-          <div className="correction-list">
-            {result.answers.length ? result.answers.map((answer, index) => (
-              <div className={`correction-row ${answer.correct ? "" : "is-wrong"}`} key={`${answer.part}-${index}`}>
-                <strong>{answer.part}: {answer.prompt}</strong>
-                <span>Student: {answer.response || "-"} · Correct: {answer.correctAnswer || "-"} · Score: {formatScore(answer.score)}/{formatScore(answer.possible)}</span>
-                {renderGradingDetails(answer.gradingDetails)}
-              </div>
-            )) : <p>No answer details available.</p>}
-          </div>
+          <AnswerReviewList result={result} />
         </section>
       </section>
     </div>
@@ -485,46 +478,6 @@ function courseFamily(test: CatalogTest) {
 
 function uniqueSorted(values: string[]) {
   return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
-}
-
-function renderGradingDetails(details: Record<string, unknown> | null | undefined) {
-  const parts = Array.isArray(details?.parts) ? details.parts : [];
-  if (parts.length) {
-    const reviewRecommended = parts.some((part) => Boolean((part as { reviewRecommended?: unknown }).reviewRecommended));
-    return (
-      <span>
-        Parts: {parts.map((part) => {
-          const item = part as { id?: unknown; score?: unknown; possible?: unknown };
-          return `${String(item.id || "")} ${formatScore(Number(item.score || 0))}/${formatScore(Number(item.possible || 0))}`;
-        }).join(" · ")}
-        {reviewRecommended ? " · Review recommended" : ""}
-      </span>
-    );
-  }
-  if (!details || typeof details !== "object" || !("contentScore" in details)) return null;
-  if ("communicativeAchievementScore" in details) {
-    return (
-      <span>
-        Content: {formatScore(Number(details.contentScore || 0))}/5 · Communicative achievement: {formatScore(Number(details.communicativeAchievementScore || 0))}/5 · Organisation: {formatScore(Number(details.organisationScore || 0))}/5 · Language: {formatScore(Number(details.languageScore || 0))}/5
-        {details.wordCount !== undefined ? ` · ${String(details.wordCount)} words` : ""}
-        {details.feedback ? ` · ${String(details.feedback)}` : ""}
-      </span>
-    );
-  }
-  if ("languageScore" in details) {
-    return (
-      <span>
-        Content: {formatScore(Number(details.contentScore || 0))}/3 · Language: {formatScore(Number(details.languageScore || 0))}/2
-        {details.feedback ? ` · ${String(details.feedback)}` : ""}
-      </span>
-    );
-  }
-  return (
-    <span>
-      Content: {formatScore(Number(details.contentScore || 0))}/0.5 · Writing: {formatScore(Number(details.writingScore || 0))}/0.5
-      {details.feedback ? ` · ${String(details.feedback)}` : ""}
-    </span>
-  );
 }
 
 function formatDate(value: string) {

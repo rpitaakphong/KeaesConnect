@@ -198,6 +198,7 @@ function normalizePartScores(value: unknown): AdminPartScore[] {
 function normalizeAnswers(value: unknown): AdminAnswer[] {
   return Array.isArray(value)
     ? value.map((answer) => ({
+      questionId: String(answer?.questionId || ""),
       part: String(answer?.part || ""),
       prompt: String(answer?.prompt || ""),
       response: String(answer?.response || ""),

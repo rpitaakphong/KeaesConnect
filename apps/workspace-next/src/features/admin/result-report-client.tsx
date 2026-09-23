@@ -4,6 +4,7 @@ import { ArrowLeft, Download, RefreshCcw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { getResult } from "@/features/admin/admin-api";
+import { AnswerReviewList, formatChoiceSelectionForText, resolveChoiceAnswer } from "@/features/admin/answer-review";
 import type { AdminResult } from "@/features/admin/types";
 import { formatAssignmentBranch } from "@/features/assignments/branches";
 import { requireStaffProfile } from "@/features/auth/auth-api";
@@ -106,14 +107,7 @@ export function ResultReportClient({ attemptId }: { attemptId: string }) {
 
           <article className="panel">
             <h2>Answers</h2>
-            <div className="correction-list">
-              {result.answers.map((answer, index) => (
-                <div className={`correction-row ${answer.correct ? "" : "is-wrong"}`} key={`${answer.part}-${index}`}>
-                  <strong>{answer.part}: {answer.prompt}</strong>
-                  <span>Student: {answer.response || "-"} · Correct: {answer.correctAnswer || "-"} · Score: {formatScore(answer.score)}/{formatScore(answer.possible)}</span>
-                </div>
-              ))}
-            </div>
+            <AnswerReviewList result={result} />
           </article>
         </section>
       ) : null}
@@ -277,8 +271,13 @@ function buildResultPdf(result: AdminResult) {
   section("Answers");
   if (result.answers.length) {
     result.answers.forEach((answer, index) => {
-      const promptRows = wrapText(`${index + 1}. ${answer.part}: ${answer.prompt}`, 95);
-      const detailRows = wrapText(`Student: ${answer.response || "-"}   Correct: ${answer.correctAnswer || "-"}   Score: ${formatScore(answer.score)}/${formatScore(answer.possible)}`, 98);
+      const choiceReview = resolveChoiceAnswer(result.testId, answer);
+      const questionLabel = choiceReview ? `Question ${choiceReview.questionNumber}` : `Answer ${index + 1}`;
+      const promptRows = wrapText(`${answer.part} · ${questionLabel}: ${answer.prompt}`, 95);
+      const detailText = choiceReview
+        ? `Student selected: ${formatChoiceSelectionForText(choiceReview.selected, choiceReview.selectedFallback)}   Correct answer: ${formatChoiceSelectionForText(choiceReview.correct, choiceReview.correctFallback)}   Score: ${formatScore(answer.score)}/${formatScore(answer.possible)}`
+        : `Student: ${answer.response || "-"}   Correct: ${answer.correctAnswer || "-"}   Score: ${formatScore(answer.score)}/${formatScore(answer.possible)}`;
+      const detailRows = wrapText(detailText, 98);
       const rowHeight = Math.max(28, 12 + promptRows.length * 8 + detailRows.length * 8);
       ensure(rowHeight + 6);
       const fill = answer.correct ? colors.white : colors.redSoft;
