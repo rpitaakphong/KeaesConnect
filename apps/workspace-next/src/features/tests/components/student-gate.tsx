@@ -29,7 +29,9 @@ export function StudentGate({ test }: { test: TestDefinition }) {
           return;
         }
         setAssignment(assignment);
-        setStatus("Your details will be attached to your submitted score for admin review.");
+        setStatus(test.resultMode === "diagnostic"
+          ? "Your details will be attached to your submitted diagnostic results for admin review."
+          : "Your details will be attached to your submitted score for admin review.");
         setReady(true);
       })
       .catch((err) => setStatus(err instanceof Error ? err.message : "Could not load assignment."));

@@ -40,6 +40,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
     : active?.questions.length || 0;
 
   function updateAnswer(questionId: string, value: TestAnswers[string]) {
+    if (result) return;
     const next = { ...answers, [questionId]: value };
     setAnswers(next);
     saveAnswers(test.id, assignmentToken, next);
@@ -47,6 +48,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
 
   async function handleSubmit() {
     if (!profile || pending || result) return;
+    if (test.resultMode === "diagnostic" && !window.confirm("Submit the whole diagnostic now? You can leave answers blank, but every answer will lock after submission.")) return;
     setPending(true);
     setSubmitError("");
     try {
@@ -78,22 +80,26 @@ export function TestRunner({ test }: { test: TestDefinition }) {
         </div>
       </header>
 
-      <main id="test" className="test-shell" data-test-id={test.id}>
+      <main id="test" className="test-shell" data-result-mode={test.resultMode || "score"} data-test-id={test.id}>
         <div className="test-workspace">
           <aside className="part-nav" aria-label="Test sections">
-            {test.sections.map((section) => (
-              <button
-                className={`part-tab ${section.id === activeSection ? "is-active" : ""}`}
-                key={section.id}
-                type="button"
-                onClick={() => setActiveSection(section.id)}
-              >
-                {section.label}
-              </button>
-            ))}
-            <button className={`part-tab review-submit-tab ${activeSection === "review" ? "is-active" : ""}`} type="button" onClick={() => setActiveSection("review")}>
-              Review and Submit
-            </button>
+            {result && test.resultMode === "diagnostic" ? null : (
+              <>
+                {test.sections.map((section) => (
+                  <button
+                    className={`part-tab ${section.id === activeSection ? "is-active" : ""}`}
+                    key={section.id}
+                    type="button"
+                    onClick={() => setActiveSection(section.id)}
+                  >
+                    {section.label}
+                  </button>
+                ))}
+                <button className={`part-tab review-submit-tab ${activeSection === "review" ? "is-active" : ""}`} type="button" onClick={() => setActiveSection("review")}>
+                  Review and Submit
+                </button>
+              </>
+            )}
           </aside>
 
           <section className="test-panel">
@@ -106,6 +112,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
                 pending={pending}
                 questionCount={questions.length}
                 result={result}
+                test={test}
               />
             ) : (
               <>
@@ -422,7 +429,7 @@ function GroupedQuestionCard({
           <p className="eyebrow">{numberLabel}</p>
           <h3>{title}</h3>
         </div>
-        <span className="badge">{points} {points === 1 ? "mark" : "marks"}</span>
+        <span className="badge mark-badge">{points} {points === 1 ? "mark" : "marks"}</span>
       </div>
       <div className="science-subquestion-list">
         {questions.map((question) => (
@@ -455,7 +462,7 @@ function ScienceQuestionGroupRenderer({
         <div>
           <p className="eyebrow">Question {group.number}</p>
         </div>
-        <span className="badge">{points} {points === 1 ? "mark" : "marks"}</span>
+        <span className="badge mark-badge">{points} {points === 1 ? "mark" : "marks"}</span>
       </div>
       {group.intro ? <QuestionGroupIntro intro={group.intro} /> : null}
       {group.visuals?.length ? <QuestionVisuals visuals={group.visuals} /> : null}
@@ -510,6 +517,7 @@ function ReviewPanel({
   pending,
   questionCount,
   result,
+  test,
 }: {
   answers: TestAnswers;
   answeredCount: number;
@@ -518,7 +526,11 @@ function ReviewPanel({
   pending: boolean;
   questionCount: number;
   result: SubmitResult | null;
+  test: TestDefinition;
 }) {
+  if (result && test.resultMode === "diagnostic") {
+    return <DiagnosticResults result={result} test={test} />;
+  }
   return (
     <article className="question-card">
       <p className="eyebrow">Review</p>
@@ -535,6 +547,54 @@ function ReviewPanel({
           {pending ? "Submitting..." : "Submit test"}
         </button>
       )}
+    </article>
+  );
+}
+
+type DiagnosticResultRow = {
+  questionId?: string;
+  correct?: boolean;
+  correctAnswer?: string;
+  prompt?: string;
+  response?: string;
+};
+
+function DiagnosticResults({ result, test }: { result: SubmitResult; test: TestDefinition }) {
+  const questions = test.sections.flatMap((section) => section.questions);
+  const rows = Object.values(result.sections || {}).flatMap((value) => Array.isArray(value) ? value as DiagnosticResultRow[] : []);
+  const rowById = new Map(rows.map((row) => [row.questionId || "", row]));
+  const rowByPrompt = new Map(rows.map((row) => [row.prompt || "", row]));
+
+  return (
+    <article className="diagnostic-results" aria-labelledby="diagnostic-results-title">
+      <div className="question-card diagnostic-results-intro">
+        <p className="eyebrow">Diagnostic complete</p>
+        <h2 id="diagnostic-results-title">Check each answer and explanation.</h2>
+        <p>Your answers are locked. Every part is shown as Correct or Incorrect; this pre-test does not show a score.</p>
+      </div>
+      <div className="diagnostic-result-list">
+        {questions.map((question) => {
+          const row = rowById.get(question.id) || rowByPrompt.get(question.prompt);
+          const correct = Boolean(row?.correct);
+          const explanationKey = question.id.replace(/^cie-igcse-cs-p3-(?:diagnostic-)?q/, "");
+          return (
+            <section className={`diagnostic-result ${correct ? "is-correct" : "is-incorrect"}`} key={question.id}>
+              <div className="diagnostic-result-heading">
+                <h3>Question {question.number}: {question.prompt}</h3>
+                <strong className="diagnostic-verdict">{correct ? "Correct" : "Incorrect"}</strong>
+              </div>
+              <dl className="diagnostic-answer-comparison">
+                <div><dt>Your answer</dt><dd>{row?.response || "No answer"}</dd></div>
+                <div><dt>Correct answer</dt><dd>{row?.correctAnswer || question.grading?.display || "See the explanation"}</dd></div>
+              </dl>
+              <div className="diagnostic-explanation">
+                <h4>Why this is the answer</h4>
+                <p>{test.answerExplanations?.[explanationKey] || "Compare the required scientific idea with the correct answer shown above."}</p>
+              </div>
+            </section>
+          );
+        })}
+      </div>
     </article>
   );
 }

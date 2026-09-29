@@ -5,6 +5,7 @@ export function scoreTestLocally(test: TestDefinition, answers: TestAnswers): Su
     const rows = section.questions.map((question) => {
       const scored = scoreQuestion(question, answers[question.id], answers);
       return {
+        questionId: question.id,
         part: section.label,
         prompt: question.prompt,
         response: formatResponse(answers[question.id]),
