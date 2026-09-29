@@ -322,7 +322,7 @@ const questions: TestQuestion[] = [
     "(a) State the name of the positive electrode in the electrolysis apparatus.",
     1,
     [exact("answer", ["anode"])],
-    { visuals: [image("paper3-q04-electrolysis.png", "Electrolysis of concentrated aqueous sodium chloride using inert electrodes", 470)] },
+    { visuals: [image("paper3-q04-electrolysis.png", "Electrolysis of concentrated aqueous sodium chloride using inert electrodes", 650)] },
   ),
   multiTextQuestion(
     "q4b",
@@ -622,10 +622,10 @@ const questions: TestQuestion[] = [
   ),
   choiceQuestion("q9dii", 9, "(d)(ii) Choose the completed diagram with a perpendicular normal, the angle of incidence labelled i, and a reflected ray travelling towards the eye.", ["A", "B", "C", "D"], "D", "D — perpendicular normal, correctly placed i, and reflected ray towards the eye", {
     imageChoices: {
-      A: `${assetBase}/paper3-q09-ray-choice-a.png`,
-      B: `${assetBase}/paper3-q09-ray-choice-b.png`,
-      C: `${assetBase}/paper3-q09-ray-choice-c.png`,
-      D: `${assetBase}/paper3-q09-ray-choice-d.png`,
+      A: `${assetBase}/paper3-q09-ray-choice-a.svg`,
+      B: `${assetBase}/paper3-q09-ray-choice-b.svg`,
+      C: `${assetBase}/paper3-q09-ray-choice-c.svg`,
+      D: `${assetBase}/paper3-q09-ray-choice-d.svg`,
     },
     points: 2,
   }),

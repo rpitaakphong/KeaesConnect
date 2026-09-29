@@ -3618,6 +3618,28 @@ tr:last-child td { border-bottom: 0; }
   height: 110px;
   object-fit: contain;
 }
+.ray-diagram-choice-grid {
+  width: min(760px, 100%);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+.ray-diagram-choice-grid .image-choice-card {
+  min-height: 0;
+  align-items: stretch;
+  padding: 14px;
+}
+.ray-diagram-choice-grid .image-choice-card img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+.ray-diagram-choice-grid .image-choice-card > span:last-child {
+  font-size: var(--font-md);
+  font-weight: 900;
+}
 .math-choice-visual {
   display: block;
   width: min(100%, 160px);
@@ -3699,6 +3721,9 @@ tr:last-child td { border-bottom: 0; }
 }
 @media (max-width: 520px) {
   .compact-image-choice-grid {
+    grid-template-columns: 1fr;
+  }
+  .ray-diagram-choice-grid {
     grid-template-columns: 1fr;
   }
 }

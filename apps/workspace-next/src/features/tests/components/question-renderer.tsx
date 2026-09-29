@@ -609,6 +609,7 @@ function singleChoiceGridClass(question: Extract<TestQuestion, { type: "singleCh
   const classes = ["choice-grid", question.choices.some((choice) => choice.image || choice.visualHtml) ? "visual-choice-grid" : "text-choice-grid"];
   if (isCompactEnglishLetterChoice(question)) classes.push("compact-letter-choice-grid");
   if (isCompactEnglishImageChoice(question)) classes.push("compact-image-choice-grid");
+  if (question.id === "cie-igcse-cs-p3-diagnostic-q9dii") classes.push("ray-diagram-choice-grid");
   return classes.join(" ");
 }
 
