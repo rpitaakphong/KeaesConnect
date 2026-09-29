@@ -29,5 +29,8 @@ export async function getAssignment(token: string, demoTest?: { id: string; titl
 }
 
 export function isDemoAssignment(token: string) {
-  return typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname) && token === "demo";
+  if (typeof window === "undefined" || token !== "demo") return false;
+
+  const hostname = window.location.hostname.toLowerCase();
+  return ["127.0.0.1", "localhost"].includes(hostname) || hostname.endsWith(".trycloudflare.com");
 }

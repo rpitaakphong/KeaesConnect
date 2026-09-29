@@ -214,7 +214,7 @@ export function QuestionRenderer({
       <section className={`science-subquestion question-${question.id}`}>
         <div className="science-subquestion-head">
           <h4><QuestionPrompt question={question} /></h4>
-          <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
+          <span className="badge mark-badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
         </div>
         {question.note ? <p>{question.note}</p> : null}
         {responseContent}
@@ -230,7 +230,7 @@ export function QuestionRenderer({
           {question.hidePrompt ? null : <h3><QuestionPrompt question={question} /></h3>}
           {question.note ? <p>{question.note}</p> : null}
         </div>
-        <span className="badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
+        <span className="badge mark-badge">{question.points} {question.points === 1 ? "mark" : "marks"}</span>
       </div>
       {responseContent}
     </article>
@@ -609,6 +609,7 @@ function singleChoiceGridClass(question: Extract<TestQuestion, { type: "singleCh
   const classes = ["choice-grid", question.choices.some((choice) => choice.image || choice.visualHtml) ? "visual-choice-grid" : "text-choice-grid"];
   if (isCompactEnglishLetterChoice(question)) classes.push("compact-letter-choice-grid");
   if (isCompactEnglishImageChoice(question)) classes.push("compact-image-choice-grid");
+  if (question.id === "cie-igcse-cs-p3-diagnostic-q9dii") classes.push("ray-diagram-choice-grid");
   return classes.join(" ");
 }
 

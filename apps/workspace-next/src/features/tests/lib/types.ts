@@ -26,6 +26,8 @@ export type TestDefinition = {
     cancelLabel?: string;
   };
   answerPayload?: "default" | "rwAnswers";
+  resultMode?: "score" | "diagnostic";
+  answerExplanations?: Record<string, string>;
   aiShortAnswerRubrics?: Record<string, string>;
   sections: TestSection[];
 };
