@@ -349,12 +349,14 @@ function answerForQuestion(question) {
   }
 
   if (question.type === "text") {
-    const part = question.grading.parts.find((item) => item.id === "answer") || question.grading.parts[0];
-    return answerForPart(part);
+    const parts = question.grading.parts.filter((item) => item.id === "answer");
+    return (parts.length ? parts : [question.grading.parts[0]])
+      .reduce((answer, part) => mergePartAnswer(answer, answerForPart(part)), "");
   }
 
   const answer = {};
   for (const part of question.grading.parts) {
+    if (question.grading.scoringStrategy === "highestCorrect" && answer[part.id]) continue;
     const nextAnswer = answerForPart(part);
     answer[part.id] = mergePartAnswer(answer[part.id], nextAnswer);
   }
@@ -362,7 +364,7 @@ function answerForQuestion(question) {
 }
 
 function answerForPart(part) {
-  if (part.normalizer === "set") return [...part.accepted];
+  if (part.normalizer === "set" || part.normalizer === "contains") return [...part.accepted];
   if (part.normalizer === "keywords" && part.keywords?.length) return part.keywords.map((group) => group.join(" ")).join(" ");
   return part.accepted?.[0] || "";
 }
@@ -411,12 +413,13 @@ async function submitThroughBrowser(browser, baseUrl, test, assignmentToken, pro
     await page.goto(takeUrl, { waitUntil: "networkidle" });
     await page.getByRole("heading", { name: test.title }).waitFor({ timeout: 15000 });
     await page.getByRole("button", { name: "Review and Submit" }).click();
+    if (test.resultMode === "diagnostic") page.once("dialog", (dialog) => dialog.accept());
     const submitAttemptResponse = waitForSubmitAttemptResponse(page, timeoutMs);
     await page.getByRole("button", { name: "Submit test" }).click();
-    await page.waitForSelector("text=Total score", { timeout: timeoutMs });
-    const resultText = await page.locator(".notice").filter({ hasText: "Total score" }).innerText({ timeout: 5000 });
-    const match = /Total score\s+([0-9.]+)\/([0-9.]+)/i.exec(resultText.replace(/\s+/g, " "));
     const rpcResult = await submitAttemptResponse;
+    await page.waitForSelector(test.resultMode === "diagnostic" ? "#diagnostic-results-title" : "text=Total score", { timeout: timeoutMs });
+    const resultText = test.resultMode === "diagnostic" ? "" : await page.locator(".notice").filter({ hasText: "Total score" }).innerText({ timeout: 5000 });
+    const match = /Total score\s+([0-9.]+)\/([0-9.]+)/i.exec(resultText.replace(/\s+/g, " "));
     const screenshotPath = path.join(runDir, `${test.id}-passed.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true });
     await context.close();
