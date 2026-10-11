@@ -15,7 +15,7 @@ export const summerEnglishLevel3Pretest: TestDefinition = {
   title: "Summer English Level 3 Pre-test",
   subject: "English",
   level: "Summer English Level 3",
-  status: "draft",
+  status: "active",
   durationMinutes: 40,
   totalPoints: 30,
   sections: [
