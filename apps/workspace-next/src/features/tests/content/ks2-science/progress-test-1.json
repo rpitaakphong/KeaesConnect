@@ -1,0 +1,1977 @@
+{
+  "schemaVersion": "1.0.0",
+  "test": {
+    "id": "ks2-science-progress-test-1",
+    "title": "Key Stage 2 Science - Progress Test 1",
+    "durationMinutes": 45,
+    "totalMarks": 40,
+    "candidateFields": [
+      "name",
+      "age",
+      "date"
+    ],
+    "sourceInstructions": [
+      "Read this carefully.",
+      "You have 45 minutes for this test.",
+      "The pencil symbol shows where an answer is required.",
+      "Some questions in the paper version require a drawn answer.",
+      "Do not write in the grey margins or on or near the bar codes."
+    ],
+    "digitalInstructions": [
+      "Read each question carefully.",
+      "You have 45 minutes for the complete test.",
+      "Choose, order, match, classify, or enter an answer as directed.",
+      "Every question has been adapted so it can be checked automatically.",
+      "Answers and feedback are intended to be shown only after submission."
+    ],
+    "attribution": {
+      "copyright": "© Crown copyright 2012",
+      "pupilPackReference": "STA/12/5593",
+      "markSchemePackReference": "STA/12/5591",
+      "sourceDistribution": "Downloaded from Compare4Kids.co.uk",
+      "adaptationNote": "Response formats were adapted for deterministic digital marking; the assessed science and official mark allocation are preserved."
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "number": 1,
+      "title": "Pond life",
+      "introduction": "Tom holds a glass bowl in pond water and watches the pond life underneath. He sees a water beetle, pondweed and a stickleback fish, and is told that micro-organisms live in the pond water.",
+      "questions": [
+        {
+          "id": "1a",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 20
+          },
+          "marks": 1,
+          "originalPrompt": "What property of the bowl allows Tom to see the pond life? The glass bowl is ...",
+          "adaptedPrompt": "Which property of the glass bowl allows Tom to see the pond life through it?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "transparent",
+                "label": "Transparent (clear or see-through)",
+                "feedback": "Correct: transparent materials let light pass through, so Tom can see through the bowl."
+              },
+              {
+                "id": "opaque",
+                "label": "Opaque",
+                "feedback": "Opaque materials block light, so Tom would not be able to see through the bowl."
+              },
+              {
+                "id": "absorbent",
+                "label": "Absorbent",
+                "feedback": "Absorbency describes taking in liquid; it does not explain why Tom can see through the bowl."
+              },
+              {
+                "id": "flexible",
+                "label": "Flexible",
+                "feedback": "Flexibility describes bending; it does not explain why Tom can see through the bowl."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "transparent"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the glass is transparent.",
+            "incorrect": "Look for the property that lets light pass through a material.",
+            "explanation": "A transparent or clear material can be seen through."
+          },
+          "assets": [
+            "assets/q1a-glass-bowl.png"
+          ],
+          "adaptationNote": "Changed from free text to a single-choice property question.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1b",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 20
+          },
+          "marks": 1,
+          "originalPrompt": "The stickleback fish is a predator. Tick ONE box to show why the stickleback fish is a predator.",
+          "adaptedPrompt": "Why is the stickleback fish a predator?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "eats_plants",
+                "label": "It eats plants.",
+                "feedback": "Eating plants does not make an animal a predator."
+              },
+              {
+                "id": "eats_animals",
+                "label": "It eats other animals.",
+                "feedback": "Correct: predators hunt or eat other animals."
+              },
+              {
+                "id": "hides",
+                "label": "It hides near pondweed.",
+                "feedback": "Where it hides does not determine whether it is a predator."
+              },
+              {
+                "id": "is_eaten",
+                "label": "It gets eaten by other animals.",
+                "feedback": "Being eaten makes it prey in that relationship, not a predator."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "eats_animals"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - predators eat other animals.",
+            "incorrect": "A predator is identified by what it eats, not where it lives or what eats it.",
+            "explanation": "The stickleback is a predator because it eats other animals."
+          },
+          "assets": [
+            "assets/q1b-pond-life.png"
+          ],
+          "adaptationNote": "Original objective format preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1c",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 20
+          },
+          "marks": 1,
+          "originalPrompt": "Write true or false next to each statement about producers.",
+          "adaptedPrompt": "Classify each statement about producers as true or false.",
+          "interaction": {
+            "type": "true_false_grid",
+            "items": [
+              {
+                "id": "start_food_chain",
+                "statement": "Producers are at the start of the food chain."
+              },
+              {
+                "id": "catch_food",
+                "statement": "Producers catch their food from the water."
+              },
+              {
+                "id": "use_sunlight",
+                "statement": "Producers use sunlight to make new materials for growth."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "start_food_chain": true,
+              "catch_food": false,
+              "use_sunlight": true
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - all three statements are classified accurately.",
+            "incorrect": "Remember that producers make new material using light; they do not catch food from the water.",
+            "explanation": "Producers begin food chains and use sunlight to make material for growth."
+          },
+          "assets": [],
+          "adaptationNote": "Original true/false format preserved as a digital grid; all three rows are required for the mark.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1d-i",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 21
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why Tom cannot see the micro-organisms in the water.",
+          "adaptedPrompt": "Why can Tom not see the micro-organisms in the pond water with his eyes alone?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "microscopic",
+                "label": "They are microscopic - too small to see without a microscope.",
+                "feedback": "Correct: micro-organisms are too small to see with the unaided eye."
+              },
+              {
+                "id": "transparent",
+                "label": "They are transparent, so light always passes through them.",
+                "feedback": "Transparency is not the reason given by the evidence; their extremely small size is."
+              },
+              {
+                "id": "hidden",
+                "label": "They are all hidden behind the pondweed.",
+                "feedback": "They remain too small to see even when they are not behind pondweed."
+              },
+              {
+                "id": "same_colour",
+                "label": "They are exactly the same colour as the water.",
+                "feedback": "Colour does not explain why micro-organisms require a microscope to be seen."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "microscopic"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - they are microscopic.",
+            "incorrect": "Choose the explanation about their size and the need for a microscope.",
+            "explanation": "Micro-organisms are at the very small end of the size scale and are too small for the unaided eye."
+          },
+          "assets": [
+            "assets/q1d-microorganisms.png"
+          ],
+          "adaptationNote": "Changed from an explanation to a single-choice causal explanation.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1d-ii",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 21
+          },
+          "marks": 1,
+          "originalPrompt": "Why does it help to have some micro-organisms living in the pond?",
+          "adaptedPrompt": "Which is one way that some micro-organisms help a pond ecosystem?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "break_down_waste",
+                "label": "They break down waste and recycle it into nutrients.",
+                "feedback": "Correct: decomposer micro-organisms recycle material in the pond."
+              },
+              {
+                "id": "block_light",
+                "label": "They block all sunlight from entering the pond.",
+                "feedback": "Blocking all sunlight would hinder producers rather than help the pond."
+              },
+              {
+                "id": "remove_oxygen",
+                "label": "They remove all oxygen from the water.",
+                "feedback": "Removing all oxygen would harm many pond organisms."
+              },
+              {
+                "id": "make_glass_clear",
+                "label": "They make the glass bowl transparent.",
+                "feedback": "The glass is transparent because of its material, not because of micro-organisms."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "break_down_waste"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - some micro-organisms break down waste and recycle nutrients.",
+            "incorrect": "Think about decomposition and recycling material in an ecosystem.",
+            "explanation": "Useful micro-organisms can break down waste, recycle nutrients, reduce disease, or provide food for other organisms."
+          },
+          "assets": [
+            "assets/q1d-microorganisms.png"
+          ],
+          "adaptationNote": "Changed from free text to one mark-scheme-supported benefit with controlled distractors.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "number": 2,
+      "title": "Triangles",
+      "introduction": "Paul investigates the sound made by metal triangles and how the size of a triangle and the force used to hit it affect the sound.",
+      "questions": [
+        {
+          "id": "2a",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 22
+          },
+          "marks": 1,
+          "originalPrompt": "What happens to the triangle for Paul to hear a sound when it is hit?",
+          "adaptedPrompt": "What must the triangle do to produce the sound Paul hears?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "vibrate",
+                "label": "Vibrate",
+                "feedback": "Correct: the vibrating metal makes the sound."
+              },
+              {
+                "id": "heat",
+                "label": "Become hotter",
+                "feedback": "Heating is not required for the triangle to make a sound."
+              },
+              {
+                "id": "grow",
+                "label": "Become larger",
+                "feedback": "The triangle does not need to change size to make a sound."
+              },
+              {
+                "id": "absorb",
+                "label": "Absorb the sound",
+                "feedback": "The triangle produces sound by vibrating; it does not need to absorb it."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "vibrate"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the triangle vibrates.",
+            "incorrect": "The important movement is vibration, not simply 'moving' or 'shaking'.",
+            "explanation": "Sound is produced when the metal triangle vibrates."
+          },
+          "assets": [
+            "assets/q2a-triangle.png"
+          ],
+          "adaptationNote": "Changed from free text to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2b",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 22
+          },
+          "marks": 1,
+          "originalPrompt": "Write the letters A, B, C, and D to order the sound the triangles make from highest to lowest.",
+          "adaptedPrompt": "Order the triangles from the highest-pitched sound to the lowest-pitched sound.",
+          "interaction": {
+            "type": "ordering",
+            "items": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          },
+          "answerRule": {
+            "kind": "ordered_equals",
+            "value": [
+              "C",
+              "A",
+              "B",
+              "D"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - C, A, B, D.",
+            "incorrect": "Smaller triangles produce higher-pitched sounds; larger triangles produce lower-pitched sounds.",
+            "explanation": "From highest to lowest pitch, the order is C, A, B, D."
+          },
+          "assets": [
+            "assets/q2b-triangle-sizes.png"
+          ],
+          "adaptationNote": "Original ordering task preserved as drag-and-drop or equivalent ordered controls.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2c",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 22
+          },
+          "marks": 1,
+          "originalPrompt": "What scientific term is used to describe how high or low a sound is?",
+          "adaptedPrompt": "Which scientific term describes how high or low a sound is?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "pitch",
+                "label": "Pitch",
+                "feedback": "Correct: pitch describes how high or low a sound is."
+              },
+              {
+                "id": "volume",
+                "label": "Volume",
+                "feedback": "Volume describes how loud or quiet a sound is."
+              },
+              {
+                "id": "echo",
+                "label": "Echo",
+                "feedback": "An echo is a reflected sound."
+              },
+              {
+                "id": "force",
+                "label": "Force",
+                "feedback": "Force may affect volume, but it is not the name for how high or low a sound is."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "pitch"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the term is pitch.",
+            "incorrect": "Do not confuse pitch with volume: volume is loudness.",
+            "explanation": "Pitch is the scientific term for how high or low a sound is."
+          },
+          "assets": [],
+          "adaptationNote": "Changed from a one-word response to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2d",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 22
+          },
+          "marks": 1,
+          "originalPrompt": "Complete each row of the table to show how hard the triangle was hit. Use gently, quite hard, and very hard.",
+          "adaptedPrompt": "Classify each set of volume readings by how hard the triangle was hit.",
+          "interaction": {
+            "type": "classification_grid",
+            "choices": [
+              "gently",
+              "quite_hard",
+              "very_hard"
+            ],
+            "items": [
+              {
+                "id": "readings_12_15_14",
+                "label": "12, 15, 14"
+              },
+              {
+                "id": "readings_8_10_6",
+                "label": "8, 10, 6"
+              },
+              {
+                "id": "readings_16_19_21",
+                "label": "16, 19, 21"
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "readings_12_15_14": "quite_hard",
+              "readings_8_10_6": "gently",
+              "readings_16_19_21": "very_hard"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the lowest readings are gentle and the highest are very hard.",
+            "incorrect": "Compare all three sets: greater force produces a greater volume.",
+            "explanation": "12/15/14 is quite hard, 8/10/6 is gentle, and 16/19/21 is very hard."
+          },
+          "assets": [
+            "assets/q2d-volume-table.png"
+          ],
+          "adaptationNote": "Original table completion preserved as a classification grid.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2e",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 23
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why Paul repeats his test three times for each force.",
+          "adaptedPrompt": "Why should Paul repeat the volume measurement three times for each force?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "reliability",
+                "label": "To make the results more reliable and help identify an unusual reading.",
+                "feedback": "Correct: repeated measurements provide more evidence and allow a typical result or average to be found."
+              },
+              {
+                "id": "fairness",
+                "label": "To make the test fair even if he changes the force each time.",
+                "feedback": "Repeating improves reliability; fairness depends on controlling variables."
+              },
+              {
+                "id": "same",
+                "label": "To make sure all three readings are exactly the same.",
+                "feedback": "Repeated readings may differ slightly; they do not need to be identical."
+              },
+              {
+                "id": "more_force",
+                "label": "To increase the force each time.",
+                "feedback": "The force should stay at the chosen level during each set of repeats."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "reliability"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - repetition improves reliability.",
+            "incorrect": "Repeating does not guarantee identical results and does not by itself make a test fair.",
+            "explanation": "Repeats provide more evidence, help reveal anomalous readings, and can be used to calculate an average."
+          },
+          "assets": [],
+          "adaptationNote": "Changed from an explanation to a best-reason single-choice item.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2f",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 23
+          },
+          "marks": 1,
+          "originalPrompt": "Paul hit the triangle gently three times. Explain why the volume was not the same each time.",
+          "adaptedPrompt": "Why might the three volume readings differ even though Paul tried to hit the triangle gently each time?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "force_varied",
+                "label": "It is difficult to apply exactly the same force by hand each time.",
+                "feedback": "Correct: small differences in force change the volume."
+              },
+              {
+                "id": "pitch_changed",
+                "label": "The triangle changed into a different size after each hit.",
+                "feedback": "The triangle's size did not change, and size is linked to pitch rather than this variation in volume."
+              },
+              {
+                "id": "sensor_random",
+                "label": "A sound sensor always chooses a random number.",
+                "feedback": "A sensor measures sound; variation is more reasonably explained by the hits."
+              },
+              {
+                "id": "place_only",
+                "label": "He struck a different place, which must always change the volume.",
+                "feedback": "The mark scheme requires reference to the force of the hit; position alone is insufficient."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "force_varied"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the force was unlikely to be identical on every hit.",
+            "incorrect": "The explanation must refer to small differences in the force or speed of each hit.",
+            "explanation": "Human-applied force varies slightly, so the sound volume also varies."
+          },
+          "assets": [],
+          "adaptationNote": "Changed from an explanation to a single-choice cause.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-3",
+      "number": 3,
+      "title": "Dandelion",
+      "introduction": "Class 5 compare the stem lengths of 20 dandelions from short grass with 20 dandelions from long grass.",
+      "questions": [
+        {
+          "id": "3a",
+          "source": {
+            "testPage": 8,
+            "markSchemePage": 25
+          },
+          "marks": 1,
+          "originalPrompt": "Tick ONE box to show the most common length of dandelion stems in long grass.",
+          "adaptedPrompt": "What is the most common stem-length group for dandelions in long grass?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "7-10",
+                "label": "7-10 cm",
+                "feedback": "Only one long-grass dandelion is in this group."
+              },
+              {
+                "id": "11-14",
+                "label": "11-14 cm",
+                "feedback": "Six long-grass dandelions are in this group, fewer than in 15-18 cm."
+              },
+              {
+                "id": "15-18",
+                "label": "15-18 cm",
+                "feedback": "Correct: this group has the largest frequency, 11."
+              },
+              {
+                "id": "19-22",
+                "label": "19-22 cm",
+                "feedback": "Two long-grass dandelions are in this group."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "15-18"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - 15-18 cm is the modal group.",
+            "incorrect": "Look for the largest number in the long-grass row.",
+            "explanation": "The largest frequency is 11, in the 15-18 cm group."
+          },
+          "assets": [
+            "assets/q3-dandelion-data.png"
+          ],
+          "adaptationNote": "Original single-choice format preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3b",
+          "source": {
+            "testPage": 8,
+            "markSchemePage": 25
+          },
+          "marks": 1,
+          "originalPrompt": "In the table, how many dandelions had stems of 15 cm and longer?",
+          "adaptedPrompt": "Using both rows of the table, how many dandelions had stems of 15 cm or longer?",
+          "interaction": {
+            "type": "integer_entry",
+            "min": 0,
+            "max": 40
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": 13
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - 13 dandelions.",
+            "incorrect": "Add both 15-18 cm cells and both 19-22 cm cells.",
+            "explanation": "Short grass contributes 0; long grass contributes 11 + 2, giving 13."
+          },
+          "assets": [
+            "assets/q3-dandelion-data.png"
+          ],
+          "adaptationNote": "Original numeric response preserved with exact numeric validation.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3c",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 25
+          },
+          "marks": 1,
+          "originalPrompt": "Tick ONE box in each row to show whether each prediction is supported by the evidence.",
+          "adaptedPrompt": "For each prediction, decide whether it is supported by the results table.",
+          "interaction": {
+            "type": "classification_grid",
+            "choices": [
+              "supported",
+              "not_supported"
+            ],
+            "items": [
+              {
+                "id": "place_affects_length",
+                "label": "Where dandelions grow makes a difference to stem length."
+              },
+              {
+                "id": "more_in_short",
+                "label": "There will be more dandelions in the short grass than in the long grass."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "place_affects_length": "supported",
+              "more_in_short": "not_supported"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - only the stem-length prediction is supported.",
+            "incorrect": "Both places supplied 20 sampled dandelions, so the table cannot show that one place has more dandelions overall.",
+            "explanation": "The distributions differ by grass length, but equal sample sizes do not support the claim about total abundance."
+          },
+          "assets": [
+            "assets/q3-dandelion-data.png"
+          ],
+          "adaptationNote": "Original evidence-classification grid preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3d",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 25
+          },
+          "marks": 1,
+          "originalPrompt": "How is the dandelion seed usually dispersed?",
+          "adaptedPrompt": "How is a dandelion seed like the one shown usually dispersed?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "wind",
+                "label": "By the wind",
+                "feedback": "Correct: the light, parachute-like seed is carried by moving air."
+              },
+              {
+                "id": "animals",
+                "label": "By attaching to animal fur",
+                "feedback": "This seed is adapted for wind dispersal, not hooks onto fur."
+              },
+              {
+                "id": "water",
+                "label": "By floating along streams",
+                "feedback": "The shown seed is not adapted for water dispersal."
+              },
+              {
+                "id": "explosion",
+                "label": "By the fruit exploding",
+                "feedback": "Dandelions do not use explosive seed dispersal."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "wind"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - dandelion seeds are carried by wind.",
+            "incorrect": "Use the parachute-like shape as evidence.",
+            "explanation": "The fine hairs increase air resistance so wind can carry the seed away."
+          },
+          "assets": [
+            "assets/q3d-dandelion-seed.png"
+          ],
+          "adaptationNote": "Changed from free text to single choice while retaining the seed image.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3e",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 25
+          },
+          "marks": 1,
+          "originalPrompt": "Tick ONE box to show which life process seed dispersal is part of.",
+          "adaptedPrompt": "Which life process includes seed dispersal?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "pollination",
+                "label": "Pollination",
+                "feedback": "Pollination happens before seeds form."
+              },
+              {
+                "id": "nutrition",
+                "label": "Nutrition",
+                "feedback": "Nutrition is obtaining or making food, not spreading seeds."
+              },
+              {
+                "id": "reproduction",
+                "label": "Reproduction",
+                "feedback": "Correct: seed production and dispersal are parts of plant reproduction."
+              },
+              {
+                "id": "growth",
+                "label": "Growth",
+                "feedback": "Growth is an increase in size or development, not the dispersal process."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "reproduction"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - seed dispersal is part of reproduction.",
+            "incorrect": "Think about the life process that produces and spreads offspring.",
+            "explanation": "Seeds contain the next generation, so dispersal belongs to reproduction."
+          },
+          "assets": [],
+          "adaptationNote": "Original single-choice format preserved.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-4",
+      "number": 4,
+      "title": "Identifying solids",
+      "introduction": "Mia identifies four solids by mixing them with water and vinegar and by testing a mixture with a sieve.",
+      "questions": [
+        {
+          "id": "4a",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 26
+          },
+          "marks": 1,
+          "originalPrompt": "What is the name of the process that has happened to solids B and C?",
+          "adaptedPrompt": "Solids B and C can no longer be seen after they are mixed with water, and each liquid is clear. Which process has occurred?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "dissolving",
+                "label": "Dissolving",
+                "feedback": "Correct: the solids dissolve to form solutions."
+              },
+              {
+                "id": "melting",
+                "label": "Melting",
+                "feedback": "Melting is caused by heating a solid into a liquid; no heating is described."
+              },
+              {
+                "id": "evaporating",
+                "label": "Evaporating",
+                "feedback": "Evaporation changes a liquid into a gas."
+              },
+              {
+                "id": "sieving",
+                "label": "Sieving",
+                "feedback": "Sieving separates particles by size; it is not what happened in the water."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "dissolving"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the solids dissolved.",
+            "incorrect": "A clear liquid with the solid no longer visible indicates a solution has formed.",
+            "explanation": "Soluble solids dissolve in water to form a solution."
+          },
+          "assets": [
+            "assets/q4-table-1.png"
+          ],
+          "adaptationNote": "Changed from a one-word response to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4b",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 26
+          },
+          "marks": 1,
+          "originalPrompt": "Describe ONE difference between solids A and D that stops solid A going through the sieve.",
+          "adaptedPrompt": "Which difference explains why solid A stays in the sieve while solid D passes through?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "larger_particles",
+                "label": "Solid A has larger particles than solid D.",
+                "feedback": "Correct: A's particles are too large for the sieve holes."
+              },
+              {
+                "id": "different_colour",
+                "label": "Solid A is a different colour.",
+                "feedback": "Colour does not determine whether particles pass through sieve holes."
+              },
+              {
+                "id": "more_soluble",
+                "label": "Solid A is more soluble in water.",
+                "feedback": "This test is about particle size in a dry sieve, not solubility."
+              },
+              {
+                "id": "heavier",
+                "label": "Every particle of solid A is heavier.",
+                "feedback": "The evidence supports a size difference, not necessarily a mass difference."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "larger_particles"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - A has larger particles.",
+            "incorrect": "A sieve separates by particle size.",
+            "explanation": "A stays in the sieve because its pieces are larger than the holes; D has smaller pieces."
+          },
+          "assets": [
+            "assets/q4-table-2.png"
+          ],
+          "adaptationNote": "Changed from a written comparison to a causal single-choice item.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4c",
+          "source": {
+            "testPage": 11,
+            "markSchemePage": 26
+          },
+          "marks": 1,
+          "originalPrompt": "Which solid has a non-reversible change when mixed with vinegar? What evidence shows the change is non-reversible?",
+          "adaptedPrompt": "Which solid undergoes a non-reversible change with vinegar, and which observation is the evidence?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "c_bubbles",
+                "label": "Solid C - the mixture bubbles and fizzes, showing that a gas/new material is made.",
+                "feedback": "Correct: solid C reacts with vinegar and produces gas."
+              },
+              {
+                "id": "b_clear",
+                "label": "Solid B - the liquid stays clear.",
+                "feedback": "A clear solution does not show that a new material has formed."
+              },
+              {
+                "id": "c_invisible",
+                "label": "Solid C - the solid cannot be seen because it simply dissolves.",
+                "feedback": "The key evidence is bubbling and fizzing, not disappearance by itself."
+              },
+              {
+                "id": "b_invisible",
+                "label": "Solid B - the solid cannot be seen in the clear liquid.",
+                "feedback": "Dissolving alone is reversible and is not evidence of a new material."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "c_bubbles"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - solid C bubbles and fizzes, providing evidence that gas is made.",
+            "incorrect": "Choose both the correct solid and an observation showing a new material formed.",
+            "explanation": "Solid C reacts with vinegar. Bubbling/fizzing is observable evidence of gas production and a non-reversible change."
+          },
+          "assets": [
+            "assets/q4-table-3.png"
+          ],
+          "adaptationNote": "The original selection and written evidence are combined into one paired-choice response.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4d",
+          "source": {
+            "testPage": 11,
+            "markSchemePage": 27
+          },
+          "marks": 2,
+          "originalPrompt": "Draw FOUR lines to match each solid to its name. Use Tables 1, 2 and 3 to help you.",
+          "adaptedPrompt": "Match each lettered solid to its name using the observations from all three tables.",
+          "interaction": {
+            "type": "matching",
+            "left": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "right": [
+              "flour",
+              "coconut",
+              "salt",
+              "bicarbonate_of_soda"
+            ],
+            "rightLabels": {
+              "flour": "Flour",
+              "coconut": "Coconut",
+              "salt": "Salt",
+              "bicarbonate_of_soda": "Bicarbonate of soda"
+            }
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "A": "coconut",
+              "B": "salt",
+              "C": "bicarbonate_of_soda",
+              "D": "flour"
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 4,
+                "marks": 2
+              },
+              {
+                "minCorrect": 2,
+                "maxCorrect": 3,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 1,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - A coconut, B salt, C bicarbonate of soda, D flour.",
+            "incorrect": "Use particle size, solubility, and the vinegar reaction together; partial credit is awarded for two or three correct matches.",
+            "explanation": "Coconut floats and is coarse; salt dissolves without reacting; bicarbonate reacts with vinegar; fine flour makes cloudy water and passes the sieve."
+          },
+          "assets": [
+            "assets/q4-table-1.png",
+            "assets/q4-table-2.png",
+            "assets/q4-table-3.png",
+            "assets/q4d-solids.png"
+          ],
+          "adaptationNote": "Original matching task preserved with exact partial-credit bands from the mark scheme.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-5",
+      "number": 5,
+      "title": "Celery",
+      "introduction": "Sandeep places celery in red-coloured water and investigates whether temperature affects how quickly the water reaches the leaves.",
+      "questions": [
+        {
+          "id": "5a",
+          "source": {
+            "testPage": 12,
+            "markSchemePage": 28
+          },
+          "marks": 1,
+          "originalPrompt": "Give ONE function of the leaves for the celery plant.",
+          "adaptedPrompt": "Which is one function of the celery plant's leaves?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "make_food",
+                "label": "They take in light and make food/new material for growth.",
+                "feedback": "Correct: leaves use light in photosynthesis to make food for growth."
+              },
+              {
+                "id": "absorb_soil_water",
+                "label": "They absorb most of the plant's water directly from the soil.",
+                "feedback": "Roots, not leaves, are the main organs that absorb water from soil."
+              },
+              {
+                "id": "anchor",
+                "label": "They anchor the plant firmly in the soil.",
+                "feedback": "Roots anchor the plant."
+              },
+              {
+                "id": "make_energy",
+                "label": "They create energy from nothing.",
+                "feedback": "Leaves transfer light energy during photosynthesis; they do not create energy."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "make_food"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - leaves take in light and make food/new material for growth.",
+            "incorrect": "Distinguish leaf functions from root functions, and avoid saying that leaves 'make energy'.",
+            "explanation": "Leaves absorb light and carry out photosynthesis, producing sugars used for growth."
+          },
+          "assets": [
+            "assets/q5a-celery-plant.png"
+          ],
+          "adaptationNote": "Changed from a free-text function to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "5b",
+          "source": {
+            "testPage": 13,
+            "markSchemePage": 28
+          },
+          "marks": 1,
+          "originalPrompt": "The variable I will change in my investigation is ...",
+          "adaptedPrompt": "In an investigation using identical celery setups but different water temperatures, which variable should Sandeep change?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "temperature",
+                "label": "The temperature of the coloured water",
+                "feedback": "Correct: temperature is the independent variable."
+              },
+              {
+                "id": "time",
+                "label": "The time taken for the leaves to turn red",
+                "feedback": "Time is the measured outcome, so it is the dependent variable."
+              },
+              {
+                "id": "celery_length",
+                "label": "The length of each celery stick",
+                "feedback": "Celery length should be controlled so the temperature comparison is fair."
+              },
+              {
+                "id": "water_amount",
+                "label": "The amount of coloured water",
+                "feedback": "The water amount should be controlled."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "temperature"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - change the temperature.",
+            "incorrect": "The changed variable is the independent variable; time is what is measured.",
+            "explanation": "Temperature is varied to test its effect on how quickly coloured water reaches the leaves."
+          },
+          "assets": [
+            "assets/q5b-red-water.png"
+          ],
+          "adaptationNote": "Changed from free text to a specified experimental setup with one unambiguous independent variable.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "5c",
+          "source": {
+            "testPage": 13,
+            "markSchemePage": 29
+          },
+          "marks": 1,
+          "originalPrompt": "The equipment I will use to measure the time it takes for the red water to get to the leaves is ...",
+          "adaptedPrompt": "Which equipment should Sandeep use to measure how long the red water takes to reach the leaves?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "stopwatch",
+                "label": "A stopwatch or timer",
+                "feedback": "Correct: a stopwatch or timer measures elapsed time."
+              },
+              {
+                "id": "thermometer",
+                "label": "A thermometer",
+                "feedback": "A thermometer measures temperature, not elapsed time."
+              },
+              {
+                "id": "ruler",
+                "label": "A ruler",
+                "feedback": "A ruler measures length."
+              },
+              {
+                "id": "balance",
+                "label": "A balance",
+                "feedback": "A balance measures mass."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "stopwatch"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - use a stopwatch or timer.",
+            "incorrect": "Choose equipment that measures elapsed time.",
+            "explanation": "A stopwatch, clock, watch, or timer can measure the time taken."
+          },
+          "assets": [],
+          "adaptationNote": "Changed from a one-word response to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "5d",
+          "source": {
+            "testPage": 13,
+            "markSchemePage": 29
+          },
+          "marks": 1,
+          "originalPrompt": "TWO variables I will keep the same to make my investigation fair are ...",
+          "adaptedPrompt": "Select exactly TWO variables that could be kept the same while the coloured-water temperature is changed.",
+          "interaction": {
+            "type": "select_exactly_n",
+            "requiredCount": 2,
+            "options": [
+              {
+                "id": "celery_length",
+                "label": "Length of the celery sticks",
+                "feedback": "This is a valid control variable."
+              },
+              {
+                "id": "water_amount",
+                "label": "Amount of coloured water",
+                "feedback": "This is a valid control variable."
+              },
+              {
+                "id": "glass_size",
+                "label": "Size of the glasses",
+                "feedback": "This is a valid control variable."
+              },
+              {
+                "id": "food_colouring",
+                "label": "Amount of food colouring",
+                "feedback": "This is a valid control variable."
+              },
+              {
+                "id": "leaf_area",
+                "label": "Number or surface area of leaves",
+                "feedback": "This is a valid control variable."
+              },
+              {
+                "id": "light",
+                "label": "Amount of light",
+                "feedback": "This is a valid control variable."
+              },
+              {
+                "id": "temperature",
+                "label": "Temperature of the coloured water",
+                "feedback": "Temperature is the variable being changed, so it cannot also be controlled."
+              },
+              {
+                "id": "elapsed_time",
+                "label": "Time taken for the leaves to turn red",
+                "feedback": "Time is the measured outcome, not a control variable."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "choose_any_n_from_set",
+            "requiredCount": 2,
+            "acceptedValues": [
+              "celery_length",
+              "water_amount",
+              "glass_size",
+              "food_colouring",
+              "leaf_area",
+              "light"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - both selected variables can be controlled.",
+            "incorrect": "Select exactly two factors that should stay constant; do not select temperature or elapsed time.",
+            "explanation": "Valid controls include celery length, water amount, glass size, food colouring, leaf area, and light."
+          },
+          "assets": [
+            "assets/q5b-red-water.png"
+          ],
+          "adaptationNote": "Changed from two free-text controls to an exact-two multi-select with several mark-scheme-supported combinations.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-6",
+      "number": 6,
+      "title": "Jack's shadow",
+      "introduction": "Class 3 measure Jack's shadow in the same playground position at different times on a bright sunny day.",
+      "questions": [
+        {
+          "id": "6a",
+          "source": {
+            "testPage": 14,
+            "markSchemePage": 30
+          },
+          "marks": 1,
+          "originalPrompt": "Which picture shows Jack's shadow at midday? Tick ONE box.",
+          "adaptedPrompt": "Select the picture that shows Jack's shadow at midday.",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "top_left",
+                "label": "Top-left picture: a short 0.25 m shadow to Jack's right",
+                "feedback": "Correct: at midday the shadow is short and lies on the side away from the Sun."
+              },
+              {
+                "id": "top_right",
+                "label": "Top-right picture: a short 0.25 m shadow to Jack's left",
+                "feedback": "The length is short, but the direction is toward the Sun rather than away from it."
+              },
+              {
+                "id": "bottom_left",
+                "label": "Bottom-left picture: a long 2 m shadow",
+                "feedback": "The midday Sun is higher, so the shadow should be much shorter than at 9 am."
+              },
+              {
+                "id": "bottom_right",
+                "label": "Bottom-right picture: a long 2 m shadow in another direction",
+                "feedback": "The midday shadow should be short, not 2 m long."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "top_left"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the top-left picture.",
+            "incorrect": "At midday the Sun is higher, producing a shorter shadow on the opposite side from the Sun.",
+            "explanation": "The official answer is the top-left 0.25 m shadow."
+          },
+          "assets": [
+            "assets/q6a-shadow-options.png"
+          ],
+          "adaptationNote": "Original visual single-choice format preserved with explicit position labels for accessibility.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6b",
+          "source": {
+            "testPage": 14,
+            "markSchemePage": 30
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why a shadow forms on the ground when the sunlight shines on Jack.",
+          "adaptedPrompt": "Why does Jack form a shadow on the ground when sunlight shines on him?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "blocks_light",
+                "label": "Jack is opaque and blocks the sunlight from reaching part of the ground.",
+                "feedback": "Correct: the blocked light creates the shadow."
+              },
+              {
+                "id": "bends_light",
+                "label": "Jack bends all the sunlight around himself.",
+                "feedback": "A shadow forms because light is blocked, not because all light bends around him."
+              },
+              {
+                "id": "solid_only",
+                "label": "Any solid object makes a shadow because all solids are opaque.",
+                "feedback": "Some solids can be transparent; the explanation must identify blocked light or opacity."
+              },
+              {
+                "id": "ground_dark",
+                "label": "The ground becomes dark by itself when Jack stands still.",
+                "feedback": "The darkness is caused by Jack blocking the light."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "blocks_light"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - Jack blocks the sunlight.",
+            "incorrect": "The explanation must refer to blocked light or Jack being opaque.",
+            "explanation": "Light cannot pass through Jack, so the area behind him receives less light and appears as a shadow."
+          },
+          "assets": [],
+          "adaptationNote": "Changed from an explanation to a causal single-choice item.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6c",
+          "source": {
+            "testPage": 15,
+            "markSchemePage": 30
+          },
+          "marks": 1,
+          "originalPrompt": "What movement in space causes Jack's shadow to change position?",
+          "adaptedPrompt": "Which movement in space causes Jack's shadow to change position during the day?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "earth_rotates",
+                "label": "The Earth rotates on its axis.",
+                "feedback": "Correct: Earth's rotation changes the Sun's apparent position in the sky."
+              },
+              {
+                "id": "earth_orbits",
+                "label": "The Earth orbits the Sun once during the day.",
+                "feedback": "Earth's yearly orbit does not cause the day-to-day movement described here."
+              },
+              {
+                "id": "sun_orbits",
+                "label": "The Sun travels around the Earth each day.",
+                "feedback": "This is incorrect; Earth rotates on its axis."
+              },
+              {
+                "id": "moon_moves",
+                "label": "The Moon moves around the Earth.",
+                "feedback": "The Moon's movement does not cause Jack's daytime shadow to shift."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "earth_rotates"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - Earth rotates on its axis.",
+            "incorrect": "Do not confuse Earth's daily rotation with its yearly orbit around the Sun.",
+            "explanation": "Earth's rotation makes the Sun appear to move across the sky, changing the shadow's position."
+          },
+          "assets": [],
+          "adaptationNote": "Changed from a written explanation to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6d",
+          "source": {
+            "testPage": 15,
+            "markSchemePage": 31
+          },
+          "marks": 1,
+          "originalPrompt": "Tick ONE box to show why the class should not do their test on a cloudy day.",
+          "adaptedPrompt": "Why should the class avoid doing the shadow test on a cloudy day?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "very_dark",
+                "label": "Jack's shadow is very dark.",
+                "feedback": "Clouds reduce direct sunlight, so the shadow is usually less distinct, not darker."
+              },
+              {
+                "id": "no_change",
+                "label": "Jack's shadow does not change position.",
+                "feedback": "The shadow's position still depends on the light direction; the problem is visibility."
+              },
+              {
+                "id": "difficult",
+                "label": "Jack's shadow is difficult to see.",
+                "feedback": "Correct: diffuse light on a cloudy day makes the shadow faint."
+              },
+              {
+                "id": "very_big",
+                "label": "Jack's shadow is very big.",
+                "feedback": "Cloud cover affects clarity more than making the shadow very large."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "difficult"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the shadow would be difficult to see.",
+            "incorrect": "Clouds scatter and reduce direct sunlight, making shadows faint.",
+            "explanation": "A clear, bright light source is needed for a distinct measurable shadow."
+          },
+          "assets": [],
+          "adaptationNote": "Original single-choice format preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6e",
+          "source": {
+            "testPage": 15,
+            "markSchemePage": 31
+          },
+          "marks": 2,
+          "originalPrompt": "Write true or false under each idea about shadows.",
+          "adaptedPrompt": "Classify each statement about shadows as true or false.",
+          "interaction": {
+            "type": "true_false_grid",
+            "items": [
+              {
+                "id": "colour",
+                "statement": "The colour of a car's shadow depends on the colour of the car."
+              },
+              {
+                "id": "shape",
+                "statement": "The shape of the shadow depends on the shape of the object."
+              },
+              {
+                "id": "eyes",
+                "statement": "You can tell if Jack's eyes are shut by looking at his shadow."
+              },
+              {
+                "id": "sun_only",
+                "statement": "Only light from the Sun causes a shadow."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "colour": false,
+              "shape": true,
+              "eyes": false,
+              "sun_only": false
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 4,
+                "marks": 2
+              },
+              {
+                "minCorrect": 3,
+                "maxCorrect": 3,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 2,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - false, true, false, false.",
+            "incorrect": "Shadow shape follows the object's outline, but shadow colour and fine details are not shown; any suitable light source can make a shadow.",
+            "explanation": "The official classifications are F, T, F, F, with one mark for any three correct and two marks for all four."
+          },
+          "assets": [
+            "assets/q6e-shadow-statements.png"
+          ],
+          "adaptationNote": "Original true/false task preserved with official partial-credit thresholds.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-7",
+      "number": 7,
+      "title": "Rolling marble",
+      "introduction": "John and Ravinder change the height of a ramp and measure how far a marble rolls from the bottom.",
+      "questions": [
+        {
+          "id": "7a",
+          "source": {
+            "testPage": 16,
+            "markSchemePage": 33
+          },
+          "marks": 1,
+          "originalPrompt": "What equipment could be used to measure the height of the ramp?",
+          "adaptedPrompt": "Which equipment could measure the height of the ramp?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "length_tool",
+                "label": "A ruler, metre rule, or tape measure",
+                "feedback": "Correct: these tools measure length or height."
+              },
+              {
+                "id": "stopwatch",
+                "label": "A stopwatch",
+                "feedback": "A stopwatch measures time."
+              },
+              {
+                "id": "thermometer",
+                "label": "A thermometer",
+                "feedback": "A thermometer measures temperature."
+              },
+              {
+                "id": "string",
+                "label": "A piece of unmarked string",
+                "feedback": "Unmarked string alone does not provide a height measurement."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "length_tool"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - use a ruler, metre rule, or tape measure.",
+            "incorrect": "Choose calibrated equipment that measures length.",
+            "explanation": "The ramp height is a length, so a ruler or measuring tape is appropriate."
+          },
+          "assets": [
+            "assets/q7a-ramp-setup.png"
+          ],
+          "adaptationNote": "Changed from free text to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "7b",
+          "source": {
+            "testPage": 16,
+            "markSchemePage": 33
+          },
+          "marks": 2,
+          "originalPrompt": "Tick ONE box in each row to show how they should do their investigation to make sure their test is fair.",
+          "adaptedPrompt": "Classify each variable as something that must stay the same, must be different, or makes no difference.",
+          "interaction": {
+            "type": "classification_grid",
+            "choices": [
+              "same",
+              "different",
+              "no_difference"
+            ],
+            "items": [
+              {
+                "id": "surface",
+                "label": "Surface of the ramp"
+              },
+              {
+                "id": "height",
+                "label": "Height of the ramp"
+              },
+              {
+                "id": "size",
+                "label": "Size of the marble"
+              },
+              {
+                "id": "mass",
+                "label": "Mass of the marble"
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "surface": "same",
+              "height": "different",
+              "size": "same",
+              "mass": "same"
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 4,
+                "marks": 2
+              },
+              {
+                "minCorrect": 3,
+                "maxCorrect": 3,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 2,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - only ramp height changes; the surface, marble size, and marble mass stay the same.",
+            "incorrect": "A fair test changes the independent variable and controls other relevant variables.",
+            "explanation": "All four correct earn two marks; any three correct earn one mark."
+          },
+          "assets": [
+            "assets/q7b-fair-test-table.png"
+          ],
+          "adaptationNote": "Original classification table preserved with official partial-credit thresholds.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "7c",
+          "source": {
+            "testPage": 17,
+            "markSchemePage": 33
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why the ramp in photograph C is too steep to get good results.",
+          "adaptedPrompt": "Why is the ramp in photograph C too steep to produce good rolling-distance results?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "drop_bounce",
+                "label": "The marble may drop, bounce, or lose contact instead of rolling smoothly down the ramp.",
+                "feedback": "Correct: a near-vertical ramp does not provide a controlled rolling path."
+              },
+              {
+                "id": "too_fast_only",
+                "label": "The marble will simply move too fast, and speed alone makes the result invalid.",
+                "feedback": "Speed alone is insufficient; the key problem is that the marble may fall or fail to roll along the ramp."
+              },
+              {
+                "id": "height_zero",
+                "label": "The ramp height becomes zero.",
+                "feedback": "The pictured ramp is very high, not zero."
+              },
+              {
+                "id": "marble_heavier",
+                "label": "The steep ramp makes the marble permanently heavier.",
+                "feedback": "Changing ramp angle does not change the marble's mass."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "drop_bounce"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the marble may drop or bounce instead of rolling smoothly.",
+            "incorrect": "The explanation must go beyond saying it is fast and describe the loss of a controlled rolling path.",
+            "explanation": "A very steep ramp can make the marble fall, bounce, or stop contacting the ramp, reducing measurement quality."
+          },
+          "assets": [
+            "assets/q7c-steep-ramp.png"
+          ],
+          "adaptationNote": "Changed from an explanation to a best-explanation single-choice item.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "7d",
+          "source": {
+            "testPage": 17,
+            "markSchemePage": 33
+          },
+          "marks": 1,
+          "originalPrompt": "Draw a cross on the graph to show the distance the marble would roll if the ramp was 0 cm high.",
+          "adaptedPrompt": "Select the coordinate where the point should be plotted when the ramp height is 0 cm.",
+          "interaction": {
+            "type": "coordinate_select",
+            "xLabel": "Height of ramp (cm)",
+            "yLabel": "Distance marble rolled (cm)",
+            "xValues": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "yValues": [
+              0,
+              50,
+              100,
+              150,
+              200,
+              250
+            ],
+            "snapToGrid": true
+          },
+          "answerRule": {
+            "kind": "coordinate_equals",
+            "value": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - plot the origin, (0, 0).",
+            "incorrect": "If the ramp has zero height, the model predicts zero rolling distance from the ramp.",
+            "explanation": "The required point is the graph origin: height 0 cm and distance 0 cm."
+          },
+          "assets": [
+            "assets/q7d-marble-graph.png"
+          ],
+          "adaptationNote": "Changed from freehand plotting to a snap-to-grid coordinate selection that still tests graph interpretation.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-8",
+      "number": 8,
+      "title": "Candles",
+      "introduction": "Justine observes changes when candles burn and investigates how candle height and width affect burning time.",
+      "questions": [
+        {
+          "id": "8a",
+          "source": {
+            "testPage": 18,
+            "markSchemePage": 34
+          },
+          "marks": 1,
+          "originalPrompt": "Complete the table to show if each observation is evidence of a reversible or non-reversible change.",
+          "adaptedPrompt": "Classify each candle observation as evidence of a reversible or non-reversible change.",
+          "interaction": {
+            "type": "classification_grid",
+            "choices": [
+              "reversible",
+              "non_reversible"
+            ],
+            "items": [
+              {
+                "id": "wax_melts",
+                "label": "The wax melts."
+              },
+              {
+                "id": "smoke",
+                "label": "Smoke is given off."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "wax_melts": "reversible",
+              "smoke": "non_reversible"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - melting wax is reversible; smoke is evidence of a non-reversible change.",
+            "incorrect": "Both rows must be correct for the mark.",
+            "explanation": "Wax can solidify again, while smoke indicates new substances are produced during burning."
+          },
+          "assets": [
+            "assets/q8a-candle-observation.png"
+          ],
+          "adaptationNote": "Original classification table preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8b",
+          "source": {
+            "testPage": 18,
+            "markSchemePage": 34
+          },
+          "marks": 1,
+          "originalPrompt": "Describe the relationship between the height of the candle and the time it takes the candle to burn down to 1 cm.",
+          "adaptedPrompt": "Complete the relationship: The _____ the candle, the _____ it takes to burn down to 1 cm.",
+          "interaction": {
+            "type": "sentence_completion",
+            "slots": [
+              {
+                "id": "height",
+                "options": [
+                  "taller",
+                  "shorter",
+                  "wider"
+                ]
+              },
+              {
+                "id": "time",
+                "options": [
+                  "longer",
+                  "shorter",
+                  "same amount of time"
+                ]
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "height": "taller",
+              "time": "longer"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the taller the candle, the longer it takes.",
+            "incorrect": "Both variables must be compared generally, not just one specific candle.",
+            "explanation": "For candles of the same width, increasing starting height increases the time needed to burn down to 1 cm."
+          },
+          "assets": [
+            "assets/q8b-candle-heights.png"
+          ],
+          "adaptationNote": "Changed from a written relationship to a two-slot sentence completion.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8c",
+          "source": {
+            "testPage": 19,
+            "markSchemePage": 34
+          },
+          "marks": 1,
+          "originalPrompt": "How many minutes did it take candle C to burn down to 4 cm?",
+          "adaptedPrompt": "Read the graph: how many minutes did candle C take to burn down to a height of 4 cm?",
+          "interaction": {
+            "type": "numeric_entry",
+            "min": 0,
+            "max": 100,
+            "unit": "minutes"
+          },
+          "answerRule": {
+            "kind": "number_range",
+            "min": 21,
+            "max": 26,
+            "expected": 23
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the graph reading is about 23 minutes.",
+            "incorrect": "Trace horizontally from 4 cm to candle C, then vertically to the time axis. Values from 21 to 26 minutes are accepted.",
+            "explanation": "The expected reading is 23 minutes; the official tolerance is 21-26 minutes inclusive."
+          },
+          "assets": [
+            "assets/q8-candle-graph.png"
+          ],
+          "adaptationNote": "Original numeric graph-reading response preserved with the official accepted range.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8d",
+          "source": {
+            "testPage": 19,
+            "markSchemePage": 35
+          },
+          "marks": 1,
+          "originalPrompt": "Draw a line on the graph to show how quickly the new, thinner candle will burn down to 1 cm.",
+          "adaptedPrompt": "The new candle is thinner than candle C but starts at the same 10 cm height. Which graph line best predicts how it will burn down to 1 cm?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "a",
+                "label": "Line A",
+                "feedback": "Correct: a thinner candle should burn down faster than candle C while starting at the same height.",
+                "asset": "assets/q8d-option-a.svg",
+                "accessibleDescription": "A line that starts at 10 cm, falls continuously more steeply than candle C, and reaches 1 cm sooner."
+              },
+              {
+                "id": "b",
+                "label": "Line B",
+                "feedback": "This does not show the thinner candle burning down more quickly.",
+                "asset": "assets/q8d-option-b.svg",
+                "accessibleDescription": "A line that follows the same path as candle C."
+              },
+              {
+                "id": "c",
+                "label": "Line C",
+                "feedback": "The new candle has the same starting height, so the line must begin at 10 cm.",
+                "asset": "assets/q8d-option-c.svg",
+                "accessibleDescription": "A steep line that starts below 10 cm."
+              },
+              {
+                "id": "d",
+                "label": "Line D",
+                "feedback": "A burning candle should not deliberately increase in height.",
+                "asset": "assets/q8d-option-d.svg",
+                "accessibleDescription": "A line that starts at 10 cm, rises, and then falls."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "a"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - Line A.",
+            "incorrect": "The correct line must start at 10 cm, stay decreasing, be steeper than candle C, and reach 1 cm sooner.",
+            "explanation": "The visual-choice format encodes all four official marking conditions without requiring freehand judgement."
+          },
+          "assets": [
+            "assets/q8c-candle-heights.png",
+            "assets/q8-candle-graph.png",
+            "assets/q8d-option-a.svg",
+            "assets/q8d-option-b.svg",
+            "assets/q8d-option-c.svg",
+            "assets/q8d-option-d.svg"
+          ],
+          "adaptationNote": "Changed from freehand line drawing to selection among four graph-line alternatives.",
+          "requiresHumanReview": false
+        }
+      ]
+    }
+  ]
+}
