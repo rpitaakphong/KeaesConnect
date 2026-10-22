@@ -39,6 +39,7 @@ export type TestSection = {
   hint?: string;
   questionLayout?: "cards" | "grouped";
   groupByQuestionNumber?: boolean;
+  visualPlacement?: "shared" | "perQuestion";
   visuals?: QuestionVisual[];
   wordBank?: string[];
   storyTitle?: string;
@@ -157,6 +158,7 @@ export type AnswerPart = {
   id: string;
   accepted: string[];
   points: number;
+  numericRange?: { min: number; max: number };
   normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
   keywords?: string[][];
   reviewRecommended?: boolean;

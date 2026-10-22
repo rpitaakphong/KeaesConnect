@@ -1287,28 +1287,28 @@
           },
           "marks": 1,
           "originalPrompt": "Which picture shows Jack's shadow at midday? Tick ONE box.",
-          "adaptedPrompt": "Select the picture that shows Jack's shadow at midday.",
+          "adaptedPrompt": "Susie measures Jack's shadow at 9 am, as shown in the reference picture. On the same sunny day, Jack stands in the same position at midday. Select the picture that shows his shadow at midday.",
           "interaction": {
             "type": "single_choice",
             "options": [
               {
                 "id": "top_left",
-                "label": "Top-left picture: a short 0.25 m shadow to Jack's right",
+                "label": "Top-left picture: a short 0.25 m shadow close to Jack's feet",
                 "feedback": "Correct: at midday the shadow is short and lies on the side away from the Sun."
               },
               {
                 "id": "top_right",
-                "label": "Top-right picture: a short 0.25 m shadow to Jack's left",
+                "label": "Top-right picture: a short 0.25 m shadow extending to the left",
                 "feedback": "The length is short, but the direction is toward the Sun rather than away from it."
               },
               {
                 "id": "bottom_left",
-                "label": "Bottom-left picture: a long 2 m shadow",
+                "label": "Bottom-left picture: a long 2 m shadow extending straight down",
                 "feedback": "The midday Sun is higher, so the shadow should be much shorter than at 9 am."
               },
               {
                 "id": "bottom_right",
-                "label": "Bottom-right picture: a long 2 m shadow in another direction",
+                "label": "Bottom-right picture: a long 2 m shadow extending diagonally to the left",
                 "feedback": "The midday shadow should be short, not 2 m long."
               }
             ]
@@ -1321,13 +1321,21 @@
           "feedback": {
             "correct": "Correct - the top-left picture.",
             "incorrect": "At midday the Sun is higher, producing a shorter shadow on the opposite side from the Sun.",
-            "explanation": "The official answer is the top-left 0.25 m shadow."
+            "explanation": "At midday the Sun is higher than at 9 am. The top-left picture shows the short shadow close to Jack's feet."
           },
           "assets": [
+            "assets/q6a-morning-shadow.png",
             "assets/q6a-shadow-options.png"
           ],
           "adaptationNote": "Original visual single-choice format preserved with explicit position labels for accessibility.",
-          "requiresHumanReview": false
+          "requiresHumanReview": false,
+          "assetDescriptions": {
+            "assets/q6a-morning-shadow.png": "At 9 am, the Sun is above and to the left of Jack; his 2 m shadow extends diagonally down to the right.",
+            "assets/q6a-shadow-options.png": "Four midday alternatives, arranged top-left, top-right, bottom-left and bottom-right, with their shadow lengths labelled."
+          },
+          "assetMaxWidths": {
+            "assets/q6a-morning-shadow.png": 360
+          }
         },
         {
           "id": "6b",
@@ -1857,17 +1865,23 @@
             ]
           },
           "answerRule": {
-            "kind": "all_match",
-            "values": {
-              "height": "taller",
-              "time": "longer"
-            }
+            "kind": "one_of_maps",
+            "alternatives": [
+              {
+                "height": "taller",
+                "time": "longer"
+              },
+              {
+                "height": "shorter",
+                "time": "shorter"
+              }
+            ]
           },
           "partialCredit": null,
           "feedback": {
-            "correct": "Correct - the taller the candle, the longer it takes.",
-            "incorrect": "Both variables must be compared generally, not just one specific candle.",
-            "explanation": "For candles of the same width, increasing starting height increases the time needed to burn down to 1 cm."
+            "correct": "Correct - taller candles take longer, or shorter candles take less time.",
+            "incorrect": "Match the complete relationship: taller with longer, or shorter with shorter.",
+            "explanation": "For candles of the same width, a taller candle takes longer to burn down to 1 cm; a shorter candle takes a shorter time."
           },
           "assets": [
             "assets/q8b-candle-heights.png"

@@ -2605,6 +2605,15 @@ tr:last-child td { border-bottom: 0; }
   display: grid;
   gap: 16px;
 }
+[data-test-id="ks2-science-progress-test-1"] .science-subquestion-list,
+[data-test-id="ks2-science-progress-test-1"] .science-subquestion {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+[data-test-id="ks2-science-progress-test-1"] .question-ks2-sci-pt1-8d .image-choice-card img {
+  width: min(100%, 320px);
+  height: auto;
+}
 .question-group-intro {
   display: grid;
   gap: 12px;
