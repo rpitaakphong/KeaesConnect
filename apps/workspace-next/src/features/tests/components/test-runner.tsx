@@ -32,7 +32,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
   const answeredCount = questions.filter((question) => isAnswered(answers[question.id])).length;
   const active = test.sections.find((section) => section.id === activeSection) || test.sections[0];
   const activeQuestionItems = useMemo(
-    () => groupScienceQuestions(active?.questions || [], Boolean(active?.groupByQuestionNumber)),
+    () => groupScienceQuestions(active?.questions || [], Boolean(active?.groupByQuestionNumber), active?.visualPlacement),
     [active],
   );
   const activeQuestionCount = active?.groupByQuestionNumber
@@ -350,7 +350,11 @@ type ScienceQuestionGroup = {
   visuals?: NonNullable<TestQuestion["visuals"]>;
 };
 
-function groupScienceQuestions(questions: TestQuestion[], groupAllByNumber = false): Array<TestQuestion | ScienceQuestionGroup> {
+function groupScienceQuestions(
+  questions: TestQuestion[],
+  groupAllByNumber = false,
+  visualPlacement: "shared" | "perQuestion" = "shared",
+): Array<TestQuestion | ScienceQuestionGroup> {
   const groupedNumbers = new Set([4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16]);
   const groupByNumberOnly = new Set([4, 7, 11]);
   const items: Array<TestQuestion | ScienceQuestionGroup> = [];
@@ -366,7 +370,7 @@ function groupScienceQuestions(questions: TestQuestion[], groupAllByNumber = fal
     }
 
     const firstImage = firstImageSrc(question);
-    const hasSharedVisual = Boolean(firstImage) && (groupAllByNumber || !groupByNumberOnly.has(question.number));
+    const hasSharedVisual = visualPlacement === "shared" && Boolean(firstImage) && (groupAllByNumber || !groupByNumberOnly.has(question.number));
     const groupQuestions = [question];
     let nextIndex = index + 1;
     while (nextIndex < questions.length) {

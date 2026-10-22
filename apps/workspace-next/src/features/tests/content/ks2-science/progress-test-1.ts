@@ -43,17 +43,24 @@ type SourceQuestion = {
     value?: unknown;
     values?: Record<string, unknown>;
     acceptedValues?: string[];
+    alternatives?: Array<Record<string, string>>;
+    min?: number;
+    max?: number;
+    expected?: number;
   };
   partialCredit?: {
     bands?: Array<{ minCorrect: number; marks: number }>;
   } | null;
   feedback: { explanation: string };
   assets: string[];
+  assetDescriptions?: Record<string, string>;
+  assetMaxWidths?: Record<string, number>;
 };
 
 type SourceSection = {
   id: string;
   title: string;
+  introduction: string;
   questions: SourceQuestion[];
 };
 
@@ -80,7 +87,11 @@ export const ks2ScienceProgressTest1: TestDefinition = {
     title: section.title,
     hint: "Answer every question. All responses are marked automatically.",
     groupByQuestionNumber: true,
-    questions: section.questions.map(convertQuestion),
+    visualPlacement: "perQuestion",
+    questions: section.questions.map((question, questionIndex) => ({
+      ...convertQuestion(question),
+      ...(questionIndex === 0 ? { groupIntro: { lead: section.introduction } } : {}),
+    })),
   })),
 };
 
@@ -95,8 +106,8 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
       .map((asset) => ({
         type: "image" as const,
         src: assetPath(asset),
-        alt: `Source visual for question ${question.id}`,
-        maxWidth: 720,
+        alt: question.assetDescriptions?.[asset] || `Source visual for question ${question.id}`,
+        maxWidth: question.assetMaxWidths?.[asset] || 720,
       })),
   };
 
@@ -120,9 +131,9 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
   }
 
   if (question.interaction.type === "integer_entry" || question.interaction.type === "numeric_entry") {
-    const accepted = question.answerRule.kind === "number_range"
-      ? integerRange(question.answerRule.values, question.answerRule)
-      : [String(question.answerRule.value ?? "")];
+    const numericRange = answerRange(question);
+    const expected = numericRange ? question.answerRule.expected ?? numericRange.min : question.answerRule.value;
+    const accepted = [String(expected ?? "")];
     return {
       ...common,
       type: "text",
@@ -130,8 +141,8 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
       placeholder: question.interaction.unit ? `Answer in ${question.interaction.unit}` : "Enter a number",
       grading: {
         mode: "auto",
-        display: question.answerRule.kind === "number_range" ? "21–26 minutes (expected reading: 23)" : accepted[0],
-        parts: [{ id: "answer", accepted, points: question.marks }],
+        display: numericRange ? `${numericRange.min}–${numericRange.max} ${question.interaction.unit || ""} (expected reading: ${expected})`.trim() : accepted[0],
+        parts: [{ id: "answer", accepted, points: question.marks, numericRange }],
       },
     };
   }
@@ -161,6 +172,30 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
   }
 
   const fields = responseFields(question);
+  if (question.answerRule.kind === "one_of_maps") {
+    const alternatives = question.answerRule.alternatives || [];
+    return {
+      ...common,
+      type: "multiText",
+      compact: true,
+      fields,
+      grading: {
+        mode: "auto",
+        display: alternatives.map((values) => displayValues(values, question)).join(" OR "),
+        parts: fields.map((field) => ({
+          id: field.id,
+          accepted: [...new Set(alternatives.map((values) => values[field.id]))],
+          points: 1,
+        })),
+        sequenceGroups: alternatives.map((values, index) => ({
+          id: `alternative-${index + 1}`,
+          partIds: fields.map((field) => field.id),
+          acceptedSequence: fields.map((field) => values[field.id]),
+          points: question.marks,
+        })),
+      },
+    };
+  }
   const values = question.answerRule.values || {};
   const parts = fields.map((field, index) => ({
     id: field.id,
@@ -253,11 +288,13 @@ function displayValues(values: Record<string, unknown>, question: SourceQuestion
   return Object.entries(values).map(([key, value]) => `${humanize(key)}: ${humanize(String(value))}`).join("; ");
 }
 
-function integerRange(_values: Record<string, unknown> | undefined, rule: SourceQuestion["answerRule"]) {
-  const record = rule as SourceQuestion["answerRule"] & { min?: number; max?: number };
-  const min = Number(record.min ?? 0);
-  const max = Number(record.max ?? min);
-  return Array.from({ length: max - min + 1 }, (_, index) => String(min + index));
+function answerRange(question: SourceQuestion) {
+  const { kind, min, max } = question.answerRule;
+  if (kind !== "number_range") return undefined;
+  if (typeof min !== "number" || typeof max !== "number" || !Number.isFinite(min) || !Number.isFinite(max) || min > max) {
+    throw new Error(`Invalid numeric range for question ${question.id}`);
+  }
+  return { min, max };
 }
 
 function partLabel(id: string) {

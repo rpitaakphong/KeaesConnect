@@ -105,7 +105,9 @@ export function QuestionRenderer({
           ) : (
             <input
               autoComplete="off"
-              inputMode={question.inputMode === "number" ? "numeric" : "text"}
+              inputMode={question.inputMode === "number"
+                ? question.grading?.mode === "auto" && question.grading.parts.some((part) => part.numericRange) ? "decimal" : "numeric"
+                : "text"}
               onChange={(event) => onChange(event.target.value)}
               placeholder={question.placeholder || "answer"}
               value={typeof answer === "string" ? answer : ""}

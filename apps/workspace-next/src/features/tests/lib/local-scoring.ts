@@ -708,6 +708,11 @@ function distanceToSegment(point: { x: number; y: number }, start: { x: number; 
 }
 
 function isCorrectPart(raw: string | string[], part: NonNullable<Extract<TestQuestion["grading"], { mode: "auto" }>["parts"]>[number]) {
+  if (part.numericRange) {
+    if (typeof raw !== "string" || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw.trim())) return false;
+    const value = Number(raw.trim());
+    return Number.isFinite(value) && value >= part.numericRange.min && value <= part.numericRange.max;
+  }
   if (part.normalizer === "set") return sameSet(Array.isArray(raw) ? raw : [], part.accepted);
   if (part.normalizer === "contains") {
     return Array.isArray(raw) && part.accepted.some((accepted) => raw.some((item) => normalize(item) === normalize(accepted)));
