@@ -32,5 +32,7 @@ export function isDemoAssignment(token: string) {
   if (typeof window === "undefined" || token !== "demo") return false;
 
   const hostname = window.location.hostname.toLowerCase();
-  return ["127.0.0.1", "localhost"].includes(hostname) || hostname.endsWith(".trycloudflare.com");
+  return ["127.0.0.1", "localhost"].includes(hostname)
+    || hostname.endsWith(".trycloudflare.com")
+    || /^deploy-preview-\d+--keaesconnect\.netlify\.app$/.test(hostname);
 }
