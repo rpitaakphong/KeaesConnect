@@ -1,0 +1,86 @@
+{
+  "project_ref": "xomxithihmrikgzkayfd",
+  "migration": "20261023090000",
+  "registration_verification": {
+    "diagnostic_cases": 21,
+    "extra_numeric_cases": 8,
+    "history_fingerprint": {
+      "answers": {
+        "count": 4773,
+        "hash": "7c7915fc1e23ee8698bd3f45c968b92d"
+      },
+      "assignments": {
+        "count": 253,
+        "hash": "d80fa9372114e1c6692c6c6f3d63ac73"
+      },
+      "attempts": {
+        "count": 134,
+        "hash": "cdc66f9a418fc7454546cfb1da6f7930"
+      },
+      "students": {
+        "count": 134,
+        "hash": "b56b3c433089395c2f2e28d8717589e9"
+      }
+    },
+    "history_unchanged": true,
+    "integration": {
+      "branches": [
+        {
+          "admin_report": true,
+          "answers": 37,
+          "branch": "ram",
+          "possible": 40,
+          "score": 40,
+          "single_use": true
+        },
+        {
+          "admin_report": true,
+          "answers": 37,
+          "branch": "ekamai",
+          "possible": 40,
+          "score": 40,
+          "single_use": true
+        }
+      ],
+      "history_counts_unchanged": true,
+      "rolled_back": true
+    },
+    "ks2_cases": 318,
+    "possible": 40,
+    "question_parts": 37,
+    "spip_cases": 3,
+    "status": "inactive",
+    "test_id": "ks2-science-progress-test-1",
+    "unchanged_legacy_questions": 350
+  },
+  "production_qa": {
+    "assignment_status": "closed",
+    "candle_answers": [
+      {
+        "possible": 1,
+        "question": "ks2-sci-pt1-8b",
+        "response": "height: shorter; time: shorter",
+        "score": 1
+      },
+      {
+        "possible": 1,
+        "question": "ks2-sci-pt1-8c",
+        "response": "23.5",
+        "score": 1
+      }
+    ],
+    "historical_data_unchanged": true,
+    "migration_recorded": true,
+    "report": {
+      "attempt_id": "d74ccc7b-4253-40be-9ffb-a1cd1c2c10ba",
+      "branch": "ram",
+      "full_name": "KS2 Setup QA 2026-10-23",
+      "score_percent": 100,
+      "score_possible": 40,
+      "score_total": 40,
+      "test_id": "ks2-science-progress-test-1",
+      "test_title": "Key Stage 2 Science Progress Test 1"
+    },
+    "saved_answers": 37
+  }
+}

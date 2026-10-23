@@ -69,7 +69,9 @@ for (const [suffix, answer, expected] of cases) {
   assert.equal(row.score, expected, `${suffix}: ${JSON.stringify(answer)}`);
 }
 
-if (process.argv.includes("--database")) {
+export { test as diagnosticTest, cases as diagnosticCases };
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain && process.argv.includes("--database")) {
   const { createClient } = await import("@supabase/supabase-js");
   const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, { auth: { persistSession: false } });
   const login = await client.auth.signInWithPassword({ email: process.env.E2E_STAFF_EMAIL, password: process.env.E2E_STAFF_PASSWORD });
@@ -93,7 +95,7 @@ if (process.argv.includes("--database")) {
     assert.equal(Number(result.data), expected, `Database ${suffix}: ${JSON.stringify(answer)}`);
   }));
   process.stdout.write(`Supabase matches all ${rows.length} registry keys and passes ${cases.length} scoring regressions.\n`);
-} else if (process.argv.includes("--sql")) {
+} else if (isMain && process.argv.includes("--sql")) {
   const literal = (value) => `'${value.replaceAll("'", "''")}'`;
   const rows = test.sections.flatMap((section) => section.questions.map((q) => {
     const grading = { ...q.grading };
@@ -102,6 +104,6 @@ if (process.argv.includes("--database")) {
     return `(${literal(q.id)}, ${literal(test.id)}, ${literal(section.label)}, ${literal(q.prompt)}, ${literal(JSON.stringify(key))}::jsonb, null, ${q.points}, ${questions.indexOf(q) + 1})`;
   }));
   process.stdout.write(`-- Cambridge 0653/03/SP/25: https://www.cambridgeinternational.org/Images/672378-2025-specimen-mark-scheme-paper-3-.pdf\n-- Current diagnostic UI adaptations; historical attempts are preserved.\ninsert into public.test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position) values\n${rows.join(",\n")}\non conflict (id) do update set part = excluded.part, prompt = excluded.prompt, answer_key = excluded.answer_key, points = excluded.points, position = excluded.position;\n`);
-} else {
+} else if (isMain) {
   process.stdout.write(`Verified ${questions.length} questions, 80/80 model score, and ${cases.length} marking regressions.\n`);
 }

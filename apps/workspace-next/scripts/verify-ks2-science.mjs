@@ -44,7 +44,12 @@ function rowScore(question, value) {
 }
 function check(question, value, expectedScore, detail) {
   const actual = rowScore(question, value);
-  cases.push({ question: question.id.replace('ks2-sci-pt1-', ''), detail, answer: value, expected: expectedScore, actual, pass: actual === expectedScore });
+  cases.push({ question: question.id.replace('ks2-sci-pt1-', ''), detail, answer: value, expected: expectedScore, actual, pass: actual === expectedScore, key: databaseAnswerKey(question) });
+}
+function databaseAnswerKey(question) {
+  const grading = { ...question.grading };
+  delete grading.mode;
+  return JSON.parse(JSON.stringify({ source: 'mathMultiPart', id: question.id, points: question.points, status: 'official-adapted', ...grading }));
 }
 for (const q of questions) {
   const id = q.id.replace('ks2-sci-pt1-', '');
@@ -122,4 +127,7 @@ for (const other of getAllTestDefinitions().filter(t => t.id !== test.id)) {
 }
 const failures = cases.filter(c => !c.pass);
 assert.deepEqual(failures, [], JSON.stringify(failures, null, 2));
-console.log(`Verified 37 question parts, 40/40 primary answers, ${auditCaseCount} original audit cases and ${cases.length - auditCaseCount} additional edge cases. Other tests retain their existing visual placement.`);
+export { test, score, load, cases, fullAnswers, databaseAnswerKey };
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  console.log(`Verified 37 question parts, 40/40 primary answers, ${auditCaseCount} original audit cases and ${cases.length - auditCaseCount} additional edge cases. Other tests retain their existing visual placement.`);
+}
