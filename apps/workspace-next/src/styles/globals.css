@@ -2606,7 +2606,9 @@ tr:last-child td { border-bottom: 0; }
   gap: 16px;
 }
 [data-test-id="ks2-science-progress-test-1"] .science-subquestion-list,
-[data-test-id="ks2-science-progress-test-1"] .science-subquestion {
+[data-test-id="ks2-science-progress-test-1"] .science-subquestion,
+[data-test-id="ks2-science-assessment-test"] .science-subquestion-list,
+[data-test-id="ks2-science-assessment-test"] .science-subquestion {
   min-width: 0;
   grid-template-columns: minmax(0, 1fr);
 }

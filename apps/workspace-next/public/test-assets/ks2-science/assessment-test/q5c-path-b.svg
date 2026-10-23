@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="812" height="395" viewBox="0 0 812 395" role="img" aria-labelledby="title">
+  <title id="title">Light arrows run from the car to the mirror and then to Julia's bike</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d84a3a"/></marker></defs>
+  <rect width="812" height="395" fill="#fff"/><g stroke="#26364a" stroke-width="4" fill="none"><path d="M35 150H777M35 300H777"/><path d="M355 108h85l-12 18h-85z"/><path d="M397 108V56"/><path d="M70 304h130l28 31H58z"/><circle cx="92" cy="340" r="13"/><circle cx="192" cy="340" r="13"/><circle cx="625" cy="326" r="22"/><circle cx="700" cy="326" r="22"/><path d="M625 326l35-52 40 52h-75l35-52 38 0"/></g><g fill="#26364a" font-family="Arial, sans-serif" font-size="24" font-weight="700"><text x="354" y="40">mirror</text><text x="70" y="380">car driver</text><text x="610" y="380">Julia's bike</text></g><circle cx="675" cy="266" r="9" fill="#f4b942"/>
+  <path d="M145 296 L375 120" fill="none" stroke="#d84a3a" stroke-width="8" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M410 105 L675 266" fill="none" stroke="#d84a3a" stroke-width="8" stroke-linecap="round" marker-end="url(#arrow)"/>
+</svg>
