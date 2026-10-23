@@ -18,6 +18,7 @@ import { mathOlympiad4 } from "@/features/tests/content/math-olympiad/level-4";
 import { mathOlympiad5 } from "@/features/tests/content/math-olympiad/level-5";
 import { mathOlympiad6 } from "@/features/tests/content/math-olympiad/level-6";
 import { ks2ScienceProgressTest1 } from "@/features/tests/content/ks2-science/progress-test-1";
+import { ks2ScienceProgressTest2 } from "@/features/tests/content/ks2-science/progress-test-2";
 import { spipYear7EnglishPre } from "@/features/tests/content/spip/english-pre";
 import { spipYear7MathPre } from "@/features/tests/content/spip/math-pre";
 import { spipYear7SciencePre } from "@/features/tests/content/spip/science-pre";
@@ -53,6 +54,7 @@ const tests: Record<string, TestDefinition> = {
   [mathOlympiad5.id]: mathOlympiad5,
   [mathOlympiad6.id]: mathOlympiad6,
   [ks2ScienceProgressTest1.id]: ks2ScienceProgressTest1,
+  [ks2ScienceProgressTest2.id]: ks2ScienceProgressTest2,
   [spipYear7EnglishPre.id]: spipYear7EnglishPre,
   [spipYear7MathPre.id]: spipYear7MathPre,
   [spipYear7SciencePre.id]: spipYear7SciencePre,

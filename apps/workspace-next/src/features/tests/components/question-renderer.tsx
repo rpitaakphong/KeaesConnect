@@ -537,7 +537,7 @@ function DiagramAnnotationEditor({
     }
   }
 
-  const instruction = question.variant === "curve"
+  const instruction = question.instruction || (question.variant === "curve"
     ? "Draw the protease activity curve directly on the graph."
     : question.variant === "arrow"
       ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
@@ -545,7 +545,7 @@ function DiagramAnnotationEditor({
         ? !start ? "Select the first end of the length arrow." : !end ? "Select the other end of the length arrow." : "Place the L label beside the arrow."
       : question.variant === "directionArrow"
         ? !start ? "Select where the force arrow begins." : !end ? "Select where the arrow points." : "Drag again to replace the arrow."
-      : "Place X on the part of the graph where the student is decelerating.";
+      : "Place X on the part of the graph where the student is decelerating.");
 
   return (
     <div className="diagram-annotation-editor">
