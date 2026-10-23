@@ -1,0 +1,2005 @@
+{
+  "schemaVersion": "1.1.0",
+  "test": {
+    "id": "ks2-science-assessment-test",
+    "title": "Key Stage 2 Science - Assessment Test",
+    "durationMinutes": 45,
+    "totalMarks": 40,
+    "candidateFields": [
+      "name",
+      "age",
+      "date"
+    ],
+    "digitalInstructions": [
+      "Read each question carefully.",
+      "You have 45 minutes for the complete test.",
+      "Choose, match, classify, or enter an answer as directed.",
+      "Your work is saved automatically on this browser.",
+      "Answers and explanations appear only after submission."
+    ],
+    "attribution": {
+      "copyright": "Keaes Academics",
+      "pupilPackReference": "Key Stage 2 Science Assessment Test A",
+      "markSchemePackReference": "Assessment Test A Mark Schemes",
+      "sourceDistribution": "Downloaded from Compare4Kids.co.uk",
+      "adaptationNote": "Response formats were adapted for deterministic digital marking; the assessed science and official 40-mark allocation are preserved."
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "number": 1,
+      "title": "Birds in their environments",
+      "questions": [
+        {
+          "id": "1a",
+          "source": {
+            "testPage": 3,
+            "markSchemePage": 2
+          },
+          "marks": 1,
+          "originalPrompt": "Why are webbed feet useful to water birds?",
+          "adaptedPrompt": "How do webbed feet help water birds?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "swim",
+                "label": "They help the bird push against water and swim.",
+                "feedback": "Correct: the broad webbed surface helps a bird push water backwards."
+              },
+              {
+                "id": "fly",
+                "label": "They make the bird's wings stronger for flying.",
+                "feedback": "Webbed feet do not strengthen wings."
+              },
+              {
+                "id": "see",
+                "label": "They help the bird see food under water.",
+                "feedback": "Webbed feet are used for movement, not vision."
+              },
+              {
+                "id": "warm",
+                "label": "They keep every part of the bird warm.",
+                "feedback": "Warmth is not the assessed function of webbing."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "swim"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - webbed feet help water birds swim.",
+            "incorrect": "Choose the answer about pushing against water.",
+            "explanation": "Webbed feet provide a broad surface that helps a bird push water backwards and move forwards."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1b",
+          "source": {
+            "testPage": 3,
+            "markSchemePage": 2
+          },
+          "marks": 1,
+          "originalPrompt": "Draw THREE lines to match each beak to the food the bird eats.",
+          "adaptedPrompt": "Match each beak shape to the food it is best suited to eating.",
+          "interaction": {
+            "type": "matching",
+            "left": [
+              "Long probing beak",
+              "Hooked tearing beak",
+              "Short strong beak"
+            ],
+            "right": [
+              "mud_animals",
+              "meat",
+              "seeds"
+            ],
+            "rightLabels": {
+              "mud_animals": "Animals buried deep in mud",
+              "meat": "Meat torn from prey",
+              "seeds": "Small seeds and berries"
+            }
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "Long probing beak": "mud_animals",
+              "Hooked tearing beak": "meat",
+              "Short strong beak": "seeds"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - all three beaks are matched to suitable foods.",
+            "incorrect": "Look at whether each beak is suited to probing, tearing, or cracking food.",
+            "explanation": "Long beaks probe mud, hooked beaks tear meat, and short strong beaks handle seeds and berries."
+          },
+          "assets": [
+            {
+              "path": "assets/q1-beaks.png",
+              "alt": "Three bird beak shapes from left to right: a long probing beak, a hooked beak, and a short strong beak"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1c",
+          "source": {
+            "testPage": 3,
+            "markSchemePage": 2
+          },
+          "marks": 1,
+          "originalPrompt": "Why is it important that people stop taking eggs from wild birds' nests?",
+          "adaptedPrompt": "Why does the law stop people taking eggs from wild birds' nests?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "reproduce",
+                "label": "So there are enough birds to reproduce.",
+                "feedback": "Correct: eggs must remain so young birds can develop and populations can reproduce."
+              },
+              {
+                "id": "foxes",
+                "label": "Because there would be no food for foxes.",
+                "feedback": "This is not the reason the law protects eggs."
+              },
+              {
+                "id": "break",
+                "label": "Because birds' eggs break easily.",
+                "feedback": "Fragility alone does not explain the conservation law."
+              },
+              {
+                "id": "people",
+                "label": "So people do not hurt themselves taking eggs.",
+                "feedback": "The law protects wild birds rather than egg collectors."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "reproduce"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - leaving eggs protects reproduction.",
+            "incorrect": "Think about how bird populations continue.",
+            "explanation": "Eggs must remain in nests so young birds can develop and the population can reproduce."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "number": 2,
+      "title": "In the kitchen",
+      "questions": [
+        {
+          "id": "2a",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 3
+          },
+          "marks": 1,
+          "originalPrompt": "Which equipment could separate flour from raisins quickly?",
+          "adaptedPrompt": "Which piece of equipment would separate flour from raisins quickly?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "spoon",
+                "label": "Wooden spoon",
+                "feedback": "A spoon would move the mixture but would not quickly separate it."
+              },
+              {
+                "id": "sieve",
+                "label": "Sieve",
+                "feedback": "Correct: flour passes through the holes while raisins remain in the sieve."
+              },
+              {
+                "id": "scales",
+                "label": "Weighing scales",
+                "feedback": "Scales measure mass; they do not separate a mixture."
+              },
+              {
+                "id": "filter",
+                "label": "Paper filter",
+                "feedback": "A paper filter is intended for a solid-liquid mixture, not flour and raisins."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "sieve"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - a sieve separates particles by size.",
+            "incorrect": "Choose equipment with holes that let flour pass but retain raisins.",
+            "explanation": "The smaller flour particles pass through a sieve while the larger raisins remain."
+          },
+          "assets": [
+            {
+              "path": "assets/q2-separation.png",
+              "alt": "Flour mixed with raisins and four pieces of kitchen equipment"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2b",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 3
+          },
+          "marks": 1,
+          "originalPrompt": "Complete the table with the states before and after each change.",
+          "adaptedPrompt": "Classify the state of each material before and after the change.",
+          "interaction": {
+            "type": "classification_grid",
+            "choices": [
+              "solid",
+              "liquid",
+              "gas"
+            ],
+            "items": [
+              {
+                "id": "cake_before",
+                "label": "Cake mixture before baking"
+              },
+              {
+                "id": "cake_after",
+                "label": "Cake after baking"
+              },
+              {
+                "id": "butter_before",
+                "label": "Butter before melting"
+              },
+              {
+                "id": "butter_after",
+                "label": "Butter after melting"
+              },
+              {
+                "id": "ice_before",
+                "label": "Water before making ice cubes"
+              },
+              {
+                "id": "ice_after",
+                "label": "Ice cubes after freezing"
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "cake_before": "liquid",
+              "cake_after": "solid",
+              "butter_before": "solid",
+              "butter_after": "liquid",
+              "ice_before": "liquid",
+              "ice_after": "solid"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - every state before and after is classified accurately.",
+            "incorrect": "Check each material at the moment before and after the change.",
+            "explanation": "Cake mixture changes from liquid to solid, butter from solid to liquid, and water from liquid to solid."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2c",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 3
+          },
+          "marks": 2,
+          "originalPrompt": "Write yes or no to show whether each activity causes a reversible change.",
+          "adaptedPrompt": "Classify each kitchen change as reversible or irreversible.",
+          "interaction": {
+            "type": "true_false_grid",
+            "items": [
+              {
+                "id": "cake",
+                "statement": "Baking a cake is reversible."
+              },
+              {
+                "id": "eggs",
+                "statement": "Frying eggs is reversible."
+              },
+              {
+                "id": "sugar",
+                "statement": "Dissolving sugar is reversible."
+              },
+              {
+                "id": "candles",
+                "statement": "Burning birthday candles is reversible."
+              },
+              {
+                "id": "ice",
+                "statement": "Making ice cubes is reversible."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "cake": false,
+              "eggs": false,
+              "sugar": true,
+              "candles": false,
+              "ice": true
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 5,
+                "marks": 2
+              },
+              {
+                "minCorrect": 4,
+                "maxCorrect": 4,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 3,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - all five changes are classified accurately.",
+            "incorrect": "Four correct rows earn one mark; review which changes can be undone.",
+            "explanation": "Dissolving sugar and freezing water can be reversed. Baking, frying, and burning form new materials."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2d",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 4
+          },
+          "marks": 1,
+          "originalPrompt": "Name the process that causes the water level to go down as it is heated.",
+          "adaptedPrompt": "Which scientific process lowers the water level when warm water does not boil?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "evaporation",
+                "label": "Evaporation",
+                "feedback": "Correct: surface water changes into water vapour."
+              },
+              {
+                "id": "condensation",
+                "label": "Condensation",
+                "feedback": "Condensation changes water vapour into liquid."
+              },
+              {
+                "id": "freezing",
+                "label": "Freezing",
+                "feedback": "Freezing changes liquid water into solid ice."
+              },
+              {
+                "id": "melting",
+                "label": "Melting",
+                "feedback": "Melting changes a solid into a liquid."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "evaporation"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the process is evaporation.",
+            "incorrect": "The liquid changes into water vapour from its surface.",
+            "explanation": "Evaporation can occur below boiling point and reduces the amount of liquid water."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2e",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 4
+          },
+          "marks": 1,
+          "originalPrompt": "Why does condensation form on the window?",
+          "adaptedPrompt": "Which property of the window causes water vapour to condense on it?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "smooth",
+                "label": "It is smooth.",
+                "feedback": "Smoothness does not cause condensation."
+              },
+              {
+                "id": "transparent",
+                "label": "It is transparent.",
+                "feedback": "Transparency does not cause condensation."
+              },
+              {
+                "id": "cold",
+                "label": "It is cold.",
+                "feedback": "Correct: water vapour cools at the cold window and condenses."
+              },
+              {
+                "id": "hard",
+                "label": "It is hard.",
+                "feedback": "Hardness does not cause condensation."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "cold"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the window is cold.",
+            "incorrect": "Think about what makes water vapour cool.",
+            "explanation": "Water vapour loses thermal energy at the cold glass and becomes liquid droplets."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-3",
+      "number": 3,
+      "title": "Animal heart rates",
+      "questions": [
+        {
+          "id": "3a",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 6
+          },
+          "marks": 2,
+          "originalPrompt": "Use the table to answer three questions about animal mass and heart rate.",
+          "adaptedPrompt": "Use the animal data table to complete all three lookups.",
+          "interaction": {
+            "type": "classification_grid",
+            "items": [
+              {
+                "id": "fastest",
+                "label": "Animal with the fastest average heart rate",
+                "choices": [
+                  {
+                    "id": "elephant",
+                    "label": "Elephant"
+                  },
+                  {
+                    "id": "human",
+                    "label": "Human"
+                  },
+                  {
+                    "id": "cat",
+                    "label": "Cat"
+                  },
+                  {
+                    "id": "rabbit",
+                    "label": "Rabbit"
+                  },
+                  {
+                    "id": "squirrel",
+                    "label": "Squirrel"
+                  }
+                ]
+              },
+              {
+                "id": "cat_mass",
+                "label": "Average mass of the cat",
+                "choices": [
+                  {
+                    "id": "4",
+                    "label": "4 kg"
+                  },
+                  {
+                    "id": "7",
+                    "label": "7 kg"
+                  },
+                  {
+                    "id": "68",
+                    "label": "68 kg"
+                  }
+                ]
+              },
+              {
+                "id": "rabbit_rate",
+                "label": "Heart rate of the 4 kg animal",
+                "choices": [
+                  {
+                    "id": "70",
+                    "label": "70 bpm"
+                  },
+                  {
+                    "id": "130",
+                    "label": "130 bpm"
+                  },
+                  {
+                    "id": "205",
+                    "label": "205 bpm"
+                  },
+                  {
+                    "id": "400",
+                    "label": "400 bpm"
+                  }
+                ]
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "fastest": "squirrel",
+              "cat_mass": "7",
+              "rabbit_rate": "205"
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 3,
+                "marks": 2
+              },
+              {
+                "minCorrect": 2,
+                "maxCorrect": 2,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 1,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - all three values were read accurately.",
+            "incorrect": "Two correct lookups earn one mark; recheck the row labels and units.",
+            "explanation": "The squirrel is fastest, the cat has a mass of 7 kg, and the 4 kg rabbit has a rate of 205 bpm."
+          },
+          "assets": [
+            {
+              "path": "assets/q3-heart-table.png",
+              "alt": "Table of average masses and heart rates for an elephant, human, cat, rabbit, and squirrel"
+            }
+          ],
+          "visualFirst": true,
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3b",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 6
+          },
+          "marks": 1,
+          "originalPrompt": "Describe the relationship between animal mass and heart rate.",
+          "adaptedPrompt": "Which statement best describes the relationship in the table?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "inverse",
+                "label": "The heavier the animal, the slower its average heart rate.",
+                "feedback": "Correct: mass rises while heart rate generally falls."
+              },
+              {
+                "id": "same",
+                "label": "All animals have the same average heart rate.",
+                "feedback": "The table shows very different heart rates."
+              },
+              {
+                "id": "direct",
+                "label": "The heavier the animal, the faster its average heart rate.",
+                "feedback": "This reverses the pattern in the table."
+              },
+              {
+                "id": "none",
+                "label": "There is no relationship between mass and heart rate.",
+                "feedback": "The table shows a clear general pattern."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "inverse"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - larger animals have slower heart rates in this table.",
+            "incorrect": "Compare both the heaviest and lightest animals.",
+            "explanation": "As animal mass increases, average heart rate generally decreases."
+          },
+          "assets": [
+            {
+              "path": "assets/q3-heart-table.png",
+              "alt": "Table of average masses and heart rates for five animals"
+            }
+          ],
+          "visualFirst": true,
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3c",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 6
+          },
+          "marks": 1,
+          "originalPrompt": "Predict the heart rate of a 30 kg dog.",
+          "adaptedPrompt": "Predict the heart rate of the 30 kg dog using the table.",
+          "interaction": {
+            "type": "integer_entry",
+            "min": 0,
+            "max": 500,
+            "unit": "beats per minute"
+          },
+          "answerRule": {
+            "kind": "number_range",
+            "min": 71,
+            "max": 129,
+            "expected": 100
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the prediction is between 70 and 130 bpm.",
+            "incorrect": "The dog is heavier than the cat but lighter than the human, so use a value between their heart rates.",
+            "explanation": "A valid prediction is greater than 70 and less than 130 beats per minute."
+          },
+          "assets": [
+            {
+              "path": "assets/q3-heart-table.png",
+              "alt": "Table of average masses and heart rates for five animals"
+            }
+          ],
+          "visualFirst": true,
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-4",
+      "number": 4,
+      "title": "Seaweed and trees",
+      "questions": [
+        {
+          "id": "4a",
+          "source": {
+            "testPage": 8,
+            "markSchemePage": 7
+          },
+          "marks": 1,
+          "originalPrompt": "Use the key to identify seaweeds B, C and D.",
+          "adaptedPrompt": "Use the branching key to identify seaweeds B, C, and D.",
+          "interaction": {
+            "type": "matching",
+            "left": [
+              "Seaweed B",
+              "Seaweed C",
+              "Seaweed D"
+            ],
+            "right": [
+              "serrated",
+              "bladder",
+              "gutweed",
+              "lettuce"
+            ],
+            "rightLabels": {
+              "serrated": "Serrated wrack",
+              "bladder": "Bladder wrack",
+              "gutweed": "Gutweed",
+              "lettuce": "Sea lettuce"
+            }
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "Seaweed B": "gutweed",
+              "Seaweed C": "lettuce",
+              "Seaweed D": "serrated"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - B is gutweed, C is sea lettuce, and D is serrated wrack.",
+            "incorrect": "Follow the key from the first yes/no question for each drawing.",
+            "explanation": "B is unbranched and long and thin; C is unbranched but not long and thin; D is branched with jagged edges."
+          },
+          "assets": [
+            {
+              "path": "assets/q4-seaweed-key.png",
+              "alt": "Branching identification key and drawings of seaweeds A to D"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4b",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 7
+          },
+          "marks": 1,
+          "originalPrompt": "Draw an arrow to show the force from water that makes the seaweed float.",
+          "adaptedPrompt": "In which direction does the water's force act on the gas pocket?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "up",
+                "label": "Upwards ↑",
+                "feedback": "Correct: upthrust acts upwards."
+              },
+              {
+                "id": "down",
+                "label": "Downwards ↓",
+                "feedback": "Downwards is the direction of weight, not upthrust."
+              },
+              {
+                "id": "left",
+                "label": "Sideways ←",
+                "feedback": "The floating force is not sideways."
+              },
+              {
+                "id": "right",
+                "label": "Sideways →",
+                "feedback": "The floating force is not sideways."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "up"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the force from the water acts upwards.",
+            "incorrect": "The force that helps an object float is upthrust.",
+            "explanation": "Water exerts an upward force, called upthrust, on the gas-filled seaweed."
+          },
+          "assets": [
+            {
+              "path": "assets/q4-seaweed-float.png",
+              "alt": "Seaweed attached to a rock with a gas-filled pocket near the water surface"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4c",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 8
+          },
+          "marks": 1,
+          "originalPrompt": "Choose a tree feature and explain how it helps leaves get sunlight.",
+          "adaptedPrompt": "Which feature-and-explanation pair correctly shows how a tree helps its leaves get sunlight?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "trunk_high",
+                "label": "Trunk - holds the leaves high above objects that might block light.",
+                "feedback": "Correct: height can lift leaves into stronger light."
+              },
+              {
+                "id": "branches_spread",
+                "label": "Branches - spread leaves into open spaces where they can receive light.",
+                "feedback": "Correct: spreading branches reduces shading between leaves."
+              },
+              {
+                "id": "trunk_water",
+                "label": "Trunk - makes water into sunlight for the leaves.",
+                "feedback": "A trunk transports water but does not turn it into sunlight."
+              },
+              {
+                "id": "branches_elastic",
+                "label": "Branches - stretch like elastic bands towards the Sun.",
+                "feedback": "Branches grow but do not stretch elastically."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "one_of",
+            "values": [
+              "trunk_high",
+              "branches_spread"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - that feature positions leaves where they can receive more light.",
+            "incorrect": "Choose a pair that describes height or spreading without incorrect science.",
+            "explanation": "A tall trunk raises leaves above obstacles, while spreading branches place leaves in open, well-lit spaces."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4d",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 8
+          },
+          "marks": 1,
+          "originalPrompt": "Tick three functions of tree roots.",
+          "adaptedPrompt": "Select exactly three functions of tree roots.",
+          "interaction": {
+            "type": "select_exactly_n",
+            "requiredCount": 3,
+            "options": [
+              {
+                "id": "seeds",
+                "label": "Make seeds",
+                "feedback": "Seeds are formed after flowers are pollinated, not by roots."
+              },
+              {
+                "id": "water",
+                "label": "Absorb water",
+                "feedback": "Correct: roots absorb water from soil."
+              },
+              {
+                "id": "anchor",
+                "label": "Anchor the plant in the ground",
+                "feedback": "Correct: roots hold the plant firmly."
+              },
+              {
+                "id": "minerals",
+                "label": "Take up minerals",
+                "feedback": "Correct: roots take up dissolved minerals."
+              },
+              {
+                "id": "carry",
+                "label": "Carry new growth material to leaves",
+                "feedback": "This is not a root function stated by the mark scheme."
+              },
+              {
+                "id": "predators",
+                "label": "Protect the plant from predators",
+                "feedback": "Roots do not generally protect the plant from predators."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "choose_any_n_from_set",
+            "requiredCount": 3,
+            "acceptedValues": [
+              "water",
+              "anchor",
+              "minerals"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - roots absorb water and minerals and anchor the plant.",
+            "incorrect": "Select only functions performed by roots in the soil.",
+            "explanation": "Roots anchor the plant and absorb water and dissolved minerals from the soil."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-5",
+      "number": 5,
+      "title": "Road safety",
+      "questions": [
+        {
+          "id": "5a-i",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 9
+          },
+          "marks": 2,
+          "originalPrompt": "Draw a circuit diagram for Julia's bike light using symbols.",
+          "adaptedPrompt": "Complete both features of a correct circuit diagram for Julia's bike light.",
+          "interaction": {
+            "type": "classification_grid",
+            "items": [
+              {
+                "id": "path",
+                "label": "The circuit path should be",
+                "choices": [
+                  {
+                    "id": "closed",
+                    "label": "A complete closed loop"
+                  },
+                  {
+                    "id": "open",
+                    "label": "An open line with a gap"
+                  }
+                ]
+              },
+              {
+                "id": "components",
+                "label": "The symbols should show",
+                "choices": [
+                  {
+                    "id": "all",
+                    "label": "One cell, one bulb and one switch"
+                  },
+                  {
+                    "id": "missing",
+                    "label": "A bulb only"
+                  },
+                  {
+                    "id": "wrong",
+                    "label": "Two bulbs and no cell"
+                  }
+                ]
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "path": "closed",
+              "components": "all"
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 2,
+                "marks": 2
+              },
+              {
+                "minCorrect": 1,
+                "maxCorrect": 1,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 0,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - the diagram has a closed loop and all required component symbols.",
+            "incorrect": "Each correct feature earns one mark.",
+            "explanation": "A working circuit diagram must show a complete loop containing a cell, bulb, and switch using recognisable symbols."
+          },
+          "assets": [
+            {
+              "path": "assets/q5-bike-circuit.png",
+              "alt": "Julia's bike light circuit containing a cell, bulb, and switch connected in one loop"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "5a-ii",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 9
+          },
+          "marks": 1,
+          "originalPrompt": "What should Julia add to make the light brighter?",
+          "adaptedPrompt": "What should Julia add in series to make the bulb brighter?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "cell",
+                "label": "Another cell or battery",
+                "feedback": "Correct: an additional cell can increase the potential difference."
+              },
+              {
+                "id": "bulb",
+                "label": "Another bulb",
+                "feedback": "Another bulb in series would not make the original bulb brighter."
+              },
+              {
+                "id": "switch",
+                "label": "Another switch",
+                "feedback": "A switch controls the circuit but does not supply energy."
+              },
+              {
+                "id": "wire",
+                "label": "A longer wire",
+                "feedback": "A longer wire does not supply extra energy."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "cell"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - add another cell or battery.",
+            "incorrect": "Choose the component that supplies electrical energy.",
+            "explanation": "Adding a cell or battery increases the supply to the circuit and can make the bulb brighter."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "5b",
+          "source": {
+            "testPage": 11,
+            "markSchemePage": 9
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why Julia can see jacket B better than jacket A.",
+          "adaptedPrompt": "What happens to the torchlight so Julia sees jacket B better?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "reflects_more",
+                "label": "Jacket B reflects more light back towards Julia than jacket A.",
+                "feedback": "Correct: more reflected light reaches Julia's eyes."
+              },
+              {
+                "id": "makes",
+                "label": "Jacket B makes its own light.",
+                "feedback": "The jacket reflects torchlight; it does not produce light."
+              },
+              {
+                "id": "none_a",
+                "label": "Jacket A reflects no light at all.",
+                "feedback": "Jacket A may reflect some light, just less than B."
+              },
+              {
+                "id": "transparent",
+                "label": "The torchlight passes straight through jacket B.",
+                "feedback": "Visibility here depends on reflection, not transmission."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "reflects_more"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - jacket B reflects more torchlight.",
+            "incorrect": "Julia sees light that travels from the jacket to her eyes.",
+            "explanation": "A more reflective jacket returns more of the torchlight towards the observer."
+          },
+          "assets": [
+            {
+              "path": "assets/q5-jackets.png",
+              "alt": "Two jackets illuminated by a torch; jacket B appears much brighter than jacket A"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "5c",
+          "source": {
+            "testPage": 11,
+            "markSchemePage": 10
+          },
+          "marks": 2,
+          "originalPrompt": "Draw two arrows to show how light travels from Julia's bike to the car driver via the mirror.",
+          "adaptedPrompt": "Complete the path and direction of light that lets the driver see Julia's bike light.",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "correct",
+                "label": "Diagram A",
+                "feedback": "Correct: the arrows show light travelling from the bike to the mirror and then to the car.",
+                "asset": "assets/q5c-path-a.svg",
+                "accessibleDescription": "Diagram A: arrows travel from Julia's bike light to the roadside mirror, then from the mirror towards the car."
+              },
+              {
+                "id": "reverse",
+                "label": "Diagram B",
+                "feedback": "These arrows run backwards, from the car towards the bike.",
+                "asset": "assets/q5c-path-b.svg",
+                "accessibleDescription": "Diagram B: arrows travel from the car to the mirror and then towards Julia's bike."
+              },
+              {
+                "id": "direct",
+                "label": "Diagram C",
+                "feedback": "The light must reflect from the roadside mirror rather than travel straight across the bend.",
+                "asset": "assets/q5c-path-c.svg",
+                "accessibleDescription": "Diagram C: an arrow travels directly from Julia's bike towards the car without reflecting from the mirror."
+              },
+              {
+                "id": "wrong_turn",
+                "label": "Diagram D",
+                "feedback": "The arrows do not form the reflected path from the bike to the driver.",
+                "asset": "assets/q5c-path-d.svg",
+                "accessibleDescription": "Diagram D: the light from the bike reaches the mirror but the reflected arrow points away from the car."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "correct"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - light travels from the bike to the mirror and then to the driver.",
+            "incorrect": "Trace the arrows from Julia's bike light and make sure the path reflects at the mirror before reaching the car.",
+            "explanation": "Light leaves Julia's bike light, reflects from the mirror, and travels to the car windscreen and driver's eyes."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-6",
+      "number": 6,
+      "title": "Arms",
+      "questions": [
+        {
+          "id": "6a",
+          "source": {
+            "testPage": 12,
+            "markSchemePage": 11
+          },
+          "marks": 1,
+          "originalPrompt": "Label what causes the arm bones to move.",
+          "adaptedPrompt": "Which label belongs on the blank line pointing to the shaded tissue that moves the arm bones?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "muscles",
+                "label": "Muscles",
+                "feedback": "Correct: muscles contract and pull on bones."
+              },
+              {
+                "id": "ligaments",
+                "label": "Ligaments",
+                "feedback": "Ligaments join bone to bone but do not pull bones to create movement."
+              },
+              {
+                "id": "tendons",
+                "label": "Tendons",
+                "feedback": "Tendons attach muscle to bone, but the muscles supply the force."
+              },
+              {
+                "id": "joints",
+                "label": "Joints",
+                "feedback": "Joints allow movement but do not provide the force."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "muscles"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - muscles cause the bones to move.",
+            "incorrect": "Choose the tissue that contracts and produces force.",
+            "explanation": "Muscles contract and pull through tendons to move bones at a joint."
+          },
+          "assets": [
+            {
+              "path": "assets/q6-arm.png",
+              "alt": "Diagram of an arm showing bones and the upper-arm muscles"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6b",
+          "source": {
+            "testPage": 12,
+            "markSchemePage": 11
+          },
+          "marks": 1,
+          "originalPrompt": "Describe one way humans can keep their bones strong.",
+          "adaptedPrompt": "Which action helps humans keep their bones strong?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "exercise_diet",
+                "label": "Exercise regularly and eat a balanced diet with calcium-rich foods.",
+                "feedback": "Correct: exercise and a suitable diet support strong bones."
+              },
+              {
+                "id": "no_movement",
+                "label": "Avoid exercise so bones never experience forces.",
+                "feedback": "Regular weight-bearing activity helps maintain bone strength."
+              },
+              {
+                "id": "water_only",
+                "label": "Drink only water instead of eating a balanced diet.",
+                "feedback": "Water alone does not provide all nutrients needed for bones."
+              },
+              {
+                "id": "smoke",
+                "label": "Smoke regularly.",
+                "feedback": "Smoking does not help keep bones strong."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "exercise_diet"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - exercise and a balanced diet support strong bones.",
+            "incorrect": "Think about activity and nutrients such as calcium and vitamin D.",
+            "explanation": "Regular exercise and a balanced diet, including calcium-rich foods, help maintain bone strength."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6c",
+          "source": {
+            "testPage": 13,
+            "markSchemePage": 12
+          },
+          "marks": 2,
+          "originalPrompt": "Classify each statement as true or false for a fair investigation.",
+          "adaptedPrompt": "Aziz measures around each child's upper arm when it is straight and bent. Decide whether each step makes the comparison fair.",
+          "interaction": {
+            "type": "true_false_grid",
+            "items": [
+              {
+                "id": "sleeves",
+                "statement": "Everyone should roll up their sleeves."
+              },
+              {
+                "id": "many",
+                "statement": "Aziz must measure the arms of lots of children to make the comparison fair."
+              },
+              {
+                "id": "same_place",
+                "statement": "Aziz should measure around every arm in the same place."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "sleeves": true,
+              "many": false,
+              "same_place": true
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 3,
+                "marks": 2
+              },
+              {
+                "minCorrect": 2,
+                "maxCorrect": 2,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 1,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - all three fairness statements are classified accurately.",
+            "incorrect": "Two correct classifications earn one mark.",
+            "explanation": "Sleeves should be removed and measurement position controlled. More children improve reliability, not fairness."
+          },
+          "assets": [
+            {
+              "path": "assets/q6-arm-measurement.png",
+              "alt": "Aziz measuring around a child's upper arm first while it is straight and then while it is bent"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "6d",
+          "source": {
+            "testPage": 13,
+            "markSchemePage": 12
+          },
+          "marks": 1,
+          "originalPrompt": "Describe how arm measurements differ for straight and bent arms.",
+          "adaptedPrompt": "What does the graph show when the children's arms are bent?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "increase",
+                "label": "The distance around the upper arm increases.",
+                "feedback": "Correct: every bent-arm bar is higher than its straight-arm bar."
+              },
+              {
+                "id": "decrease",
+                "label": "The distance around the upper arm decreases.",
+                "feedback": "The graph shows higher, not lower, measurements when bent."
+              },
+              {
+                "id": "same",
+                "label": "The measurement stays exactly the same.",
+                "feedback": "The paired bars are not equal."
+              },
+              {
+                "id": "length",
+                "label": "The arm becomes longer.",
+                "feedback": "The graph records distance around the arm, not length."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "increase"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the measurement around the arm increases when bent.",
+            "incorrect": "Compare the paired bars for every child.",
+            "explanation": "For each child, the circumference of the upper arm is greater when the arm is bent."
+          },
+          "assets": [
+            {
+              "path": "assets/q6-arm-graph.png",
+              "alt": "Bar chart comparing straight-arm and bent-arm measurements for five children"
+            }
+          ],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-7",
+      "number": 7,
+      "title": "Drinking chocolate",
+      "questions": [
+        {
+          "id": "7a",
+          "source": {
+            "testPage": 14,
+            "markSchemePage": 13
+          },
+          "marks": 1,
+          "originalPrompt": "Which property should the best material for keeping the drink hot have?",
+          "adaptedPrompt": "Which property should a material have to keep the drink hot?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "strong",
+                "label": "Strong",
+                "feedback": "Strength does not directly describe resistance to heat transfer."
+              },
+              {
+                "id": "conductor",
+                "label": "A conductor",
+                "feedback": "A conductor would let thermal energy escape quickly."
+              },
+              {
+                "id": "hard",
+                "label": "Hard",
+                "feedback": "Hardness does not determine insulation."
+              },
+              {
+                "id": "insulator",
+                "label": "An insulator",
+                "feedback": "Correct: an insulator slows thermal energy transfer."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "insulator"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the material should be an insulator.",
+            "incorrect": "Choose the property that reduces heat transfer.",
+            "explanation": "An insulator slows the transfer of thermal energy from the hot drink to its surroundings."
+          },
+          "assets": [
+            {
+              "path": "assets/q7-cups.png",
+              "alt": "Four cups wrapped in newspaper, foil, food wrap, and bubble wrap"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "7b",
+          "source": {
+            "testPage": 15,
+            "markSchemePage": 13
+          },
+          "marks": 1,
+          "originalPrompt": "Which result in the table should be checked again?",
+          "adaptedPrompt": "Enter the temperature result that should be checked again.",
+          "interaction": {
+            "type": "integer_entry",
+            "min": 0,
+            "max": 100,
+            "unit": "°C"
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": 25
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - 25°C is inconsistent with the surrounding food-wrap readings.",
+            "incorrect": "Look for a value that falls and then is followed by a higher temperature.",
+            "explanation": "The food-wrap result of 25°C at 10 minutes breaks the cooling pattern and should be rechecked."
+          },
+          "assets": [
+            {
+              "path": "assets/q7-results-table.png",
+              "alt": "Temperature table for drinks wrapped in four different materials over twenty minutes"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "7c",
+          "source": {
+            "testPage": 15,
+            "markSchemePage": 14
+          },
+          "marks": 2,
+          "originalPrompt": "Name the best material and explain why using the results.",
+          "adaptedPrompt": "Complete both parts of the conclusion using the results table.",
+          "interaction": {
+            "type": "classification_grid",
+            "items": [
+              {
+                "id": "material",
+                "label": "Best material",
+                "choices": [
+                  {
+                    "id": "newspaper",
+                    "label": "Newspaper"
+                  },
+                  {
+                    "id": "foil",
+                    "label": "Foil"
+                  },
+                  {
+                    "id": "food_wrap",
+                    "label": "Food wrap"
+                  },
+                  {
+                    "id": "bubble_wrap",
+                    "label": "Bubble wrap"
+                  }
+                ]
+              },
+              {
+                "id": "evidence",
+                "label": "Best supporting evidence",
+                "choices": [
+                  {
+                    "id": "highest_final",
+                    "label": "It had the highest final temperature: 50°C"
+                  },
+                  {
+                    "id": "highest_start",
+                    "label": "It had the highest starting temperature"
+                  },
+                  {
+                    "id": "lowest_final",
+                    "label": "It had the lowest final temperature"
+                  },
+                  {
+                    "id": "looks_thick",
+                    "label": "It looked thickest"
+                  }
+                ]
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "material": "bubble_wrap",
+              "evidence": "highest_final"
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 2,
+                "marks": 2
+              },
+              {
+                "minCorrect": 1,
+                "maxCorrect": 1,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 0,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - bubble wrap kept the drink hottest and finished at 50°C.",
+            "incorrect": "The material and comparative evidence are each worth one mark.",
+            "explanation": "Bubble wrap was best because its drink cooled most slowly and had the highest temperature after 20 minutes."
+          },
+          "assets": [
+            {
+              "path": "assets/q7-results-table.png",
+              "alt": "Temperature results for the four insulating materials"
+            }
+          ],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-8",
+      "number": 8,
+      "title": "Germinating seeds",
+      "questions": [
+        {
+          "id": "8a",
+          "source": {
+            "testPage": 16,
+            "markSchemePage": 15
+          },
+          "marks": 1,
+          "originalPrompt": "Name the one variable Sunita is changing.",
+          "adaptedPrompt": "Sunita compares how quickly different types of seed germinate. Which variable does she deliberately change?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "seed_type",
+                "label": "The type of seed",
+                "feedback": "Correct: Sunita compares different types of seed."
+              },
+              {
+                "id": "soil_amount",
+                "label": "The amount of soil",
+                "feedback": "This should be controlled, not deliberately changed."
+              },
+              {
+                "id": "water",
+                "label": "The amount of water",
+                "feedback": "This should be controlled."
+              },
+              {
+                "id": "tray",
+                "label": "The size of the tray",
+                "feedback": "This should be controlled."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "seed_type"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - she changes the type of seed.",
+            "incorrect": "The investigation compares seed types.",
+            "explanation": "The independent variable is the factor deliberately changed: the type of seed."
+          },
+          "assets": [
+            {
+              "path": "assets/q8-seed-trays.png",
+              "alt": "Sunita planting different types of seed in separate trays of soil"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8b",
+          "source": {
+            "testPage": 16,
+            "markSchemePage": 15
+          },
+          "marks": 1,
+          "originalPrompt": "Name two variables Sunita should keep the same.",
+          "adaptedPrompt": "Sunita uses separate trays for different seed types. Select exactly two conditions she should keep the same for a fair test.",
+          "interaction": {
+            "type": "select_exactly_n",
+            "requiredCount": 2,
+            "options": [
+              {
+                "id": "soil",
+                "label": "Type and amount of soil",
+                "feedback": "Correct: soil conditions should be kept the same."
+              },
+              {
+                "id": "water",
+                "label": "Amount and frequency of watering",
+                "feedback": "Correct: watering should be controlled."
+              },
+              {
+                "id": "depth",
+                "label": "Depth at which seeds are planted",
+                "feedback": "Correct: planting depth should be controlled."
+              },
+              {
+                "id": "light",
+                "label": "Light and position of the trays",
+                "feedback": "Correct: light exposure should be controlled."
+              },
+              {
+                "id": "tray",
+                "label": "Size of the seed trays",
+                "feedback": "Correct: tray size can be controlled."
+              },
+              {
+                "id": "seed_type",
+                "label": "Use the same type of seed in every tray",
+                "feedback": "Seed type is the independent variable and must vary."
+              },
+              {
+                "id": "person",
+                "label": "The same person must look at every tray",
+                "feedback": "The observer does not meaningfully affect germination."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "choose_any_n_from_set",
+            "requiredCount": 2,
+            "acceptedValues": [
+              "soil",
+              "water",
+              "depth",
+              "light",
+              "tray"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - both selected variables are suitable controls.",
+            "incorrect": "Keep conditions affecting germination the same, but do not keep the seed type the same.",
+            "explanation": "Suitable controls include soil, water, planting depth, light, temperature, position, and tray size."
+          },
+          "assets": [
+            {
+              "path": "assets/q8-seed-trays.png",
+              "alt": "Sunita planting different types of seed in separate trays of soil"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8c",
+          "source": {
+            "testPage": 17,
+            "markSchemePage": 15
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why Sunita records the shoot rather than when the root first appears.",
+          "adaptedPrompt": "The root grows first beneath the soil, but Sunita records when the shoot first appears above it. Why?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "hidden_root",
+                "label": "The first root is under the soil and cannot be seen without disturbing the seed.",
+                "feedback": "Correct: the shoot becomes visible above the soil."
+              },
+              {
+                "id": "root_later",
+                "label": "The root always grows after the shoot.",
+                "feedback": "The question states that the root grows first."
+              },
+              {
+                "id": "no_roots",
+                "label": "Germinating seeds do not grow roots.",
+                "feedback": "Roots are an essential part of germination."
+              },
+              {
+                "id": "shoot_food",
+                "label": "The shoot supplies food before germination starts.",
+                "feedback": "This does not explain the observation method."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "hidden_root"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the root begins under the soil and is not visible.",
+            "incorrect": "Think about what Sunita can observe without digging up the seed.",
+            "explanation": "The root starts below the soil, whereas the shoot becomes visible above the surface."
+          },
+          "assets": [
+            {
+              "path": "assets/q8-shoot.png",
+              "alt": "A seed tray with a newly emerged shoot visible above the soil"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8d",
+          "source": {
+            "testPage": 17,
+            "markSchemePage": 16
+          },
+          "marks": 1,
+          "originalPrompt": "Why plant five seeds of each type rather than just one?",
+          "adaptedPrompt": "Sunita plants five seeds of each type instead of one. Why does this improve the investigation?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "reliable",
+                "label": "It makes the results more reliable and reduces the effect of one seed failing to germinate.",
+                "feedback": "Correct: repeats provide more evidence and reduce the effect of anomalies."
+              },
+              {
+                "id": "fair",
+                "label": "It automatically makes every other variable fair.",
+                "feedback": "Repeats improve reliability; they do not control other variables."
+              },
+              {
+                "id": "faster",
+                "label": "It forces every seed to germinate faster.",
+                "feedback": "The number of seeds does not force faster germination."
+              },
+              {
+                "id": "right",
+                "label": "It guarantees a single correct result.",
+                "feedback": "Science investigations use evidence and uncertainty, not a guaranteed answer."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "reliable"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - repeats improve reliability.",
+            "incorrect": "Think about evidence, averages, and the chance that one seed may fail.",
+            "explanation": "Several seeds provide repeated evidence and reduce the influence of a faulty or non-germinating seed."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "8e",
+          "source": {
+            "testPage": 17,
+            "markSchemePage": 16
+          },
+          "marks": 1,
+          "originalPrompt": "Where does germination happen in the plant life cycle?",
+          "adaptedPrompt": "At which labelled point in the life cycle does germination happen?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "a",
+                "label": "A",
+                "feedback": "Germination occurs after seed dispersal, not before it."
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "feedback": "Correct: dispersed seeds germinate before the plant forms flowers."
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "feedback": "C is between flower formation and pollination."
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "feedback": "D is between pollination and seed formation."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "b"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - germination happens at B.",
+            "incorrect": "A seed germinates after dispersal and before the new plant forms flowers.",
+            "explanation": "Point B lies between seed dispersal and flower formation, where the new plant begins to grow."
+          },
+          "assets": [
+            {
+              "path": "assets/q8-life-cycle.png",
+              "alt": "Circular plant life cycle labelled A, B, C, and D"
+            }
+          ],
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-9",
+      "number": 9,
+      "title": "Filters",
+      "questions": [
+        {
+          "id": "9a",
+          "source": {
+            "testPage": 18,
+            "markSchemePage": 18
+          },
+          "marks": 1,
+          "originalPrompt": "Complete the table to show whether each mixture can be separated by a filter.",
+          "adaptedPrompt": "Classify whether each mixture can be separated using a filter.",
+          "interaction": {
+            "type": "true_false_grid",
+            "items": [
+              {
+                "id": "soil_water",
+                "statement": "Soil and water can be separated by a filter."
+              },
+              {
+                "id": "sand_soil",
+                "statement": "Sand and soil can be separated by a filter."
+              },
+              {
+                "id": "salt_water",
+                "statement": "Salt and water can be separated by a filter."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "soil_water": true,
+              "sand_soil": false,
+              "salt_water": false
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - only soil and water can be separated by ordinary filtration.",
+            "incorrect": "A filter separates an insoluble solid from a liquid, not dissolved substances or two dry solids.",
+            "explanation": "Soil is retained while water passes through. Dissolved salt passes with water, and dry sand and soil require another method."
+          },
+          "assets": [],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "9b",
+          "source": {
+            "testPage": 19,
+            "markSchemePage": 18
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why kitchen foil does not separate chalk, sugar and water.",
+          "adaptedPrompt": "Why does an unbroken kitchen-foil filter fail to separate the mixture?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "no_holes",
+                "label": "The foil has no pores or holes, so water and the mixture cannot pass through it.",
+                "feedback": "Correct: an effective filter must be permeable."
+              },
+              {
+                "id": "absorbent",
+                "label": "The foil is too absorbent.",
+                "feedback": "Foil is not absorbent, and absorbency is not the required property."
+              },
+              {
+                "id": "breaks",
+                "label": "The foil breaks and lets everything through.",
+                "feedback": "The question states that the foil does not break."
+              },
+              {
+                "id": "dissolves",
+                "label": "The foil dissolves in the water.",
+                "feedback": "Kitchen foil does not dissolve in this investigation."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "no_holes"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - unbroken foil has no pores for the liquid to pass through.",
+            "incorrect": "A filter must contain small gaps that let liquid through.",
+            "explanation": "Kitchen foil is impermeable, so the whole mixture remains in it instead of being separated."
+          },
+          "assets": [
+            {
+              "path": "assets/q9-foil-filter.png",
+              "alt": "Funnel lined with kitchen foil above a beaker"
+            }
+          ],
+          "requiresHumanReview": false
+        },
+        {
+          "id": "9c",
+          "source": {
+            "testPage": 19,
+            "markSchemePage": 18
+          },
+          "marks": 1,
+          "originalPrompt": "Describe how to separate the sugar from the water.",
+          "adaptedPrompt": "How can Jemal recover the sugar from the sugar-and-water solution?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "evaporate_water",
+                "label": "Evaporate the water, leaving the sugar behind.",
+                "feedback": "Correct: the water leaves as vapour and sugar remains."
+              },
+              {
+                "id": "filter_again",
+                "label": "Filter it again through a finer paper towel.",
+                "feedback": "Dissolved sugar passes through a filter with the water."
+              },
+              {
+                "id": "evaporate_sugar",
+                "label": "Evaporate the sugar and leave the water behind.",
+                "feedback": "Sugar does not evaporate from the solution before the water."
+              },
+              {
+                "id": "magnet",
+                "label": "Use a magnet to pull out the sugar.",
+                "feedback": "Sugar is not magnetic."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "evaporate_water"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - evaporate the water and leave the sugar behind.",
+            "incorrect": "Filtration cannot remove a dissolved solid.",
+            "explanation": "Heating gently or leaving the solution in a warm place allows water to evaporate so sugar remains."
+          },
+          "assets": [
+            {
+              "path": "assets/q9-paper-filter.png",
+              "alt": "Paper-towel filter retaining chalk while sugar solution collects in a beaker"
+            }
+          ],
+          "requiresHumanReview": false
+        }
+      ]
+    }
+  ]
+}
