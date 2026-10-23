@@ -122,7 +122,7 @@ for (const [index, section] of test.sections.entries()) {
   }
 }
 const { getAllTestDefinitions } = load(path.join(root, 'features/tests/content/registry.ts'));
-for (const other of getAllTestDefinitions().filter(t => t.id !== test.id)) {
+for (const other of getAllTestDefinitions().filter(t => ![test.id, 'ks2-science-assessment-test'].includes(t.id))) {
   for (const section of other.sections) assert.equal(section.visualPlacement, undefined, other.id);
 }
 const failures = cases.filter(c => !c.pass);

@@ -1,0 +1,674 @@
+{
+  "date": "2026-10-24",
+  "project": "xomxithihmrikgzkayfd",
+  "migration": "20261024090000_register_ks2_science_assessment_test",
+  "assessment_browser_cases": 450,
+  "database_setup": {
+    "assessment_cases": 450,
+    "before_fingerprint": {
+      "answers": {
+        "count": 4810,
+        "hash": "8c315b2e9a0f67cf0de285cb6c12baf2"
+      },
+      "assignments": {
+        "count": 255,
+        "hash": "4d9be654faa5c7a9e3807c678ea77bc0"
+      },
+      "attempts": {
+        "count": 135,
+        "hash": "0dd394cb9f35c868686ed80062159454"
+      },
+      "existing_keys": {
+        "count": 895,
+        "hash": "71f28cff324e700634dadcc4f6e0603a"
+      },
+      "existing_tests": "4f917b61f59470277116671964a51305",
+      "functions": "e389b35e918c0472967069438422024b",
+      "grants": "28d3ab79193b7caf9c4617b9c7955be7",
+      "policies": "62d48260d0ea76a0830e43b2e72b663b",
+      "students": {
+        "count": 135,
+        "hash": "adee8e9ea8b1df91b89aea845876d2fa"
+      }
+    },
+    "branches_verified": [
+      "ram",
+      "ekamai"
+    ],
+    "diagnostic_cases": 21,
+    "existing_unchanged": true,
+    "extra_numeric_cases": 8,
+    "marks": 40,
+    "parts": 34,
+    "progress_cases": 318,
+    "spip_cases": 3,
+    "status": "inactive",
+    "synthetic_integration_rolled_back": true,
+    "test_id": "ks2-science-assessment-test"
+  },
+  "retained_qa": {
+    "student": "Assessment Setup QA 2026-10-24",
+    "origin": "Local review build using a real assignment token and the live Supabase project",
+    "report_url": "https://keaesconnect.netlify.app/admin/tests/results/ee6642be-3bb2-4212-b8ab-19a476ff25c7",
+    "admin_report": true,
+    "assignment_closed": true,
+    "attempt_id": "ee6642be-3bb2-4212-b8ab-19a476ff25c7",
+    "branch": "ram",
+    "fixed_answers": [
+      {
+        "question_id": "ks2-sci-assessment-7b",
+        "response": "25.0",
+        "score": 1
+      },
+      {
+        "question_id": "ks2-sci-assessment-3c",
+        "response": "100.0",
+        "score": 1
+      },
+      {
+        "question_id": "ks2-sci-assessment-4c",
+        "response": "branches_spread",
+        "score": 1
+      }
+    ],
+    "possible": 40,
+    "preexisting_rows_keys_security_unchanged": true,
+    "saved_answers": 34,
+    "score": 40,
+    "test_active": true
+  },
+  "catalog_checks": {
+    "active_db_listed": true,
+    "inactive_preserved": true,
+    "offline_inactive": true,
+    "unknown_excluded": true
+  },
+  "layout": {
+    "section_views": 27,
+    "distinct_images": 21,
+    "overflow_or_clipping": false,
+    "widths": [
+      1280,
+      768,
+      390
+    ],
+    "details": [
+      {
+        "device": "desktop",
+        "section": 1,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q1-beaks.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 2,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q2-separation.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 3,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 4,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q4-seaweed-key.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q4-seaweed-float.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 5,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5-bike-circuit.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5-jackets.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-a.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-b.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-c.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-d.svg"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 6,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm-measurement.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm-graph.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 7,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-cups.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-results-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-results-table.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 8,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-seed-trays.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-seed-trays.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-shoot.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-life-cycle.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "desktop",
+        "section": 9,
+        "clippedElements": [],
+        "height": 900,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q9-foil-filter.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q9-paper-filter.png"
+          }
+        ],
+        "overflow": false,
+        "width": 1280
+      },
+      {
+        "device": "tablet",
+        "section": 1,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q1-beaks.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 2,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q2-separation.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 3,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 4,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q4-seaweed-key.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q4-seaweed-float.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 5,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5-bike-circuit.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5-jackets.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-a.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-b.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-c.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-d.svg"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 6,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm-measurement.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm-graph.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 7,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-cups.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-results-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-results-table.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 8,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-seed-trays.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-seed-trays.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-shoot.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-life-cycle.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "tablet",
+        "section": 9,
+        "clippedElements": [],
+        "height": 1024,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q9-foil-filter.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q9-paper-filter.png"
+          }
+        ],
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "device": "mobile",
+        "section": 1,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q1-beaks.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 2,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q2-separation.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 3,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q3-heart-table.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 4,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q4-seaweed-key.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q4-seaweed-float.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 5,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5-bike-circuit.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5-jackets.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-a.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-b.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-c.svg"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q5c-path-d.svg"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 6,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm-measurement.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q6-arm-graph.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 7,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-cups.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-results-table.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q7-results-table.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 8,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-seed-trays.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-seed-trays.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-shoot.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q8-life-cycle.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "device": "mobile",
+        "section": 9,
+        "clippedElements": [],
+        "height": 844,
+        "images": [
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q9-foil-filter.png"
+          },
+          {
+            "loaded": true,
+            "src": "/test-assets/ks2-science/assessment-test/q9-paper-filter.png"
+          }
+        ],
+        "overflow": false,
+        "width": 390
+      }
+    ]
+  },
+  "local_migration_repeatability": true,
+  "typecheck": "pass",
+  "lint": "pass",
+  "production_build": "pass",
+  "staff_listing_requires_pr_merge": true,
+  "github_rules_changed": false
+}

@@ -5,6 +5,7 @@ import type { AdminAnswer, AdminPartScore, AdminResult, CatalogTest, TestAssignm
 import type { AssignmentBranch } from "@/features/assignments/branches";
 
 const nextRuntimeTests = new Set([
+  "ks2-science-assessment-test",
   "ks2-science-progress-test-1",
   "cie-igcse-combined-science-paper-1-core",
   "cie-igcse-combined-science-paper-2-extended",
@@ -40,6 +41,7 @@ const nextRuntimeTests = new Set([
 ]);
 
 const builtinTests: CatalogTest[] = [
+  { id: "ks2-science-assessment-test", title: "Key Stage 2 Science Assessment Test", subject: "Science", level: "Key Stage 2", status: "inactive", totalPoints: 40, appPath: "/tests/ks2-science-assessment-test/start", runtime: "next-shared-engine" },
   { id: "ks2-science-progress-test-1", title: "Key Stage 2 Science Progress Test 1", subject: "Science", level: "Key Stage 2", status: "inactive", totalPoints: 40, appPath: "/tests/ks2-science-progress-test-1/start", runtime: "next-shared-engine" },
   { id: "cie-igcse-combined-science-paper-1-core", title: "CIE IGCSE Combined Science Paper 1 Core", subject: "Combined Science", level: "Core", status: "active", appPath: "/tests/cie-igcse-combined-science-paper-1-core/start", runtime: "next-shared-engine" },
   { id: "cie-igcse-combined-science-paper-2-extended", title: "CIE IGCSE Combined Science Paper 2 Extended", subject: "Combined Science", level: "Extended", status: "active", appPath: "/tests/cie-igcse-combined-science-paper-2-extended/start", runtime: "next-shared-engine" },

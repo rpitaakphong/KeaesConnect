@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "smoke:active-tests": "node scripts/smoke-active-tests.mjs",
     "smoke:english-grader": "node scripts/smoke-english-grader.mjs",
-    "verify:ks2-science": "node scripts/verify-ks2-science.mjs && node scripts/ks2-science-supabase.mjs --check"
+    "verify:ks2-science": "node scripts/verify-ks2-science.mjs && node scripts/ks2-science-supabase.mjs --check && node scripts/verify-ks2-assessment.mjs && node scripts/ks2-assessment-supabase.mjs --check"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

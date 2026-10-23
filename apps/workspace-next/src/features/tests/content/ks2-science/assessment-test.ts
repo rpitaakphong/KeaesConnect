@@ -39,7 +39,7 @@ type SourceQuestion = {
   answerRule: {
     kind: string;
     value?: unknown;
-    values?: Record<string, unknown>;
+    values?: Record<string, unknown> | string[];
     acceptedValues?: string[];
     min?: number;
     max?: number;
@@ -82,6 +82,7 @@ export const ks2ScienceAssessmentTest: TestDefinition = {
     title: section.title,
     hint: "Answer every question. All responses are marked automatically.",
     groupByQuestionNumber: true,
+    visualPlacement: "perQuestion",
     questions: section.questions.map(convertQuestion),
   })),
 };
@@ -102,7 +103,12 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
 
   if (question.interaction.type === "single_choice") {
     const options = question.interaction.options || [];
-    const answer = String(question.answerRule.value ?? "");
+    const accepted = question.answerRule.kind === "one_of"
+      ? Array.isArray(question.answerRule.values) ? question.answerRule.values : []
+      : question.answerRule.value === undefined ? [] : [String(question.answerRule.value)];
+    if (!accepted.length || accepted.some((answer) => !answer || !options.some((option) => option.id === answer))) {
+      throw new Error(`Missing or invalid choice answer for Assessment Test ${question.id}`);
+    }
     return {
       ...common,
       type: "singleChoice",
@@ -114,16 +120,23 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
       })),
       grading: {
         mode: "auto",
-        display: options.find((option) => option.id === answer)?.label || answer,
-        parts: [{ id: "answer", accepted: [answer], points: question.marks }],
+        display: accepted.map((answer) => options.find((option) => option.id === answer)!.label).join(" OR "),
+        parts: [{ id: "answer", accepted, points: question.marks }],
       },
     };
   }
 
   if (question.interaction.type === "integer_entry" || question.interaction.type === "numeric_entry") {
-    const accepted = question.answerRule.kind === "number_range"
-      ? integerRange(question.answerRule.min, question.answerRule.max)
-      : [String(question.answerRule.value ?? "")];
+    const expected = question.answerRule.kind === "number_range"
+      ? question.answerRule.expected ?? question.answerRule.min
+      : Number(question.answerRule.value);
+    const numericRange = question.answerRule.kind === "number_range"
+      ? { min: question.answerRule.min!, max: question.answerRule.max! }
+      : { min: expected!, max: expected! };
+    if (!Number.isFinite(expected) || !Number.isFinite(numericRange.min) || !Number.isFinite(numericRange.max) || numericRange.min > numericRange.max) {
+      throw new Error(`Missing or invalid numeric answer for Assessment Test ${question.id}`);
+    }
+    const accepted = [String(expected)];
     const display = question.answerRule.kind === "number_range"
       ? `${question.answerRule.min}–${question.answerRule.max} ${question.interaction.unit || ""}`.trim()
       : `${accepted[0]}${question.interaction.unit ? ` ${question.interaction.unit}` : ""}`;
@@ -132,7 +145,7 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
       type: "text",
       inputMode: "number",
       placeholder: question.interaction.unit ? `Answer in ${question.interaction.unit}` : "Enter a number",
-      grading: { mode: "auto", display, parts: [{ id: "answer", accepted, points: question.marks }] },
+      grading: { mode: "auto", display, parts: [{ id: "answer", accepted, points: question.marks, numericRange }] },
     };
   }
 
@@ -166,7 +179,7 @@ function convertQuestion(question: SourceQuestion): TestQuestion {
     question.interaction.type === "true_false_grid"
   ) {
     const fields = responseFields(question);
-    const values = question.answerRule.values || {};
+    const values = !Array.isArray(question.answerRule.values) ? question.answerRule.values || {} : {};
     const parts: AnswerPart[] = fields.map((field) => ({
       id: field.id,
       accepted: [String(values[field.id] ?? "")],
@@ -231,10 +244,6 @@ function groupedGrading(display: string, parts: AnswerPart[], minCorrect: number
     parts,
     markGroups: [{ id: "complete-answer", partIds: parts.map((part) => part.id), minCorrect, points }],
   };
-}
-
-function integerRange(min = 0, max = min) {
-  return Array.from({ length: max - min + 1 }, (_, index) => String(min + index));
 }
 
 function partLabel(id: string) {

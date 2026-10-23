@@ -109,7 +109,8 @@ select jsonb_build_object('ks2_cases',318,'diagnostic_cases',${diagnosticCases.l
 `;
 }
 
-function integrationSql() {
+export function integrationSql({ definition = test, answers = fullAnswers } = {}) {
+  const partCount = definition.sections.reduce((n, section) => n + section.questions.length, 0);
   return `-- Every synthetic write is rolled back inside an exception subtransaction.
 create or replace function pg_temp.ks2_setup_integration() returns jsonb language plpgsql as $integration$
 declare
@@ -121,23 +122,23 @@ begin
   if staff_id is null then raise exception 'An existing super admin is required for assignment/report checks'; end if;
   begin
     perform set_config('request.jwt.claim.sub',staff_id::text,true);
-    update public.tests set status='active' where id='${test.id}';
+    update public.tests set status='active' where id='${definition.id}';
     foreach branch_name in array array['ram','ekamai'] loop
-      select * into assignment from public.create_test_assignment('${test.id}',branch_name);
-      if not exists(select 1 from public.get_assignment(assignment.assignment_token) where test_id='${test.id}' and branch=branch_name) then raise exception 'Assignment lookup failed'; end if;
-      result := public.submit_attempt(assignment.assignment_token,jsonb_build_object('fullName','KS2 Setup QA - rolled back','nickname','QA','dateOfBirth','2000-01-01','testDate',current_date),${json(fullAnswers)});
+      select * into assignment from public.create_test_assignment('${definition.id}',branch_name);
+      if not exists(select 1 from public.get_assignment(assignment.assignment_token) where test_id='${definition.id}' and branch=branch_name) then raise exception 'Assignment lookup failed'; end if;
+      result := public.submit_attempt(assignment.assignment_token,jsonb_build_object('fullName','KS2 Setup QA - rolled back','nickname','QA','dateOfBirth','2000-01-01','testDate',current_date),${json(answers)});
       if (result->>'total')::numeric <> 40 or (result->>'possible')::numeric <> 40 then raise exception 'Submission did not score 40/40: %',result; end if;
-      if (select count(*) from public.attempt_answers where attempt_id=(result->>'attemptId')::uuid) <> 37 then raise exception 'Submission did not store 37 answers'; end if;
+      if (select count(*) from public.attempt_answers where attempt_id=(result->>'attemptId')::uuid) <> ${partCount} then raise exception 'Submission did not store ${partCount} answers'; end if;
       select * into report from public.get_admin_result((result->>'attemptId')::uuid);
       if report.attempt_id is null or report.branch <> branch_name or report.score_total <> 40 or report.score_possible <> 40 then raise exception 'Admin report verification failed'; end if;
       if exists(select 1 from public.get_assignment(assignment.assignment_token)) then raise exception 'Submitted assignment remains available'; end if;
       begin
-        perform public.submit_attempt(assignment.assignment_token,jsonb_build_object('fullName','KS2 duplicate QA','nickname','QA','dateOfBirth','2000-01-01'),${json(fullAnswers)});
+        perform public.submit_attempt(assignment.assignment_token,jsonb_build_object('fullName','KS2 duplicate QA','nickname','QA','dateOfBirth','2000-01-01'),${json(answers)});
         raise exception 'Duplicate submission was accepted';
       exception when others then
         if position('already been used' in sqlerrm)=0 then raise; end if;
       end;
-      summaries := summaries || jsonb_build_array(jsonb_build_object('branch',branch_name,'score',40,'possible',40,'answers',37,'single_use',true,'admin_report',true));
+      summaries := summaries || jsonb_build_array(jsonb_build_object('branch',branch_name,'score',40,'possible',40,'answers',${partCount},'single_use',true,'admin_report',true));
     end loop;
     raise exception using errcode='ZK001',message='Roll back synthetic KS2 integration rows';
   exception when sqlstate 'ZK001' then null;
@@ -151,14 +152,16 @@ select pg_temp.ks2_setup_integration() as integration_verification;
 `;
 }
 
-const mode = process.argv[2];
-if (mode === '--migration') process.stdout.write(registrationSql());
-else if (mode === '--bootstrap') process.stdout.write(`\n-- KS2 Science: generated from the reviewed definition; activate after verification.\n${registrationRows()}\n`);
-else if (mode === '--audit') process.stdout.write(auditSql());
-else if (mode === '--integration') process.stdout.write(integrationSql());
-else if (mode === '--answers') process.stdout.write(JSON.stringify(fullAnswers, null, 2) + '\n');
-else if (mode === '--check') {
-  assert.equal(fs.readFileSync(migrationPath, 'utf8'), registrationSql(), 'Regenerate the KS2 migration from the current definition');
-  assert.ok(fs.readFileSync(path.join(repo, 'supabase/schema.sql'), 'utf8').includes(registrationRows()), 'Regenerate the KS2 bootstrap rows');
-  console.log('KS2 Supabase migration matches all 37 reviewed question keys and the opt-in numeric grader.');
-} else throw new Error('Use --migration, --bootstrap, --audit, --integration, --answers or --check');
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const mode = process.argv[2];
+  if (mode === '--migration') process.stdout.write(registrationSql());
+  else if (mode === '--bootstrap') process.stdout.write(`\n-- KS2 Science: generated from the reviewed definition; activate after verification.\n${registrationRows()}\n`);
+  else if (mode === '--audit') process.stdout.write(auditSql());
+  else if (mode === '--integration') process.stdout.write(integrationSql());
+  else if (mode === '--answers') process.stdout.write(JSON.stringify(fullAnswers, null, 2) + '\n');
+  else if (mode === '--check') {
+    assert.equal(fs.readFileSync(migrationPath, 'utf8'), registrationSql(), 'Regenerate the KS2 migration from the current definition');
+    assert.ok(fs.readFileSync(path.join(repo, 'supabase/schema.sql'), 'utf8').includes(registrationRows()), 'Regenerate the KS2 bootstrap rows');
+    console.log('KS2 Supabase migration matches all 37 reviewed question keys and the opt-in numeric grader.');
+  } else throw new Error('Use --migration, --bootstrap, --audit, --integration, --answers or --check');
+}
