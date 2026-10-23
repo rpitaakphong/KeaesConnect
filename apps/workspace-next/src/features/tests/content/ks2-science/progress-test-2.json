@@ -1,0 +1,1169 @@
+{
+  "schemaVersion": "1.1.0",
+  "test": {
+    "id": "ks2-science-progress-test-2",
+    "title": "Key Stage 2 Science - Progress Test 2",
+    "durationMinutes": 25,
+    "totalMarks": 22,
+    "candidateFields": [
+      "name",
+      "age",
+      "date"
+    ],
+    "digitalInstructions": [
+      "Read each question carefully.",
+      "You have 25 minutes for the complete test.",
+      "Choose, classify, select, or enter an answer as directed.",
+      "Your work is saved automatically on this browser.",
+      "Answers and explanations appear only after submission."
+    ],
+    "attribution": {
+      "copyright": "Keaes Academics",
+      "pupilPackReference": "Progress Test 2",
+      "markSchemePackReference": "Progress Test 2 Mark Scheme",
+      "adaptationNote": "Response formats were adapted for deterministic digital marking; the assessed science and official mark allocation are preserved."
+    }
+  },
+  "sections": [
+    {
+      "id": "section-1",
+      "number": 1,
+      "title": "Duck pond",
+      "introduction": "Peter visits a duck pond with his grandad and his dog. He observes ducks and a mole living near the pond.",
+      "questions": [
+        {
+          "id": "1a",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 9
+          },
+          "marks": 1,
+          "originalPrompt": "Tick TWO boxes to show two things that are true about a dog and a duck.",
+          "adaptedPrompt": "Which TWO statements are true about both a dog and a duck?",
+          "interaction": {
+            "type": "select_exactly_n",
+            "requiredCount": 2,
+            "options": [
+              {
+                "id": "fur",
+                "label": "They both have fur.",
+                "feedback": "Ducks have feathers rather than fur."
+              },
+              {
+                "id": "move",
+                "label": "They both move.",
+                "feedback": "Correct - both animals can move."
+              },
+              {
+                "id": "lay_eggs",
+                "label": "They both lay eggs.",
+                "feedback": "Dogs do not lay eggs."
+              },
+              {
+                "id": "breathe",
+                "label": "They both breathe.",
+                "feedback": "Correct - both animals breathe."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "choose_any_n_from_set",
+            "requiredCount": 2,
+            "acceptedValues": [
+              "move",
+              "breathe"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - both animals move and breathe.",
+            "incorrect": "Choose the two life processes shared by both animals.",
+            "explanation": "A dog and a duck can both move and breathe. Only the duck lays eggs, and a duck has feathers rather than fur."
+          },
+          "assets": [],
+          "adaptationNote": "Original exact-two selection preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1b-i",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 9
+          },
+          "marks": 1,
+          "originalPrompt": "Describe how a duck's feet are adapted for swimming.",
+          "adaptedPrompt": "How are a duck's feet adapted for swimming?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "webbed",
+                "label": "They are webbed and work like paddles.",
+                "feedback": "Correct - webbed feet push against the water."
+              },
+              {
+                "id": "sharp",
+                "label": "They have sharp claws that grip fish.",
+                "feedback": "Claws do not provide the broad paddle surface needed for swimming."
+              },
+              {
+                "id": "furred",
+                "label": "They are covered in thick fur.",
+                "feedback": "Ducks do not have fur on their feet."
+              },
+              {
+                "id": "small",
+                "label": "They are very small so they do not touch the water.",
+                "feedback": "Swimming feet need to push against the water."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "webbed"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - webbing makes the feet broad like paddles.",
+            "incorrect": "Look for the feature that helps the feet push water backwards.",
+            "explanation": "Webbed, broad feet provide a large surface that pushes against the water."
+          },
+          "assets": [
+            {
+              "path": "assets/q1-ducks.png",
+              "alt": "Male and female ducks beside the pond, with the male shown in brighter colours and the female in brown."
+            }
+          ],
+          "adaptationNote": "Free response changed to a mark-scheme-supported single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1b-ii",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 9
+          },
+          "marks": 1,
+          "originalPrompt": "Why would the female duck be hard to see in a nest?",
+          "adaptedPrompt": "Why is the female duck hard to see when she is in a nest?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "camouflage",
+                "label": "Her brown colouring blends in with the nest.",
+                "feedback": "Correct - the brown colouring provides camouflage."
+              },
+              {
+                "id": "bright",
+                "label": "Her bright colours reflect the sunlight.",
+                "feedback": "The female is dull brown rather than brightly coloured."
+              },
+              {
+                "id": "tiny",
+                "label": "She becomes much smaller in the nest.",
+                "feedback": "Her size does not change."
+              },
+              {
+                "id": "silent",
+                "label": "She cannot make any sound in the nest.",
+                "feedback": "The question is about how difficult she is to see."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "camouflage"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - her colouring camouflages her.",
+            "incorrect": "Compare the female's colour with the colours of a nest.",
+            "explanation": "The female's dull brown colouring blends into the nest and makes her difficult to see."
+          },
+          "assets": [
+            {
+              "path": "assets/q1-ducks.png",
+              "alt": "Male and female ducks beside the pond, with the male shown in brighter colours and the female in brown."
+            }
+          ],
+          "adaptationNote": "Free response changed to a causal single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1b-iii",
+          "source": {
+            "testPage": 4,
+            "markSchemePage": 9
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why the female duck needs to stay hidden when she is in her nest.",
+          "adaptedPrompt": "Why does the female duck need to stay hidden in her nest?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "predators",
+                "label": "To protect herself and her eggs or ducklings from predators.",
+                "feedback": "Correct - staying hidden reduces the risk from predators."
+              },
+              {
+                "id": "warm",
+                "label": "To make the pond water warmer.",
+                "feedback": "Hiding in a nest does not warm the pond."
+              },
+              {
+                "id": "food",
+                "label": "To make plants grow for food.",
+                "feedback": "Camouflage does not cause plants to grow."
+              },
+              {
+                "id": "feathers",
+                "label": "To change the colour of her feathers.",
+                "feedback": "Her colouring helps her hide; hiding does not change it."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "predators"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - hiding helps keep her and her young safe from predators.",
+            "incorrect": "Think about animals that might eat the duck, eggs, or ducklings.",
+            "explanation": "Camouflage makes the nesting duck less likely to be found by predators or hunters."
+          },
+          "assets": [],
+          "adaptationNote": "Explanation changed to a causal single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1c-i",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 10
+          },
+          "marks": 1,
+          "originalPrompt": "Describe how a feature of the mole helps the mole to live underground.",
+          "adaptedPrompt": "Which feature-and-function pair best explains how the mole is adapted to live underground?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "claws_dig",
+                "label": "Strong front legs and long claws help it dig through soil.",
+                "feedback": "Correct - the broad, strong front limbs and claws are adapted for digging."
+              },
+              {
+                "id": "ears_fly",
+                "label": "Large ears help it fly through tunnels.",
+                "feedback": "Moles do not fly, and the pictured ears are not large."
+              },
+              {
+                "id": "tail_swim",
+                "label": "A flat tail helps it swim across ponds.",
+                "feedback": "The pictured mole is adapted for moving through soil."
+              },
+              {
+                "id": "fur_light",
+                "label": "Bright fur produces light underground.",
+                "feedback": "Fur does not produce light."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "claws_dig"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - its strong front limbs and claws help it dig.",
+            "incorrect": "Choose a visible feature and a function that helps movement through soil.",
+            "explanation": "Broad, muscular front limbs and long claws break up and push back soil."
+          },
+          "assets": [
+            {
+              "path": "assets/q1-mole.png",
+              "alt": "A mole emerging beside a pile of loose soil."
+            }
+          ],
+          "adaptationNote": "Feature-plus-explanation response changed to paired single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "1c-ii",
+          "source": {
+            "testPage": 5,
+            "markSchemePage": 10
+          },
+          "marks": 1,
+          "originalPrompt": "Which word cannot be used to describe a mole?",
+          "adaptedPrompt": "Which word cannot be used to describe a mole?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "prey",
+                "label": "Prey",
+                "feedback": "A mole can be prey when it is eaten by another animal."
+              },
+              {
+                "id": "producer",
+                "label": "Producer",
+                "feedback": "Correct - a mole is an animal and does not make its own food."
+              },
+              {
+                "id": "predator",
+                "label": "Predator",
+                "feedback": "A mole is a predator when it eats earthworms."
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "feedback": "A mole is a consumer because it eats other organisms."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "producer"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - a mole is not a producer.",
+            "incorrect": "Producers make their own food; animals obtain food by consuming other organisms.",
+            "explanation": "A mole can be a predator, prey, and consumer, but not a producer."
+          },
+          "assets": [],
+          "adaptationNote": "Original single-choice format preserved.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "number": 2,
+      "title": "Seed dispersal",
+      "introduction": "Class 6 investigate seeds, how wind carries them, and how seed shape affects the distance travelled.",
+      "questions": [
+        {
+          "id": "2a",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 11
+          },
+          "marks": 1,
+          "originalPrompt": "Put a cross on the diagram to show where the seed develops.",
+          "adaptedPrompt": "Select the region of the flower where the seed develops.",
+          "interaction": {
+            "type": "image_hotspot",
+            "image": {
+              "path": "assets/q2-flower.png",
+              "alt": "A black line drawing showing a flower cut open to reveal its reproductive parts."
+            },
+            "hotspots": [
+              {
+                "id": "petal",
+                "label": "Region A",
+                "answerLabel": "Petal",
+                "left": 16,
+                "top": 17,
+                "width": 12,
+                "height": 11
+              },
+              {
+                "id": "anther",
+                "label": "Region B",
+                "answerLabel": "Anther",
+                "left": 58,
+                "top": 36,
+                "width": 12,
+                "height": 11
+              },
+              {
+                "id": "ovary",
+                "label": "Region C",
+                "answerLabel": "Ovary at the base of the flower",
+                "left": 51,
+                "top": 63,
+                "width": 12,
+                "height": 11
+              },
+              {
+                "id": "stem",
+                "label": "Region D",
+                "answerLabel": "Stem",
+                "left": 51,
+                "top": 81,
+                "width": 12,
+                "height": 11
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "ovary"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - seeds develop in the ovary at the base of the flower.",
+            "incorrect": "Look inside the swollen structure at the base of the flower.",
+            "explanation": "After fertilisation, ovules inside the ovary develop into seeds."
+          },
+          "assets": [],
+          "adaptationNote": "Paper cross changed to an accessible image-hotspot selection.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2b",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 11
+          },
+          "marks": 1,
+          "originalPrompt": "What equipment can measure how far the seeds travel?",
+          "adaptedPrompt": "Which piece of equipment should the children use to measure how far the seeds travel?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "tape_measure",
+                "label": "Tape measure",
+                "feedback": "Correct - a tape measure measures distance."
+              },
+              {
+                "id": "thermometer",
+                "label": "Thermometer",
+                "feedback": "A thermometer measures temperature."
+              },
+              {
+                "id": "stopwatch",
+                "label": "Stopwatch",
+                "feedback": "A stopwatch measures time."
+              },
+              {
+                "id": "balance",
+                "label": "Balance",
+                "feedback": "A balance measures mass."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "tape_measure"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - use a tape measure.",
+            "incorrect": "Choose equipment designed to measure length or distance.",
+            "explanation": "A tape measure, metre rule, ruler, or measuring stick can measure the distance travelled."
+          },
+          "assets": [
+            {
+              "path": "assets/q2-fan.png",
+              "alt": "A pupil holding a seed in front of an electric fan during a seed-dispersal investigation."
+            }
+          ],
+          "adaptationNote": "Free response changed to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2c",
+          "source": {
+            "testPage": 6,
+            "markSchemePage": 11
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why the fan helps to make the test fair.",
+          "adaptedPrompt": "Why does using a fan make the seed-dispersal test fairer than blowing with different children's mouths?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "consistent",
+                "label": "The fan can provide the same blowing force each time.",
+                "feedback": "Correct - keeping the blowing force consistent controls a variable."
+              },
+              {
+                "id": "random",
+                "label": "The fan changes speed randomly each time.",
+                "feedback": "A changing speed would make the comparison less fair."
+              },
+              {
+                "id": "warmer",
+                "label": "The fan makes every seed warmer.",
+                "feedback": "Temperature is not the variable being controlled here."
+              },
+              {
+                "id": "measures",
+                "label": "The fan measures the distance automatically.",
+                "feedback": "The fan moves air; separate equipment measures distance."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "consistent"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the fan provides a consistent force.",
+            "incorrect": "A fair comparison keeps the blowing conditions the same.",
+            "explanation": "Children may blow with different force or for different lengths of time, while a fan can be kept at one setting."
+          },
+          "assets": [],
+          "adaptationNote": "Explanation changed to causal single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2d",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 12
+          },
+          "marks": 1,
+          "originalPrompt": "Tick ONE box to show which features of the seeds help them to fall slowly.",
+          "adaptedPrompt": "Which features help a wind-dispersed seed fall slowly?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "smooth_soft",
+                "label": "Smooth and soft",
+                "feedback": "These features do not necessarily create enough air resistance."
+              },
+              {
+                "id": "large_light",
+                "label": "A large surface area and a low mass",
+                "feedback": "Correct - this combination increases the effect of air resistance."
+              },
+              {
+                "id": "large_heavy",
+                "label": "A large surface area and a high mass",
+                "feedback": "A high mass makes the seed fall more quickly."
+              },
+              {
+                "id": "flexible_soft",
+                "label": "Flexible and soft",
+                "feedback": "The important features are surface area and mass."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "large_light"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - a large surface area and low mass slow the fall.",
+            "incorrect": "Think about what increases air resistance without adding much weight.",
+            "explanation": "A broad, light seed experiences more air resistance compared with its weight and falls more slowly."
+          },
+          "assets": [
+            {
+              "path": "assets/q2-seed-table.png",
+              "alt": "A results table comparing sycamore, apple, bulrush, and oak seeds and the distances they travelled."
+            }
+          ],
+          "adaptationNote": "Original single-choice format preserved with clarified wording.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2e",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 12
+          },
+          "marks": 1,
+          "originalPrompt": "Name the force that slows the seeds as they fall.",
+          "adaptedPrompt": "Which force slows the seeds as they fall?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "air_resistance",
+                "label": "Air resistance",
+                "feedback": "Correct - air resistance opposes the falling motion."
+              },
+              {
+                "id": "gravity",
+                "label": "Gravity",
+                "feedback": "Gravity pulls the seeds down rather than slowing their fall."
+              },
+              {
+                "id": "weight",
+                "label": "Weight",
+                "feedback": "Weight is the downward force caused by gravity."
+              },
+              {
+                "id": "magnetism",
+                "label": "Magnetism",
+                "feedback": "There is no magnetic interaction in this situation."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "air_resistance"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - air resistance slows the falling seeds.",
+            "incorrect": "Choose the force that opposes movement through air.",
+            "explanation": "Air resistance, also called drag, acts opposite to the seed's downward motion."
+          },
+          "assets": [],
+          "adaptationNote": "One-word response changed to single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "2f",
+          "source": {
+            "testPage": 7,
+            "markSchemePage": 12
+          },
+          "marks": 1,
+          "originalPrompt": "Name ONE other way seeds are dispersed in nature.",
+          "adaptedPrompt": "Which is another way seeds can be dispersed in nature, apart from wind?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "animals",
+                "label": "Animals carry seeds on their fur or after eating fruit.",
+                "feedback": "Correct - animals can transport seeds away from the parent plant."
+              },
+              {
+                "id": "sunlight",
+                "label": "Sunlight pulls the seeds across the ground.",
+                "feedback": "Sunlight does not pull seeds across the ground."
+              },
+              {
+                "id": "photosynthesis",
+                "label": "Photosynthesis throws seeds into the air.",
+                "feedback": "Photosynthesis makes sugars; it is not a dispersal mechanism."
+              },
+              {
+                "id": "roots",
+                "label": "Roots push all seeds into the sky.",
+                "feedback": "Roots do not disperse seeds this way."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "animals"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - animals can disperse seeds.",
+            "incorrect": "Think about fur, eaten fruit, water, or exploding seed pods.",
+            "explanation": "Other accepted methods include animals, water, rolling downhill, and explosive seed pods."
+          },
+          "assets": [],
+          "adaptationNote": "Open response changed to one mark-scheme-supported method.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-3",
+      "number": 3,
+      "title": "Grass heads",
+      "introduction": "Class 6 grow grass on model heads and change one condition at a time to investigate plant growth and water movement.",
+      "questions": [
+        {
+          "id": "3a",
+          "source": {
+            "testPage": 8,
+            "markSchemePage": 13
+          },
+          "marks": 1,
+          "originalPrompt": "Name TWO other things that all plants need to grow.",
+          "adaptedPrompt": "Apart from water, which TWO things can plants need for healthy growth?",
+          "interaction": {
+            "type": "select_exactly_n",
+            "requiredCount": 2,
+            "options": [
+              {
+                "id": "light",
+                "label": "Light",
+                "feedback": "Accepted - plants need light for photosynthesis."
+              },
+              {
+                "id": "air",
+                "label": "Air",
+                "feedback": "Accepted - plants exchange gases with the air."
+              },
+              {
+                "id": "minerals",
+                "label": "Mineral nutrients",
+                "feedback": "Accepted - plants need mineral nutrients for healthy growth."
+              },
+              {
+                "id": "warmth",
+                "label": "Suitable warmth",
+                "feedback": "Accepted - plant processes need a suitable temperature."
+              },
+              {
+                "id": "food",
+                "label": "Food supplied by an animal",
+                "feedback": "Plants make sugars by photosynthesis rather than eating animal food."
+              },
+              {
+                "id": "plastic",
+                "label": "A sealed plastic covering",
+                "feedback": "A plastic covering is not a universal requirement for plant growth."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "choose_any_n_from_set",
+            "requiredCount": 2,
+            "acceptedValues": [
+              "light",
+              "air",
+              "minerals",
+              "warmth"
+            ]
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - both selected requirements are accepted.",
+            "incorrect": "Select two genuine plant requirements rather than materials used in this investigation.",
+            "explanation": "The mark scheme accepts light, air, mineral nutrients, and suitable warmth, among other scientifically valid responses."
+          },
+          "assets": [
+            {
+              "path": "assets/q3-grass-heads.png",
+              "alt": "A grass head before planting and after one week, when grass has grown from seeds in its top."
+            }
+          ],
+          "adaptationNote": "Open response changed to exact-two selection from accepted and distractor options.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3b",
+          "source": {
+            "testPage": 8,
+            "markSchemePage": 13
+          },
+          "marks": 1,
+          "originalPrompt": "Give ONE reason why the grass under the hat might look more yellow.",
+          "adaptedPrompt": "Why might the grass growing under the paper hat look more yellow?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "less_light",
+                "label": "The hat blocks light from reaching the grass.",
+                "feedback": "Correct - the covered grass receives less light."
+              },
+              {
+                "id": "more_water",
+                "label": "The hat gives the grass much more water.",
+                "feedback": "The amount of water is kept the same."
+              },
+              {
+                "id": "more_air",
+                "label": "The hat creates extra air for the grass.",
+                "feedback": "The hat does not create air."
+              },
+              {
+                "id": "measured",
+                "label": "The ruler makes the grass yellow.",
+                "feedback": "Measuring height does not cause the colour change."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "less_light"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the hat reduces the light reaching the grass.",
+            "incorrect": "Think about which condition the paper hat changes.",
+            "explanation": "With less light, less chlorophyll may develop and the grass can appear yellow."
+          },
+          "assets": [],
+          "adaptationNote": "Explanation changed to causal single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3c",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 13
+          },
+          "marks": 1,
+          "originalPrompt": "Write yes or no next to each idea to show if it is a good way to measure the height of the grass each week.",
+          "adaptedPrompt": "Classify each measuring idea as a good method or a bad method.",
+          "interaction": {
+            "type": "classification_grid",
+            "choices": [
+              "good_method",
+              "bad_method"
+            ],
+            "items": [
+              {
+                "id": "average",
+                "label": "Find the average length of several pieces of grass."
+              },
+              {
+                "id": "different",
+                "label": "Measure a different single piece of grass each week."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "average": "good_method",
+              "different": "bad_method"
+            }
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - average several pieces, and do not switch to a different single piece each week.",
+            "incorrect": "A reliable method should represent the whole grass head and be repeatable.",
+            "explanation": "An average reduces the effect of unusually short or long blades. Measuring a different blade each week creates an unfair comparison."
+          },
+          "assets": [],
+          "adaptationNote": "Original yes/no grid uses explicit good-method and bad-method choices.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "3d",
+          "source": {
+            "testPage": 9,
+            "markSchemePage": 14
+          },
+          "marks": 1,
+          "originalPrompt": "Tick ONE box to explain why droplets of water form on the inside of the plastic bag.",
+          "adaptedPrompt": "Why do water droplets form on the inside of the sealed plastic bag?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "evap_condense",
+                "label": "Water evaporates from the grass head and condenses on the bag.",
+                "feedback": "Correct - water vapour cools and condenses on the plastic."
+              },
+              {
+                "id": "cond_evap",
+                "label": "Water condenses from the grass head and evaporates on the bag.",
+                "feedback": "The changes of state are in the wrong order."
+              },
+              {
+                "id": "dissolve_evap",
+                "label": "Water dissolves from the grass head and evaporates on the bag.",
+                "feedback": "Dissolving is not the process that releases water vapour here."
+              },
+              {
+                "id": "dissolve_cond",
+                "label": "Water dissolves from the grass head and condenses on the bag.",
+                "feedback": "Water first evaporates from the moist grass head."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "evap_condense"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - water evaporates, then condenses on the cooler bag.",
+            "incorrect": "Follow the water from the moist grass head into the air and then onto the plastic.",
+            "explanation": "Liquid water becomes vapour by evaporation and then becomes liquid droplets again by condensation."
+          },
+          "assets": [
+            {
+              "path": "assets/q3-plastic-bag.png",
+              "alt": "A grass head enclosed in a transparent plastic bag with moisture visible inside."
+            }
+          ],
+          "adaptationNote": "Original single-choice format preserved.",
+          "requiresHumanReview": false
+        }
+      ]
+    },
+    {
+      "id": "section-4",
+      "number": 4,
+      "title": "Smallpox",
+      "introduction": "Dr Edward Jenner investigated whether having cowpox could protect people from smallpox, a disease that could be fatal.",
+      "questions": [
+        {
+          "id": "4a-i",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 15
+          },
+          "marks": 1,
+          "originalPrompt": "What sort of statement did Dr Jenner make?",
+          "adaptedPrompt": "What type of scientific statement was Jenner's idea that people who had cowpox would not catch smallpox?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "explanation",
+                "label": "Explanation",
+                "feedback": "An explanation accounts for why something happens; Jenner stated what he expected to happen."
+              },
+              {
+                "id": "prediction",
+                "label": "Prediction",
+                "feedback": "Correct - the statement predicts a future outcome that can be tested."
+              },
+              {
+                "id": "comparison",
+                "label": "Comparison",
+                "feedback": "The statement is testable but is not itself a comparison."
+              },
+              {
+                "id": "observation",
+                "label": "Observation",
+                "feedback": "An observation records what has already been noticed."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "prediction"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - it was a prediction.",
+            "incorrect": "A prediction says what someone expects will happen in a test.",
+            "explanation": "Jenner proposed a testable outcome: previous cowpox infection would prevent smallpox."
+          },
+          "assets": [
+            {
+              "path": "assets/q4-jenner.png",
+              "alt": "A historical portrait of Dr Edward Jenner beside his statement about cowpox and smallpox."
+            }
+          ],
+          "adaptationNote": "Original single-choice format preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4a-ii",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 15
+          },
+          "marks": 2,
+          "originalPrompt": "Describe what Dr Jenner must have done next and also describe the evidence needed to show that his statement was true.",
+          "adaptedPrompt": "Choose Jenner's required next step and the evidence that would support his prediction.",
+          "interaction": {
+            "type": "classification_grid",
+            "items": [
+              {
+                "id": "next_step",
+                "label": "Next step",
+                "choices": [
+                  {
+                    "id": "infect_smallpox",
+                    "label": "Expose or infect James with smallpox."
+                  },
+                  {
+                    "id": "infect_cowpox",
+                    "label": "Give James cowpox again."
+                  },
+                  {
+                    "id": "measure_height",
+                    "label": "Measure James's height."
+                  }
+                ]
+              },
+              {
+                "id": "evidence",
+                "label": "Evidence",
+                "choices": [
+                  {
+                    "id": "no_smallpox",
+                    "label": "James does not develop smallpox."
+                  },
+                  {
+                    "id": "has_smallpox",
+                    "label": "James develops smallpox."
+                  },
+                  {
+                    "id": "gets_taller",
+                    "label": "James grows taller."
+                  }
+                ]
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "all_match",
+            "values": {
+              "next_step": "infect_smallpox",
+              "evidence": "no_smallpox"
+            }
+          },
+          "partialCredit": {
+            "kind": "count_correct",
+            "bands": [
+              {
+                "minCorrect": 1,
+                "maxCorrect": 1,
+                "marks": 1
+              },
+              {
+                "minCorrect": 0,
+                "maxCorrect": 0,
+                "marks": 0
+              }
+            ]
+          },
+          "feedback": {
+            "correct": "Correct - both the next step and supporting evidence are identified.",
+            "incorrect": "One mark is available for the correct next step and one for the correct evidence.",
+            "explanation": "Jenner had to expose James to smallpox; if James did not develop the disease, that outcome supported the prediction."
+          },
+          "assets": [],
+          "adaptationNote": "Two-part explanation changed to a structured response with one mark per correct part.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4a-iii",
+          "source": {
+            "testPage": 10,
+            "markSchemePage": 16
+          },
+          "marks": 1,
+          "originalPrompt": "Why did Dr Jenner test other people?",
+          "adaptedPrompt": "Why did Jenner repeat the test with other people?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "reliable",
+                "label": "To collect more evidence and check that the result was reliable.",
+                "feedback": "Correct - repetition checks whether the result is consistent."
+              },
+              {
+                "id": "fair",
+                "label": "To make James's original test a fair test.",
+                "feedback": "Repeating with people primarily improves reliability, not fairness."
+              },
+              {
+                "id": "change",
+                "label": "To make the prediction change each time.",
+                "feedback": "The same prediction should be tested repeatedly."
+              },
+              {
+                "id": "answer",
+                "label": "To guarantee the answer he wanted.",
+                "feedback": "A scientific test should not be designed to force a preferred result."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "reliable"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - testing more people improves reliability.",
+            "incorrect": "Think about why scientists repeat tests and collect more data.",
+            "explanation": "Repeating the investigation checks that the first result was not unusual and that different people show a similar pattern."
+          },
+          "assets": [],
+          "adaptationNote": "Explanation changed to causal single choice.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4b",
+          "source": {
+            "testPage": 11,
+            "markSchemePage": 16
+          },
+          "marks": 1,
+          "originalPrompt": "How many people who were 30 years old died from smallpox?",
+          "adaptedPrompt": "According to the table, how many 30-year-olds died from smallpox?",
+          "interaction": {
+            "type": "integer_entry",
+            "min": 0,
+            "max": 1000
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": 98
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the table shows 98 deaths at age 30.",
+            "incorrect": "Read across the row for age 30.",
+            "explanation": "The value paired with age 30 in the table is 98."
+          },
+          "assets": [
+            {
+              "path": "assets/q4-smallpox-table.png",
+              "alt": "A table of smallpox deaths in London in 1844 for ages 10 to 80 at ten-year intervals."
+            }
+          ],
+          "adaptationNote": "Original numeric response preserved.",
+          "requiresHumanReview": false
+        },
+        {
+          "id": "4c",
+          "source": {
+            "testPage": 11,
+            "markSchemePage": 17
+          },
+          "marks": 1,
+          "originalPrompt": "Explain why Holly cannot be sure of her conclusion.",
+          "adaptedPrompt": "Why can Holly not be sure that younger people were always more likely to die of smallpox?",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "contradiction",
+                "label": "The data do not follow that pattern at every age: more 20-year-olds died than 10-year-olds, and more 60-year-olds than 50-year-olds.",
+                "feedback": "Correct - both comparisons contradict a simple younger-means-more pattern."
+              },
+              {
+                "id": "all_same",
+                "label": "Exactly the same number died at every age.",
+                "feedback": "The values in the table are not all the same."
+              },
+              {
+                "id": "no_ages",
+                "label": "The table gives no ages at all.",
+                "feedback": "The table lists ages from 10 to 80."
+              },
+              {
+                "id": "future",
+                "label": "The table only contains predictions about future deaths.",
+                "feedback": "The table records deaths that occurred in 1844."
+              }
+            ]
+          },
+          "answerRule": {
+            "kind": "equals",
+            "value": "contradiction"
+          },
+          "partialCredit": null,
+          "feedback": {
+            "correct": "Correct - the pattern has clear exceptions.",
+            "incorrect": "Compare age 10 with 20 and age 50 with 60.",
+            "explanation": "A confident conclusion also requires knowing the total number of people at each age, because raw death counts are not the same as likelihood."
+          },
+          "assets": [
+            {
+              "path": "assets/q4-smallpox-table.png",
+              "alt": "A table of smallpox deaths in London in 1844 for ages 10 to 80 at ten-year intervals."
+            }
+          ],
+          "adaptationNote": "Explanation changed to an evidence-based single choice.",
+          "requiresHumanReview": false
+        }
+      ]
+    }
+  ]
+}

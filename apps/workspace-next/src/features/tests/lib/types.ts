@@ -299,6 +299,7 @@ export type RayDiagramQuestion = QuestionBase & {
 export type DiagramAnnotationQuestion = QuestionBase & {
   type: "diagramAnnotation";
   variant: "curve" | "arrow" | "point" | "doubleArrow" | "directionArrow";
+  instruction?: string;
   backgroundSrc: string;
   backgroundAlt: string;
   geometry:
