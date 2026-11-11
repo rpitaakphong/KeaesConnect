@@ -1,0 +1,41 @@
+-- Register the draft in the existing Supabase catalog and grading flow.
+begin;
+
+insert into public.tests (id, title, subject, level, status, total_points, app_path)
+values ('ks2-year-3-english-post-test', 'KS2 Year 3 English Post-Test', 'English', 'Key Stage 2 · Year 3', 'inactive', 28, '/tests/ks2-year-3-english-post-test/start')
+on conflict (id) do nothing;
+
+insert into public.test_questions (id, test_id, part, prompt, answer_key, points, position)
+values
+  ('ks2-y3-eng-post-q1', 'ks2-year-3-english-post-test', 'Part I', 'The boys were livid because they missed the bus. Write a synonym for livid.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q1","points":1,"mode":"auto","display":"angry or upset","parts":[{"id":"answer","accepted":["angry","upset"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 1),
+  ('ks2-y3-eng-post-q2', 'ks2-year-3-english-post-test', 'Part I', 'It is illegal to throw trash in the street. Write the meaning of illegal.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q2","points":1,"mode":"auto","display":"not legal","parts":[{"id":"answer","accepted":["not legal"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 2),
+  ('ks2-y3-eng-post-q3', 'ks2-year-3-english-post-test', 'Part I', 'Change serious to an adverb by adding a suffix.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q3","points":1,"mode":"auto","display":"seriously","parts":[{"id":"answer","accepted":["seriously"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 3),
+  ('ks2-y3-eng-post-q4', 'ks2-year-3-english-post-test', 'Part II', 'The wind ___ the kite across the sky.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q4","points":1,"mode":"auto","display":"blew","parts":[{"id":"answer","accepted":["blew"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 4),
+  ('ks2-y3-eng-post-q5', 'ks2-year-3-english-post-test', 'Part II', 'Select the misspelled word in the sentence: They took their freinds to the mall to buy clothes.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q5","points":1,"mode":"auto","display":"freinds","parts":[{"id":"answer","accepted":["freinds"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 5),
+  ('ks2-y3-eng-post-q6', 'ks2-year-3-english-post-test', 'Part II', 'Use an apostrophe to write the contraction of he would.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q6","points":1,"mode":"auto","display":"he’d","parts":[{"id":"answer","accepted":["he''d","he’d"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 6),
+  ('ks2-y3-eng-post-q7', 'ks2-year-3-english-post-test', 'Part II', 'The ___ bikes are in the garage. Choose the apostrophe that shows plural possession.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q7","points":1,"mode":"auto","display":"girls’","parts":[{"id":"answer","accepted":["girls''"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 7),
+  ('ks2-y3-eng-post-q8', 'ks2-year-3-english-post-test', 'Part II', 'Select the incorrectly spelled word and write its correct form.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q8","points":2,"mode":"auto","display":"irlegible → illegible","parts":[{"id":"selected","accepted":["irlegible"],"points":1,"normalizer":"text"},{"id":"correction","accepted":["illegible"],"points":1,"normalizer":"text"}]}'::jsonb, 2, 8),
+  ('ks2-y3-eng-post-q9', 'ks2-year-3-english-post-test', 'Part III', 'Select the two adjectives: In the dark forest lived a wicked witch.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q9","points":2,"mode":"auto","display":"dark; wicked","parts":[{"id":"selected","accepted":["dark"],"points":1,"normalizer":"contains"},{"id":"selected","accepted":["wicked"],"points":1,"normalizer":"contains"}]}'::jsonb, 2, 9),
+  ('ks2-y3-eng-post-q10', 'ks2-year-3-english-post-test', 'Part III', 'The class went to the stadium to play football. What word class is play?', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q10","points":1,"mode":"auto","display":"verb","parts":[{"id":"answer","accepted":["verb"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 10),
+  ('ks2-y3-eng-post-q11', 'ks2-year-3-english-post-test', 'Part III', 'Write the three main parts of a story in order.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q11","points":3,"mode":"auto","display":"beginning; middle; end","parts":[{"id":"beginning","accepted":["beginning"],"points":1,"normalizer":"text"},{"id":"middle","accepted":["middle"],"points":1,"normalizer":"text"},{"id":"end","accepted":["end"],"points":1,"normalizer":"text"}]}'::jsonb, 3, 11),
+  ('ks2-y3-eng-post-q12', 'ks2-year-3-english-post-test', 'Part IV', 'Correct the spelling and punctuation mistakes: I didnt enjoy the rainy seeson.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q12","points":2,"mode":"auto","display":"didn’t; season","parts":[{"id":"didnt","accepted":["didn''t","didn’t"],"points":1,"normalizer":"text"},{"id":"season","accepted":["season"],"points":1,"normalizer":"text"}]}'::jsonb, 2, 12),
+  ('ks2-y3-eng-post-q13', 'ks2-year-3-english-post-test', 'Part IV', 'Correct the capitalisation and ending punctuation: Will you visit china on your holiday', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q13","points":2,"mode":"auto","display":"China; ?","parts":[{"id":"country","accepted":["correct-China"],"points":1,"normalizer":"text"},{"id":"punctuation","accepted":["question-mark"],"points":1,"normalizer":"text"}]}'::jsonb, 2, 13),
+  ('ks2-y3-eng-post-q14', 'ks2-year-3-english-post-test', 'Part IV', 'You might get sick ___ you eat too much candy. Write the correct conjunction.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q14","points":1,"mode":"auto","display":"if","parts":[{"id":"answer","accepted":["if"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 14),
+  ('ks2-y3-eng-post-q15', 'ks2-year-3-english-post-test', 'Part IV', 'Select the verb: The boys read books in the library.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q15","points":1,"mode":"auto","display":"read","parts":[{"id":"answer","accepted":["read"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 15),
+  ('ks2-y3-eng-post-q16', 'ks2-year-3-english-post-test', 'Part IV', 'The cat ___ been chasing the mouse all morning.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q16","points":1,"mode":"auto","display":"has","parts":[{"id":"answer","accepted":["has"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 16),
+  ('ks2-y3-eng-post-q17', 'ks2-year-3-english-post-test', 'Part IV', 'Select the common noun: He hiked all day in the mountains.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q17","points":1,"mode":"auto","display":"mountains","parts":[{"id":"answer","accepted":["mountains"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 17),
+  ('ks2-y3-eng-post-q18', 'ks2-year-3-english-post-test', 'Part IV', 'The children walked ___ the river bank. Complete the sentence with a preposition.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q18","points":1,"mode":"auto","display":"along, near or next to","parts":[{"id":"answer","accepted":["along","near","next to"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 18),
+  ('ks2-y3-eng-post-q19', 'ks2-year-3-english-post-test', 'Part V', 'Choose the sentence with speech marks correctly showing direct speech.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q19","points":1,"mode":"auto","display":"“Can I have some juice?” asked Ted.","parts":[{"id":"answer","accepted":["correct"],"points":1,"normalizer":"text"}]}'::jsonb, 1, 19),
+  ('ks2-y3-eng-post-q20', 'ks2-year-3-english-post-test', 'Part V', 'Select the three places where commas belong: The giraffe has brown black white and orange spots.', '{"source":"mathMultiPart","id":"ks2-y3-eng-post-q20","points":3,"mode":"auto","display":"brown, black, white, and orange","parts":[{"id":"selected","accepted":["brown"],"points":1,"normalizer":"contains"},{"id":"selected","accepted":["black"],"points":1,"normalizer":"contains"},{"id":"selected","accepted":["white"],"points":1,"normalizer":"contains"}]}'::jsonb, 3, 20)
+on conflict (id) do nothing;
+
+do $$
+begin
+  if (select count(*) from public.test_questions where test_id = 'ks2-year-3-english-post-test') <> 20
+    or (select sum(points) from public.test_questions where test_id = 'ks2-year-3-english-post-test') <> 28 then
+    raise exception 'Expected 20 Year 3 English questions worth 28 marks';
+  end if;
+end;
+$$;
+
+commit;
