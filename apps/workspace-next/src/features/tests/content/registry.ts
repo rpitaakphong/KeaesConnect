@@ -1,5 +1,4 @@
 import { englishLiteracy1 } from "@/features/tests/content/english-literacy/level-1";
-import { ks2Year3EnglishPostTest } from "@/features/tests/content/ks2-english/year-3-post-test";
 import { englishLiteracy2 } from "@/features/tests/content/english-literacy/level-2";
 import { englishLiteracy3 } from "@/features/tests/content/english-literacy/level-3";
 import { englishLiteracy4 } from "@/features/tests/content/english-literacy/level-4";
@@ -38,7 +37,6 @@ import type { TestDefinition } from "@/features/tests/lib/types";
 
 const tests: Record<string, TestDefinition> = {
   [englishLiteracy1.id]: englishLiteracy1,
-  [ks2Year3EnglishPostTest.id]: ks2Year3EnglishPostTest,
   [englishLiteracy2.id]: englishLiteracy2,
   [englishLiteracy3.id]: englishLiteracy3,
   [englishLiteracy4.id]: englishLiteracy4,
