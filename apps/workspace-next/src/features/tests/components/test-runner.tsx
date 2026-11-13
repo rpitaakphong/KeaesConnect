@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { StudentProfile, SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
-import { loadAnswers, loadStudentProfile, saveAnswers } from "@/features/tests/lib/profile-storage";
+import { loadAnswers, loadAttemptProgress, loadStudentProfile, saveAnswers, saveAttemptProgress } from "@/features/tests/lib/profile-storage";
 import { submitAttempt } from "@/features/tests/lib/submission-api";
 import { QuestionRenderer, QuestionVisuals } from "@/features/tests/components/question-renderer";
 
@@ -14,6 +14,9 @@ export function TestRunner({ test }: { test: TestDefinition }) {
   const [pending, setPending] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [result, setResult] = useState<SubmitResult | null>(null);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const showsCorrections = test.resultMode === "scoreWithCorrections";
+  const locksOnSubmit = showsCorrections || test.resultMode === "diagnostic";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -26,7 +29,17 @@ export function TestRunner({ test }: { test: TestDefinition }) {
     }
     setProfile(savedProfile);
     setAnswers(loadAnswers(test.id, token));
-  }, [test.id]);
+    if (test.suggestedTimer) {
+      const savedProgress = loadAttemptProgress(test.id, token);
+      const progress = savedProgress ?? { startedAt: Date.now() };
+      if (!savedProgress) saveAttemptProgress(test.id, token, progress);
+      setStartedAt(progress.startedAt);
+      if (progress.result) {
+        setResult(progress.result);
+        setActiveSection("review");
+      }
+    }
+  }, [test.id, test.suggestedTimer]);
 
   const questions = useMemo(() => test.sections.flatMap((section) => section.questions), [test.sections]);
   const answeredCount = questions.filter((question) => isAnswered(answers[question.id])).length;
@@ -40,7 +53,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
     : active?.questions.length || 0;
 
   function updateAnswer(questionId: string, value: TestAnswers[string]) {
-    if (result) return;
+    if (result || (showsCorrections && pending)) return;
     const next = { ...answers, [questionId]: value };
     setAnswers(next);
     saveAnswers(test.id, assignmentToken, next);
@@ -48,12 +61,16 @@ export function TestRunner({ test }: { test: TestDefinition }) {
 
   async function handleSubmit() {
     if (!profile || pending || result) return;
-    if (test.resultMode === "diagnostic" && !window.confirm("Submit the whole diagnostic now? You can leave answers blank, but every answer will lock after submission.")) return;
+    if (locksOnSubmit && !window.confirm("Submit this test now? You can leave answers blank. Answers will lock after submission.")) return;
     setPending(true);
     setSubmitError("");
     try {
-      setResult(await submitAttempt(profile, answers, test));
+      const submitted = await submitAttempt(profile, answers, test);
+      setResult(submitted);
       setActiveSection("review");
+      if (test.suggestedTimer && startedAt !== null) {
+        saveAttemptProgress(test.id, assignmentToken, { startedAt, result: submitted });
+      }
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Could not submit test.");
     } finally {
@@ -76,6 +93,9 @@ export function TestRunner({ test }: { test: TestDefinition }) {
           <TestAudio confirmation={test.audioStartConfirmation} mode={test.audioMode} src={test.audioSrc} />
         </div>
         <div className="header-actions">
+          {startedAt !== null && test.durationMinutes && !result
+            ? <SuggestedTimer deadline={startedAt + test.durationMinutes * 60_000} />
+            : null}
           <span className="badge">{answeredCount}/{questions.length} answered</span>
         </div>
       </header>
@@ -83,7 +103,7 @@ export function TestRunner({ test }: { test: TestDefinition }) {
       <main id="test" className="test-shell" data-result-mode={test.resultMode || "score"} data-test-id={test.id}>
         <div className="test-workspace">
           <aside className="part-nav" aria-label="Test sections">
-            {result && test.resultMode === "diagnostic" ? null : (
+            {result && locksOnSubmit ? null : (
               <>
                 {test.sections.map((section) => (
                   <button
@@ -172,6 +192,26 @@ export function TestRunner({ test }: { test: TestDefinition }) {
         </div>
       </main>
     </>
+  );
+}
+
+function SuggestedTimer({ deadline }: { deadline: number }) {
+  const [now, setNow] = useState(() => Date.now());
+  const remaining = Math.max(0, Math.ceil((deadline - now) / 1_000));
+  const expired = remaining === 0;
+
+  useEffect(() => {
+    if (expired) return;
+    const interval = window.setInterval(() => setNow(Date.now()), 250);
+    return () => window.clearInterval(interval);
+  }, [expired]);
+
+  const minutes = Math.floor(remaining / 60);
+  const seconds = String(remaining % 60).padStart(2, "0");
+  return expired ? (
+    <span className="badge" role="status">Suggested time elapsed. You can keep working.</span>
+  ) : (
+    <span className="badge" role="timer" aria-label="Suggested time remaining">{minutes}:{seconds} left</span>
   );
 }
 
@@ -532,8 +572,8 @@ function ReviewPanel({
   result: SubmitResult | null;
   test: TestDefinition;
 }) {
-  if (result && test.resultMode === "diagnostic") {
-    return <DiagnosticResults result={result} test={test} />;
+  if (result && (test.resultMode === "diagnostic" || test.resultMode === "scoreWithCorrections")) {
+    return <AnswerReviewResults result={result} test={test} />;
   }
   return (
     <article className="question-card">
@@ -563,23 +603,36 @@ type DiagnosticResultRow = {
   response?: string;
 };
 
-function DiagnosticResults({ result, test }: { result: SubmitResult; test: TestDefinition }) {
+function AnswerReviewResults({ result, test }: { result: SubmitResult; test: TestDefinition }) {
   const questions = test.sections.flatMap((section) => section.questions);
   const rows = Object.values(result.sections || {}).flatMap((value) => Array.isArray(value) ? value as DiagnosticResultRow[] : []);
+  const showsScore = test.resultMode === "scoreWithCorrections";
+  const percentage = result.possible ? Math.round((result.total / result.possible) * 100) : 0;
   const rowById = new Map(rows.map((row) => [row.questionId || "", row]));
   const rowByPrompt = new Map(rows.map((row) => [row.prompt || "", row]));
 
   return (
     <article className="diagnostic-results" aria-labelledby="diagnostic-results-title">
       <div className="question-card diagnostic-results-intro">
-        <p className="eyebrow">Diagnostic complete</p>
-        <h2 id="diagnostic-results-title">Check each answer and explanation.</h2>
-        <p>Your answers are locked. Every part is shown as Correct or Incorrect; this pre-test does not show a score.</p>
+        {showsScore ? (
+          <>
+            <h2 id="diagnostic-results-title">Score: {result.total}/{result.possible} ({percentage}%)</h2>
+            <p>Your test has been submitted.</p>
+            {result.total === result.possible ? <p>All answers are correct.</p> : null}
+          </>
+        ) : (
+          <>
+            <p className="eyebrow">Diagnostic complete</p>
+            <h2 id="diagnostic-results-title">Check each answer and explanation.</h2>
+            <p>Your answers are locked. Every part is shown as Correct or Incorrect; this pre-test does not show a score.</p>
+          </>
+        )}
       </div>
       <div className="diagnostic-result-list">
         {questions.map((question) => {
           const row = rowById.get(question.id) || rowByPrompt.get(question.prompt);
           const correct = Boolean(row?.correct);
+          if (showsScore && (!row || correct)) return null;
           const explanationKey = question.id.replace(/^cie-igcse-cs-p3-(?:diagnostic-)?q/, "");
           return (
             <section className={`diagnostic-result ${correct ? "is-correct" : "is-incorrect"}`} key={question.id}>
@@ -588,13 +641,15 @@ function DiagnosticResults({ result, test }: { result: SubmitResult; test: TestD
                 <strong className="diagnostic-verdict">{correct ? "Correct" : "Incorrect"}</strong>
               </div>
               <dl className="diagnostic-answer-comparison">
-                <div><dt>Your answer</dt><dd>{row?.response || "No answer"}</dd></div>
+                <div><dt>Your answer</dt><dd>{row?.response?.trim() || "No answer"}</dd></div>
                 <div><dt>Correct answer</dt><dd>{row?.correctAnswer || question.grading?.display || "See the explanation"}</dd></div>
               </dl>
-              <div className="diagnostic-explanation">
-                <h4>Why this is the answer</h4>
-                <p>{test.answerExplanations?.[explanationKey] || "Compare the required scientific idea with the correct answer shown above."}</p>
-              </div>
+              {!showsScore ? (
+                <div className="diagnostic-explanation">
+                  <h4>Why this is the answer</h4>
+                  <p>{test.answerExplanations?.[explanationKey] || "Compare the required scientific idea with the correct answer shown above."}</p>
+                </div>
+              ) : null}
             </section>
           );
         })}

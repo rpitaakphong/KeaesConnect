@@ -1,6 +1,6 @@
 "use client";
 
-import type { StudentProfile, TestAnswers } from "@/features/tests/lib/types";
+import type { StudentProfile, SubmitResult, TestAnswers } from "@/features/tests/lib/types";
 
 const profilePrefix = "keaes-test-profile-v1";
 const answerPrefix = "keaes-test-answers-v1";
@@ -40,4 +40,24 @@ export function loadAnswers(testId: string, assignmentToken: string) {
   } catch {
     return {};
   }
+}
+
+type AttemptProgress = {
+  startedAt: number;
+  result?: SubmitResult;
+};
+
+export function loadAttemptProgress(testId: string, assignmentToken: string): AttemptProgress | null {
+  const key = `keaes-test-progress-v1:${testStorageKey(testId, assignmentToken)}`;
+  try {
+    const progress = JSON.parse(window.sessionStorage.getItem(key) || "null") as AttemptProgress | null;
+    return progress && Number.isFinite(progress.startedAt) ? progress : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveAttemptProgress(testId: string, assignmentToken: string, progress: AttemptProgress) {
+  const key = `keaes-test-progress-v1:${testStorageKey(testId, assignmentToken)}`;
+  window.sessionStorage.setItem(key, JSON.stringify(progress));
 }
