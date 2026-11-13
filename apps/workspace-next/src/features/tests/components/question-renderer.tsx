@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { TestQuestion } from "@/features/tests/lib/types";
 import { ImageOverlay, ImageOverlayBoard } from "@/features/tests/components/test-interactions";
@@ -25,6 +25,8 @@ export function QuestionRenderer({
   question: TestQuestion;
   variant?: "card" | "subquestion";
 }) {
+  const isEnglishAnswer = question.grading?.mode === "auto"
+    && question.grading.parts.some((part) => part.normalizer === "englishExact" || part.normalizer === "englishText");
   const objectAnswer = typeof answer === "object" && answer ? answer : {};
   const spipMathInteraction = question.id.startsWith("spip-y7m-")
     ? renderSpipMathInteraction(question, objectAnswer, onChange)
@@ -98,6 +100,7 @@ export function QuestionRenderer({
                 onChange={(event) => onChange(event.target.value)}
                 placeholder={question.placeholder || "answer"}
                 rows={10}
+                spellCheck={isEnglishAnswer ? false : undefined}
                 value={typeof answer === "string" ? answer : ""}
               />
               {question.wordRange ? <WordCountStatus range={question.wordRange} value={typeof answer === "string" ? answer : ""} /> : null}
@@ -110,6 +113,7 @@ export function QuestionRenderer({
                 : "text"}
               onChange={(event) => onChange(event.target.value)}
               placeholder={question.placeholder || "answer"}
+              spellCheck={isEnglishAnswer ? false : undefined}
               value={typeof answer === "string" ? answer : ""}
             />
           )}
@@ -205,7 +209,9 @@ export function QuestionRenderer({
         </>
       ) : (
         <div className={`field-grid ${question.compact ? "compact-lines" : ""}`}>
-          {question.fields.map((field) => <MathField answer={objectAnswer} field={field} key={field.id} onChange={onChange} />)}
+          {question.fields.map((field) => (
+            <MathField answer={objectAnswer} field={field} key={field.id} onChange={onChange} spellCheck={isEnglishAnswer ? false : undefined} />
+          ))}
         </div>
       )}
     </>
@@ -537,7 +543,7 @@ function DiagramAnnotationEditor({
     }
   }
 
-  const instruction = question.variant === "curve"
+  const instruction = question.instruction || (question.variant === "curve"
     ? "Draw the protease activity curve directly on the graph."
     : question.variant === "arrow"
       ? !start ? "Select the base of the activation-energy arrow." : !end ? "Select the arrow tip at the peak." : "Place the Ea label beside the arrow."
@@ -545,7 +551,7 @@ function DiagramAnnotationEditor({
         ? !start ? "Select the first end of the length arrow." : !end ? "Select the other end of the length arrow." : "Place the L label beside the arrow."
       : question.variant === "directionArrow"
         ? !start ? "Select where the force arrow begins." : !end ? "Select where the arrow points." : "Drag again to replace the arrow."
-      : "Place X on the part of the graph where the student is decelerating.";
+      : "Place X on the part of the graph where the student is decelerating.");
 
   return (
     <div className="diagram-annotation-editor">
@@ -1836,6 +1842,7 @@ function MathField({
   answer,
   field,
   onChange,
+  spellCheck,
 }: {
   answer: Record<string, string | string[]>;
   field: {
@@ -1847,7 +1854,9 @@ function MathField({
     control?: "radio" | "select";
   };
   onChange: (value: Record<string, string | string[]>) => void;
+  spellCheck?: boolean;
 }) {
+  const radioGroup = useId();
   if (field.options?.length) {
     if (field.control === "select") {
       return (
@@ -1868,7 +1877,7 @@ function MathField({
             <label key={option.value}>
               <input
                 checked={answer[field.id] === option.value}
-                name={`${field.id}-${option.value}`}
+                name={radioGroup}
                 onChange={() => onChange({ ...answer, [field.id]: option.value })}
                 type="radio"
                 value={option.value}
@@ -1884,7 +1893,7 @@ function MathField({
     <label className={field.visualHtml ? "has-field-visual" : ""}>
       {field.visualHtml ? <span className="math-field-visual" dangerouslySetInnerHTML={{ __html: field.visualHtml }} /> : null}
       <span>{field.label}</span>
-      <MathInput answer={answer} field={field} onChange={onChange} />
+      <MathInput answer={answer} field={field} onChange={onChange} spellCheck={spellCheck} />
     </label>
   );
 }
@@ -1893,10 +1902,12 @@ function MathInput({
   answer,
   field,
   onChange,
+  spellCheck,
 }: {
   answer: Record<string, string | string[]>;
   field: { id: string; label: string; placeholder?: string };
   onChange: (value: Record<string, string | string[]>) => void;
+  spellCheck?: boolean;
 }) {
   const value = answer[field.id];
   return (
@@ -1906,6 +1917,7 @@ function MathInput({
       className="math-line-input"
       onChange={(event) => onChange({ ...answer, [field.id]: event.target.value })}
       placeholder={field.placeholder || "answer"}
+      spellCheck={spellCheck}
       value={typeof value === "string" ? value : ""}
     />
   );

@@ -17,6 +17,7 @@ export type TestDefinition = {
   totalPoints: number;
   status: "active" | "draft" | "legacy";
   durationMinutes?: number;
+  suggestedTimer?: boolean;
   audioSrc?: string;
   audioMode?: "standard" | "lockedOnceStarted";
   audioStartConfirmation?: {
@@ -26,7 +27,7 @@ export type TestDefinition = {
     cancelLabel?: string;
   };
   answerPayload?: "default" | "rwAnswers";
-  resultMode?: "score" | "diagnostic";
+  resultMode?: "score" | "diagnostic" | "scoreWithCorrections";
   answerExplanations?: Record<string, string>;
   aiShortAnswerRubrics?: Record<string, string>;
   sections: TestSection[];
@@ -159,7 +160,7 @@ export type AnswerPart = {
   accepted: string[];
   points: number;
   numericRange?: { min: number; max: number };
-  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
+  normalizer?: "text" | "englishText" | "englishExact" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
   keywords?: string[][];
   reviewRecommended?: boolean;
   category?: "apparatus" | "method" | "measurements" | "controls" | "processing";
@@ -301,6 +302,7 @@ export type RayDiagramQuestion = QuestionBase & {
 export type DiagramAnnotationQuestion = QuestionBase & {
   type: "diagramAnnotation";
   variant: "curve" | "arrow" | "point" | "doubleArrow" | "directionArrow";
+  instruction?: string;
   backgroundSrc: string;
   backgroundAlt: string;
   geometry:

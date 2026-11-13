@@ -1,4 +1,4 @@
-import type { SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
+import type { AnswerPart, SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
 
 export function scoreTestLocally(test: TestDefinition, answers: TestAnswers): SubmitResult {
   const sections = Object.fromEntries(test.sections.map((section) => {
@@ -735,7 +735,11 @@ function matchesKeywords(value: string, keywordGroups: string[][]) {
   return Boolean(raw) && keywordGroups.some((group) => group.every((word) => raw.includes(normalize(word))));
 }
 
-function normalize(value: string, mode: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression" = "text") {
+function normalize(value: string, mode: AnswerPart["normalizer"] = "text") {
+  if (mode === "englishExact" || mode === "englishText") {
+    const text = value.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[ \t\r\n\f\v]+/g, " ").trim();
+    return mode === "englishExact" ? text : text.toLowerCase();
+  }
   const clean = String(value || "")
     .toLowerCase()
     .replace(/[,$]/g, "")
