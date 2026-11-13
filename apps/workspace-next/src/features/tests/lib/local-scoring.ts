@@ -1,4 +1,4 @@
-import type { SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
+import type { AnswerPart, SubmitResult, TestAnswers, TestDefinition, TestQuestion } from "@/features/tests/lib/types";
 
 export function scoreTestLocally(test: TestDefinition, answers: TestAnswers): SubmitResult {
   const sections = Object.fromEntries(test.sections.map((section) => {
@@ -708,6 +708,11 @@ function distanceToSegment(point: { x: number; y: number }, start: { x: number; 
 }
 
 function isCorrectPart(raw: string | string[], part: NonNullable<Extract<TestQuestion["grading"], { mode: "auto" }>["parts"]>[number]) {
+  if (part.numericRange) {
+    if (typeof raw !== "string" || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw.trim())) return false;
+    const value = Number(raw.trim());
+    return Number.isFinite(value) && value >= part.numericRange.min && value <= part.numericRange.max;
+  }
   if (part.normalizer === "set") return sameSet(Array.isArray(raw) ? raw : [], part.accepted);
   if (part.normalizer === "contains") {
     return Array.isArray(raw) && part.accepted.some((accepted) => raw.some((item) => normalize(item) === normalize(accepted)));
@@ -730,7 +735,11 @@ function matchesKeywords(value: string, keywordGroups: string[][]) {
   return Boolean(raw) && keywordGroups.some((group) => group.every((word) => raw.includes(normalize(word))));
 }
 
-function normalize(value: string, mode: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression" = "text") {
+function normalize(value: string, mode: AnswerPart["normalizer"] = "text") {
+  if (mode === "englishExact" || mode === "englishText") {
+    const text = value.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[ \t\r\n\f\v]+/g, " ").trim();
+    return mode === "englishExact" ? text : text.toLowerCase();
+  }
   const clean = String(value || "")
     .toLowerCase()
     .replace(/[,$]/g, "")

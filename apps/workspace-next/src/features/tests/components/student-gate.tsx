@@ -5,7 +5,7 @@ import { getAssignment } from "@/features/assignments/assignment-api";
 import type { Assignment } from "@/features/assignments/assignment-api";
 import { formatAssignmentBranch } from "@/features/assignments/branches";
 import type { TestDefinition, StudentProfile } from "@/features/tests/lib/types";
-import { clearSavedAnswers, saveStudentProfile } from "@/features/tests/lib/profile-storage";
+import { clearSavedAnswers, saveAttemptProgress, saveStudentProfile } from "@/features/tests/lib/profile-storage";
 import { cleanText } from "@/lib/formatting/text";
 
 export function StudentGate({ test }: { test: TestDefinition }) {
@@ -58,6 +58,7 @@ export function StudentGate({ test }: { test: TestDefinition }) {
     }
     saveStudentProfile(profile);
     clearSavedAnswers(test.id, assignmentToken);
+    if (test.suggestedTimer) saveAttemptProgress(test.id, assignmentToken, { startedAt: Date.now() });
     window.location.href = `/tests/${test.id}/take?assignment=${encodeURIComponent(assignmentToken)}`;
   }
 

@@ -1287,28 +1287,28 @@
           },
           "marks": 1,
           "originalPrompt": "Which picture shows Jack's shadow at midday? Tick ONE box.",
-          "adaptedPrompt": "Select the picture that shows Jack's shadow at midday.",
+          "adaptedPrompt": "Susie measures Jack's shadow at 9 am, as shown in the reference picture. On the same sunny day, Jack stands in the same position at midday. Select the picture that shows his shadow at midday.",
           "interaction": {
             "type": "single_choice",
             "options": [
               {
                 "id": "top_left",
-                "label": "Top-left picture: a short 0.25 m shadow to Jack's right",
+                "label": "Top-left picture: a short 0.25 m shadow close to Jack's feet",
                 "feedback": "Correct: at midday the shadow is short and lies on the side away from the Sun."
               },
               {
                 "id": "top_right",
-                "label": "Top-right picture: a short 0.25 m shadow to Jack's left",
+                "label": "Top-right picture: a short 0.25 m shadow extending to the left",
                 "feedback": "The length is short, but the direction is toward the Sun rather than away from it."
               },
               {
                 "id": "bottom_left",
-                "label": "Bottom-left picture: a long 2 m shadow",
+                "label": "Bottom-left picture: a long 2 m shadow extending straight down",
                 "feedback": "The midday Sun is higher, so the shadow should be much shorter than at 9 am."
               },
               {
                 "id": "bottom_right",
-                "label": "Bottom-right picture: a long 2 m shadow in another direction",
+                "label": "Bottom-right picture: a long 2 m shadow extending diagonally to the left",
                 "feedback": "The midday shadow should be short, not 2 m long."
               }
             ]
@@ -1321,13 +1321,21 @@
           "feedback": {
             "correct": "Correct - the top-left picture.",
             "incorrect": "At midday the Sun is higher, producing a shorter shadow on the opposite side from the Sun.",
-            "explanation": "The official answer is the top-left 0.25 m shadow."
+            "explanation": "At midday the Sun is higher than at 9 am. The top-left picture shows the short shadow close to Jack's feet."
           },
           "assets": [
+            "assets/q6a-morning-shadow.png",
             "assets/q6a-shadow-options.png"
           ],
           "adaptationNote": "Original visual single-choice format preserved with explicit position labels for accessibility.",
-          "requiresHumanReview": false
+          "requiresHumanReview": false,
+          "assetDescriptions": {
+            "assets/q6a-morning-shadow.png": "At 9 am, the Sun is above and to the left of Jack; his 2 m shadow extends diagonally down to the right.",
+            "assets/q6a-shadow-options.png": "Four midday alternatives, arranged top-left, top-right, bottom-left and bottom-right, with their shadow lengths labelled."
+          },
+          "assetMaxWidths": {
+            "assets/q6a-morning-shadow.png": 360
+          }
         },
         {
           "id": "6b",
@@ -1857,17 +1865,23 @@
             ]
           },
           "answerRule": {
-            "kind": "all_match",
-            "values": {
-              "height": "taller",
-              "time": "longer"
-            }
+            "kind": "one_of_maps",
+            "alternatives": [
+              {
+                "height": "taller",
+                "time": "longer"
+              },
+              {
+                "height": "shorter",
+                "time": "shorter"
+              }
+            ]
           },
           "partialCredit": null,
           "feedback": {
-            "correct": "Correct - the taller the candle, the longer it takes.",
-            "incorrect": "Both variables must be compared generally, not just one specific candle.",
-            "explanation": "For candles of the same width, increasing starting height increases the time needed to burn down to 1 cm."
+            "correct": "Correct - taller candles take longer, or shorter candles take less time.",
+            "incorrect": "Match the complete relationship: taller with longer, or shorter with shorter.",
+            "explanation": "For candles of the same width, a taller candle takes longer to burn down to 1 cm; a shorter candle takes a shorter time."
           },
           "assets": [
             "assets/q8b-candle-heights.png"
@@ -1916,37 +1930,37 @@
           },
           "marks": 1,
           "originalPrompt": "Draw a line on the graph to show how quickly the new, thinner candle will burn down to 1 cm.",
-          "adaptedPrompt": "The new candle is thinner than candle C but starts at the same 10 cm height. Which graph line best predicts how it will burn down to 1 cm?",
+          "adaptedPrompt": "The new candle is thinner than candle C but starts at the same 10 cm height. Each graph shows candle C (dark dashed line) and a prediction for the new candle (blue solid line). Which option best predicts how the new candle will burn down to 1 cm?",
           "interaction": {
             "type": "single_choice",
             "options": [
               {
                 "id": "a",
-                "label": "Line A",
+                "label": "Option 1",
                 "feedback": "Correct: a thinner candle should burn down faster than candle C while starting at the same height.",
                 "asset": "assets/q8d-option-a.svg",
-                "accessibleDescription": "A line that starts at 10 cm, falls continuously more steeply than candle C, and reaches 1 cm sooner."
+                "accessibleDescription": "The blue new-candle line falls steadily from 10 cm at 0 minutes to 1 cm at 20 minutes. The dark dashed candle C line falls from 10 cm to 1 cm at 35 minutes. Both axes run from 0 to 40 minutes and 0 to 12 cm."
               },
               {
                 "id": "b",
-                "label": "Line B",
+                "label": "Option 2",
                 "feedback": "This does not show the thinner candle burning down more quickly.",
                 "asset": "assets/q8d-option-b.svg",
-                "accessibleDescription": "A line that follows the same path as candle C."
+                "accessibleDescription": "The blue new-candle line and dark dashed candle C line overlap: both fall steadily from 10 cm at 0 minutes to 1 cm at 35 minutes. Both axes run from 0 to 40 minutes and 0 to 12 cm."
               },
               {
                 "id": "c",
-                "label": "Line C",
+                "label": "Option 3",
                 "feedback": "The new candle has the same starting height, so the line must begin at 10 cm.",
                 "asset": "assets/q8d-option-c.svg",
-                "accessibleDescription": "A steep line that starts below 10 cm."
+                "accessibleDescription": "The blue new-candle line falls steadily from 8 cm at 0 minutes to 1 cm at 20 minutes. The dark dashed candle C line falls from 10 cm to 1 cm at 35 minutes. Both axes run from 0 to 40 minutes and 0 to 12 cm."
               },
               {
                 "id": "d",
-                "label": "Line D",
+                "label": "Option 4",
                 "feedback": "A burning candle should not deliberately increase in height.",
                 "asset": "assets/q8d-option-d.svg",
-                "accessibleDescription": "A line that starts at 10 cm, rises, and then falls."
+                "accessibleDescription": "The blue new-candle line starts at 10 cm, rises to 11 cm at 5 minutes, then falls to 1 cm at 25 minutes. The dark dashed candle C line falls steadily from 10 cm to 1 cm at 35 minutes. Both axes run from 0 to 40 minutes and 0 to 12 cm."
               }
             ]
           },
@@ -1956,18 +1970,23 @@
           },
           "partialCredit": null,
           "feedback": {
-            "correct": "Correct - Line A.",
+            "correct": "Correct - Option 1.",
             "incorrect": "The correct line must start at 10 cm, stay decreasing, be steeper than candle C, and reach 1 cm sooner.",
-            "explanation": "The visual-choice format encodes all four official marking conditions without requiring freehand judgement."
+            "explanation": "Option 1 starts at the same 10 cm height, decreases continuously, is steeper than candle C, and reaches 1 cm sooner. A thinner candle burns down more quickly."
           },
           "assets": [
             "assets/q8c-candle-heights.png",
-            "assets/q8-candle-graph.png",
             "assets/q8d-option-a.svg",
             "assets/q8d-option-b.svg",
             "assets/q8d-option-c.svg",
             "assets/q8d-option-d.svg"
           ],
+          "assetDescriptions": {
+            "assets/q8c-candle-heights.png": "Candles A, B and C have the same height. B is widest, A has a medium width, and C is thinnest."
+          },
+          "assetMaxWidths": {
+            "assets/q8c-candle-heights.png": 360
+          },
           "adaptationNote": "Changed from freehand line drawing to selection among four graph-line alternatives.",
           "requiresHumanReview": false
         }

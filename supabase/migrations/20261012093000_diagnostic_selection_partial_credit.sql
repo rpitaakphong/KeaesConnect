@@ -1,0 +1,4 @@
+-- Partial credit for a single correct category; reject extra selections.
+insert into public.test_questions (id, test_id, part, prompt, answer_key, transcript_ref, points, position) values
+('cie-igcse-cs-p3-diagnostic-q3aii', 'cie-igcse-combined-science-paper-3-diagnostic', 'Biology 1–3', '(a)(ii) Select each term that describes the puffin in the food web.', '{"source":"mathMultiPart","id":"cie-igcse-cs-p3-diagnostic-q3aii","points":2,"status":"official-adapted","display":"carnivore; tertiary consumer","parts":[{"id":"selected","accepted":["carnivore","tertiary consumer"],"points":2,"normalizer":"set"},{"id":"selected","accepted":["carnivore"],"points":1,"normalizer":"set"},{"id":"selected","accepted":["tertiary consumer"],"points":1,"normalizer":"set"}],"scoringStrategy":"highestCorrect"}'::jsonb, null, 2, 14)
+on conflict (id) do update set answer_key = excluded.answer_key;

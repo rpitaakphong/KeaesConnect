@@ -1,39 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240" role="img" aria-label="Same slope as candle C">
-  <rect width="320" height="240" fill="white"/>
-  <g stroke="#d7dde7" stroke-width="1">
-    <line x1="54" y1="20" x2="54" y2="196"/>
-    <line x1="76" y1="20" x2="76" y2="196"/>
-    <line x1="98" y1="20" x2="98" y2="196"/>
-    <line x1="120" y1="20" x2="120" y2="196"/>
-    <line x1="142" y1="20" x2="142" y2="196"/>
-    <line x1="164" y1="20" x2="164" y2="196"/>
-    <line x1="186" y1="20" x2="186" y2="196"/>
-    <line x1="208" y1="20" x2="208" y2="196"/>
-    <line x1="230" y1="20" x2="230" y2="196"/>
-    <line x1="252" y1="20" x2="252" y2="196"/>
-    <line x1="274" y1="20" x2="274" y2="196"/>
-    <line x1="54" y1="20" x2="274" y2="20"/>
-    <line x1="54" y1="37.6" x2="274" y2="37.6"/>
-    <line x1="54" y1="55.2" x2="274" y2="55.2"/>
-    <line x1="54" y1="72.80000000000001" x2="274" y2="72.80000000000001"/>
-    <line x1="54" y1="90.4" x2="274" y2="90.4"/>
-    <line x1="54" y1="108" x2="274" y2="108"/>
-    <line x1="54" y1="125.60000000000001" x2="274" y2="125.60000000000001"/>
-    <line x1="54" y1="143.20000000000002" x2="274" y2="143.20000000000002"/>
-    <line x1="54" y1="160.8" x2="274" y2="160.8"/>
-    <line x1="54" y1="178.4" x2="274" y2="178.4"/>
-    <line x1="54" y1="196" x2="274" y2="196"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="440" viewBox="0 0 400 440" role="img" aria-labelledby="title desc">
+  <title id="title">Option 2: candle height over time</title>
+  <desc id="desc">The new candle and candle C both fall steadily from 10 cm to 1 cm at 35 minutes. Their lines overlap; the dark dashes remain visible over the blue line. The horizontal axis runs from 0 to 40 minutes; the vertical axis runs from 0 to 12 cm.</desc>
+  <rect width="400" height="440" rx="8" fill="#fff"/>
+  <g font-family="Arial, sans-serif" font-size="22" fill="#263445">
+    <path d="M56 22 H102" fill="none" stroke="#263445" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+    <text x="116" y="29">Candle C</text>
+    <path d="M56 52 H102" fill="none" stroke="#0072ce" stroke-width="8" stroke-linecap="round"/>
+    <text x="116" y="59">New candle</text>
+    <text x="56" y="88">Height (cm)</text>
   </g>
-  <g stroke="#18243a" stroke-width="2" fill="none">
-    <path d="M54 20 V196 H276"/>
-    <path d="M54 24 L112 186" stroke="#8a96a8" stroke-dasharray="6 5"/>
-    <path d="M 54 24 L 112 186" stroke="#1565c0" stroke-width="4"/>
+  <g stroke="#e1e7ed" stroke-width="1">
+    <path d="M56 100 V364"/>
+    <path d="M96 100 V364"/>
+    <path d="M136 100 V364"/>
+    <path d="M176 100 V364"/>
+    <path d="M216 100 V364"/>
+    <path d="M256 100 V364"/>
+    <path d="M296 100 V364"/>
+    <path d="M336 100 V364"/>
+    <path d="M376 100 V364"/>
+    <path d="M56 364 H376"/>
+    <path d="M56 342 H376"/>
+    <path d="M56 320 H376"/>
+    <path d="M56 298 H376"/>
+    <path d="M56 276 H376"/>
+    <path d="M56 254 H376"/>
+    <path d="M56 232 H376"/>
+    <path d="M56 210 H376"/>
+    <path d="M56 188 H376"/>
+    <path d="M56 166 H376"/>
+    <path d="M56 144 H376"/>
+    <path d="M56 122 H376"/>
+    <path d="M56 100 H376"/>
   </g>
-  <g fill="#18243a" font-family="system-ui, sans-serif" font-size="12">
-    <text x="20" y="29">10</text><text x="29" y="190">1</text>
-    <text x="48" y="214">0</text><text x="260" y="214">100</text>
-    <text x="145" y="232">Time (minutes)</text>
-    <text transform="translate(14 160) rotate(-90)">Height (cm)</text>
-    <text x="182" y="42" fill="#8a96a8">candle C</text>
+  <path d="M56 100 V364 H376" fill="none" stroke="#263445" stroke-width="2"/>
+  <g fill="#263445" font-family="Arial, sans-serif" font-size="22" text-anchor="end">
+    <text x="44" y="371">0</text>
+    <text x="44" y="349">1</text>
+    <text x="44" y="327">2</text>
+    <text x="44" y="283">4</text>
+    <text x="44" y="239">6</text>
+    <text x="44" y="195">8</text>
+    <text x="44" y="151">10</text>
+    <text x="44" y="107">12</text>
   </g>
+  <g fill="#263445" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">
+    <text x="56" y="394">0</text>
+    <text x="136" y="394">10</text>
+    <text x="216" y="394">20</text>
+    <text x="296" y="394">30</text>
+    <text x="376" y="394">40</text>
+    <text x="216" y="428">Time (minutes)</text>
+  </g>
+  <!-- Draw the wider prediction first so both styles remain visible when the lines coincide. -->
+  <path d="M56 144 L336 342" fill="none" stroke="#0072ce" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M56 144 L336 342" fill="none" stroke="#263445" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
 </svg>

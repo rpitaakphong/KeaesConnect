@@ -14,7 +14,7 @@ export const summerEnglishLevel2Pretest: TestDefinition = {
   title: "Summer English Level 2 Pre-test",
   subject: "English",
   level: "Summer English Level 2",
-  status: "draft",
+  status: "active",
   durationMinutes: 40,
   totalPoints: 30,
   aiShortAnswerRubrics: {
@@ -74,7 +74,7 @@ export const summerEnglishLevel2Pretest: TestDefinition = {
       id: "part4",
       label: "Part IV",
       title: "Rewrite each sentence using a pronoun in place of the underlined word or phrase.",
-      hint: "Write a complete sentence. These draft answers are AI graded when submitted.",
+      hint: "Write a complete sentence.",
       questions: [
         aiText("sel2", 16, "Grandma's pictures tell stories about Grandma's life.", "They tell stories about her life.", ["they", "her"], {
           promptParts: [
@@ -131,7 +131,7 @@ export const summerEnglishLevel2Pretest: TestDefinition = {
       id: "part6",
       label: "Part VI",
       title: "Read the passage and answer the questions.",
-      hint: "Write a short answer. These draft answers are AI graded when submitted.",
+      hint: "Write a short answer.",
       storyTitle: "What are clouds?",
       story: cloudStory,
       storyLayout: "imageFirst",

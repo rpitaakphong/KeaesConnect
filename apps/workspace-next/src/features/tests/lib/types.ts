@@ -17,6 +17,7 @@ export type TestDefinition = {
   totalPoints: number;
   status: "active" | "draft" | "legacy";
   durationMinutes?: number;
+  suggestedTimer?: boolean;
   audioSrc?: string;
   audioMode?: "standard" | "lockedOnceStarted";
   audioStartConfirmation?: {
@@ -26,7 +27,7 @@ export type TestDefinition = {
     cancelLabel?: string;
   };
   answerPayload?: "default" | "rwAnswers";
-  resultMode?: "score" | "diagnostic";
+  resultMode?: "score" | "diagnostic" | "scoreWithCorrections";
   answerExplanations?: Record<string, string>;
   aiShortAnswerRubrics?: Record<string, string>;
   sections: TestSection[];
@@ -39,6 +40,7 @@ export type TestSection = {
   hint?: string;
   questionLayout?: "cards" | "grouped";
   groupByQuestionNumber?: boolean;
+  visualPlacement?: "shared" | "perQuestion";
   visuals?: QuestionVisual[];
   wordBank?: string[];
   storyTitle?: string;
@@ -157,7 +159,8 @@ export type AnswerPart = {
   id: string;
   accepted: string[];
   points: number;
-  normalizer?: "text" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
+  numericRange?: { min: number; max: number };
+  normalizer?: "text" | "englishText" | "englishExact" | "time" | "set" | "contains" | "keywords" | "arrowDown" | "linearExpression";
   keywords?: string[][];
   reviewRecommended?: boolean;
   category?: "apparatus" | "method" | "measurements" | "controls" | "processing";

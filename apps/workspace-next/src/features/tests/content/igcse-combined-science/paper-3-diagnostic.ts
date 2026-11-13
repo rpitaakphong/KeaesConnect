@@ -66,6 +66,9 @@ function multiTextQuestion(
     compact?: boolean;
     answerTable?: Extract<TestQuestion, { type: "multiText" }>["answerTable"];
     scoreThresholds?: Array<{ minCorrect: number; points: number }>;
+    markGroups?: Extract<NonNullable<TestQuestion["grading"]>, { mode: "auto" }>["markGroups"];
+    sequenceGroups?: Extract<NonNullable<TestQuestion["grading"]>, { mode: "auto" }>["sequenceGroups"];
+    scoringStrategy?: "highestCorrect";
   } = {},
 ): TestQuestion {
   return {
@@ -85,6 +88,9 @@ function multiTextQuestion(
       display: options.display || parts.flatMap((part) => part.accepted).join(" / "),
       parts,
       scoreThresholds: options.scoreThresholds,
+      markGroups: options.markGroups,
+      sequenceGroups: options.sequenceGroups,
+      scoringStrategy: options.scoringStrategy,
     },
   };
 }
@@ -156,7 +162,7 @@ const questions: TestQuestion[] = [
     ],
     [
       exact("aName", ["cell membrane", "cell surface membrane"]),
-      markingPoint("dFunction", [["aerobic", "respiration"], ["site", "respiration"]]),
+      markingPoint("dFunction", [["respiration"]]),
       exact("vacuoleLetter", ["G"]),
       markingPoint("vacuoleFunction", [["support"], ["storage"], ["stores", "cell sap"]]),
     ],
@@ -187,7 +193,10 @@ const questions: TestQuestion[] = [
     {
       display: "cell → tissue → organ → organ system → organism",
       compact: true,
-      scoreThresholds: [{ minCorrect: 2, points: 1 }, { minCorrect: 3, points: 2 }],
+      sequenceGroups: [
+        { id: "tissue-organ", partIds: ["first", "second", "third"], acceptedSequence: ["tissue", "organ"], points: 1 },
+        { id: "organ-system", partIds: ["first", "second", "third"], acceptedSequence: ["organ", "organ system"], points: 1 },
+      ],
     },
   ),
   textQuestion("q1ci", 1, "(c)(i) State the name of an upper chamber of the heart.", 1, [exact("answer", ["atrium", "atria"])], { display: "atrium / atria" }),
@@ -282,7 +291,12 @@ const questions: TestQuestion[] = [
     grading: {
       mode: "auto",
       display: "carnivore; tertiary consumer",
-      parts: [{ id: "selected", accepted: ["carnivore", "tertiary consumer"], points: 2, normalizer: "set" }],
+      parts: [
+        { id: "selected", accepted: ["carnivore", "tertiary consumer"], points: 2, normalizer: "set" },
+        { id: "selected", accepted: ["carnivore"], points: 1, normalizer: "set" },
+        { id: "selected", accepted: ["tertiary consumer"], points: 1, normalizer: "set" },
+      ],
+      scoringStrategy: "highestCorrect",
     },
   },
   multiTextQuestion(
@@ -371,7 +385,7 @@ const questions: TestQuestion[] = [
     [{ id: "refineryGas", label: "Refinery gas" }, { id: "gasoline", label: "Gasoline" }],
     [
       markingPoint("refineryGas", [["heating"], ["cooking"]]),
-      markingPoint("gasoline", [["car"], ["van"], ["lorry"], ["vehicle"], ["fuel"]]),
+      markingPoint("gasoline", [["car"], ["van"], ["lorry"], ["lorries"], ["vehicle"]]),
     ],
     {
       display: "refinery gas: heating/cooking; gasoline: fuel for cars, vans or lorries",
@@ -408,11 +422,17 @@ const questions: TestQuestion[] = [
     2,
     [{ id: "test", label: "Test" }, { id: "aObservation", label: "Observation for A" }, { id: "bObservation", label: "Observation for B" }],
     [
-      markingPoint("test", [["aqueous", "bromine"], ["bromine", "water"], ["br2"]]),
+      markingPoint("test", [["aqueous", "bromine"], ["bromine", "water"], ["aqueous", "br2"]]),
       { id: "aObservation", accepted: [], keywords: [["stays", "orange"], ["remains", "orange"]], points: 0.5, normalizer: "keywords", reviewRecommended: true },
       { id: "bObservation", accepted: [], keywords: [["decolour"], ["colorless"], ["colourless"]], points: 0.5, normalizer: "keywords", reviewRecommended: true },
     ],
-    { display: "Aqueous bromine remains orange with A and is decolourised by B." },
+    {
+      display: "Aqueous bromine remains orange with A and is decolourised by B.",
+      markGroups: [
+        { id: "test", partIds: ["test"], minCorrect: 1, points: 1 },
+        { id: "observations", partIds: ["aObservation", "bObservation"], minCorrect: 2, points: 1 },
+      ],
+    },
   ),
   multiTextQuestion(
     "q5c",
@@ -456,7 +476,7 @@ const questions: TestQuestion[] = [
     6,
     "(c)(ii) State the test for hydrogen and the positive result.",
     1,
-    [markingPoint("answer", [["lighted", "splint", "squeaky", "pop"], ["burning", "splint", "pop"]])],
+    [markingPoint("answer", [["lighted", "splint", "pop"], ["lit", "splint", "pop"], ["burning", "splint", "pop"]])],
     { display: "A lighted splint gives a squeaky pop." },
   ),
   multiTextQuestion(
@@ -494,22 +514,24 @@ const questions: TestQuestion[] = [
     7,
     "(a)(iii) A 2.0 kW heater runs for 5.5 hours at $0.15 per kWh. Calculate the cost.",
     2,
-    [{ id: "answer", label: "Final cost ($)" }],
+    [{ id: "working", label: "Working" }, { id: "answer", label: "Final cost ($)" }],
     [
+      markingPoint("working", [["0.15", "2.0", "5.5"], ["0.15", "2", "5.5"], ["cost", "power", "time"]]),
       { id: "answer", accepted: ["1.65", "1.70", "$1.65", "$1.70"], points: 2, normalizer: "text" },
     ],
-    { display: "$1.65 ($1.70 accepted)" },
+    { display: "$1.65 ($1.70 accepted)", scoringStrategy: "highestCorrect" },
   ),
   multiTextQuestion(
     "q7b",
     7,
     "(b) A wind turbine produces 2200 W. Calculate the energy transferred in 15 seconds.",
     2,
-    [{ id: "answer", label: "Final energy (J)" }],
+    [{ id: "working", label: "Working" }, { id: "answer", label: "Final energy (J)" }],
     [
+      markingPoint("working", [["2200", "15"], ["energy", "power", "time"], ["e", "p", "t"]]),
       { id: "answer", accepted: ["33000", "33 000", "33000 j"], points: 2, normalizer: "text" },
     ],
-    { display: "33 000 J", visuals: [image("paper3-q07-wind-turbine.png", "Wind turbine", 390)] },
+    { display: "33 000 J", scoringStrategy: "highestCorrect", visuals: [image("paper3-q07-wind-turbine.png", "Wind turbine", 390)] },
   ),
   textQuestion("q7ci", 7, "(c)(i) State the colour of visible light with the longest wavelength.", 1, [exact("answer", ["red"])]),
   textQuestion("q7cii", 7, "(c)(ii) State one other region, apart from visible light, in which most solar energy is radiated.", 1, [exact("answer", ["infrared", "infra-red", "ultraviolet", "ultra-violet", "uv", "ir"])], { display: "infrared or ultraviolet" }),
@@ -519,11 +541,16 @@ const questions: TestQuestion[] = [
     8,
     "(a)(i) A spacecraft has a mass of 3.1 × 10³ kg. Calculate its weight on Earth. Include the unit.",
     3,
-    [{ id: "answer", label: "Final answer, including unit" }],
+    [{ id: "working", label: "Working" }, { id: "answer", label: "Final answer, including unit" }],
     [
-      { id: "answer", accepted: ["30000 n", "30 000 n", "30 x 10^3 n", "30 × 10^3 n", "30380 n", "30400 n", "30.38 kn", "30.4 kn"], points: 3, normalizer: "text" },
+      markingPoint("working", [["3100", "9.8"], ["3.1", "10", "9.8"], ["weight", "mass", "gravitational"], ["w=mg"]]),
+      exact("answer", ["30000 n", "30 000 n", "30 x 10^3 n", "30 × 10^3 n", "30380 n", "30400 n", "30.38 kn", "30.4 kn"], 3),
+      exact("answer", ["30000", "30 000", "30 x 10^3", "30380", "30400"], 2),
     ],
-    { display: "30 000 N (30.38 kN or 30.4 kN accepted)" },
+    {
+      display: "30 000 N (30 380 N, 30 400 N, 30.38 kN or 30.4 kN accepted)",
+      scoringStrategy: "highestCorrect",
+    },
   ),
   textQuestion("q8aii", 8, "(a)(ii) State what is meant by accelerates.", 1, [markingPoint("answer", [["increase", "speed"], ["gets", "faster"]])], { display: "increases in speed" }),
   textQuestion("q8aiii", 8, "(a)(iii) Calculate the number of hours in 3.2 days.", 1, [exact("answer", ["76.8", "76.8 h", "76 h 48 min"])], { display: "76.8 h" }),
@@ -532,11 +559,12 @@ const questions: TestQuestion[] = [
     8,
     "(a)(iv) The Earth–Moon distance is 384 000 km. Calculate the spacecraft's average speed using your answer to (a)(iii).",
     2,
-    [{ id: "answer", label: "Final speed (km/h)" }],
+    [{ id: "working", label: "Working" }, { id: "answer", label: "Final speed (km/h)" }],
     [
+      markingPoint("working", [["384000", "76.8"], ["384 000", "76.8"], ["speed", "distance", "time"]]),
       { id: "answer", accepted: ["5000", "5000 km/h", "5000 km h"], points: 2, normalizer: "text" },
     ],
-    { display: "5000 km/h" },
+    { display: "5000 km/h", scoringStrategy: "highestCorrect" },
   ),
   multiTextQuestion(
     "q8av",
@@ -590,7 +618,14 @@ const questions: TestQuestion[] = [
       exact("ethanol", ["sinks", "sink"]),
       exact("explanation", ["Poly(ethene) is less dense than water but more dense than ethanol"]),
     ],
-    { display: "It floats in water and sinks in ethanol because its density lies between theirs.", visualHtml: table91, scoreThresholds: [{ minCorrect: 3, points: 2 }] },
+    {
+      display: "It floats in water and sinks in ethanol because its density lies between theirs.",
+      visualHtml: table91,
+      markGroups: [
+        { id: "predictions", partIds: ["water", "ethanol"], minCorrect: 2, points: 1 },
+        { id: "density", partIds: ["explanation"], minCorrect: 1, points: 1 },
+      ],
+    },
   ),
   multiTextQuestion(
     "q9c",
@@ -600,25 +635,33 @@ const questions: TestQuestion[] = [
     [
       { id: "ethanol", label: "Ethanol" },
       { id: "sulfur", label: "Sulfur" },
-      radioField("explanation", "Which statement correctly explains the diagrams?", ["There is no difference between solid and liquid particle arrangements", "A solid has a regular particle arrangement; a liquid has an irregular arrangement", "Solid particles are widely separated; liquid particles are fixed in place", "A liquid has a regular particle arrangement; a solid has an irregular arrangement"]),
+      radioField("explanation", "Which statement correctly explains the diagrams?", ["There is no difference between solid and liquid particle arrangements", "Sulfur is solid with a regular particle arrangement; ethanol is liquid with an irregular arrangement", "Solid particles are widely separated; liquid particles are fixed in place", "A liquid has a regular particle arrangement; a solid has an irregular arrangement"]),
     ],
     [
       { id: "ethanol", accepted: ["Y"], points: 0.5, normalizer: "text" },
       { id: "sulfur", accepted: ["X"], points: 0.5, normalizer: "text" },
-      exact("explanation", ["A solid has a regular particle arrangement; a liquid has an irregular arrangement"]),
+      exact("explanation", ["Sulfur is solid with a regular particle arrangement; ethanol is liquid with an irregular arrangement", "A solid has a regular particle arrangement; a liquid has an irregular arrangement"]),
     ],
-    { display: "ethanol Y; sulfur X; a solid is regular/more closely packed and a liquid is irregular/less closely packed", visuals: [image("paper3-q09-particles.png", "Particle arrangements X and Y", 470)] },
+    {
+      display: "ethanol Y (liquid); sulfur X (solid); a solid is regular/more closely packed and a liquid is irregular/less closely packed",
+      visuals: [image("paper3-q09-particles.png", "Particle arrangements X and Y", 470)],
+      markGroups: [
+        { id: "diagrams-and-states", partIds: ["ethanol", "sulfur", "explanation"], minCorrect: 3, points: 1 },
+        { id: "arrangement", partIds: ["explanation"], minCorrect: 1, points: 1 },
+      ],
+    },
   ),
   multiTextQuestion(
     "q9di",
     9,
     "(d)(i) An aluminium mirror has a mass of 9.0 g and density 2.7 g/cm³. Calculate its volume.",
     2,
-    [{ id: "answer", label: "Final volume (cm³)" }],
+    [{ id: "working", label: "Working" }, { id: "answer", label: "Final volume (cm³)" }],
     [
-      { id: "answer", accepted: ["3.3", "3.33", "3.333", "3.3 cm3", "3.33 cm3", "3.333 cm3"], points: 2, normalizer: "text" },
+      markingPoint("working", [["9.0", "2.7"], ["9", "2.7"], ["volume", "mass", "density"]]),
+      { id: "answer", accepted: ["3.3", "3.33", "3.3 cm3", "3.33 cm3"], points: 2, normalizer: "text" },
     ],
-    { display: "3.3 cm³" },
+    { display: "3.3 cm³ (3.33 cm³ accepted)", scoringStrategy: "highestCorrect" },
   ),
   choiceQuestion("q9dii", 9, "(d)(ii) Choose the completed diagram with a perpendicular normal, the angle of incidence labelled i, and a reflected ray travelling towards the eye.", ["A", "B", "C", "D"], "D", "D — perpendicular normal, correctly placed i, and reflected ray towards the eye", {
     imageChoices: {
